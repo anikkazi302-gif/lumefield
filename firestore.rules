@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// LumeField credit wallets + one-way signup claims (v3) — paste this whole
+// LumeField credit wallets + one-way signup claims + daily refill + referrals (v4) — paste this whole
 // file into Firebase console > lumeField project > Build > Firestore
 // Database > Rules tab, then click Publish. See FIRESTORE-SETUP.md.
 //
@@ -17,9 +17,22 @@ rules_version = '2';
 //        here; the site also blocks ~560 at sign-up — no list is complete,
 //        new temp domains appear daily, so update the list over time).
 //      - Update: credits may ONLY go down by exactly one valid video cost
-//        (5s = 4, 10s = 7, 20s = 14, 30s = 20). No other field may change
-//        except updatedAt. Nobody can raise their own balance, create extra
-//        credits, or touch another user's wallet.
+//        (5s = 4, 10s = 7, 20s = 14, 30s = 20), optionally counting the build
+//        (builds +1). Two narrow exceptions, both capped: (a) the DAILY FREE
+//        REFILL — credits up by exactly 4, only with lastDailyClaim set to a
+//        new, later, valid YYYY-MM-DD date (the site only ever claims
+//        today's Asia/Dhaka date; the rules enforce format + strictly
+//        increasing date, so a fake future date is the only residual hole —
+//        worth 4 credits a throw, far less than a fresh email's 60, see §4);
+//        (b) the REFERRAL REWARD — credits up by exactly 20, only paid by
+//        the referred user themself, only while their referrals doc names
+//        this wallet as referrer and is still unpaid (rewarded == false).
+//        No other field may change except updatedAt (plus builds /
+//        lastDailyClaim in their own cases). Nobody can raise their own
+//        balance, create extra credits, or touch another user's wallet.
+//      - Create: may also carry referredBy (uid of the inviter, never the
+//        user's own uid) and lastDailyClaim (valid date string, normally
+//        absent at creation).
 //      - Delete: never allowed.
 // 2. Claims (collection "claimed", doc id = NORMALIZED email): one-way
 //    record that an email has already taken its one 60-credit signup bonus.
@@ -35,7 +48,20 @@ rules_version = '2';
 //    owner of that email) can read, update or delete it.
 //    A COMPLETELY NEW email can still register — no site can stop that
 //    without phone verification or a paid identity check.
-// 3. Everything else in the database: denied.
+// 3. Referrals (collection "referrals", doc id = REFERRED user id): one doc
+//    per invited friend, created by the referred user after they verify
+//    their email and build their first video plan. The referrer earns 20
+//    credits, paid by the referred user in the same transaction that flips
+//    rewarded false -> true — the flip is one-way, so the reward can never
+//    pay twice. Self-referral is blocked (referrerUid != referredUid).
+//    Readable by the referred user and by the referrer (profile stats).
+// 4. Honest limit (daily refill): the rules cannot compute "today" from a
+//    date string, so they enforce format + strictly increasing date. A user
+//    calling Firestore directly with fake future dates could claim +4 per
+//    fake day — deliberate SDK abuse for 4 credits a throw, while the same
+//    user could simply register a new email for 60. Not worth a Cloud
+//    Function; the client always claims the real Asia/Dhaka date.
+// 5. Everything else in the database: denied.
 service cloud.firestore {
   match /databases/{database}/documents {
     // Normalized email: Gmail ignores dots and +tags, so
@@ -56,17 +82,51 @@ service cloud.firestore {
 
       allow create: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId
         && request.resource.data.credits == 60
-        && request.resource.data.keys().hasOnly(['credits', 'createdAt', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['credits', 'createdAt', 'updatedAt', 'referredBy', 'lastDailyClaim'])
+        && (!('referredBy' in request.resource.data) || (request.resource.data.referredBy is string && request.resource.data.referredBy != request.auth.uid))
+        && (!('lastDailyClaim' in request.resource.data) || (request.resource.data.lastDailyClaim is string && request.resource.data.lastDailyClaim.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')))
         && !isDisposableEmail(request.auth.token.email)
         && !exists(/databases/$(database)/documents/claimed/$(normEmail(request.auth.token.email)));
 
-      allow update: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt'])
+      allow update: if request.auth != null && request.auth.token.email_verified == true
         && request.resource.data.credits >= 0
-        && (request.resource.data.credits == resource.data.credits - 4
-            || request.resource.data.credits == resource.data.credits - 7
-            || request.resource.data.credits == resource.data.credits - 14
-            || request.resource.data.credits == resource.data.credits - 20);
+        && (
+          // A: own wallet, debit by exactly one valid video cost (old shape, no builds field).
+          (request.auth.uid == userId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt'])
+            && (request.resource.data.credits == resource.data.credits - 4
+                || request.resource.data.credits == resource.data.credits - 7
+                || request.resource.data.credits == resource.data.credits - 14
+                || request.resource.data.credits == resource.data.credits - 20))
+          // B: own wallet, debit by a valid cost AND count the build (builds +1).
+          || (request.auth.uid == userId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt', 'builds'])
+            && (request.resource.data.credits == resource.data.credits - 4
+                || request.resource.data.credits == resource.data.credits - 7
+                || request.resource.data.credits == resource.data.credits - 14
+                || request.resource.data.credits == resource.data.credits - 20)
+            && ('builds' in request.resource.data)
+            && request.resource.data.builds == ((('builds' in resource.data) ? resource.data.builds : 0) + 1))
+          // C: own wallet, daily free refill — credits up by exactly 4, only
+          // with lastDailyClaim set to a new, later, valid YYYY-MM-DD date.
+          || (request.auth.uid == userId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt', 'lastDailyClaim'])
+            && request.resource.data.credits == resource.data.credits + 4
+            && ('lastDailyClaim' in request.resource.data)
+            && request.resource.data.lastDailyClaim is string
+            && request.resource.data.lastDailyClaim.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')
+            && (!('lastDailyClaim' in resource.data) || request.resource.data.lastDailyClaim > resource.data.lastDailyClaim))
+          // D: referral reward — paid by the REFERRED user (request.auth.uid)
+          // to the referrer's wallet (userId): credits up by exactly 20,
+          // only while the referrals doc keyed by the referred user names
+          // this wallet as referrer and is still unpaid (rewarded == false).
+          || (request.auth.uid != userId
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt'])
+            && request.resource.data.credits == resource.data.credits + 20
+            && exists(/databases/$(database)/documents/referrals/$(request.auth.uid))
+            && get(/databases/$(database)/documents/referrals/$(request.auth.uid)).data.referrerUid == userId
+            && get(/databases/$(database)/documents/referrals/$(request.auth.uid)).data.rewarded == false)
+        );
 
       allow delete: if false;
     }
@@ -80,6 +140,32 @@ service cloud.firestore {
         && request.resource.data.email == email;
 
       allow read, update, delete: if false;
+    }
+
+    match /referrals/{referredUid} {
+      // Create: only by the referred user themself, verified, naming a real
+      // referrer (never themself), unpaid, with the allowed fields only.
+      allow create: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == referredUid
+        && request.resource.data.keys().hasOnly(['referrerUid', 'rewarded', 'createdAt'])
+        && request.resource.data.referrerUid is string
+        && request.resource.data.referrerUid != referredUid
+        && request.resource.data.rewarded == false;
+
+      // Read: the referred user and the referrer (profile stats). A query
+      // filtered by referrerUid == the requester's uid is permitted.
+      allow read: if request.auth != null && request.auth.token.email_verified == true
+        && (request.auth.uid == referredUid || request.auth.uid == resource.data.referrerUid);
+
+      // Update: only the one-way flip false -> true (the reward payment),
+      // by the referred user or the referrer; nothing else may change.
+      allow update: if request.auth != null && request.auth.token.email_verified == true
+        && (request.auth.uid == referredUid || request.auth.uid == resource.data.referrerUid)
+        && resource.data.rewarded == false
+        && request.resource.data.rewarded == true
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['rewarded', 'updatedAt']);
+
+      allow delete: if false;
     }
 
     match /{document=**} {
