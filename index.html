@@ -413,6 +413,7 @@
   </div>
 
   <button class="big-btn" id="buildBtn">🎬 Build my video plan</button>
+  <div class="warn" id="buildErr" role="alert"></div>
 
   <!-- OUTPUT -->
   <div class="card out" id="output">
@@ -558,6 +559,19 @@ let selectedEngine = "wan22";
 let selectedDur = 30;
 let photos = [];
 
+/* ---------- build error: visible on the page, not a popup (popups are
+   auto-dismissed by some browsers, which made a missing photo look like
+   the site was broken). Shown when a photo engine is picked with no photo. */
+var PHOTO_ERR = "Please upload a reference photo first — this engine needs one, or switch to a text-only engine.";
+function showBuildError(msg) {
+  var el = document.getElementById("buildErr");
+  if (el) { el.textContent = msg; el.classList.add("show"); if (el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+}
+function hideBuildError() {
+  var el = document.getElementById("buildErr");
+  if (el) { el.textContent = ""; el.classList.remove("show"); }
+}
+
 /* ---------- engine picker ---------- */
 const engWrap = document.getElementById("engines");
 ENGINES.forEach(function (e) {
@@ -573,6 +587,7 @@ ENGINES.forEach(function (e) {
     document.querySelectorAll(".engine").forEach(function (el) { el.classList.remove("selected"); });
     d.classList.add("selected");
     selectedEngine = e.id;
+    hideBuildError();
     const w = document.getElementById("noI2vWarn");
     if (!e.i2v) {
       document.getElementById("noI2vName").textContent = e.name;
@@ -609,6 +624,7 @@ input.addEventListener("change", function () {
   input.value = "";
 });
 function renderThumbs() {
+  hideBuildError();
   thumbs.innerHTML = "";
   photos.forEach(function (p, i) {
     const d = document.createElement("div");
@@ -663,7 +679,8 @@ function buildPlan() {
   if (!subject) { alert("Please write the subject first (Step 2) — who or what is in the video."); document.getElementById("subject").focus(); return; }
   if (!action) { alert("Please write the action first (Step 2) — what happens over the 30 seconds."); document.getElementById("action").focus(); return; }
   if (photos.length === 0 && engine.i2v) {
-    if (!confirm("No reference photo uploaded. The engine will animate from text only and the face will not match a photo. Continue anyway?")) return;
+    showBuildError(PHOTO_ERR);
+    return;
   }
 
   const segCount = Math.ceil(selectedDur / engine.maxSec);
@@ -727,6 +744,7 @@ function buildPlan() {
 }
 /* Credit gate (see credit system script below): checks free plans / credits first. */
 document.getElementById("buildBtn").addEventListener("click", function () {
+  hideBuildError();
   if (window.lfCreditGate) { window.lfCreditGate(selectedDur, buildPlan); }
   else { alert("Credit system unavailable, please reload."); }
 });
@@ -1017,7 +1035,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var engine = null;
     try { engine = ENGINES.find(function (e) { return e.id === selectedEngine; }); } catch (e) {}
     if (photos.length === 0 && engine && engine.i2v) {
-      if (!confirm("No reference photo uploaded. The engine will animate from text only and the face will not match a photo. Continue anyway?")) return false;
+      showBuildError(PHOTO_ERR);
+      return false;
     }
     return true;
   }
