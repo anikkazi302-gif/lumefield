@@ -128,6 +128,14 @@
   .howto { font-size: .92rem; line-height: 1.75; color: #d1d1de; }
   .howto li { margin: 6px 0 6px 18px; }
 
+  /* ---------- faq ---------- */
+  .faq { max-width: 880px; margin: 0 auto; padding: 40px 18px 10px; }
+  .faq h2 { font-size: 32px; text-align: center; letter-spacing: -0.5px; }
+  .faq h2 span { background: linear-gradient(90deg, #ffd166, #ff5e8a, #7c5cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .faq-item { background: #10101c; border: 1px solid #1c1c2c; border-radius: 12px; padding: 18px 20px; margin: 14px 0; }
+  .faq-item h3 { font-size: 17px; color: #ffd166; margin-bottom: 8px; }
+  .faq-item p { font-size: 15px; color: #c9c9d8; line-height: 1.65; }
+
   /* ---------- footer ---------- */
   .footer { text-align: center; padding: 22px; font-size: 13px; color: #77778c; border-top: 1px solid #1c1c2c; line-height: 1.7; }
   .footer a { color: #a9a9bd; }
@@ -139,6 +147,70 @@
     .nav-links { display: none; }
   }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "LumeField",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any",
+  "description": "LumeField — Free AI Video Generator: turn your reference photos into 30-second cinematic videos with free AI engines. No sign-up, no card.",
+  "url": "https://anikkazi302-gif.github.io/lumefield/",
+  "offers": {
+    "@type": "Offer",
+    "price": 0,
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is LumeField really free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This page is free to use — no payment, no sign-up, no card. It plans your video and writes the prompts. The video itself is rendered on free engines: free Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX), Kling with 66 free credits a day, Google Flow with 50 free credits a day, and Runway with 125 credits once. Free tiers can change, so always check the engine's own page."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many videos can I generate for free per day?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends on the engine you pick. Kling gives 66 free credits a day — about 6 standard 10-second clips. Flow gives 50 free credits a day — about 2 Fast clips or 5 Lite clips. The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to sign up or a credit card?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No sign-up and no credit card are needed to use this page. Some engines need a free account on their own page — Kling needs a free account and Flow needs a Google account — but the Hugging Face Spaces need no account at all. No engine listed here asks for a card for its free tier."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which engines are free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "All 8 engines on this page have a verified free way in: Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX on free Hugging Face Spaces; Kling (66 free credits a day); Google Flow (50 free credits a day); Runway Gen-4 Turbo (125 credits once — free clips are watermarked); and Mochi 1 (free playground, but text-to-video only — it takes no reference photo)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a reference photo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A reference photo is the photo your video must match — a face, a character, or a place. You upload it as the start frame (image input) on the engine's own page, and the engine animates that photo. This page only previews your photo in your browser; you upload the same photo again on the engine's page."
+      }
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -150,7 +222,7 @@
 
 <section class="hero">
   <h1>Turn your photos into<br><span>cinematic videos.</span></h1>
-  <p><b>Free AI Video Generator</b> — 30-second videos from your reference photos.<br>No sign-up. No watermark. Just create.</p>
+  <p><b>Free AI video generator</b> — turn your reference photos into 30-second cinematic videos with image to video AI.<br>An AI video generator free to use: no sign-up, no card, just create.</p>
   <div class="cta-row">
     <a class="btn-primary" href="#tool">▶ Start Creating — Free</a>
     <a class="btn-ghost" href="#howto">See how it works</a>
@@ -191,7 +263,7 @@
   <div class="honest">
     <b>Honest note — read first:</b> This page does <b>not</b> render video itself. It plans your
     30-second video and writes the exact prompts, then sends you to a genuinely free engine
-    (open-source model on Hugging Face, or a free tier) where the video is rendered for free.
+    (free AI models on Hugging Face, or a free tier) where the video is rendered for free with image to video AI.
     Most free engines make <b>5–10 seconds per clip</b>, so a 30-second video is made by
     <b>chaining 3 × 10-second segments</b> — this tool builds that chain for you, segment by segment.
   </div>
@@ -300,6 +372,30 @@
     scene changing mid-video.</p>
   </div>
 </div>
+
+<section class="faq" id="faq">
+  <h2>Frequently asked <span>questions</span></h2>
+  <div class="faq-item">
+    <h3>Is LumeField really free?</h3>
+    <p>Yes. This page is free to use — no payment, no sign-up, no card. It plans your video and writes the prompts. The video itself is rendered on free engines: free Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX), Kling with 66 free credits a day, Google Flow with 50 free credits a day, and Runway with 125 credits once. Free tiers can change, so always check the engine's own page.</p>
+  </div>
+  <div class="faq-item">
+    <h3>How many videos can I generate for free per day?</h3>
+    <p>It depends on the engine you pick. Kling gives 66 free credits a day — about 6 standard 10-second clips. Flow gives 50 free credits a day — about 2 Fast clips or 5 Lite clips. The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Do I need to sign up or a credit card?</h3>
+    <p>No sign-up and no credit card are needed to use this page. Some engines need a free account on their own page — Kling needs a free account and Flow needs a Google account — but the Hugging Face Spaces need no account at all. No engine listed here asks for a card for its free tier.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Which engines are free?</h3>
+    <p>All 8 engines on this page have a verified free way in: Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX on free Hugging Face Spaces; Kling (66 free credits a day); Google Flow (50 free credits a day); Runway Gen-4 Turbo (125 credits once — free clips are watermarked); and Mochi 1 (free playground, but text-to-video only — it takes no reference photo).</p>
+  </div>
+  <div class="faq-item">
+    <h3>What is a reference photo?</h3>
+    <p>A reference photo is the photo your video must match — a face, a character, or a place. You upload it as the start frame (image input) on the engine's own page, and the engine animates that photo. This page only previews your photo in your browser; you upload the same photo again on the engine's page.</p>
+  </div>
+</section>
 
 <div class="footer">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
 Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.</div>
