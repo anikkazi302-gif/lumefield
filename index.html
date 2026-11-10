@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free AI Video Studio — 30-Second Videos from Reference Photos</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif; background: #0B0F19; color: #E5E7EB; min-height: 100vh; padding: 0 0 60px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 24px 18px; }
+  header { text-align: center; padding: 28px 0 8px; }
+  header h1 { font-size: 2rem; letter-spacing: .5px; }
+  header h1 span { color: #F59E0B; }
+  header p { color: #9CA3AF; margin-top: 8px; font-size: 1rem; line-height: 1.5; }
+  .honest { background: #1E293B; border: 1px solid #F59E0B; border-radius: 10px; padding: 14px 16px; margin: 18px 0; font-size: .95rem; line-height: 1.6; }
+  .honest b { color: #FBBF24; }
+  .card { background: #111827; border: 1px solid #1F2937; border-radius: 12px; padding: 20px; margin: 16px 0; }
+  .card h2 { font-size: 1.15rem; margin-bottom: 6px; color: #FBBF24; }
+  .card h2 .step { color: #6B7280; font-size: .9rem; font-weight: 400; }
+  .card p.sub { color: #9CA3AF; font-size: .92rem; margin-bottom: 14px; line-height: 1.5; }
+  label { display: block; font-size: .9rem; color: #D1D5DB; margin: 12px 0 5px; }
+  input[type=text], textarea, select { width: 100%; background: #0B0F19; border: 1px solid #374151; color: #F3F4F6; border-radius: 8px; padding: 10px 12px; font-size: .95rem; font-family: inherit; }
+  textarea { min-height: 64px; resize: vertical; }
+  input[type=text]:focus, textarea:focus, select:focus { outline: 2px solid #F59E0B; border-color: #F59E0B; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+  .drop { border: 2px dashed #4B5563; border-radius: 10px; padding: 22px 14px; text-align: center; color: #9CA3AF; cursor: pointer; transition: border-color .2s; }
+  .drop:hover { border-color: #F59E0B; }
+  .drop input { display: none; }
+  .thumbs { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+  .thumb { position: relative; width: 160px; }
+  .thumb img { width: 160px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #374151; display: block; }
+  .thumb button { position: absolute; top: 4px; right: 4px; background: #DC2626; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; line-height: 1; }
+  .thumb .tag { font-size: .75rem; color: #9CA3AF; margin-top: 4px; }
+  .seg-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg-btns button { background: #1F2937; color: #E5E7EB; border: 1px solid #374151; border-radius: 999px; padding: 9px 18px; cursor: pointer; font-size: .95rem; }
+  .seg-btns button.active { background: #F59E0B; color: #111827; border-color: #F59E0B; font-weight: 700; }
+  .engines { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 640px) { .engines { grid-template-columns: 1fr; } }
+  .engine { border: 1px solid #374151; border-radius: 10px; padding: 12px 14px; cursor: pointer; background: #0F172A; }
+  .engine:hover { border-color: #F59E0B; }
+  .engine.selected { border-color: #F59E0B; background: #1C1917; box-shadow: 0 0 0 1px #F59E0B; }
+  .engine h3 { font-size: 1rem; }
+  .engine h3 .badge { font-size: .68rem; background: #065F46; color: #A7F3D0; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+  .engine h3 .badge.no { background: #7F1D1D; color: #FECACA; }
+  .engine p { font-size: .83rem; color: #9CA3AF; line-height: 1.55; margin-top: 5px; }
+  .engine .limit { font-size: .8rem; color: #FBBF24; margin-top: 6px; font-weight: 600; }
+  .big-btn { width: 100%; background: #F59E0B; color: #111827; border: none; border-radius: 10px; padding: 15px; font-size: 1.1rem; font-weight: 800; cursor: pointer; margin-top: 8px; }
+  .big-btn:hover { background: #FBBF24; }
+  .out { display: none; }
+  .out.show { display: block; }
+  .summary { background: #1E293B; border-radius: 10px; padding: 14px 16px; line-height: 1.7; font-size: .95rem; margin-bottom: 14px; }
+  .seg { border: 1px solid #374151; border-radius: 10px; padding: 14px; margin: 12px 0; background: #0F172A; }
+  .seg h3 { font-size: 1rem; color: #FBBF24; margin-bottom: 8px; }
+  .seg textarea { min-height: 96px; font-size: .92rem; line-height: 1.55; }
+  .copy-btn { background: #374151; color: #F3F4F6; border: none; border-radius: 8px; padding: 8px 14px; cursor: pointer; font-size: .88rem; margin-top: 8px; }
+  .copy-btn:hover { background: #4B5563; }
+  .copy-btn.done { background: #065F46; }
+  .rules { background: #1C1917; border: 1px solid #78350F; border-radius: 10px; padding: 14px 16px; margin: 14px 0; font-size: .9rem; line-height: 1.65; white-space: pre-wrap; }
+  .go-btn { display: inline-block; background: #059669; color: #fff; text-decoration: none; border-radius: 10px; padding: 13px 22px; font-weight: 700; font-size: 1rem; margin-top: 6px; }
+  .go-btn:hover { background: #047857; }
+  .note { font-size: .88rem; color: #9CA3AF; line-height: 1.6; margin-top: 10px; }
+  .warn { background: #450A0A; border: 1px solid #991B1B; color: #FECACA; border-radius: 10px; padding: 12px 14px; margin: 12px 0; font-size: .92rem; line-height: 1.55; display: none; }
+  .warn.show { display: block; }
+  footer { text-align: center; color: #6B7280; font-size: .85rem; margin-top: 30px; line-height: 1.6; }
+  footer a { color: #9CA3AF; }
+  .howto { font-size: .92rem; line-height: 1.75; color: #D1D5DB; }
+  .howto li { margin: 6px 0 6px 18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🎬 Free AI <span>Video Studio</span></h1>
+    <p>Turn reference photos into a 30-second, high-quality video — free.</p>
+  </header>
+
+  <div class="honest">
+    <b>Honest note — read first:</b> This page does <b>not</b> render video itself. It plans your
+    30-second video and writes the exact prompts, then sends you to a genuinely free engine
+    (open-source model on Hugging Face, or a free tier) where the video is rendered for free.
+    Most free engines make <b>5–10 seconds per clip</b>, so a 30-second video is made by
+    <b>chaining 3 × 10-second segments</b> — this tool builds that chain for you, segment by segment.
+  </div>
+
+  <!-- STEP 1 : REFERENCE PHOTOS -->
+  <div class="card">
+    <h2>Step 1 — Reference photos <span class="step">(1–2 photos)</span></h2>
+    <p class="sub">Upload the photo(s) the video must match — a character, a face, a place. You will upload
+    the same photo(s) again on the engine's own page; this tool only previews them here.</p>
+    <label class="drop" for="photoInput">📷 Click to upload 1–2 reference photos (JPG / PNG / WebP)
+      <input type="file" id="photoInput" accept="image/*" multiple>
+    </label>
+    <div class="thumbs" id="thumbs"></div>
+    <p class="note">🔒 Your photos stay in your browser. This tool uploads nothing anywhere — the preview is
+    local only. When you generate, you upload the photo yourself on the engine's page.</p>
+  </div>
+
+  <!-- STEP 2 : SCENE -->
+  <div class="card">
+    <h2>Step 2 — Your scene</h2>
+    <p class="sub">Describe what happens. Be specific — the engine can only animate what you describe.</p>
+    <label for="subject">Subject (who / what is in the video)</label>
+    <input type="text" id="subject" placeholder="e.g. A white dragon standing behind a young woman in front of an old stone cottage">
+    <label for="action">Action (what happens over the 30 seconds)</label>
+    <textarea id="action" placeholder="e.g. The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated"></textarea>
+    <div class="row">
+      <div>
+        <label for="camera">Camera move</label>
+        <select id="camera">
+          <option value="static, locked-off camera">Static — locked-off camera</option>
+          <option value="slow push-in toward the subject" selected>Slow push-in toward the subject</option>
+          <option value="slow pull-back revealing the scene">Slow pull-back revealing the scene</option>
+          <option value="slow pan left to right">Slow pan left to right</option>
+          <option value="slow pan right to left">Slow pan right to left</option>
+          <option value="slow tracking shot following the subject">Slow tracking shot following the subject</option>
+          <option value="slow crane shot rising upward">Slow crane shot rising upward</option>
+          <option value="slow orbit around the subject">Slow orbit around the subject</option>
+        </select>
+      </div>
+      <div>
+        <label for="style">Style</label>
+        <select id="style">
+          <option value="cinematic dark fantasy, film grain, moody light" selected>Cinematic dark fantasy</option>
+          <option value="realistic, natural light, photographic">Realistic / photographic</option>
+          <option value="bright 3D cartoon, cheerful">Bright 3D cartoon</option>
+          <option value="anime style, clean lines">Anime style</option>
+          <option value="documentary style, handheld feel">Documentary style</option>
+          <option value="epic fantasy, dramatic light, rich colour">Epic fantasy</option>
+        </select>
+      </div>
+    </div>
+    <label for="setting">Setting / place (optional)</label>
+    <input type="text" id="setting" placeholder="e.g. Rocky mountainside, old stone cottage, overcast grey sky, light snow falling">
+    <label for="sound">Sound / dialogue note (optional — only LTX-2.3 and Flow render audio)</label>
+    <input type="text" id="sound" placeholder="e.g. No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end.">
+  </div>
+
+  <!-- STEP 3 : DURATION + ENGINE -->
+  <div class="card">
+    <h2>Step 3 — Duration &amp; free engine</h2>
+    <p class="sub">Pick how long the video should be, then pick the engine that renders it. Every engine
+    below was verified free on 10 November 2026 — each card shows its honest limit.</p>
+    <label>Duration</label>
+    <div class="seg-btns" id="durBtns">
+      <button data-dur="5">5 seconds</button>
+      <button data-dur="10">10 seconds</button>
+      <button data-dur="20">20 seconds</button>
+      <button data-dur="30" class="active">30 seconds</button>
+    </div>
+    <label>Engine (free — pick one)</label>
+    <div class="engines" id="engines"></div>
+    <div class="warn" id="noI2vWarn">⚠️ <b id="noI2vName"></b> does <b>not</b> take a reference photo — it is
+    text-to-video only. Your photo will not be used there. Pick a photo engine (Wan 2.2, LTX-2.3,
+    HunyuanVideo 1.5, CogVideoX, Kling or Flow) if the face must match your photo.</div>
+  </div>
+
+  <button class="big-btn" id="buildBtn">🎬 Build my video plan</button>
+
+  <!-- OUTPUT -->
+  <div class="card out" id="output">
+    <h2>Your video plan</h2>
+    <div class="summary" id="summary"></div>
+    <div id="segments"></div>
+    <h2 style="margin-top:18px;">Locked rules — paste with every prompt</h2>
+    <div class="rules" id="rulesText"></div>
+    <button class="copy-btn" data-copy="rulesText">📋 Copy locked rules</button>
+    <h2 style="margin-top:18px;">Recommended settings for <span id="engineName"></span></h2>
+    <div class="summary" id="settings"></div>
+    <a class="go-btn" id="goBtn" href="#" target="_blank" rel="noopener">▶ Open the free engine →</a>
+    <h2 style="margin-top:18px;">How to make the full 30 seconds</h2>
+    <ol class="howto">
+      <li>Open the engine above (free, no payment). Upload your reference photo as the start frame / image input.</li>
+      <li>Paste the <b>Segment 1</b> prompt and generate. Download the clip.</li>
+      <li>For Segment 2, use the <b>last frame of Segment 1</b> as the start image (save it from the clip) and paste the Segment 2 prompt. Repeat for Segment 3.</li>
+      <li>Join the clips in any free editor (CapCut, DaVinci Resolve, or ffmpeg) — no re-render needed.</li>
+      <li>If a segment comes out wrong, regenerate only that segment — never the whole video.</li>
+    </ol>
+    <p class="note">Tip: keep every segment prompt's subject, face, clothes and setting identical.
+    Changing one word of the subject between segments is the most common cause of a face or
+    scene changing mid-video.</p>
+  </div>
+
+  <footer>
+    Free AI Video Studio — plans and prompts only; video is rendered free on the engine you choose.<br>
+    Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own
+    page before planning a production around a limit. MIT License — free to use, share and remix.
+  </footer>
+</div>
+
+<script>
+const ENGINES = [
+  { id: "wan22", name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
+  { id: "ltx23", name: "LTX-2.3", vendor: "Lightricks · open weights", url: "https://huggingface.co/spaces/Lightricks/LTX-2-3", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free official Hugging Face Space", note: "The only free engine here with synced audio. 10s per clip on the Space (the model itself supports 20s self-hosted)." },
+  { id: "hunyuan15", name: "HunyuanVideo 1.5", vendor: "Tencent · open source", url: "https://huggingface.co/spaces/multimodalart/Hunyuan-Video-1-5", maxSec: 10, i2v: true, res: "480p / 720p", audio: false, free: "Free Hugging Face Space", note: "Silent clips. Duration settings 5 / 8 / 10 seconds. Runs on a consumer GPU if self-hosted." },
+  { id: "cogvideox", name: "CogVideoX 1.5", vendor: "Zhipu AI · open source", url: "https://huggingface.co/spaces/zai-org/CogVideoX-5B-Space", maxSec: 10, i2v: true, res: "up to 1360×768", audio: false, free: "Free official Hugging Face Space", note: "Strong prompt adherence. 5–10s per clip. The 2B version runs on small GPUs." },
+  { id: "kling", name: "Kling AI", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 10, i2v: true, res: "720p / 1080p", audio: false, free: "66 free credits every day", note: "About 6 standard 10-second clips a day free. Needs a free account; credits expire in 24 hours." },
+  { id: "flow", name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 2 Fast or 5 Lite clips a day free. Needs a Google account." },
+  { id: "runway", name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
+  { id: "mochi", name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." }
+];
+
+const SETTINGS = {
+  wan22: "Resolution: 720p · 24 fps · Steps: ~30 · Guidance: 5–7 · Negative prompt: blurry, low quality, distorted face, extra limbs, flicker · Use your photo as the start image.",
+  ltx23: "Resolution: 720p (1080p if the Space offers it) · 24 fps · Audio: ON if your clip needs sound · Duration: set to the segment length · Enhance Prompt: ON for short prompts.",
+  hunyuan15: "Resolution: 720p · 24 fps · Duration: 5 / 8 / 10 seconds · No audio — add sound later in your editor · Keep the prompt short and concrete.",
+  cogvideox: "Resolution: 720p (1360×768 on the 5B Space) · 16 fps · Guidance: 6 · Duration: 5–10 seconds · Short, literal prompts work best.",
+  kling: "Mode: Standard (uses fewer credits) · 10 seconds · 720p · Professional Mode: OFF on free credits · Upload your photo as the first frame.",
+  flow: "Model: Veo 3.1 Fast for motion and dialogue, Veo 3.1 Light for simple wide shots · 8 seconds · 720p / 1080p · Audio: ON · Use Frames-to-Video with your photo.",
+  runway: "Model: Gen-4 Turbo · 5 seconds · 720p · Free-tier exports are watermarked · Image-to-video with your photo as the first frame.",
+  mochi: "Not recommended for reference-photo work — Mochi 1 takes text only. Pick Wan 2.2, LTX-2.3, HunyuanVideo 1.5, CogVideoX, Kling or Flow instead."
+};
+
+const CAMERA_RULE = "CAMERA RULE: The camera does whatever it needs to do to show the characters well — it may turn, move, change angle or cut whenever the scene needs it; that is the camera's own job. All camera decisions belong to the camera alone: where to zoom in, where to zoom out, which angle to use, where to use a tracking shot, when to pull back, when to push forward, who to focus on, and when to zoom onto a face — whatever makes the scene beautiful and brings out its emotion, pain, anger and feeling. The characters pay NO attention to the camera at all: they NEVER look at it, NEVER act for it, and do nothing for it — they stay in their own business and live their scene naturally, as if no camera were there.";
+const FACE_LOCK = "FACE LOCK: Faces must match the reference photos exactly — not even slightly. No face changes, no character changes, no clothing changes between segments. 16:9 widescreen. NO blood ever.";
+
+let selectedEngine = "wan22";
+let selectedDur = 30;
+let photos = [];
+
+/* ---------- engine picker ---------- */
+const engWrap = document.getElementById("engines");
+ENGINES.forEach(function (e) {
+  const d = document.createElement("div");
+  d.className = "engine" + (e.id === selectedEngine ? " selected" : "");
+  d.dataset.id = e.id;
+  d.innerHTML = "<h3>" + e.name + "<span class='badge" + (e.i2v ? "" : " no") + "'>" +
+    (e.i2v ? "photo ✓" : "text only") + "</span></h3>" +
+    "<p>" + e.vendor + " · " + e.free + "</p>" +
+    "<p>" + e.note + "</p>" +
+    "<div class='limit'>Max " + e.maxSec + "s per clip · " + e.res + (e.audio ? " · with audio" : " · silent") + "</div>";
+  d.addEventListener("click", function () {
+    document.querySelectorAll(".engine").forEach(function (el) { el.classList.remove("selected"); });
+    d.classList.add("selected");
+    selectedEngine = e.id;
+    const w = document.getElementById("noI2vWarn");
+    if (!e.i2v) {
+      document.getElementById("noI2vName").textContent = e.name;
+      w.classList.add("show");
+    } else { w.classList.remove("show"); }
+  });
+  engWrap.appendChild(d);
+});
+
+/* ---------- duration picker ---------- */
+document.querySelectorAll("#durBtns button").forEach(function (b) {
+  b.addEventListener("click", function () {
+    document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.remove("active"); });
+    b.classList.add("active");
+    selectedDur = parseInt(b.dataset.dur, 10);
+  });
+});
+
+/* ---------- photo upload ---------- */
+const input = document.getElementById("photoInput");
+const thumbs = document.getElementById("thumbs");
+input.addEventListener("change", function () {
+  const files = Array.prototype.slice.call(input.files).slice(0, 2 - photos.length);
+  files.forEach(function (f) {
+    if (!f.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      const idx = photos.length;
+      photos.push({ name: f.name, dataUrl: ev.target.result });
+      renderThumbs();
+    };
+    reader.readAsDataURL(f);
+  });
+  input.value = "";
+});
+function renderThumbs() {
+  thumbs.innerHTML = "";
+  photos.forEach(function (p, i) {
+    const d = document.createElement("div");
+    d.className = "thumb";
+    d.innerHTML = "<img src='" + p.dataUrl + "' alt='Reference photo " + (i + 1) + "'>" +
+      "<button type='button' title='Remove'>×</button><div class='tag'>Photo " + (i + 1) + " — " + p.name + "</div>";
+    d.querySelector("button").addEventListener("click", function () {
+      photos.splice(i, 1);
+      renderThumbs();
+    });
+    thumbs.appendChild(d);
+  });
+}
+
+/* ---------- copy helper ---------- */
+function copyText(text, btn) {
+  function done() {
+    const old = btn.textContent;
+    btn.textContent = "✓ Copied";
+    btn.classList.add("done");
+    setTimeout(function () { btn.textContent = old; btn.classList.remove("done"); }, 1600);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+  } else { fallbackCopy(text, done); }
+}
+function fallbackCopy(text, done) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); done(); } catch (e) { /* clipboard unavailable */ }
+  document.body.removeChild(ta);
+}
+document.querySelectorAll("[data-copy]").forEach(function (btn) {
+  btn.addEventListener("click", function () {
+    copyText(document.getElementById(btn.dataset.copy).textContent, btn);
+  });
+});
+
+/* ---------- build plan ---------- */
+document.getElementById("buildBtn").addEventListener("click", function () {
+  const subject = document.getElementById("subject").value.trim();
+  const action = document.getElementById("action").value.trim();
+  const camera = document.getElementById("camera").value;
+  const style = document.getElementById("style").value;
+  const setting = document.getElementById("setting").value.trim();
+  const sound = document.getElementById("sound").value.trim();
+  const engine = ENGINES.find(function (e) { return e.id === selectedEngine; });
+
+  if (!subject) { alert("Please write the subject first (Step 2) — who or what is in the video."); document.getElementById("subject").focus(); return; }
+  if (!action) { alert("Please write the action first (Step 2) — what happens over the 30 seconds."); document.getElementById("action").focus(); return; }
+  if (photos.length === 0 && engine.i2v) {
+    if (!confirm("No reference photo uploaded. The engine will animate from text only and the face will not match a photo. Continue anyway?")) return;
+  }
+
+  const segCount = Math.ceil(selectedDur / engine.maxSec);
+  const baseLen = Math.floor(selectedDur / segCount);
+  const extra = selectedDur - baseLen * segCount;
+  const beats = [
+    "begins — the opening moment: ",
+    "continues — the middle of the action: ",
+    "reaches its peak — the strongest moment: ",
+    "ends — the closing moment: ",
+    "continues — the next beat: ",
+    "ends — the final beat: "
+  ];
+  const segs = [];
+  let t = 0;
+  for (let i = 0; i < segCount; i++) {
+    const len = baseLen + (i < extra ? 1 : 0);
+    const start = t, end = t + len;
+    t = end;
+    const beat = beats[Math.min(i, beats.length - 1)];
+    let prompt = subject + ", " + beat + action + ". " +
+      "Camera: " + camera + ". Style: " + style + ".";
+    if (setting) prompt += " Setting: " + setting + ".";
+    if (sound && engine.audio) prompt += " Sound: " + sound + ".";
+    if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
+    else prompt += " Match the reference photo exactly — same face, same clothes, same setting.";
+    segs.push({ start: start, end: end, prompt: prompt });
+  }
+
+  document.getElementById("summary").innerHTML =
+    "<b>Engine:</b> " + engine.name + " (" + engine.vendor + ") — free: " + engine.free + "<br>" +
+    "<b>Duration:</b> " + selectedDur + " seconds in <b>" + segCount + " segment" + (segCount > 1 ? "s" : "") + "</b> " +
+    "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
+    "<b>Reference photos:</b> " + photos.length + " uploaded (used as the start frame on the engine's page)<br>" +
+    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera;
+
+  const segWrap = document.getElementById("segments");
+  segWrap.innerHTML = "";
+  segs.forEach(function (s, i) {
+    const d = document.createElement("div");
+    d.className = "seg";
+    d.innerHTML = "<h3>Segment " + (i + 1) + " — " + s.start + "s to " + s.end + "s (" + (s.end - s.start) + "s)</h3>" +
+      "<textarea id='segPrompt" + i + "'>" + s.prompt.replace(/&/g, "&amp;").replace(/</g, "&lt;") + "</textarea>" +
+      "<button class='copy-btn' type='button'>📋 Copy segment " + (i + 1) + " prompt</button>";
+    d.querySelector("button").addEventListener("click", function (ev) {
+      copyText(document.getElementById("segPrompt" + i).value, ev.target);
+    });
+    segWrap.appendChild(d);
+  });
+
+  document.getElementById("rulesText").textContent = CAMERA_RULE + "\n\n" + FACE_LOCK;
+  document.getElementById("engineName").textContent = engine.name;
+  document.getElementById("settings").textContent = SETTINGS[engine.id] || "";
+  const go = document.getElementById("goBtn");
+  go.href = engine.url;
+  go.textContent = "▶ Open " + engine.name + " free →";
+  document.getElementById("output").classList.add("show");
+  const outEl = document.getElementById("output");
+  if (outEl.scrollIntoView) outEl.scrollIntoView({ behavior: "smooth" });
+});
+</script>
+</body>
+</html>
