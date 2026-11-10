@@ -229,6 +229,12 @@
           <option value="slow tracking shot following the subject">Slow tracking shot following the subject</option>
           <option value="slow crane shot rising upward">Slow crane shot rising upward</option>
           <option value="slow orbit around the subject">Slow orbit around the subject</option>
+          <option value="dolly in — camera moves forward toward the subject">Dolly in — camera moves forward toward the subject</option>
+          <option value="dolly out — camera pulls back from the subject">Dolly out — camera pulls back from the subject</option>
+          <option value="crane down — camera descends from above">Crane down — camera descends from above</option>
+          <option value="FPV drone fly-through — fast first-person drone flight through the scene">FPV drone fly-through — fast first-person drone flight through the scene</option>
+          <option value="slow tilt up — camera tilts upward">Slow tilt up — camera tilts upward</option>
+          <option value="slow tilt down — camera tilts downward">Slow tilt down — camera tilts downward</option>
         </select>
       </div>
       <div>
@@ -460,6 +466,7 @@ document.getElementById("buildBtn").addEventListener("click", function () {
     if (sound && engine.audio) prompt += " Sound: " + sound + ".";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
     else prompt += " Match the reference photo exactly — same face, same clothes, same setting.";
+    prompt += " FACE LOCK: Faces must match the reference photos exactly — not even slightly.";
     segs.push({ start: start, end: end, prompt: prompt });
   }
 
