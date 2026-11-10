@@ -38,6 +38,22 @@
   .nav-signin { background: transparent; color: #fff; border: 1px solid #55556a; border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
   .nav-signin:hover { border-color: #fff; }
   .nav-user { font-size: 13px; color: #c9c9d8; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* ---------- header profile (chip + dropdown menu) ---------- */
+  .profile-wrap { position: relative; }
+  .profile-chip { display: flex; align-items: center; gap: 8px; background: #1c1c2c; color: #fff; border: 1px solid #7c5cff; border-radius: 999px; padding: 5px 14px 5px 5px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; max-width: 260px; }
+  .profile-chip:hover { border-color: #ffd166; }
+  .profile-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #ffd166, #ff5e8a 55%, #7c5cff); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; flex: none; }
+  .profile-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
+  .profile-credits { color: #ffd166; white-space: nowrap; }
+  .profile-menu { position: absolute; top: calc(100% + 10px); right: 0; min-width: 270px; background: #12121d; border: 1px solid #26263a; border-radius: 16px; padding: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.6); z-index: 60; }
+  .profile-menu[hidden] { display: none; }
+  .profile-menu-email { font-size: 13px; color: #fff; font-weight: 700; word-break: break-all; }
+  .profile-menu-credits { margin-top: 6px; font-size: 14px; color: #ffd166; font-weight: 700; }
+  .profile-menu-costs { margin-top: 4px; font-size: 12px; color: #a9a9bd; }
+  .profile-menu-item { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px; background: transparent; border: none; border-top: 1px solid #26263a; margin-top: 12px; padding: 10px 2px 0; color: #e5e5ef; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; text-align: left; }
+  .profile-menu-item.profile-soon-row { cursor: default; }
+  .profile-soon { font-size: 11px; color: #a9a9bd; font-weight: 400; }
+  .profile-signout { color: #ff8a8a; }
   .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-backdrop[hidden] { display: none; }
   .modal { position: relative; background: #12121d; border: 1px solid #26263a; border-radius: 20px; padding: 28px 26px 24px; width: 100%; max-width: 380px; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
@@ -260,6 +276,8 @@
     .hero h1 { font-size: 32px; }
     .detail-backdrop { padding: 12px 8px; }
     .nav { gap: 8px; }
+    .profile-name { max-width: 64px; }
+    .profile-menu { min-width: 230px; }
   }
 
   @media (max-width: 640px) {
@@ -347,7 +365,7 @@
 <nav class="nav">
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><span class="nav-user" id="navUser" hidden></span><button class="nav-signin" id="signOutBtn" type="button" hidden>Sign out</button><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
@@ -1116,8 +1134,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var modeIn = document.getElementById("modeSignIn");
   var modeUp = document.getElementById("modeSignUp");
   var signInBtn = document.getElementById("signInBtn");
-  var signOutBtn = document.getElementById("signOutBtn");
-  var navUser = document.getElementById("navUser");
+  var profileWrap = document.getElementById("profileWrap");
+  var profileSignOut = document.getElementById("profileSignOut");
   var mode = "signin";
   if (!modal) return;
   if (FIREBASE_CONFIGURED && note) note.style.display = "none";
@@ -1183,17 +1201,17 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function renderUser(user) {
     if (user) {
       if (signInBtn) signInBtn.hidden = true;
-      if (navUser) { navUser.textContent = user.email || "Signed in"; navUser.hidden = false; }
-      if (signOutBtn) signOutBtn.hidden = false;
+      if (profileWrap) profileWrap.hidden = false;
     } else {
       if (signInBtn) signInBtn.hidden = false;
-      if (navUser) navUser.hidden = true;
-      if (signOutBtn) signOutBtn.hidden = true;
+      if (profileWrap) profileWrap.hidden = true;
+      var m = document.getElementById("profileMenu");
+      if (m) m.hidden = true;
     }
   }
   if (lfAuth) lfAuth.onAuthStateChanged(renderUser);
   else renderUser(null);
-  if (signOutBtn) signOutBtn.addEventListener("click", function () {
+  if (profileSignOut) profileSignOut.addEventListener("click", function () {
     if (lfAuth) lfAuth.signOut();
     renderUser(null);
   });
@@ -1305,9 +1323,60 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     try { window.localStorage.setItem(GUEST_KEY, String(n)); } catch (e) { /* storage unavailable */ }
   }
 
+  /* ----- header profile chip + menu (credits always visible in the
+     header once signed in — the only credit line used to sit far below
+     the models grid, so the owner could not find his balance) ----- */
+  var profileWrap = document.getElementById("profileWrap");
+  var profileChip = document.getElementById("profileChip");
+  var profileMenu = document.getElementById("profileMenu");
+  var profileAvatar = document.getElementById("profileAvatar");
+  var profileName = document.getElementById("profileName");
+  var profileCredits = document.getElementById("profileCredits");
+  var profileMenuEmail = document.getElementById("profileMenuEmail");
+  var profileMenuCredits = document.getElementById("profileMenuCredits");
+  function profileBalanceText() {
+    if (isOwner()) return "Unlimited (Owner)";
+    if (walletState === "loading") return "Loading…";
+    if (walletState === "unavailable") return "Wallet unavailable";
+    if (walletState === "ready") return walletCredits === 0 ? "0 credits (finished)" : walletCredits + " credits";
+    return "";
+  }
+  function updateProfile() {
+    if (!profileWrap || !currentUser) return;
+    var email = currentUser.email || "";
+    var name = email.split("@")[0] || "Signed in";
+    if (profileAvatar) profileAvatar.textContent = (name.charAt(0) || "?").toUpperCase();
+    if (profileName) profileName.textContent = name;
+    var bal = profileBalanceText();
+    if (profileCredits) profileCredits.textContent = "💎 " + bal;
+    if (profileMenuEmail) profileMenuEmail.textContent = email;
+    if (profileMenuCredits) profileMenuCredits.textContent = "💎 Your credits: " + bal + " · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20";
+  }
+  if (profileChip && profileMenu) {
+    profileChip.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = profileMenu.hidden;
+      profileMenu.hidden = !open;
+      profileChip.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) {
+      if (!profileMenu.hidden && profileWrap && !profileWrap.contains(e.target)) {
+        profileMenu.hidden = true;
+        profileChip.setAttribute("aria-expanded", "false");
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !profileMenu.hidden) {
+        profileMenu.hidden = true;
+        profileChip.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
   /* ----- balance display (always above the tool) ----- */
   function costFor(dur) { return COST[dur] || COST[30]; }
   function updateBar() {
+    updateProfile();
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
     if (!authResolved) {
