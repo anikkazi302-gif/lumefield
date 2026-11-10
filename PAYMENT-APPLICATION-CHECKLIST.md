@@ -15,8 +15,8 @@ Proposed credit packs (fit the credit costs 5s = 4, 10s = 7, 20s = 14, 30s = 20;
 | Pack | Credits | Price | What it buys | Paddle fee (5% + $0.50) | Owner keeps |
 |---|---|---|---|---|---|
 | **Starter** | 60 | **$4.99** | 3 × 30s videos (or 15 × 5s, 8 × 10s) | $0.75 | $4.24 |
-| **Creator** | 150 | **$9.99** | 7 × 30s videos (10 credits left over) | $1.00 | $8.99 |
-| **Studio** | 300 | **$19.99** | 15 × 30s videos | $1.50 | $18.49 |
+| **Plus** | 150 | **$9.99** | 7 × 30s videos (10 credits left over) | $1.00 | $8.99 |
+| **Ultra** | 300 | **$19.99** | 15 × 30s videos | $1.50 | $18.49 |
 
 Per 30-second video: $1.66 / $1.43 / $1.33. Polar's fee is 5% + $0.50 + 1.5% on non-US cards, so a few cents more per sale — the packs stay the same, the keeper column is a few cents lower on Polar.
 
@@ -28,7 +28,7 @@ The owner must approve these prices (or change them) before any product is creat
 
 | # | Item | Details | Cost |
 |---|---|---|---|
-| 1 | **Approve the prices above** (or set different ones) | One decision: Starter / Creator / Studio prices. Nothing else can be built until this is chosen. | $0 |
+| 1 | **Approve the prices above** (or set different ones) | One decision: Starter / Plus / Ultra prices. Nothing else can be built until this is chosen. | $0 |
 | 2 | **Payoneer account** (free to open) | Sign up at payoneer.com with the same ID and bank account below. This is how Paddle's payouts reach him without the $15 SWIFT wire fee. (Annual fee $29.95 only if under $6,000 received in 12 months.) | $0 |
 | 3 | **Government ID** — NID card or passport | Clear photo/scan, front and back. Needed for KYC identity checks on Paddle (Sumsub), Polar (Stripe Connect Express) and Payoneer. | $0 |
 | 4 | **Proof of address** — utility bill or bank statement in his name | Sometimes asked by Paddle's verification. Have one ready, dated within the last 3 months. | $0 |
@@ -52,7 +52,7 @@ Apply to both in parallel and use whichever approves first. Approval is **not gu
 3. Complete identity verification (Sumsub): upload the NID/passport + proof of address from step 1. Sometimes a short liveness video is asked for.
 4. Add a payout method: **Payoneer** (preferred — avoids the $15 SWIFT fee) or bank wire. Minimum payout **$100** (adjustable up). Payouts are monthly: balance above the threshold on the 1st is sent by the 15th.
 5. **Re-check the fee on Paddle's own pricing page on the day of signup** (published: 5% + $0.50 per sale; Paddle asks sellers of products under $10 to contact sales for custom pricing — check this at signup). Also note: Paddle does **not** refund its fee when a customer is refunded.
-6. Once approved, create the 3 products in the Paddle dashboard (Starter / Creator / Studio, one-time payments, prices from step 0) and copy the hosted checkout links.
+6. Once approved, create the 3 products in the Paddle dashboard (Starter / Plus / Ultra, one-time payments, prices from step 0) and copy the hosted checkout links.
 
 ### 2.2 Polar (2nd choice)
 
@@ -101,7 +101,7 @@ Apply to both in parallel and use whichever approves first. Approval is **not gu
 
 ## সংক্ষেপে (বাংলায়)
 
-- **দাম ঠিক করা বাকি** — Starter ৬০ ক্রেডিট $৪.৯৯, Creator ১৫০ ক্রেডিট $৯.৯৯, Studio ৩০০ ক্রেডিট $১৯.৯৯ (প্রস্তাব; তুমি হ্যাঁ বললে চূড়ান্ত)।
+- **দাম ঠিক করা বাকি** — Starter ৬০ ক্রেডিট $৪.৯৯, Plus ১৫০ ক্রেডিট $৯.৯৯, Ultra ৩০০ ক্রেডিট $১৯.৯৯ (প্রস্তাব; তুমি হ্যাঁ বললে চূড়ান্ত)।
 - **তোমার যা লাগবে:** NID/পাসপোর্ট, ঠিকানার প্রমাণ, নিজের নামে ব্যাংক অ্যাকাউন্ট, ফ্রি Payoneer অ্যাকাউন্ট, আর তোমার ইমেইল। কোম্পানি লাগবে না, আবেদন করতে টাকা লাগবে না।
 - **আবেদন:** Paddle আর Polar — দুটোতেই একসাথে আবেদন করবে, **ওদের নিজের সাইটে গিয়ে**, তোমার হাতে। কাগজ কাউকে চ্যাটে দেবে না।
 - **অনুমোদন নিশ্চিত না** — Paddle মাঝে মাঝে কারণ না বলে না করে দেয়; তাই দুটোতে আবেদন।
