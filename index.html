@@ -8,6 +8,10 @@
 <meta name="keywords" content="LumeField, free AI video generator, image to video AI, free video generator, AI video generator free, reference photo video">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://anikkazi302-gif.github.io/lumefield/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd166'/%3E%3Cstop offset='.55' stop-color='%23ff5e8a'/%3E%3Cstop offset='1' stop-color='%237c5cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle' fill='white'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="https://anikkazi302-gif.github.io/lumefield/founder.webp">
+<meta property="og:image:alt" content="Founder Raju — LumeField">
+<meta name="twitter:image" content="https://anikkazi302-gif.github.io/lumefield/founder.webp">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LumeField — Free AI Video Generator">
 <meta property="og:description" content="Turn your reference photos into 30-second cinematic videos with free AI engines. Start free — no card needed to start.">
@@ -56,6 +60,20 @@
   .profile-menu-item.profile-soon-row { cursor: default; }
   .profile-soon { font-size: 11px; color: #a9a9bd; font-weight: 400; }
   .profile-signout { color: #ff8a8a; }
+  /* ---------- "JUST ADD" items: NEW badges, filters, hamburger, history, resend ---------- */
+  .new-badge { font-size: 10px; background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 18px; }
+  .filter-row input[type=text] { flex: 1; min-width: 220px; max-width: 320px; }
+  .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter-chip { background: #1a1a28; color: #f2f2f7; border: 1px solid #33334a; border-radius: 999px; padding: 8px 16px; cursor: pointer; font-size: .9rem; font-family: inherit; }
+  .filter-chip.active { background: linear-gradient(90deg, #ff5e8a, #7c5cff); border-color: transparent; font-weight: 700; }
+  .nav-burger { display: none; background: transparent; border: 1px solid #55556a; color: #fff; border-radius: 10px; padding: 8px 12px; font-size: 18px; cursor: pointer; font-family: inherit; }
+  .profile-history { border-top: 1px solid #26263a; margin-top: 12px; padding-top: 10px; }
+  .profile-history-title { font-size: 12px; font-weight: 700; color: #a9a9bd; }
+  .profile-history-row { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: #e5e5ef; margin-top: 6px; }
+  .profile-history-empty { font-size: 13px; color: #a9a9bd; margin-top: 6px; }
+  .auth-resend { width: 100%; margin-top: 10px; background: #1c1c2c; color: #ffd166; border: 1px solid #7c5cff; border-radius: 999px; padding: 12px 0; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .auth-resend:hover { border-color: #ffd166; }
   .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
   .modal-backdrop[hidden] { display: none; }
   .modal { position: relative; background: #12121d; border: 1px solid #26263a; border-radius: 20px; padding: 28px 26px 24px; width: 100%; max-width: 380px; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
@@ -288,6 +306,8 @@
     .hero p { font-size: 16px; }
     .nav { padding: 14px 16px; }
     .nav-links { display: none; }
+    .nav-links.open { display: flex; flex-direction: column; gap: 12px; width: 100%; padding: 6px 0 2px; }
+    .nav-burger { display: inline-flex; }
   }
 </style>
 <script type="application/ld+json">
@@ -358,6 +378,14 @@
         "@type": "Answer",
         "text": "A reference photo is the photo your video must match — a face, a character, or a place. You upload it as the start frame (image input) on the engine's own page, and the engine animates that photo. This page only previews your photo in your browser; you upload the same photo again on the engine's page."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Do the 60 free sign-up credits expire?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The 60 free sign-up credits do not expire. They stay in your balance until you use them."
+      }
     }
   ]
 }
@@ -367,8 +395,9 @@
 
 <nav class="nav">
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
+  <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
@@ -387,7 +416,7 @@
 
 <section class="limits" id="limits">
   <div class="limit-card"><div class="num">30s</div><div class="lbl">video per plan — free</div></div>
-  <div class="limit-card"><div class="num">66</div><div class="lbl">Kling credits / day — free</div></div>
+  <div class="limit-card"><div class="num">≈1</div><div class="lbl">Kling clip / day — free (66 credits claimed, figure disputed)</div></div>
   <div class="limit-card"><div class="num">50</div><div class="lbl">Flow credits / day — free</div></div>
   <div class="limit-card"><div class="num">16</div><div class="lbl">free engines built in</div></div>
 </section>
@@ -419,7 +448,24 @@
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>Video <span>models</span> — free</h2>
   <p class="lead">Tap any model to watch what it makes and see its true quality, speed and motion — then buy credits or use it free in the tool below.</p>
+  <div class="filter-row">
+    <input type="text" id="modelSearch" placeholder="🔍 Search models…" aria-label="Search video models">
+    <div class="filter-chips" id="modelFilterChips">
+      <button type="button" class="filter-chip active" data-filter="all">All</button>
+      <button type="button" class="filter-chip" data-filter="audio">With audio</button>
+      <button type="button" class="filter-chip" data-filter="photo">Photo</button>
+      <button type="button" class="filter-chip" data-filter="text">Text-only</button>
+    </div>
+  </div>
   <div class="model-grid" id="modelsGrid"></div>
+</section>
+
+<section class="model-sec has-bg" id="showcase">
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <h2>Made with <span>LumeField</span></h2>
+  <p class="lead">Real videos made with these free engines — tap any clip to watch it and open the model.</p>
+  <div class="model-grid" id="showcaseGrid"></div>
 </section>
 
 <div class="tool-wrap has-bg" id="tool">
@@ -500,6 +546,8 @@
     <input type="text" id="setting" placeholder="e.g. Rocky mountainside, old stone cottage, overcast grey sky, light snow falling">
     <label for="sound">Sound / dialogue note (optional — only engines marked "with audio" render it)</label>
     <input type="text" id="sound" placeholder="e.g. No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end.">
+    <label>✨ Try an example — one click fills the scene</label>
+    <div class="seg-btns" id="presetBtns"></div>
   </div>
 
   <!-- STEP 3 : DURATION + ENGINE -->
@@ -527,6 +575,10 @@
   <div class="card out" id="output">
     <h2>Your video plan</h2>
     <div class="summary" id="summary"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 6px;">
+      <button class="copy-btn" id="copyPlanBtn" type="button">📋 Copy whole plan</button>
+      <button class="copy-btn" id="downloadPlanBtn" type="button">⬇️ Download plan (.txt)</button>
+    </div>
     <div id="segments"></div>
     <p class="note">✏️ <b>Customize your plan:</b> every segment prompt above is editable — change any part of it, then copy it. Change the style, camera or duration above and press “Build my video plan” again to rebuild the whole plan your way. You control every part.</p>
     <h2 style="margin-top:18px;">Locked rules — paste with every prompt</h2>
@@ -607,11 +659,16 @@
     <h3>What is a reference photo?</h3>
     <p>A reference photo is the photo your video must match — a face, a character, or a place. You upload it as the start frame (image input) on the engine's own page, and the engine animates that photo. This page only previews your photo in your browser; you upload the same photo again on the engine's page.</p>
   </div>
+  <div class="faq-item">
+    <h3>Do the 60 free sign-up credits expire?</h3>
+    <p>No. The 60 free sign-up credits do not expire. They stay in your balance until you use them.</p>
+  </div>
 </section>
 
 <section class="howto-sec" id="image-tools">
   <h2>Create <span>images</span> — free</h2>
   <p class="lead">Make any image free with these tools — then customize it your way.</p>
+  <div class="filter-row"><input type="text" id="imageSearch" placeholder="🔍 Search image tools…" aria-label="Search image tools"></div>
     <div class="model-grid" id="imageGrid"></div>
   <div class="honest">✏️ <b>Customize any image your way:</b> change any part, remove things, add things, restyle it, edit text, adjust colors — every kind of customization, by you. Open your image in <a href="https://photopea.com" target="_blank" rel="noopener">Photopea</a> or <a href="https://www.capcut.com/create/ai-image-editor-free" target="_blank" rel="noopener">CapCut AI Image Editor</a> (or any editor below) and fix or change anything you want.</div>
 </section>
@@ -619,6 +676,7 @@
 <section class="howto-sec" id="photo-editing">
   <h2>Edit <span>photos</span> — free</h2>
   <p class="lead">Free photo editors — remove backgrounds, erase objects, upscale to 4K, design anything.</p>
+  <div class="filter-row"><input type="text" id="editorSearch" placeholder="🔍 Search photo editors…" aria-label="Search photo editors"></div>
     <div class="model-grid" id="editorGrid"></div>
 </section>
 
@@ -627,7 +685,8 @@
   <div class="bg-overlay" aria-hidden="true"></div>
 <div class="footer-inner">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
 Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.<br>
-<a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a></div></div>
+<a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a><br>
+Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div></div>
 
 <section class="founder">
   <img src="founder.webp" alt="Founder Raju" width="120" height="120">
@@ -660,6 +719,7 @@ Plans and prompts only; video is rendered free on the engine you choose. Engine 
     <p class="auth-msg" id="authMsg" role="status"></p>
     <button class="btn-primary auth-submit" id="authSubmit" type="button">Sign in</button>
     <button class="auth-google" id="authGoogle" type="button">Continue with Google</button>
+    <button class="auth-resend" id="resendVerifyBtn" type="button" hidden>✉️ Resend verification email</button>
     <p class="modal-note" id="authNote">Free to start — sign in with Google or email.</p>
   </div>
 </div>
@@ -686,6 +746,8 @@ const ENGINES = [
   { id: "luma", name: "Luma Dream Machine", vendor: "Luma AI", url: "https://dream-machine.lumalabs.ai", maxSec: 10, i2v: true, res: "720p", audio: false, free: "Free tier — verify at signup", note: "Cinematic Ray models with keyframe control, free tier to verify at signup. Video only — no native audio." },
   { id: "firefly", name: "Adobe Firefly (video)", vendor: "Adobe", url: "https://firefly.adobe.com", maxSec: 5, i2v: true, res: "1080p", audio: true, free: "Free daily generations", note: "Veo, Kling and Luma models in one place, trained on licensed data, free daily generations. Audio depends on the partner model." }
 ];
+/* Newest engines — shown with a NEW badge on their cards. */
+var NEW_ENGINE_IDS = ["seedance", "vidu", "wan3", "pixverse", "firefly"];
 
 const SETTINGS = {
   wan22: "Resolution: 720p · 24 fps · Steps: ~30 · Guidance: 5–7 · Negative prompt: blurry, low quality, distorted face, extra limbs, flicker · Use your photo as the start image.",
@@ -734,7 +796,7 @@ ENGINES.forEach(function (e) {
   const d = document.createElement("div");
   d.className = "engine" + (e.id === selectedEngine ? " selected" : "");
   d.dataset.id = e.id;
-  d.innerHTML = "<h3>" + e.name + "<span class='badge" + (e.i2v ? "" : " no") + "'>" +
+  d.innerHTML = "<h3>" + e.name + (NEW_ENGINE_IDS.indexOf(e.id) !== -1 ? " <span class='new-badge'>NEW</span>" : "") + "<span class='badge" + (e.i2v ? "" : " no") + "'>" +
     (e.i2v ? "photo ✓" : "text only") + "</span></h3>" +
     "<p>" + e.vendor + " · " + e.free + "</p>" +
     "<p>" + e.note + "</p>" +
@@ -904,6 +966,82 @@ document.getElementById("buildBtn").addEventListener("click", function () {
   if (window.lfCreditGate) { window.lfCreditGate(selectedDur, buildPlan); }
   else { showBuildError("Credit system unavailable, please reload."); }
 });
+
+/* ---------- preset scene templates + "Try an example" ---------- */
+var PRESETS = [
+  { name: "🐉 Dragon at sunset", subject: "A white dragon standing behind a young woman in front of an old stone cottage", action: "The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated", camera: "slow push-in toward the subject", style: "cinematic dark fantasy, film grain, moody light", setting: "Rocky mountainside, old stone cottage, overcast grey sky, light snow falling", sound: "No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end." },
+  { name: "🎂 Birthday party", subject: "A happy child in a party hat blowing out candles on a birthday cake", action: "The child blows out the candles, friends cheer and clap, balloons float up and confetti falls over the table", camera: "slow pull-back revealing the scene", style: "bright 3D cartoon, cheerful", setting: "Colourful living room with balloons and streamers", sound: "Children laughing and cheering, happy birthday song in the background." },
+  { name: "🧴 Product shot", subject: "A sleek perfume bottle on a marble table", action: "The bottle slowly rotates as golden light sweeps across it and a soft mist swirls around its base", camera: "slow orbit around the subject", style: "realistic, natural light, photographic", setting: "Minimal studio, soft warm light, dark background", sound: "" },
+  { name: "⛰️ Mountain market", subject: "A busy mountain market at dawn with vendors and colourful stalls", action: "Vendors open their stalls, shoppers browse the goods, smoke rises from a tea stall and a dog runs through the lane", camera: "slow tracking shot following the subject", style: "realistic, natural light, photographic", setting: "Stone-paved mountain market, morning mist, warm sunrise light", sound: "Market chatter, distant bells, birdsong." },
+  { name: "🌧️ Rainy city street", subject: "A lone person with a glowing umbrella walking down a rainy city street at night", action: "The person walks slowly through the rain, neon signs reflect in the puddles and a tram passes behind them", camera: "slow tracking shot following the subject", style: "cinematic dark fantasy, film grain, moody light", setting: "Rainy city street at night, neon signs, wet pavement", sound: "Rain falling, distant traffic, soft footsteps." },
+  { name: "🐼 Baby animals", subject: "A baby panda and a baby elephant playing together in a sunny meadow", action: "The baby panda rolls in the grass, the baby elephant sprays water playfully and both tumble together", camera: "slow push-in toward the subject", style: "bright 3D cartoon, cheerful", setting: "Sunny green meadow with flowers and butterflies", sound: "Birds singing, soft playful music, happy animal sounds." }
+];
+function applyPreset(p) {
+  document.getElementById("subject").value = p.subject;
+  document.getElementById("action").value = p.action;
+  document.getElementById("camera").value = p.camera;
+  document.getElementById("style").value = p.style;
+  document.getElementById("setting").value = p.setting || "";
+  document.getElementById("sound").value = p.sound || "";
+  hideBuildError();
+  document.getElementById("subject").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+(function renderPresets() {
+  var wrap = document.getElementById("presetBtns");
+  if (!wrap) return;
+  PRESETS.forEach(function (p) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.textContent = p.name;
+    b.addEventListener("click", function () { applyPreset(p); });
+    wrap.appendChild(b);
+  });
+  var r = document.createElement("button");
+  r.type = "button";
+  r.textContent = "🎲 Try an example";
+  r.addEventListener("click", function () { applyPreset(PRESETS[Math.floor(Math.random() * PRESETS.length)]); });
+  wrap.appendChild(r);
+})();
+
+/* ---------- download / copy the whole plan ---------- */
+function fullPlanText() {
+  var engine = ENGINES.find(function (e) { return e.id === selectedEngine; });
+  var lines = [];
+  lines.push("LumeField video plan — " + engine.name + " (" + engine.vendor + ")");
+  lines.push("");
+  lines.push(document.getElementById("summary").textContent);
+  lines.push("");
+  var i = 0, ta;
+  while ((ta = document.getElementById("segPrompt" + i))) {
+    lines.push("Segment " + (i + 1) + " prompt:");
+    lines.push(ta.value);
+    lines.push("");
+    i++;
+  }
+  lines.push("Locked rules:");
+  lines.push(document.getElementById("rulesText").textContent);
+  lines.push("");
+  lines.push("Recommended settings for " + engine.name + ":");
+  lines.push(document.getElementById("settings").textContent);
+  lines.push("");
+  lines.push("Open the engine: " + engine.url);
+  return lines.join("\n");
+}
+document.getElementById("copyPlanBtn").addEventListener("click", function (ev) { copyText(fullPlanText(), ev.target); });
+document.getElementById("downloadPlanBtn").addEventListener("click", function (ev) {
+  var blob = new Blob([fullPlanText()], { type: "text/plain" });
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "lumefield-video-plan.txt";
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  var btn = ev.target;
+  var old = btn.textContent;
+  btn.textContent = "✓ Downloaded";
+  btn.classList.add("done");
+  setTimeout(function () { btn.textContent = old; btn.classList.remove("done"); }, 1600);
+});
 </script>
 <script>
 /* ---------- model cards + detail modal (video + name on the card; in the
@@ -982,7 +1120,7 @@ function makeCard(kind, id, name, demo, siteUrl) {
   c.setAttribute("aria-label", name + " — tap for video and details");
   c.dataset.kind = kind;
   c.dataset.id = id;
-  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + '</div>';
+  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + ((kind === "video" && typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(id) !== -1) ? ' <span class="new-badge">NEW</span>' : '') + '</div>';
   function open() { openDetail(kind, id); }
   c.addEventListener("click", open);
   c.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); } });
@@ -995,6 +1133,56 @@ function makeCard(kind, id, name, demo, siteUrl) {
   if (ig) IMAGE_TOOLS.forEach(function (t) { ig.appendChild(makeCard("image", t.id, t.name, t.demo, t.url)); });
   var eg = document.getElementById("editorGrid");
   if (eg) EDITORS.forEach(function (t) { eg.appendChild(makeCard("editor", t.id, t.name, t.demo, t.url)); });
+  /* Showcase gallery — the official demo videos already on the site. */
+  var sg = document.getElementById("showcaseGrid");
+  if (sg) {
+    ["seedance", "vidu", "kling", "flow", "wan3", "pixverse", "luma", "firefly"].forEach(function (id) {
+      var e = ENGINES.find(function (x) { return x.id === id; });
+      if (e && DEMO[id]) sg.appendChild(makeCard("video", e.id, e.name, DEMO[id], e.url));
+    });
+  }
+})();
+
+/* ---------- search / filter for the model, image and editor grids ---------- */
+var modelFilter = "all";
+function applyModelFilter() {
+  var q = ((document.getElementById("modelSearch") || {}).value || "").toLowerCase();
+  var mg = document.getElementById("modelsGrid");
+  if (!mg) return;
+  Array.prototype.forEach.call(mg.children, function (card) {
+    var e = ENGINES.find(function (x) { return x.id === card.dataset.id; });
+    if (!e) return;
+    var okQ = !q || (e.name + " " + e.vendor).toLowerCase().indexOf(q) !== -1;
+    var okF = modelFilter === "all" || (modelFilter === "audio" && e.audio) || (modelFilter === "photo" && e.i2v) || (modelFilter === "text" && !e.i2v);
+    card.style.display = (okQ && okF) ? "" : "none";
+  });
+}
+function applyToolFilter(inputId, gridId, items) {
+  var inp = document.getElementById(inputId);
+  var g = document.getElementById(gridId);
+  if (!inp || !g) return;
+  var q = (inp.value || "").toLowerCase();
+  Array.prototype.forEach.call(g.children, function (card) {
+    var t = items.find(function (x) { return x.id === card.dataset.id; });
+    if (!t) return;
+    card.style.display = (!q || (t.name + " " + t.desc).toLowerCase().indexOf(q) !== -1) ? "" : "none";
+  });
+}
+(function wireFilters() {
+  var ms = document.getElementById("modelSearch");
+  if (ms) ms.addEventListener("input", applyModelFilter);
+  var chips = document.getElementById("modelFilterChips");
+  if (chips) chips.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest(".filter-chip") : null;
+    if (!b) return;
+    modelFilter = b.getAttribute("data-filter") || "all";
+    Array.prototype.forEach.call(chips.children, function (c) { c.classList.toggle("active", c === b); });
+    applyModelFilter();
+  });
+  var is = document.getElementById("imageSearch");
+  if (is) is.addEventListener("input", function () { applyToolFilter("imageSearch", "imageGrid", IMAGE_TOOLS); });
+  var es = document.getElementById("editorSearch");
+  if (es) es.addEventListener("input", function () { applyToolFilter("editorSearch", "editorGrid", EDITORS); });
 })();
 
 var detailModal = document.getElementById("detailModal");
@@ -1211,7 +1399,37 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       var m = document.getElementById("profileMenu");
       if (m) m.hidden = true;
     }
+    updateResendButtons();
   }
+  /* Resend verification email — shown in the auth modal and in the profile
+     menu whenever the signed-in user is unverified. Rules v3 gives no
+     wallet to an unverified email, so this is the fix for "logged in but
+     no credits showing". */
+  var resendModalBtn = document.getElementById("resendVerifyBtn");
+  var resendMenuBtn = document.getElementById("profileResendBtn");
+  function setResendLabel(t) {
+    if (resendModalBtn) resendModalBtn.textContent = t;
+    if (resendMenuBtn) resendMenuBtn.textContent = t;
+  }
+  function updateResendButtons() {
+    var u = lfAuth && lfAuth.currentUser;
+    var show = !!(u && !u.emailVerified);
+    if (resendModalBtn) resendModalBtn.hidden = !show;
+    if (resendMenuBtn) resendMenuBtn.hidden = !show;
+    if (show) setResendLabel("✉️ Resend verification email");
+  }
+  window.lfResendVerification = function () {
+    var u = lfAuth && lfAuth.currentUser;
+    if (!u || !u.sendEmailVerification) return;
+    u.sendEmailVerification().then(function () {
+      showMsg("Verification email sent — check your inbox (and spam folder).");
+      setResendLabel("✓ Sent — check your inbox");
+      setTimeout(updateResendButtons, 4000);
+    }).catch(function (err) { showMsg(err && err.message ? err.message : "Could not send the verification email. Try again."); });
+  };
+  window.lfUpdateResendButtons = updateResendButtons;
+  if (resendModalBtn) resendModalBtn.addEventListener("click", function () { window.lfResendVerification(); });
+  if (resendMenuBtn) resendMenuBtn.addEventListener("click", function () { window.lfResendVerification(); });
   if (lfAuth) lfAuth.onAuthStateChanged(renderUser);
   else renderUser(null);
   if (profileSignOut) profileSignOut.addEventListener("click", function () {
@@ -1284,6 +1502,14 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     return local + "@" + domain;
   }
   var FINISHED_MSG = "Credits finished";
+  var FINISHED_UPGRADE = " Use the ⬆️ Upgrade button in the top bar to buy more credits.";
+  /* The old "owner is applying the security rules" message is stale — rules
+     v3 is published. An unverified user has no wallet because the email is
+     not verified yet, so say that (with the resend option) instead. */
+  function walletUnavailableMsg() {
+    if (currentUser && !currentUser.emailVerified) return "Please verify your email to get your credits — check your inbox for the verification email, or use “Resend verification email” in your profile menu.";
+    return "Credit wallet is not connected yet — please try again in a moment.";
+  }
 
   var bar = document.getElementById("creditBar");
   var text = document.getElementById("creditText");
@@ -1354,6 +1580,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (profileCredits) profileCredits.textContent = "💎 " + bal;
     if (profileMenuEmail) profileMenuEmail.textContent = email;
     if (profileMenuCredits) profileMenuCredits.textContent = "💎 Your credits: " + bal + " · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20";
+    renderHistory();
+    if (window.lfUpdateResendButtons) window.lfUpdateResendButtons();
   }
   if (profileChip && profileMenu) {
     profileChip.addEventListener("click", function (e) {
@@ -1386,10 +1614,47 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     });
   });
 
+  /* ----- usage history (this browser only — from localStorage, never
+     invented: builds are recorded by the gate after each successful build) ----- */
+  function renderHistory() {
+    var el = document.getElementById("profileHistory");
+    if (!el) return;
+    var hist = [];
+    try { hist = JSON.parse(window.localStorage.getItem("lumefield_history") || "[]"); } catch (e) { hist = []; }
+    if (!hist.length) {
+      el.innerHTML = '<div class="profile-history-title">Your builds (this browser)</div><div class="profile-history-empty">No builds yet</div>';
+      return;
+    }
+    var total = hist.reduce(function (a, h) { return a + (h.spent || 0); }, 0);
+    var rows = hist.slice(0, 5).map(function (h) {
+      return '<div class="profile-history-row"><span>' + h.dur + 's plan</span><span>' + (h.spent ? h.spent + ' credits' : 'free') + ' · ' + h.at + '</span></div>';
+    }).join("");
+    el.innerHTML = '<div class="profile-history-title">Your builds (this browser) — ' + hist.length + ' built, ' + total + ' credits spent</div>' + rows;
+  }
+  function recordBuild(dur, spent) {
+    try {
+      var hist = JSON.parse(window.localStorage.getItem("lumefield_history") || "[]");
+      hist.unshift({ dur: dur, spent: spent, at: new Date().toISOString().slice(0, 16).replace("T", " ") });
+      hist = hist.slice(0, 10);
+      window.localStorage.setItem("lumefield_history", JSON.stringify(hist));
+    } catch (e) {}
+    renderHistory();
+  }
+
   /* ----- balance display (always above the tool) ----- */
   function costFor(dur) { return COST[dur] || COST[30]; }
+  /* Build button shows its cost (updates with the duration). */
+  function updateBuildBtn() {
+    var b = document.getElementById("buildBtn");
+    if (!b) return;
+    var dur = (typeof selectedDur === "number") ? selectedDur : 30;
+    var cost = costFor(dur);
+    if (isOwner()) b.textContent = "🎬 Build my video plan — free for you";
+    else b.textContent = "🎬 Build my video plan — " + cost + " credits";
+  }
   function updateBar() {
     updateProfile();
+    updateBuildBtn();
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
     if (!authResolved) {
@@ -1415,10 +1680,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (walletState === "loading") {
       text.textContent = "💎 Loading your credits…";
     } else if (walletState === "unavailable") {
-      text.textContent = "⚠️ Credit wallet is not connected yet — the owner is applying the security rules. Your " + FREE_WITHOUT_LOGIN + " free videos still work.";
+      if (currentUser && !currentUser.emailVerified) {
+        text.innerHTML = "⚠️ Please verify your email to get your credits — check your inbox (and spam) for the verification email. <a href=\"#\" id=\"creditResendLink\" style=\"color:#ffd166;font-weight:700;\">Resend verification email</a>";
+      } else {
+        text.textContent = "⚠️ Credit wallet is not connected yet — please try again in a moment. Your " + FREE_WITHOUT_LOGIN + " free videos still work.";
+      }
     } else if (walletState === "ready") {
       if (walletCredits === 0) {
-        text.textContent = "💎 " + FINISHED_MSG + " — you have used all " + START_CREDITS + " credits.";
+        text.innerHTML = "💎 " + FINISHED_MSG + " — your " + START_CREDITS + " free credits are used up. <a href=\"#buy-credits\" style=\"color:#ffd166;font-weight:700;\">⬆️ Upgrade to buy more credits</a>";
+      } else if (walletCredits < 20) {
+        text.innerHTML = "💎 Your credits: " + walletCredits + " · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20 · This " + dur + "s video costs " + cost + " credits. ⚠️ Low credits — <a href=\"#buy-credits\" style=\"color:#ffd166;font-weight:700;\">⬆️ Upgrade</a>";
       } else {
         text.textContent = "💎 Your credits: " + walletCredits + " · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20 · This " + dur + "s video costs " + cost + " credits.";
       }
@@ -1427,6 +1698,14 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
   if (signInBtn) signInBtn.addEventListener("click", function () {
     if (window.lfOpenLogin) window.lfOpenLogin("");
+  });
+
+  /* Resend link inside the credit bar (unverified users). */
+  if (bar) bar.addEventListener("click", function (e) {
+    if (e.target && e.target.id === "creditResendLink") {
+      e.preventDefault();
+      if (window.lfResendVerification) window.lfResendVerification();
+    }
   });
 
   /* ----- Firestore wallet ----- */
@@ -1560,7 +1839,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!validateInputs()) return;
     /* Owner bypass (see OWNER_EMAIL above): the owner always builds free —
        no Firestore deduction, no wallet check, no "credits finished". */
-    if (isOwner()) { buildPlan(); updateBar(); return; }
+    if (isOwner()) { buildPlan(); recordBuild(dur, 0); updateBar(); return; }
     var cost = costFor(dur);
 
     /* Not signed in: 3 free videos, counted in this browser. */
@@ -1571,6 +1850,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         return;
       }
       buildPlan();
+      recordBuild(dur, 0);
       setGuestUsed(guestUsed() + 1);
       updateBar();
       return;
@@ -1585,10 +1865,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (walletState === "loading") { showBuildError("Loading your credits \u2014 try again in a second."); return; }
       if (guestUsed() >= FREE_WITHOUT_LOGIN) {
         updateBar();
-        showBuildError("Credit wallet is not connected yet \u2014 the owner is applying the security rules. Your free videos are used up; please wait until the wallet is live.");
+        showBuildError(walletUnavailableMsg() + " Your free videos are used up.");
         return;
       }
       buildPlan();
+      recordBuild(dur, 0);
       setGuestUsed(guestUsed() + 1);
       updateBar();
       return;
@@ -1597,21 +1878,22 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     /* Signed in with a live wallet: charge in Firestore first, then build. */
     if (walletCredits === null || walletCredits < cost) {
       updateBar();
-      showBuildError(walletCredits === 0 ? FINISHED_MSG + " \u2014 you have used all " + START_CREDITS + " credits."
+      showBuildError(walletCredits === 0 ? FINISHED_MSG + " \u2014 you have used all " + START_CREDITS + " credits." + FINISHED_UPGRADE
         : "Not enough credits for a " + dur + "s video \u2014 it costs " + cost + ", you have " + walletCredits + ".");
       return;
     }
     chargeWallet(currentUser.uid, cost).then(function () {
       buildPlan();
+      recordBuild(dur, cost);
       updateBar();
     }).catch(function (err) {
       if (err && err.message === "insufficient") {
         updateBar();
-        showBuildError(FINISHED_MSG + " \u2014 you have used all " + START_CREDITS + " credits.");
+        showBuildError(FINISHED_MSG + " \u2014 you have used all " + START_CREDITS + " credits." + FINISHED_UPGRADE);
       } else if (err && err.message === "no-wallet") {
         walletState = "unavailable";
         updateBar();
-        showBuildError("Credit wallet is not connected yet \u2014 the owner is applying the security rules. Please try again in a moment.");
+        showBuildError(walletUnavailableMsg());
       } else {
         showBuildError("Could not use your credits right now (" + (err && err.message ? err.message : "unknown error") + "). Nothing was charged \u2014 please try again.");
       }
@@ -1619,6 +1901,24 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   };
 
   updateBar();
+})();
+</script>
+<script>
+/* ---------- phone nav hamburger (≤640px the nav links hide) ---------- */
+(function () {
+  var b = document.getElementById("navBurger");
+  var links = document.querySelector(".nav-links");
+  if (!b || !links) return;
+  b.addEventListener("click", function () {
+    var open = links.classList.toggle("open");
+    b.setAttribute("aria-expanded", String(open));
+  });
+  links.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") {
+      links.classList.remove("open");
+      b.setAttribute("aria-expanded", "false");
+    }
+  });
 })();
 </script>
 
