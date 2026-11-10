@@ -1,6 +1,6 @@
 # Free AI Video Studio
 
-> **Try it live: https://anikkazi302-gif.github.io/free-ai-video-studio/**
+> **Try it live: https://anikkazi302-gif.github.io/lumefield/**
 
 Turn reference photos into a 30-second, high-quality video — free.
 
