@@ -195,6 +195,73 @@
   .founder img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #2a2a40; }
   .founder p { margin: 12px 0 0; font-size: 17px; color: #e8e8f0; font-weight: 600; }
 
+
+  /* ---------- section background videos (muted, lazy, low opacity) ---------- */
+  .bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: .16; pointer-events: none; }
+  .bg-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(7,7,13,.72), rgba(7,7,13,.82)); pointer-events: none; }
+  .has-bg { position: relative; overflow: hidden; }
+  .has-bg > *:not(.bg-video):not(.bg-overlay) { position: relative; z-index: 2; }
+  /* ---------- model cards: video + name only ---------- */
+  .model-sec { max-width: none; margin: 0; padding: 10px 28px 44px; }
+  #image-tools, #photo-editing { max-width: none; padding-left: 28px; padding-right: 28px; }
+  .model-sec h2 { font-size: 28px; font-weight: 800; letter-spacing: -.5px; text-align: center; }
+  .model-sec h2 span { background: linear-gradient(90deg, #ffd166, #ff5e8a, #7c5cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .model-sec p.lead { text-align: center; color: #a9a9bd; margin-top: 10px; font-size: 15px; line-height: 1.6; }
+  .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 26px; }
+  .model-card { background: #10101a; border: 1px solid #232336; border-radius: 16px; overflow: hidden; cursor: pointer; padding: 0; text-align: left; font-family: inherit; color: inherit; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  .model-card:hover, .model-card:focus-visible { border-color: #ff5e8a; outline: none; box-shadow: 0 0 0 1px #ff5e8a; }
+  .model-thumb { position: relative; aspect-ratio: 16 / 9; background: #0a0a12; }
+  .model-thumb img, .model-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .model-thumb .play-badge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+  .model-thumb .play-badge span { width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+  .model-thumb .no-demo { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; color: #c9c9d8; font-size: 13px; text-align: center; padding: 10px; }
+  .model-thumb .no-demo .big-play { font-size: 26px; }
+  .model-name { padding: 12px 14px 14px; font-size: 15px; font-weight: 700; color: #fff; line-height: 1.35; }
+  /* ---------- model detail modal: buy on top, info at the very bottom ---------- */
+  .detail-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.78); display: flex; align-items: flex-start; justify-content: center; z-index: 100; padding: 20px 12px; overflow-y: auto; }
+  .detail-backdrop[hidden] { display: none; }
+  .detail-modal { position: relative; background: #12121d; border: 1px solid #26263a; border-radius: 20px; padding: 22px; width: 100%; max-width: 720px; margin: auto 0; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
+  .detail-modal h3 { font-size: 22px; font-weight: 800; letter-spacing: -.5px; padding-right: 36px; }
+  .detail-modal .detail-vendor { margin-top: 4px; font-size: 13px; color: #a9a9bd; }
+  .detail-video { margin-top: 16px; position: relative; aspect-ratio: 16 / 9; background: #000; border-radius: 14px; overflow: hidden; }
+  .detail-video img, .detail-video video, .detail-video iframe { width: 100%; height: 100%; object-fit: cover; display: block; border: 0; }
+  .detail-video .lite-yt { position: absolute; inset: 0; cursor: pointer; }
+  .detail-video .lite-yt img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .detail-video .play-badge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .detail-video .play-badge span { width: 56px; height: 56px; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 22px; display: flex; align-items: center; justify-content: center; }
+  .detail-video .no-demo { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; color: #c9c9d8; font-size: 14px; text-align: center; padding: 12px; }
+  .detail-video .no-demo a { color: #ffd166; font-weight: 700; }
+  .detail-buy { background: linear-gradient(90deg, #1a1430, #12121d); border: 1px solid #7c5cff; border-radius: 14px; padding: 16px 18px; margin-top: 16px; }
+  .detail-buy h4 { font-size: 16px; color: #ffd166; }
+  .detail-buy p { margin-top: 8px; font-size: 14px; color: #e5e5ef; line-height: 1.6; }
+  .detail-buy .buy-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+  .detail-buy .note { font-size: 12.5px; color: #a9a9bd; margin-top: 10px; }
+  .detail-desc { margin-top: 16px; font-size: 15px; line-height: 1.65; color: #e5e5ef; }
+  .detail-desc a { color: #ffd166; font-weight: 700; }
+  .detail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .detail-info { margin-top: 20px; border-top: 1px solid #26263a; padding-top: 16px; }
+  .detail-info h4 { font-size: 16px; color: #ffd166; margin-bottom: 10px; }
+  .info-row { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid #1c1c2c; font-size: 14px; line-height: 1.55; }
+  .info-row:last-child { border-bottom: none; }
+  .info-row .k { flex: 0 0 110px; font-weight: 700; color: #c9c9d8; }
+  .info-row .v { flex: 1; color: #e5e5ef; }
+  .detail-src { margin-top: 12px; font-size: 12.5px; color: #a9a9bd; line-height: 1.55; }
+  /* ---------- responsive guards: every device, phone to desktop ---------- */
+  img, iframe { max-width: 100%; }
+  video { max-width: 100%; }
+  .model-card, .big-btn, .seg-btns button, .buy-btn, .copy-btn, .go-btn, .credit-signin { touch-action: manipulation; }
+  @media (max-width: 520px) {
+    .model-grid { grid-template-columns: 1fr; gap: 14px; }
+    .model-name { font-size: 14px; padding: 10px 12px 12px; }
+    .detail-modal { padding: 16px; }
+    .detail-modal h3 { font-size: 19px; }
+    .info-row { flex-direction: column; gap: 2px; }
+    .info-row .k { flex: none; }
+    .hero h1 { font-size: 32px; }
+    .detail-backdrop { padding: 12px 8px; }
+    .nav { gap: 8px; }
+  }
+
   @media (max-width: 640px) {
     .hero h1 { font-size: 36px; }
     .hero p { font-size: 16px; }
@@ -279,7 +346,7 @@
 
 <nav class="nav">
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
-  <div class="nav-links"><a href="#tool">Create</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
+  <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
   <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><span class="nav-user" id="navUser" hidden></span><button class="nav-signin" id="signOutBtn" type="button" hidden>Sign out</button><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
@@ -304,14 +371,18 @@
   <div class="limit-card"><div class="num">16</div><div class="lbl">free engines built in</div></div>
 </section>
 
-<section class="features">
+<section class="features has-bg">
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <div class="bg-overlay" aria-hidden="true"></div>
   <div class="feat"><div class="ico">🖼️</div><h3>Reference Photos</h3><p>Upload your photo — the same face, the same character, in every frame.</p></div>
   <div class="feat"><div class="ico">🎥</div><h3>Cinematic Camera</h3><p>Dolly, crane, orbit, FPV drone — Higgsfield-style camera moves, free.</p></div>
   <div class="feat"><div class="ico">⏱️</div><h3>30-Second Plans</h3><p>Your video split into perfect segments, ready for any free engine.</p></div>
   <div class="feat"><div class="ico">💯</div><h3>Free engines</h3><p>Every engine listed is genuinely free. No card, no trial trap.</p></div>
 </section>
 
-<section class="howto-sec" id="howto">
+<section class="howto-sec has-bg" id="howto">
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <div class="bg-overlay" aria-hidden="true"></div>
   <h2>How it <span>works</span></h2>
   <p class="lead">Four steps from a photo to a finished 30-second video — start free, no payment, no card.</p>
   <div class="steps-grid">
@@ -322,7 +393,17 @@
   </div>
 </section>
 
-<div class="tool-wrap" id="tool">
+<section class="model-sec has-bg" id="models">
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <div class="bg-overlay" aria-hidden="true"></div>
+  <h2>Video <span>models</span> — free</h2>
+  <p class="lead">Tap any model to watch what it makes and see its true quality, speed and motion — then buy credits or use it free in the tool below.</p>
+  <div class="model-grid" id="modelsGrid"></div>
+</section>
+
+<div class="tool-wrap has-bg" id="tool">
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <div class="bg-overlay" aria-hidden="true"></div>
   <div class="credit-bar" id="creditBar" role="status">
     <span id="creditText">🎬 Loading…</span>
     <button type="button" class="credit-signin" id="creditSignInBtn" hidden>Sign in — get 60 credits</button>
@@ -510,38 +591,36 @@
 <section class="howto-sec" id="image-tools">
   <h2>Create <span>images</span> — free</h2>
   <p class="lead">Make any image free with these tools — then customize it your way.</p>
-  <div class="features">
-    <div class="feat"><div class="ico">🖼️</div><h3>Bing Image Creator</h3><p>DALL-E 3 images free, 15 fast boosts a day then unlimited slow queue. <a href="https://bing.com/create" target="_blank" rel="noopener">Open Bing Create →</a></p></div>
-    <div class="feat"><div class="ico">🍌</div><h3>Gemini Nano Banana Pro</h3><p>Free AI image editing and generation with your Google account — Nano Banana Pro, up to 20 a day in Flow. <a href="https://gemini.google.com" target="_blank" rel="noopener">Open Gemini →</a></p></div>
-    <div class="feat"><div class="ico">💬</div><h3>ChatGPT Image Generation</h3><p>A few free images a day with GPT Image. <a href="https://chatgpt.com" target="_blank" rel="noopener">Open ChatGPT →</a></p></div>
-  </div>
+    <div class="model-grid" id="imageGrid"></div>
   <div class="honest">✏️ <b>Customize any image your way:</b> change any part, remove things, add things, restyle it, edit text, adjust colors — every kind of customization, by you. Open your image in <a href="https://photopea.com" target="_blank" rel="noopener">Photopea</a> or <a href="https://www.capcut.com/create/ai-image-editor-free" target="_blank" rel="noopener">CapCut AI Image Editor</a> (or any editor below) and fix or change anything you want.</div>
 </section>
 
 <section class="howto-sec" id="photo-editing">
   <h2>Edit <span>photos</span> — free</h2>
   <p class="lead">Free photo editors — remove backgrounds, erase objects, upscale to 4K, design anything.</p>
-  <div class="features">
-    <div class="feat"><div class="ico">🖌️</div><h3>Photopea</h3><p>A full Photoshop-style editor in your browser, completely free, no account. <a href="https://photopea.com" target="_blank" rel="noopener">Open Photopea →</a></p></div>
-    <div class="feat"><div class="ico">✂️</div><h3>CapCut AI Image Editor</h3><p>Free background removal, magic eraser and 4K upscaling, no card needed. <a href="https://www.capcut.com/create/ai-image-editor-free" target="_blank" rel="noopener">Open CapCut →</a></p></div>
-    <div class="feat"><div class="ico">✨</div><h3>Adobe Express</h3><p>Free background removal and Firefly generative fill, commercially safe. <a href="https://adobe.com/express" target="_blank" rel="noopener">Open Express →</a></p></div>
-    <div class="feat"><div class="ico">🎨</div><h3>Pixlr</h3><p>Two free browser editors, layers and AI tools, with ads and a daily save cap. <a href="https://pixlr.com" target="_blank" rel="noopener">Open Pixlr →</a></p></div>
-    <div class="feat"><div class="ico">🖼️</div><h3>Canva</h3><p>Free design and photo editing with 1.6M+ templates (background remover is Pro). <a href="https://canva.com" target="_blank" rel="noopener">Open Canva →</a></p></div>
-    <div class="feat"><div class="ico">🔍</div><h3>Upscayl</h3><p>Free open-source AI upscaler, unlimited, up to 16x, runs on your own computer. <a href="https://upscayl.org" target="_blank" rel="noopener">Open Upscayl →</a></p></div>
-    <div class="feat"><div class="ico">🧹</div><h3>Cleanup.pictures</h3><p>Brush away anything from a photo, unlimited and free at 720px. <a href="https://cleanup.pictures" target="_blank" rel="noopener">Open Cleanup →</a></p></div>
-    <div class="feat"><div class="ico">🪄</div><h3>Clipdrop</h3><p>Free daily AI tools: cleanup, background removal, upscaling and relighting. <a href="https://clipdrop.co" target="_blank" rel="noopener">Open Clipdrop →</a></p></div>
-  </div>
+    <div class="model-grid" id="editorGrid"></div>
 </section>
 
-<div class="footer">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
+<div class="footer has-bg">
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <div class="bg-overlay" aria-hidden="true"></div>
+<div class="footer-inner">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
 Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.<br>
-<a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a></div>
+<a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a></div></div>
 
 <section class="founder">
   <img src="founder.webp" alt="Founder Raju" width="120" height="120">
   <p>Founder Raju</p>
 </section>
 
+
+<!-- Model detail modal: video, then BUY on top, then the model's working info at the very bottom. -->
+<div class="detail-backdrop" id="detailModal" hidden>
+  <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+    <button class="modal-close" id="detailClose" type="button" aria-label="Close">✕</button>
+    <div id="detailBody"></div>
+  </div>
+</div>
 
 <!-- Login modal (Firebase Auth). Firebase login is live. -->
 <div class="modal-backdrop" id="authModal" hidden>
@@ -805,6 +884,206 @@ document.getElementById("buildBtn").addEventListener("click", function () {
   else { showBuildError("Credit system unavailable, please reload."); }
 });
 </script>
+<script>
+/* ---------- model cards + detail modal (video + name on the card; in the
+   detail: BUY on top, the model's working info at the very bottom) ---------- */
+var DEMO = {
+  wan22: { yt: "ktDogWm7Hac", kind: "official", by: "Alibaba Cloud" },
+  ltx23: { yt: "W4i9xJ8dr5M", kind: "official", by: "LTX" },
+  hunyuan15: null,
+  cogvideox: null,
+  kling: { yt: "WmC1nqz10Qk", kind: "official", by: "Kling AI" },
+  flow: { yt: "I06Ef8alr2Y", kind: "official", by: "Google DeepMind" },
+  runway: { yt: "uRkfzKYFOxc", kind: "official", by: "Runway" },
+  mochi: { yt: "elePN0wE2fo", kind: "sample", by: "AI Filmmaking Academy" },
+  seedance: { yt: "mZja2Ve0Mns", kind: "official", by: "Dreamina" },
+  vidu: { yt: "jJcbxCDRRaw", kind: "official", by: "Vidu AI Official" },
+  hailuo: { yt: "AvjamLzt2pg", kind: "official", by: "MiniMax Design" },
+  wan3: { mp4: "https://alizila.oss-us-west-1.aliyuncs.com/uploads/2026/08/Wan3.0-demo-1_30s-2.mp4", kind: "official", by: "Alibaba Cloud" },
+  pixverse: { mp4: "https://media.pixverse.ai/asset/media/v6-hero-18-25.mp4", kind: "official", by: "PixVerse" },
+  pika: { yt: "-R2ftjEOSX0", kind: "official", by: "Pika Labs" },
+  luma: { yt: "Zb3tffmBPRE", kind: "official", by: "Luma" },
+  firefly: { yt: "puEgugluadk", kind: "official", by: "Adobe Video" }
+};
+/* Quality / Speed / Motion — honest, from the research file (resolution, max
+   length, audio, speed and free-tier notes). No exaggeration, no hidden weakness. */
+var QSM = {
+  wan22: { q: "720p — strong free quality for an open model.", s: "Slow at peak times: the free shared-GPU queue can take several minutes per clip.", m: "Good, natural motion; best for short 5–8s shots chained together." },
+  ltx23: { q: "Up to 1080p, sharp detail.", s: "Fast on the free Space for 10s clips; self-hosting needs a strong GPU.", m: "Strong motion coherence with native vertical video; the only free engine here with synced audio." },
+  hunyuan15: { q: "480p / 720p — solid open-model quality.", s: "Slow: needs high-VRAM hardware self-hosted; the free Space queue varies.", m: "Good physics and motion; silent clips — add sound in your editor." },
+  cogvideox: { q: "Up to 1360×768, strong prompt adherence.", s: "Free Space queue varies; the small 2B version runs on modest GPUs.", m: "Good motion for short clips; short, literal prompts work best." },
+  kling: { q: "720p free (1080p / 4K on paid) — very high quality.", s: "Minutes per clip on free credits; Standard mode is faster and cheaper.", m: "Excellent motion with native dialogue and lip-sync; multi-shot scenes." },
+  flow: { q: "720p / 1080p, up to 4K on Ultra — the best overall quality here.", s: "8s clips; about 5 Lite clips a day free.", m: "Excellent motion and dialogue; Frames-to-Video keeps faces steady across shots." },
+  runway: { q: "720p, cinematic.", s: "Fast Turbo renders.", m: "Good motion; Gen-4 keeps characters and objects consistent across scenes." },
+  mochi: { q: "480p only — low resolution, honest limit.", s: "Slow open model; 250 lifetime playground credits.", m: "Fluid motion for an open model — but text-to-video only, it takes no reference photo." },
+  seedance: { q: "1080p, multi-shot — the #1-ranked video model.", s: "Fast generation; free Dreamina credits may hit an upgrade wall — verify at signup.", m: "Excellent motion with native audio and multi-shot scenes." },
+  vidu: { q: "Up to 2K (free capped at 540p) — best character consistency here.", s: "1–16s clips; free monthly credits are limited.", m: "Strong acting, cinematic camera work, and voice-matched dialogue." },
+  hailuo: { q: "Up to 2K — strong quality.", s: "4–15s clips; welcome credits expire 3 days after they are granted.", m: "Native stereo sound with good dialogue and multi-shot scenes." },
+  wan3: { q: "Up to 1080p; 30s in one take on paid plans (10s free).", s: "Free plan: one video at a time, daily check-in credits.", m: "Strong motion with native sound; also reads documents as a brief." },
+  pixverse: { q: "Free output 540p (1080p on paid).", s: "Up to 15s clips; 30 free credits every day.", m: "Multi-shot storytelling with native audio and good camera control." },
+  pika: { q: "768p open weights (4K on the hosted service).", s: "Very fast — 6 sampling steps; a 15s clip takes about 7 seconds of model compute.", m: "Good motion with synced stereo audio, split into separate dialogue / music / effects stems." },
+  luma: { q: "720p draft on the free tier; cinematic Ray models.", s: "Up to 10s per clip; free tier to verify at signup.", m: "Strong cinematic motion with keyframe camera control — but no native audio." },
+  firefly: { q: "1080p; trained on licensed data, so output is commercially safe.", s: "Free daily generations (Adobe publishes no count).", m: "Motion quality depends on the partner model used (Veo, Kling or Luma)." }
+};
+var IMAGE_TOOLS = [
+  { id: "bing", name: "Bing Image Creator", url: "https://bing.com/create", desc: "DALL-E 3 images free, 15 fast boosts a day then unlimited slow queue.", demo: null, info: [["Output", "DALL-E 3 images, up to 1024px — good for quick drafts and volume."], ["Speed", "Fast with 15 daily boosts; then the unlimited slow queue."], ["Free tier", "Free with a Microsoft account; commercial rights included per Microsoft terms."], ["Limits", "Needs a Microsoft account."]] },
+  { id: "nanobanana", name: "Gemini Nano Banana Pro", url: "https://gemini.google.com", desc: "Free AI image editing and generation with your Google account — Nano Banana Pro, up to 20 a day in Flow.", demo: { yt: "UQsJIo46ZR8", kind: "official", by: "Google DeepMind" }, info: [["Output", "Up to 4K images with excellent text rendering inside images."], ["Speed", "Fast in the Gemini app."], ["Free tier", "Up to 20 Nano Banana Pro generations a day in Flow; free tier in the Gemini app."], ["Limits", "Needs a Google account; 18+ to edit images."]] },
+  { id: "chatgptimg", name: "ChatGPT Image Generation", url: "https://chatgpt.com", desc: "A few free images a day with GPT Image.", demo: null, info: [["Output", "GPT Image 2.6 — strong image editing and text in images."], ["Speed", "Fast."], ["Free tier", "A few free images a day — OpenAI publishes no number."], ["Limits", "Needs a free ChatGPT account."]] }
+];
+var EDITORS = [
+  { id: "photopea", name: "Photopea", url: "https://photopea.com", desc: "A full Photoshop-style editor in your browser, completely free, no account.", demo: null, info: [["What it does", "Full Photoshop-style editing: layers, masks, PSD files — processed locally on your computer."], ["Speed", "Instant in the browser; works offline once loaded."], ["Free tier", "Completely free, no account (ads on the free version)."], ["Limits", "Ads; the paid version only removes ads and adds cloud storage — no extra tools."]] },
+  { id: "capcutedit", name: "CapCut AI Image Editor", url: "https://www.capcut.com/create/ai-image-editor-free", desc: "Free background removal, magic eraser and 4K upscaling, no card needed.", demo: null, info: [["What it does", "One-click background remover, magic eraser, AI upscaler to 4K, auto enhance."], ["Speed", "Fast, one-click tools."], ["Free tier", "Core tools free; no card, no install; works on web, iOS, Android and desktop."], ["Limits", "Items labelled “Pro” need a subscription; limited cloud storage on free."]] },
+  { id: "express", name: "Adobe Express", url: "https://adobe.com/express", desc: "Free background removal and Firefly generative fill, commercially safe.", demo: null, info: [["What it does", "Background removal, basic Firefly generative fill/remove, thousands of templates."], ["Speed", "Fast in the browser."], ["Free tier", "Free with an Adobe account; 5GB storage."], ["Limits", "Generative credits limited (about 25/month reported in 2026); Premium $9.99/mo."]] },
+  { id: "pixlr", name: "Pixlr", url: "https://pixlr.com", desc: "Two free browser editors, layers and AI tools, with ads and a daily save cap.", demo: null, info: [["What it does", "Pixlr Editor (layers, masks, curves) and Pixlr Express (quick edits, filters)."], ["Speed", "Fast in the browser."], ["Free tier", "Both editors free; no account needed for basic editing."], ["Limits", "Ads, a daily save cap and a 10MB file cap on free."]] },
+  { id: "canva", name: "Canva", url: "https://canva.com", desc: "Free design and photo editing with 1.6M+ templates (background remover is Pro).", demo: null, info: [["What it does", "Drag-and-drop design and photo editing, 1.6M+ templates, 4.7M+ free assets."], ["Speed", "Fast in the browser."], ["Free tier", "Free forever, no card, no watermark on exports; 5GB storage."], ["Limits", "Background remover, magic eraser and upscaler are Pro only."]] },
+  { id: "upscayl", name: "Upscayl", url: "https://upscayl.org", desc: "Free open-source AI upscaler, unlimited, up to 16x, runs on your own computer.", demo: null, info: [["What it does", "AI upscaling up to 16x with batch processing, on your own computer."], ["Speed", "Local GPU speed; no upload, no queue."], ["Free tier", "Fully free open source; no account, no watermark."], ["Limits", "Desktop app (Windows, macOS, Linux); needs a Vulkan-compatible GPU."]] },
+  { id: "cleanup", name: "Cleanup.pictures", url: "https://cleanup.pictures", desc: "Brush away anything from a photo, unlimited and free at 720px.", demo: null, info: [["What it does", "Brush away objects, people, text or watermarks from any photo."], ["Speed", "Fast in the browser."], ["Free tier", "Unlimited removal, no account, no install."], ["Limits", "Free exports capped at 720px."]] },
+  { id: "clipdrop", name: "Clipdrop", url: "https://clipdrop.co", desc: "Free daily AI tools: cleanup, background removal, upscaling and relighting.", demo: null, info: [["What it does", "Cleanup, background removal, x2 upscaler, relight and text remover."], ["Speed", "Fast in the browser."], ["Free tier", "Free daily allowances with no login (e.g. 20 cleanups / 24h)."], ["Limits", "Daily caps; Pro $15/mo for high resolution and more."]] }
+];
+
+function escHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+function thumbHTML(demo, name, siteUrl) {
+  if (demo && demo.yt) {
+    return '<img src="https://i.ytimg.com/vi/' + demo.yt + '/hqdefault.jpg" alt="Demo video: ' + escHtml(name) + '" loading="lazy"><span class="play-badge"><span>▶</span></span>';
+  }
+  if (demo && demo.mp4) {
+    return '<video muted loop playsinline preload="none" data-mp4="' + demo.mp4 + '"></video><span class="play-badge"><span>▶</span></span>';
+  }
+  return '<span class="no-demo"><span class="big-play">▶</span><span>Watch the official demo on the tool’s site ↗</span></span>';
+}
+function makeCard(kind, id, name, demo, siteUrl) {
+  var c = document.createElement("article");
+  c.className = "model-card";
+  c.tabIndex = 0;
+  c.setAttribute("role", "button");
+  c.setAttribute("aria-label", name + " — tap for video and details");
+  c.dataset.kind = kind;
+  c.dataset.id = id;
+  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + '</div>';
+  function open() { openDetail(kind, id); }
+  c.addEventListener("click", open);
+  c.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); } });
+  return c;
+}
+(function renderCards() {
+  var mg = document.getElementById("modelsGrid");
+  if (mg) ENGINES.forEach(function (e) { mg.appendChild(makeCard("video", e.id, e.name, DEMO[e.id], e.url)); });
+  var ig = document.getElementById("imageGrid");
+  if (ig) IMAGE_TOOLS.forEach(function (t) { ig.appendChild(makeCard("image", t.id, t.name, t.demo, t.url)); });
+  var eg = document.getElementById("editorGrid");
+  if (eg) EDITORS.forEach(function (t) { eg.appendChild(makeCard("editor", t.id, t.name, t.demo, t.url)); });
+})();
+
+var detailModal = document.getElementById("detailModal");
+var detailBody = document.getElementById("detailBody");
+function detailVideoHTML(demo, name, siteUrl) {
+  if (demo && demo.yt) {
+    return '<div class="detail-video"><div class="lite-yt" data-yt="' + demo.yt + '"><img src="https://i.ytimg.com/vi/' + demo.yt + '/hqdefault.jpg" alt="Demo video: ' + escHtml(name) + '" loading="lazy"><span class="play-badge"><span>▶</span></span></div></div>';
+  }
+  if (demo && demo.mp4) {
+    return '<div class="detail-video"><video src="' + demo.mp4 + '" autoplay muted loop playsinline controls preload="auto"></video></div>';
+  }
+  return '<div class="detail-video"><div class="no-demo"><span style="font-size:26px;">▶</span><span>No demo video embedded yet.</span><a href="' + siteUrl + '" target="_blank" rel="noopener">Watch the official demo on the tool’s site ↗</a></div></div>';
+}
+function infoRowsHTML(rows) {
+  return rows.map(function (r) {
+    return '<div class="info-row"><div class="k">' + escHtml(r[0]) + '</div><div class="v">' + escHtml(r[1]) + '</div></div>';
+  }).join("");
+}
+function openDetail(kind, id) {
+  var item = null, demo = null, rows = [], desc = "", siteUrl = "", vendor = "", useEngine = false, srcNote = "";
+  if (kind === "video") {
+    item = ENGINES.find(function (e) { return e.id === id; });
+    if (!item) return;
+    demo = DEMO[id];
+    var q = QSM[id] || { q: "", s: "", m: "" };
+    desc = item.note;
+    siteUrl = item.url;
+    vendor = item.vendor;
+    useEngine = true;
+    rows = [
+      ["Quality", q.q],
+      ["Speed", q.s],
+      ["Motion", q.m],
+      ["Free tier", item.free],
+      ["Max clip", "Up to " + item.maxSec + "s per clip."],
+      ["Resolution", item.res],
+      ["Audio", item.audio ? "Yes — native audio." : "No — silent; add sound in your editor."],
+      ["Photo", item.i2v ? "Takes a reference photo." : "Text-to-video only — takes no reference photo."]
+    ];
+  } else if (kind === "image") {
+    item = IMAGE_TOOLS.find(function (t) { return t.id === id; });
+    if (!item) return;
+    demo = item.demo; desc = item.desc; siteUrl = item.url; vendor = "Image generation — free"; rows = item.info;
+  } else {
+    item = EDITORS.find(function (t) { return t.id === id; });
+    if (!item) return;
+    demo = item.demo; desc = item.desc; siteUrl = item.url; vendor = "Photo editing — free"; rows = item.info;
+  }
+  if (demo && demo.kind === "official") srcNote = "Demo video: the official " + demo.by + " video on YouTube.";
+  else if (demo && demo.kind === "sample") srcNote = "Demo video: a review showing real " + item.name + " output — not the vendor’s own video.";
+  else srcNote = "No demo video embedded yet — watch it on the official site. Free-tier details were verified 10–11 November 2026; always re-check the tool’s own page.";
+  var buyHTML = '<div class="detail-buy"><h4>💎 Buy credits</h4>' +
+    '<p>Starter — 60 credits, <b>$4.99</b> · Plus — 150 credits, <b>$9.99</b> · Ultra — 300 credits, <b>$19.99</b>. One pack, no subscription. A 30-second video costs 20 credits.</p>' +
+    '<div class="buy-row"><button class="credit-signin" type="button" data-goto-buy>💎 See credit packs</button></div>' +
+    '<p class="note">Checkout opens soon — pack prices are proposed for now. Your first 3 videos are free, and signing in (free) gives you 60 credits.</p></div>';
+  var actions = '<div class="detail-actions">';
+  if (useEngine) actions += '<button class="btn-primary" type="button" data-use-engine="' + item.id + '" style="border:none;cursor:pointer;font-family:inherit;">🎬 Use this engine in the tool</button>';
+  actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
+  detailBody.innerHTML =
+    '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
+    '<div class="detail-vendor">' + escHtml(vendor) + '</div>' +
+    detailVideoHTML(demo, item.name, siteUrl) +
+    buyHTML +
+    '<p class="detail-desc">' + escHtml(desc) + '</p>' +
+    actions +
+    '<div class="detail-info"><h4>How it works</h4>' + infoRowsHTML(rows) + '</div>' +
+    '<p class="detail-src">' + escHtml(srcNote) + '</p>';
+  detailModal.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeDetail() {
+  if (!detailModal) return;
+  var v = detailBody.querySelector("video");
+  if (v) { try { v.pause(); } catch (e) {} }
+  var f = detailBody.querySelector("iframe");
+  if (f) f.remove();
+  detailModal.hidden = true;
+  document.body.style.overflow = "";
+}
+if (detailModal) {
+  detailModal.addEventListener("click", function (e) { if (e.target === detailModal) closeDetail(); });
+  document.getElementById("detailClose").addEventListener("click", closeDetail);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !detailModal.hidden) closeDetail(); });
+}
+if (detailBody) {
+  detailBody.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t.closest("[data-goto-buy]")) {
+      closeDetail();
+      setTimeout(function () { document.getElementById("buy-credits").scrollIntoView({ behavior: "smooth" }); }, 60);
+      return;
+    }
+    var useBtn = t.closest("[data-use-engine]");
+    if (useBtn) {
+      var eid = useBtn.getAttribute("data-use-engine");
+      closeDetail();
+      var el = document.querySelector('.engine[data-id="' + eid + '"]');
+      if (el) el.click();
+      setTimeout(function () { document.getElementById("step3").scrollIntoView({ behavior: "smooth" }); }, 60);
+      return;
+    }
+    var lite = t.closest(".lite-yt");
+    if (lite) {
+      var vid = lite.getAttribute("data-yt");
+      var holder = lite.parentNode;
+      holder.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + vid + '?autoplay=1&rel=0" title="Demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+  });
+}
+</script>
 
 <script>
 /* ---------- LumeField login (Firebase Auth) — Team 4 ---------- */
@@ -920,25 +1199,28 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   });
 })();
 
-/* ---------- hero background video (lazy load) — Team 4 ---------- */
+/* ---------- lazy videos: hero + section backgrounds + card mp4 previews ----------
+   One IntersectionObserver loads each video only when it scrolls into view
+   (muted + loop + playsinline, low opacity on section backgrounds so text
+   stays readable), and pauses it again when it scrolls away. */
 (function () {
-  var v = document.getElementById("heroVideo");
-  if (!v) return;
-  var src = v.querySelector("source");
-  function start() {
-    if (!src || src.getAttribute("src")) return;
-    src.setAttribute("src", src.getAttribute("data-src"));
-    v.load();
+  function startVideo(v) {
+    var src = v.querySelector("source");
+    if (src && !src.getAttribute("src") && src.getAttribute("data-src")) src.setAttribute("src", src.getAttribute("data-src"));
+    if (v.getAttribute("data-mp4") && !v.getAttribute("src")) v.setAttribute("src", v.getAttribute("data-mp4"));
+    try { v.load(); } catch (e) {}
     var p = v.play();
     if (p && p.catch) p.catch(function () {});
   }
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { start(); io.disconnect(); }
+  function stopVideo(v) { try { v.pause(); } catch (e) {} }
+  var vids = Array.prototype.slice.call(document.querySelectorAll("video.bg-video, video[data-mp4], #heroVideo"));
+  if (!("IntersectionObserver" in window)) { vids.forEach(startVideo); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) startVideo(en.target); else stopVideo(en.target);
     });
-    io.observe(v);
-  } else if (document.readyState === "complete") start();
-  else window.addEventListener("load", start);
+  }, { rootMargin: "200px" });
+  vids.forEach(function (v) { io.observe(v); });
 })();
 </script>
 <script>
