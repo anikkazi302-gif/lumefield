@@ -41,8 +41,8 @@ segment 2, and so on. This tool builds that chain for you.
 ## Buying credits (checkout opens soon)
 
 - When your free credits run out, you will be able to buy a credit pack:
-  **Starter — 60 credits — $4.99** (3 × 30s videos), **Creator — 150 credits —
-  $9.99** (7 × 30s videos), **Studio — 300 credits — $19.99** (15 × 30s videos).
+  **Starter — 60 credits — $4.99** (3 × 30s videos), **Plus — 150 credits —
+  $9.99** (7 × 30s videos), **Ultra — 300 credits — $19.99** (15 × 30s videos).
   Prices are proposed until the owner approves them and checkout opens.
 - Checkout is **not live yet** — the "Buy credits" section on the site is a
   placeholder until a payment provider (Paddle or Polar) approves the store.
