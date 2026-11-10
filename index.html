@@ -39,7 +39,9 @@
   .nav-signin:hover { border-color: #fff; }
   .nav-user { font-size: 13px; color: #c9c9d8; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* ---------- header profile (chip + dropdown menu) ---------- */
-  .profile-wrap { position: relative; }
+  .profile-wrap { position: relative; display: flex; align-items: center; gap: 8px; }
+  .profile-upgrade { background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border: none; border-radius: 999px; padding: 9px 14px; font-weight: 700; font-size: 13px; white-space: nowrap; text-decoration: none; }
+  .profile-upgrade:hover { filter: brightness(1.12); }
   .profile-chip { display: flex; align-items: center; gap: 8px; background: #1c1c2c; color: #fff; border: 1px solid #7c5cff; border-radius: 999px; padding: 5px 14px 5px 5px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; max-width: 260px; }
   .profile-chip:hover { border-color: #ffd166; }
   .profile-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #ffd166, #ff5e8a 55%, #7c5cff); display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; flex: none; }
@@ -50,7 +52,7 @@
   .profile-menu-email { font-size: 13px; color: #fff; font-weight: 700; word-break: break-all; }
   .profile-menu-credits { margin-top: 6px; font-size: 14px; color: #ffd166; font-weight: 700; }
   .profile-menu-costs { margin-top: 4px; font-size: 12px; color: #a9a9bd; }
-  .profile-menu-item { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px; background: transparent; border: none; border-top: 1px solid #26263a; margin-top: 12px; padding: 10px 2px 0; color: #e5e5ef; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; text-align: left; }
+  .profile-menu-item { display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 8px; background: transparent; border: none; border-top: 1px solid #26263a; margin-top: 12px; padding: 10px 2px 0; color: #e5e5ef; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; text-align: left; text-decoration: none; }
   .profile-menu-item.profile-soon-row { cursor: default; }
   .profile-soon { font-size: 11px; color: #a9a9bd; font-weight: 400; }
   .profile-signout { color: #ff8a8a; }
@@ -278,6 +280,7 @@
     .nav { gap: 8px; }
     .profile-name { max-width: 64px; }
     .profile-menu { min-width: 230px; }
+    .profile-upgrade { padding: 8px 10px; font-size: 12px; }
   }
 
   @media (max-width: 640px) {
@@ -365,7 +368,7 @@
 <nav class="nav">
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
@@ -1372,6 +1375,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       }
     });
   }
+  /* Upgrade links (header chip + menu) scroll to the Buy credits packs
+     and close the profile menu. No checkout is built here — the packs'
+     buttons stay exactly as they are. */
+  ["profileUpgrade", "profileMenuUpgrade"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.addEventListener("click", function () {
+      if (profileMenu) profileMenu.hidden = true;
+      if (profileChip) profileChip.setAttribute("aria-expanded", "false");
+    });
+  });
 
   /* ----- balance display (always above the tool) ----- */
   function costFor(dur) { return COST[dur] || COST[30]; }
