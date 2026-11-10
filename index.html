@@ -728,7 +728,7 @@ function buildPlan() {
 /* Credit gate (see credit system script below): checks free plans / credits first. */
 document.getElementById("buildBtn").addEventListener("click", function () {
   if (window.lfCreditGate) { window.lfCreditGate(selectedDur, buildPlan); }
-  else { buildPlan(); }
+  else { alert("Credit system unavailable, please reload."); }
 });
 </script>
 
@@ -793,7 +793,20 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var p = mode === "signin"
       ? lfAuth.signInWithEmailAndPassword(email, pass)
       : lfAuth.createUserWithEmailAndPassword(email, pass);
-    p.then(function () { closeModal(); }).catch(function (err) { showMsg(err && err.message ? err.message : "Sign-in failed. Try again."); });
+    p.then(function (cred) {
+      if (mode === "signup" && cred && cred.user && cred.user.sendEmailVerification) {
+        /* New account: send the verification email. The credit wallet
+           (Firestore rules) only opens for verified emails, so the user
+           must click the link before the 60 free credits activate. */
+        cred.user.sendEmailVerification().then(function () {
+          showMsg("Account created — we sent a verification email. Click the link in it to activate your 60 free credits, then sign in.");
+        }).catch(function () {
+          showMsg("Account created, but the verification email could not be sent. Please sign in and try again.");
+        });
+        return;
+      }
+      closeModal();
+    }).catch(function (err) { showMsg(err && err.message ? err.message : "Sign-in failed. Try again."); });
   });
   document.getElementById("authGoogle").addEventListener("click", function () {
     if (!FIREBASE_CONFIGURED || !lfAuth) return notConnected();
