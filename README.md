@@ -1,4 +1,4 @@
-# Free AI Video Studio
+# LumeField
 
 > **Try it live: https://anikkazi302-gif.github.io/lumefield/**
 
