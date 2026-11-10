@@ -8,7 +8,7 @@ Turn reference photos into a 30-second, high-quality video — free.
 
 A single-page web tool that plans your video and writes the exact prompts, then sends you
 to a genuinely free engine where the video is rendered for free. Open `index.html` in any
-browser — no install, no account, no payment.
+browser — no install, no payment. No account is needed for your first 3 videos.
 
 ## Honest note — read first
 
@@ -24,6 +24,19 @@ for free in your browser. What this tool does:
 Most free engines make **5–10 seconds per clip**. A 30-second video is made by
 **chaining segments**: generate segment 1, use its last frame as the start image for
 segment 2, and so on. This tool builds that chain for you.
+
+## Credits
+
+- Your first **3 video plans are free with no account**.
+- After that, sign in (free, email or Google) and you get **60 credits**.
+- Cost per video plan: **5s = 4, 10s = 7, 20s = 14, 30s = 20** credits.
+- When your credits run out, the tool shows **"Credits finished"**.
+- Credits are enforced server-side: each signed-in user's balance lives in
+  Firestore (`wallets/{uid}`) and the security rules in `firestore.rules`
+  only ever let it go down by a valid video cost — nobody can add credits
+  to their own account. See `FIRESTORE-SETUP.md` for how the rules are applied.
+- The 3 free videos without login are counted in the browser only
+  (localStorage) — there is no account to tie them to.
 
 ## How to make the full 30 seconds
 
