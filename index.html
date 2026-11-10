@@ -758,7 +758,7 @@ function buildPlan() {
 document.getElementById("buildBtn").addEventListener("click", function () {
   hideBuildError();
   if (window.lfCreditGate) { window.lfCreditGate(selectedDur, buildPlan); }
-  else { alert("Credit system unavailable, please reload."); }
+  else { showBuildError("Credit system unavailable, please reload."); }
 });
 </script>
 
@@ -815,11 +815,24 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeModal(); });
   modeIn.addEventListener("click", function () { setMode("signin"); });
   modeUp.addEventListener("click", function () { setMode("signup"); });
+  /* Temporary / disposable email addresses may not sign up: they are the
+     standard way to farm the 60-credit bonus again and again. List: top
+     ~560 domains from the public disposable-email-domains list
+     (github.com/disposable/disposable-email-domains) plus the well-known
+     services. No list is ever complete — new temp domains appear daily —
+     so the Firestore rules also block the most common ones server-side. */
+  var DISPOSABLE_DOMAINS = new Set("0-00.usa.cc 0-30-24.com 0-attorney.com 0-mail.com 0-mailer.dynv6.net 00-tv.com 00.0.gmail.com.gmail.8.3.gmail.35.cad.creou.dev 00.msk.ru 00.pe 000-webmail.myhome-server.de 000000000000000.theworkpc.com 000000000000000000.dynv6.net 000476.com 000728.xyz 000777.info 00082cc.com 000email.com 000webmail.ddnss.de 000webmail.ddnss.org 000webmail.dyn-ip24.de 000webmail.dyn.ddnss.de 000webmail.dyn.home-webserver.de 000webmail.dyndns.ddnss.de 000webmail.dyndns1.de 000webmail.home-webserver.de 001.igg.biz 001041.xyz 001218.xyz 001260.xyz 001310.xyz 001gmail.com 002gmail.com 002r.com 002t.com 003271.com 0033.pl 0039.cf 0039.ga 0039.gq 0039.ml 003j.com 004k.com 005005.xyz 0055betplataforma.com 0058.ru 0066bet32.info 0066betapp.info 006j.com 006o.com 007.hzeg.eu.org 007bet.info 007game.ru 007gamecasino.net 007gmail.com 007jlbu.com 007jlphp.com 008686.xyz 008gmail.com 009gmail.com 00a3brcd.capcut.cloud 00b2bcr51qv59xst2.cf 00b2bcr51qv59xst2.ga 00b2bcr51qv59xst2.gq 00b2bcr51qv59xst2.ml 00b2bcr51qv59xst2.tk 00c0nmxf.annvroog.my.id 00g0.com 00gmail.com 00i816x0.neroba28.lat 00jac.com 00jlrz21.sogo.click 00sh.cf 00v981sb.nyeori.buzz 01022.hk 010530.xyz 010608.xyz 010880.com 010gmail.com 010hb.com 01130.hk 011gmail.com 0123.website 01234.space 012356.xyz 012gmail.com 012pg.bet 014yrcy5.acc4u.pro 017gmail.com 01852990.ga 01898.com 01911.ru 019gmail.com 01b06uoj.mezanaz.buzz 01bktwi2lzvg05.cf 01bktwi2lzvg05.ga 01bktwi2lzvg05.gq 01bktwi2lzvg05.ml 01bktwi2lzvg05.tk 01g.cloud 01gmail.com 01hosting.biz 01o0ubxy.chqtgpt.id 01p.co.jp 01trends.com 01zz1aig.vanum.com.br 02.pl 02.tml.waw.pl 020307.ccwu.cc 020307.xyz 020gmail.com 020yiren.com 020zlgc.com 022gmail.com 023gmail.com 024024.cf 02466.cf 02466.ga 02466.gq 02466.ml 025gmail.com 027168.com 029gmail.com 02bet.info 02gmail.com 02hotmail.com 02organicfarms.com 02pwwuai.hfgvoaio.biz.id 02stfz02.navsstore.com 02zkn905.kentoqa.cfd 03-genkzmail.ga 03.tml.waw.pl 030gmail.com 0316.eu.cc 0317123.cn 031839.com 031gmail.com 031y3vkv.maxnogar.my.id 032gmail.com 0335g.com 03498fa8.btfjbtdc.my.id 0360.store 036gmail.com 039gmail.com 03gmail.com 03pjvxjc.gogles.sbs 03pl1w4i.x7m3b9nsa.my.id 03v2464b.cewpkjcc.biz.id 0411cs.com 041998.xyz 041gmail.com 042gmail.com 043gmail.com 045692.xyz 047gmail.com 04gmail.com 04jyaz9q.polinema.cfd 04qaf9an.ariescc.site 0500betvip.com 050gmail.com 051xmixn.gogles.sbs 0530fk.com 0543sh.com 057gmail.com 058gmail.com 0597797341.website 059gmail.com 05b4rcpv.lunarvibe.buzz 05gmail.com 05hotmail.com 05l90n1g.azwowtaq.biz.id 05t0oqwp.tavqen230.biz.id 05w7mjjd.kennzo.cfd 060gmail.com 0623456.com 062e.com 062gmail.com 063gmail.com 065gmail.com 0662dq.com 066gmail.com 0679hk8m.hfgvoaio.biz.id 067gmail.com 068gamers.com 068gmail.com 06gmail.com 06lkoaia.azwowtaq.biz.id 06mujhs4.paneq.cfd 07-izvestiya.ru 07157.com 071gmail.com 07210d00.dpdns.org 0731tz.com 07819.cf 07819.ga 07819.gq 07819.ml 07819.tk 078gmail.com 079gmail.com 079i080nhj.info 07b11ecb.inovel26.com 07gmail.com 07n4zhw4.hatos.lat 07uydz6y.poloi28.christmas 0800br.ml 080mail.com 0811u64y.jebew.my.id 0815.ru 0815.su 0845.ru 0854445.com 086gmail.com 087gmail.com 089563.quest 089gmail.com 08ecl7lj.cyberspire.shop 08gmail.com 090gmail.com 091gmail.com 092088.xyz 092gmail.com 0934445.com 093gmail.com 095gmail.com 096gmail.com 097gmail.com 098gmail.com 099gmail.com 09gmail.com 09ojsdhad.info 09stees.online 09tnvwt6.cyberspire.shop 09wfykzd.zewq.shop 0a0vucvu.bsstkler.my.id 0a2d1rhh.asikmania.asia 0a8tcprz.poinakasa.cfd 0accounts.com 0ak.org 0alpjror.balloz.sbs 0amail.top 0an.ru 0anz429v.zee.asia 0bj6nx8b.ultrpro.store 0box.eu 0box.net 0bviheep.bsstkler.my.id 0c63mb9f.meiknaxz.shop 0cbgz00f.hfgvoaio.biz.id 0cd.cn 0celot.com 0cindcywrokv.cf 0cindcywrokv.ga 0cindcywrokv.gq 0cindcywrokv.ml 0cindcywrokv.tk 0cjl49d0.chatgpt123.me 0clickemail.com 0clock.net 0clock.org 0costofivf.com 0cpub2.tech 0cqqct3j.chatgpt123.me 0cu4x6qv.keinto.buzz 0cv23qjrvmcpt.cf 0cv23qjrvmcpt.ga 0cv23qjrvmcpt.gq 0cv23qjrvmcpt.ml 0cv23qjrvmcpt.tk 0d00.com 0d244mga.cewpkjcc.biz.id 0d2mu7sr.biyzkcvp.biz.id 0d71puhs.hfgvoaio.biz.id 0daymusic.org 0dbkd71l.azwowtaq.biz.id 0ddxhoml.chqtgpt.my 0dfb.piluxana.asia 0dj56h4w.nyeori.buzz 0dm8bcp8.zenithwavepeina.buzz 0ds5ia9f.olexa.sbs 0dy6mse7.xel7bora.web.id 0dyr5ojp.zoiken.cfd 0efjresl.ariescc.site 0ehtkltu0sgd.ga 0ehtkltu0sgd.ml 0ehtkltu0sgd.tk 0ek2sqyi.zenithwavepeina.buzz 0eml.com 0eot0fl5.poinakasa.cfd 0esgeri8.zaiekx.asia 0etzuyvp.premiumken.cfd 0evhdop8.capcut.cloud 0f590da1.bounceme.net 0fgpsb4s.yuina.cfd 0fru8te0xkgfptti.cf 0fru8te0xkgfptti.ga 0fru8te0xkgfptti.gq 0fru8te0xkgfptti.ml 0fru8te0xkgfptti.tk 0fwgpakc.neroba28.lat 0ger7o28.zentusza.shop 0gyenlcce.dropmail.me 0gyl7rlf.kentoqa.cfd 0h26le75d.pl 0hboy.com 0hcow.com 0hdear.com 0hio.net 0hio.org 0hio0ak.com 0hiolce.com 0hioln.com 0hirnjoy.or7mbesna.my.id 0hmw9158.pentak.shop 0hpp0hrp.navsstore.com 0i486qhe.meinz.shop 0i5wen8u.acc4u.pro 0ils.net 0ils.org 0ioi.net 0ixgelmq.ddwlcgwg.biz.id 0j6w1ag9.kenzu.sbs 0jb8wtyl.n8nshop.com 0jdhhoqo.chqtgpt.in 0jdtn3zq.azwowtaq.biz.id 0jjvrx4o.bsstkler.my.id 0jksg4jy.lenzza.shop 0jralz2qipvmr3n.ga 0jralz2qipvmr3n.ml 0jralz2qipvmr3n.tk 0js36sc4.kentoqa.cfd 0jtsnmgv.bmzzuimu.biz.id 0jylaegwalss9m6ilvq.cf 0jylaegwalss9m6ilvq.ga 0jylaegwalss9m6ilvq.gq 0jylaegwalss9m6ilvq.ml 0jylaegwalss9m6ilvq.tk 0ket9rjl.sopkya230.biz.id 0kk49zic.paneq.cfd 0kok.net 0kok.org 0ld0ak.com 0ld0x.com 0leug2vz.brolygod.me 0lezeup1.tetapkalem.my.id 0live.org 0ll2au4c8.pl 0locfht8.avnsaaeu.my.id 0lroym0g.poinas.sbs 0m0.abrdns.com 0m58t43x.btfjbtdc.my.id 0m5rp40w.poinakasa.cfd 0mail.app 0mcey9h2.eskulkulnrth.biz.id 0mel.com 0mfs0mxufjpcfc.cf 0mfs0mxufjpcfc.ga 0mfs0mxufjpcfc.gq 0mfs0mxufjpcfc.ml 0mfs0mxufjpcfc.tk 0mixmail.info 0mqmk8u1.umkmind.cfd 0mrr9nb7.capzy.store 0mvpvyj3.xiunakana.shop 0n0ff.net 0n24.com 0nb9zti01sgz8u2a.cf 0nb9zti01sgz8u2a.ga 0nb9zti01sgz8u2a.gq 0nb9zti01sgz8u2a.ml 0nb9zti01sgz8u2a.tk 0nce.net 0ne.lv 0ne0ak.com 0ne0ut.com 0nedrive.cf 0nedrive.ga 0nedrive.gq 0nedrive.ml 0nedrive.tk 0nelce.com 0nes.net 0nes.org 0nly.org 0nrg.com 0nvu7pff.lunarvibe.buzz 0o0.o0o.0m0.email 0o69aq9w.kavmre230.biz.id 0obb0ahl.mainly.asia 0ojff6vi.eskulkulkratos.biz.id 0oxgvfdufyydergd.cf 0oxgvfdufyydergd.ga 0oxgvfdufyydergd.gq 0oxgvfdufyydergd.ml 0oxgvfdufyydergd.tk 0pmtkysf.hufraki230.biz.id 0pppp.com 0pv949fc.ikuto.cfd 0q9rvhlt.zewq.shop 0qixuxtn.gogles.sbs 0qtad8bv.chqtgpt.id 0r0wfuwfteqwmbt.cf 0r0wfuwfteqwmbt.ga 0r0wfuwfteqwmbt.gq 0r0wfuwfteqwmbt.ml 0r0wfuwfteqwmbt.tk 0ranges.com 0rdered.com 0rdering.com 0re5kt93.hufraki230.biz.id 0regon.net 0regon.org 0rfj7dki.meiknaxz.shop 0rg.fr 0rgvj37x.niukana.sbs 0rhjwary.bsstkler.my.id 0rj40x3q.capcut.cloud 0rxnqb9p.hfgvoaio.biz.id 0s0224q4.jebew.my.id 0sg.net 0sp.me 0sw5ewif.vanum.com.br 0sx.ru 0t4ztwfn.capcut.cloud 0tinak9zyvf.cf 0tinak9zyvf.ga 0tinak9zyvf.gq 0tinak9zyvf.ml 0tinak9zyvf.tk 0tires.com 0to6oiry4ghhscmlokt.cf 0to6oiry4ghhscmlokt.ga 0to6oiry4ghhscmlokt.gq 0to6oiry4ghhscmlokt.ml 0to6oiry4ghhscmlokt.tk 0u.ro 0uduv6of.chqtgpt.in 0uet5oy6.asikmania.asia 0ulook.com 0ut.online 0utln.com 0uxpgdvol9n.cf 0uxpgdvol9n.ga 0uxpgdvol9n.gq 0uxpgdvol9n.ml 0uxpgdvol9n.tk 0v.ro 0v1uakbb.bombs.com.br 0vbg46nn.shuangxi.my.id 0vjl6hex.meiknaxz.shop 0vomphqb.emlhub.com 0vxf7va5.zaq.asia 0w.ro 0w06coeb.poloi28.christmas 0wk7hhtw.sopkya230.biz.id 0wn3d.pl 0wnd.net 0wnd.org 0wos8czt469.ga 0wos8czt469.gq 0wos8czt469.tk 0wwisapb.zaq.asia 0x00.name 0x000.cf 0x000.ga 0x000.gq 0x000.ml 0x01.gq 0x01.tk 0x02.cf 0x02.ga 0x02.gq 0x02.ml 0x02.tk 0x03.cf 0x03.ga 0x03.gq 0x03.ml 0x03.tk 0x11f3n7.chqtgpt.me 0x207.info 0xb37k9p.zaq.asia 0xmiikee.com 0y4mb6tr.pentak.cfd 0yhmfy0e.kavmre230.biz.id 0yjyt105.penti.sbs 0yrpqhkh.chqtgpt.in 0yxrmrgm.bxqssnft.web.id 0z2rs6cz.poinas.sbs 0z7eoqqm.bwfrnhdt.my.id 0za7vhxzpkd.cf 0za7vhxzpkd.ga 0za7vhxzpkd.gq 0za7vhxzpkd.ml 0za7vhxzpkd.tk 0zb.edit4u.org 0zc7eznv3rsiswlohu.cf 0zc7eznv3rsiswlohu.ml 0zc7eznv3rsiswlohu.tk 0ziuh07g.chqtgpt.id 0zqze51i.chqtgpt.id 10mail.org 10minutemail.com 10minutemail.net 10minutemail.org 20minutemail.com 33mail.com anonbox.net dispostable.com e4ward.com emailondeck.com fakeinbox.com getairmail.com getnada.com guerrillamail.biz guerrillamail.com guerrillamail.de guerrillamail.net guerrillamail.org inboxbear.com mailcatch.com maildrop.cc mailforspam.com mailinator.com mailinator.net mailinator.org mailinator2.com mailmetrash.com mailnesia.com mailnull.com mintemail.com moakt.com mohmal.com mytemp.email mytrashmail.com sharklasers.com spam4.me spambox.us spamgourmet.com temp-mail.io temp-mail.org tempail.com tempemail.co tempinbox.com tempmail.com tempmail.de tempmail.net tempmailaddress.com tempmailo.com tempomail.fr throwawaymail.com tmail.ws tmpmail.com tmpmail.org trashmail.com trashmail.me trashmail.net trashmail.org yopmail.com yopmail.fr yopmail.net".split(" "));
+  function isDisposableEmail(email) {
+    var parts = String(email || "").trim().toLowerCase().split("@");
+    if (parts.length !== 2) return false;
+    return DISPOSABLE_DOMAINS.has(parts[1]);
+  }
   function notConnected() { showMsg(NOT_CONNECTED_MSG); return false; }
   submitBtn.addEventListener("click", function () {
     if (!FIREBASE_CONFIGURED || !lfAuth) return notConnected();
     var email = emailEl.value.trim(), pass = passEl.value;
     if (!email || !pass) { showMsg("Enter your email and password."); return; }
+    if (mode === "signup" && isDisposableEmail(email)) { showMsg("Temporary email addresses are not allowed. Please use a real email address."); return; }
     var p = mode === "signin"
       ? lfAuth.signInWithEmailAndPassword(email, pass)
       : lfAuth.createUserWithEmailAndPassword(email, pass);
@@ -908,6 +921,21 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      no wallet needed. Marked clearly so it is easy to find and audit. */
   var OWNER_EMAIL = "anikkazi302@gmail.com";
   function isOwner() { return !!(currentUser && currentUser.email === OWNER_EMAIL); }
+  /* Claimed-bonus key: for Gmail, dots and +tags do not make a new mailbox
+     (user.name+tag@gmail.com IS username@gmail.com), so strip them before
+     using the email as the claimed-registry key — otherwise the same Gmail
+     could take the 60-credit bonus again via +aliases or dots. */
+  function normalizeEmailForClaim(email) {
+    var e = String(email || "").trim().toLowerCase();
+    var parts = e.split("@");
+    if (parts.length !== 2) return e;
+    var local = parts[0], domain = parts[1];
+    if (domain === "gmail.com" || domain === "googlemail.com") {
+      local = local.split("+")[0].split(".").join("");
+      domain = "gmail.com";
+    }
+    return local + "@" + domain;
+  }
   var FINISHED_MSG = "Credits finished";
 
   var bar = document.getElementById("creditBar");
@@ -920,6 +948,27 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var walletCredits = null;
   var walletUnsub = null;
   var ensureTried = {};
+
+  /* Auth must resolve before the bar or the gate trusts any identity.
+     Firebase restores a saved sign-in asynchronously; on the first load
+     currentUser is null until onAuthStateChanged fires. Showing a balance
+     or letting a build through before that point used the wrong identity
+     (the owner once paid 20 credits on first load). Until it resolves the
+     bar shows a loading state and the Build button stays disabled. */
+  var authResolved = false;
+  var authTimer = null;
+  var claimedTried = {};
+  function markAuthResolved() {
+    if (authResolved) return;
+    authResolved = true;
+    if (authTimer) { clearTimeout(authTimer); authTimer = null; }
+    var b = document.getElementById("buildBtn");
+    if (b) b.disabled = false;
+    updateBar();
+  }
+  /* Disable Build until auth resolves (re-enabled by markAuthResolved). */
+  var buildBtnEl = document.getElementById("buildBtn");
+  if (buildBtnEl) buildBtnEl.disabled = true;
 
   /* ----- guest counter (browser only; no account to tie it to) ----- */
   function guestUsed() {
@@ -935,6 +984,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function updateBar() {
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
+    if (!authResolved) {
+      text.textContent = "\u23f3 Checking your sign-in\u2026";
+      if (signInBtn) signInBtn.hidden = true;
+      return;
+    }
     if (!currentUser) {
       var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed());
       if (left > 0) {
@@ -968,7 +1022,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   });
 
   /* ----- Firestore wallet ----- */
-  function ensureWallet(uid) {
+  function ensureWallet(uid, email) {
     if (!lfDb || typeof firebase === "undefined") return Promise.reject(new Error("no-db"));
     var ref = lfDb.collection("wallets").doc(uid);
     return lfDb.runTransaction(function (tx) {
@@ -979,9 +1033,35 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           });
+          /* One-way claim (see firestore.rules v3): this email has now taken
+             its one 60-credit signup bonus. Written in the SAME transaction
+             as the wallet, so both succeed or neither does — and deleting
+             the Auth account does NOT delete this document, so
+             re-registering with the same email can never create a new wallet. */
+          if (email) {
+            var claimEmail = normalizeEmailForClaim(email);
+            tx.set(lfDb.collection("claimed").doc(claimEmail), {
+              email: claimEmail,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          }
         }
       });
     });
+  }
+
+  /* Backfill for accounts created before the claim system (rules v3):
+     mark this email as claimed once per session, so deleting and
+     re-registering with the same email cannot take the bonus again.
+     Failures (already claimed, rules block) are safe to ignore. */
+  function ensureClaimed(email) {
+    email = normalizeEmailForClaim(email);
+    if (!email || !lfDb || claimedTried[email]) return;
+    claimedTried[email] = true;
+    lfDb.collection("claimed").doc(email).set({
+      email: email,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).catch(function () {});
   }
 
   function chargeWallet(uid, cost) {
@@ -1008,7 +1088,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (!snap.exists) {
         if (!ensureTried[uid]) {
           ensureTried[uid] = true;
-          ensureWallet(uid).catch(function () { walletState = "unavailable"; updateBar(); });
+          ensureWallet(uid, currentUser && currentUser.email).catch(function () { walletState = "unavailable"; updateBar(); });
         }
         return;
       }
@@ -1016,6 +1096,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       walletCredits = (typeof c === "number") ? c : 0;
       walletState = "ready";
       updateBar();
+      if (currentUser && currentUser.emailVerified) ensureClaimed(currentUser.email);
     }, function () {
       walletState = "unavailable";
       updateBar();
@@ -1023,8 +1104,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
 
   function onAuth(user) {
+    markAuthResolved();
     currentUser = user || null;
     ensureTried = {};
+    claimedTried = {};
     if (user) {
       watchWallet(user.uid);
     } else {
@@ -1037,8 +1120,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
   if (typeof lfAuth !== "undefined" && lfAuth) {
     lfAuth.onAuthStateChanged(onAuth);
+    /* Safety net: if auth state never resolves (blocked storage, stalled
+       SDK), fall back to the guest view after 8s so the tool stays usable. */
+    authTimer = setTimeout(markAuthResolved, 8000);
   } else {
-    updateBar();
+    markAuthResolved();
   }
 
   /* Refresh the bar when the duration changes (cost depends on it). */
@@ -1062,6 +1148,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
 
   window.lfCreditGate = function (dur, buildPlan) {
+    if (!authResolved) { showBuildError("Please wait \u2014 checking your sign-in\u2026"); return; }
     if (!validateInputs()) return;
     /* Owner bypass (see OWNER_EMAIL above): the owner always builds free —
        no Firestore deduction, no wallet check, no "credits finished". */
@@ -1085,12 +1172,12 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
        retry once, then fall back to the 3 free videos so the tool still works. */
     if (walletState === "unavailable" || walletState === "loading") {
       if (walletState === "unavailable" && lfDb) {
-        ensureWallet(currentUser.uid).then(function () { watchWallet(currentUser.uid); }).catch(function () {});
+        ensureWallet(currentUser.uid, currentUser.email).then(function () { watchWallet(currentUser.uid); }).catch(function () {});
       }
-      if (walletState === "loading") { alert("Loading your credits — try again in a second."); return; }
+      if (walletState === "loading") { showBuildError("Loading your credits \u2014 try again in a second."); return; }
       if (guestUsed() >= FREE_WITHOUT_LOGIN) {
         updateBar();
-        alert("Credit wallet is not connected yet — the owner is applying the security rules. Your free videos are used up; please wait until the wallet is live.");
+        showBuildError("Credit wallet is not connected yet \u2014 the owner is applying the security rules. Your free videos are used up; please wait until the wallet is live.");
         return;
       }
       buildPlan();
@@ -1102,8 +1189,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     /* Signed in with a live wallet: charge in Firestore first, then build. */
     if (walletCredits === null || walletCredits < cost) {
       updateBar();
-      alert(walletCredits === 0 ? FINISHED_MSG + " — you have used all " + START_CREDITS + " credits."
-        : "Not enough credits for a " + dur + "s video — it costs " + cost + ", you have " + walletCredits + ".");
+      showBuildError(walletCredits === 0 ? FINISHED_MSG + " \u2014 you have used all " + START_CREDITS + " credits."
+        : "Not enough credits for a " + dur + "s video \u2014 it costs " + cost + ", you have " + walletCredits + ".");
       return;
     }
     chargeWallet(currentUser.uid, cost).then(function () {
@@ -1112,13 +1199,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }).catch(function (err) {
       if (err && err.message === "insufficient") {
         updateBar();
-        alert(FINISHED_MSG + " — you have used all " + START_CREDITS + " credits.");
+        showBuildError(FINISHED_MSG + " \u2014 you have used all " + START_CREDITS + " credits.");
       } else if (err && err.message === "no-wallet") {
         walletState = "unavailable";
         updateBar();
-        alert("Credit wallet is not connected yet — the owner is applying the security rules. Please try again in a moment.");
+        showBuildError("Credit wallet is not connected yet \u2014 the owner is applying the security rules. Please try again in a moment.");
       } else {
-        alert("Could not use your credits right now (" + (err && err.message ? err.message : "unknown error") + "). Nothing was charged — please try again.");
+        showBuildError("Could not use your credits right now (" + (err && err.message ? err.message : "unknown error") + "). Nothing was charged \u2014 please try again.");
       }
     });
   };
