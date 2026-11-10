@@ -60,6 +60,10 @@
   .profile-menu-item.profile-soon-row { cursor: default; }
   .profile-soon { font-size: 11px; color: #a9a9bd; font-weight: 400; }
   .profile-signout { color: #ff8a8a; }
+  .profile-invite-link { font-size: 11px; color: #a9a9bd; word-break: break-all; padding: 8px 2px 0; line-height: 1.5; }
+  .profile-menu-item[hidden] { display: none; }
+  .profile-menu-item:disabled { opacity: .55; cursor: default; }
+  .credit-signin:disabled { opacity: .55; cursor: default; }
   /* ---------- "JUST ADD" items: NEW badges, filters, hamburger, history, resend ---------- */
   .new-badge { font-size: 10px; background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
   .filter-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 18px; }
@@ -344,7 +348,7 @@
       "name": "How many videos can I generate for free per day?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "On LumeField itself: your first 3 video plans are free with no account. After that, sign in (free) and you get 60 credits — enough for three 30-second videos, or more shorter ones (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 1 standard 10-second clip (or two 5-second clips). Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits."
+        "text": "On LumeField itself: your first 3 video plans are free with no account. After that, sign in (free) and you get 60 credits — enough for three 30-second videos, or more shorter ones (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 1 standard 10-second clip (or two 5-second clips). Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits. Every verified user also gets 4 free credits every day. Invite friends with your personal link and earn 20 credits when a friend verifies their email and builds their first video plan."
       }
     },
     {
@@ -397,7 +401,7 @@
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
@@ -475,6 +479,7 @@
     <span id="creditText">🎬 Loading…</span>
     <button type="button" class="credit-signin" id="creditSignInBtn" hidden>Sign in — get 60 credits</button>
     <a class="credit-signin" href="#buy-credits" id="creditBuyBtn" style="text-align:center;">💎 Buy credits</a>
+    <button type="button" class="credit-signin" id="dailyClaimBtn" hidden>🎁 Claim today's 4 free credits</button>
   </div>
   <div class="tool-head">
     <h2>Create your <span>video</span></h2>
@@ -641,7 +646,7 @@
   </div>
   <div class="faq-item">
     <h3>How many videos can I generate for free per day?</h3>
-    <p>On LumeField itself: your first 3 video plans are free with no account. After that, sign in (free) and you get 60 credits — enough for three 30-second videos, or more shorter ones (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 1 standard 10-second clip (or two 5-second clips). Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits.</p>
+    <p>On LumeField itself: your first 3 video plans are free with no account. After that, sign in (free) and you get 60 credits — enough for three 30-second videos, or more shorter ones (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 1 standard 10-second clip (or two 5-second clips). Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits. Every verified user also gets 4 free credits every day — tap “Claim today's 4 free credits” in the credit bar. Invite friends with your personal link (in the profile menu) and earn 20 credits when a friend verifies their email and builds their first video plan.</p>
   </div>
   <div class="faq-item">
     <h3>Can I buy more credits?</h3>
@@ -1502,6 +1507,36 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     return local + "@" + domain;
   }
   var FINISHED_MSG = "Credits finished";
+  /* Daily free refill + referral (v4): verified users get 4 free credits
+     every day; inviting a friend earns 20 credits when the friend verifies
+     their email AND builds their first video plan. Both cost the site $0
+     (video renders on the engines' free tiers); credits are our own numbers. */
+  var DAILY_CREDITS = 4;
+  var REFERRAL_REWARD = 20;
+  var REF_KEY = "lumefield_ref";
+  /* Invite link (?ref=<uid>): remember the referrer for this browser so a
+     later sign-up in this session (including after a Google redirect) still
+     credits the inviter. Only a plausible uid is kept; self-referral is
+     blocked at wallet creation (referredBy must differ from the new uid). */
+  function rememberReferrer() {
+    try {
+      var q = new URLSearchParams(window.location.search).get("ref");
+      if (q && /^[A-Za-z0-9]{10,40}$/.test(q)) {
+        window.localStorage.setItem(REF_KEY, q);
+      }
+    } catch (e) { /* storage unavailable */ }
+  }
+  function pendingReferrer() {
+    try { return window.localStorage.getItem(REF_KEY) || null; } catch (e) { return null; }
+  }
+  function todayDhaka() {
+    try { return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }); }
+    catch (e) {
+      var d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+  }
+  rememberReferrer();
   var FINISHED_UPGRADE = " Use the ⬆️ Upgrade button in the top bar to buy more credits.";
   /* The old "owner is applying the security rules" message is stale — rules
      v3 is published. An unverified user has no wallet because the email is
@@ -1519,6 +1554,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var currentUser = null;
   var walletState = "guest"; // guest | loading | ready | unavailable
   var walletCredits = null;
+  var walletLastDailyClaim = null; // YYYY-MM-DD (Asia/Dhaka) of the last daily claim, or null
+  var walletBuilds = 0; // video plans built with this wallet (from the wallet doc)
+  var walletReferredBy = null; // uid of the user who invited this user, or null
+  var referralRewardDone = false; // this session already handled the referral reward
+  var referralStatsLoaded = false; // this session already loaded the referral stats
   var walletUnsub = null;
   var ensureTried = {};
 
@@ -1580,6 +1620,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (profileCredits) profileCredits.textContent = "💎 " + bal;
     if (profileMenuEmail) profileMenuEmail.textContent = email;
     if (profileMenuCredits) profileMenuCredits.textContent = "💎 Your credits: " + bal + " · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20";
+    var inviteLink = document.getElementById("profileInviteLink");
+    if (inviteLink) inviteLink.textContent = "Invite link: https://anikkazi302-gif.github.io/lumefield/?ref=" + currentUser.uid;
     renderHistory();
     if (window.lfUpdateResendButtons) window.lfUpdateResendButtons();
   }
@@ -1603,6 +1645,79 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       }
     });
   }
+  /* ----- daily free refill + invite link ----- */
+  var dailyClaimBtn = document.getElementById("dailyClaimBtn");
+  var profileDailyClaim = document.getElementById("profileDailyClaim");
+  var profileDailyClaimState = document.getElementById("profileDailyClaimState");
+  /* Daily claim button state: verified signed-in users only (unverified get
+     no wallet at all under rules v3, so no refill); the owner is Unlimited
+     and needs no refill. One claim per Asia/Dhaka day, enforced here AND in
+     Firestore (lastDailyClaim on the wallet doc + rules v4). */
+  function updateDailyClaim() {
+    var show = !!(currentUser && currentUser.emailVerified && !isOwner() && walletState === "ready");
+    var claimedToday = walletLastDailyClaim === todayDhaka();
+    if (dailyClaimBtn) {
+      dailyClaimBtn.hidden = !show;
+      dailyClaimBtn.disabled = claimedToday;
+      dailyClaimBtn.textContent = claimedToday ? "✅ Claimed — come back tomorrow" : "🎁 Claim today's 4 free credits";
+    }
+    if (profileDailyClaim) {
+      profileDailyClaim.hidden = !show;
+      profileDailyClaim.disabled = claimedToday;
+    }
+    if (profileDailyClaimState) {
+      profileDailyClaimState.textContent = claimedToday ? "Claimed ✓" : "4/day";
+    }
+  }
+  function claimDaily() {
+    if (!currentUser || !currentUser.emailVerified || isOwner() || !lfDb) return;
+    if (walletState !== "ready") { showBuildError("Loading your credits — try again in a second."); return; }
+    var today = todayDhaka();
+    if (walletLastDailyClaim === today) return; // already claimed (button is disabled too)
+    var ref = lfDb.collection("wallets").doc(currentUser.uid);
+    lfDb.runTransaction(function (tx) {
+      return tx.get(ref).then(function (snap) {
+        if (!snap.exists) throw new Error("no-wallet");
+        var d = snap.data();
+        if (d.lastDailyClaim === today) throw new Error("already-claimed");
+        var cur = (typeof d.credits === "number") ? d.credits : 0;
+        tx.update(ref, {
+          credits: cur + DAILY_CREDITS,
+          lastDailyClaim: today,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+    }).then(function () { updateBar(); }).catch(function (err) {
+      if (err && err.message === "already-claimed") { updateBar(); return; }
+      if (err && err.code === "permission-denied") {
+        showBuildError("Daily free credits are being switched on — please try again in a bit. Nothing was charged.");
+        return;
+      }
+      showBuildError("Could not claim your free credits right now (" + (err && err.message ? err.message : "unknown error") + "). Nothing changed — please try again.");
+    });
+  }
+  if (dailyClaimBtn) dailyClaimBtn.addEventListener("click", claimDaily);
+  if (profileDailyClaim) profileDailyClaim.addEventListener("click", claimDaily);
+  var profileInviteCopy = document.getElementById("profileInviteCopy");
+  if (profileInviteCopy) profileInviteCopy.addEventListener("click", function () {
+    var link = currentUser ? ("https://anikkazi302-gif.github.io/lumefield/?ref=" + currentUser.uid) : "";
+    var state = document.getElementById("profileInviteState");
+    function done(ok) {
+      if (state) state.textContent = ok ? "✅ Copied" : "Copy failed";
+      setTimeout(function () { if (state) state.textContent = "Copy"; }, 2000);
+    }
+    if (!link) { done(false); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () { done(true); }, function () { done(false); });
+    } else {
+      try {
+        var ta = document.createElement("textarea");
+        ta.value = link; document.body.appendChild(ta); ta.select();
+        var ok = document.execCommand("copy"); document.body.removeChild(ta); done(ok);
+      } catch (e) { done(false); }
+    }
+  });
+
   /* Upgrade links (header chip + menu) scroll to the Buy credits packs
      and close the profile menu. No checkout is built here — the packs'
      buttons stay exactly as they are. */
@@ -1654,6 +1769,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
   function updateBar() {
     updateProfile();
+    updateDailyClaim();
+    loadReferralStats();
     updateBuildBtn();
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
@@ -1715,11 +1832,21 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     return lfDb.runTransaction(function (tx) {
       return tx.get(ref).then(function (snap) {
         if (!snap.exists) {
-          tx.set(ref, {
+          var walletData = {
             credits: START_CREDITS,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
+          };
+          /* Referral: if this browser arrived on an invite link, record who
+             invited this user — only a plausible uid, never the user's own
+             uid (self-referral pays nothing). The referrer is paid later,
+             only after this user verifies email and builds a first plan. */
+          var refUid = pendingReferrer();
+          if (refUid && refUid !== uid && /^[A-Za-z0-9]{10,40}$/.test(refUid)) {
+            walletData.referredBy = refUid;
+            try { window.localStorage.removeItem(REF_KEY); } catch (e) { /* storage unavailable */ }
+          }
+          tx.set(ref, walletData);
           /* One-way claim (see firestore.rules v3): this email has now taken
              its one 60-credit signup bonus. Written in the SAME transaction
              as the wallet, so both succeed or neither does — and deleting
@@ -1758,11 +1885,81 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         if (!snap.exists) throw new Error("no-wallet");
         var cur = snap.data().credits;
         if (typeof cur !== "number" || cur < cost) throw new Error("insufficient");
+        var builds = (typeof snap.data().builds === "number") ? snap.data().builds : 0;
         tx.update(ref, {
           credits: cur - cost,
+          builds: builds + 1,
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       });
+    });
+  }
+
+  /* ----- referral stats + reward ----- */
+  function loadReferralStats() {
+    var statsEl = document.getElementById("profileReferralStats");
+    if (!statsEl || !currentUser || !lfDb || referralStatsLoaded) return;
+    referralStatsLoaded = true; // best effort: no retry spam if rules v4 is not live yet
+    lfDb.collection("referrals").where("referrerUid", "==", currentUser.uid).get().then(function (qs) {
+      var joined = 0, earned = 0;
+      qs.forEach(function (doc) {
+        joined++;
+        if (doc.data() && doc.data().rewarded === true) earned += REFERRAL_REWARD;
+      });
+      statsEl.textContent = joined + " · Earned: " + earned + " credits";
+    }).catch(function () {
+      statsEl.textContent = "0 · Earned: 0 credits";
+    });
+  }
+  /* Referral reward (anti-farming guard): the referrer earns 20 credits ONLY
+     after this user (a) verified their email — guaranteed, no wallet exists
+     otherwise — and (b) built their first video plan (wallet.builds >= 1).
+     Runs on every wallet update and on sign-in (covers a closed tab).
+     The referrals doc (keyed by the referred uid) makes the reward pay at
+     most once; the +20 wallet update and the rewarded flip happen in ONE
+     transaction, and rules v4 only allows that +20 while the doc is still
+     unpaid. If the referrer has no wallet (e.g. the owner), the flip still
+     records the referral and no credits are paid. */
+  function maybeRewardReferrer() {
+    if (referralRewardDone || !currentUser || !currentUser.emailVerified || !lfDb) return;
+    if (!walletReferredBy || walletBuilds < 1) return;
+    var myUid = currentUser.uid;
+    var refDoc = lfDb.collection("referrals").doc(myUid);
+    var referrerRef = lfDb.collection("wallets").doc(walletReferredBy);
+    refDoc.get().then(function (snap) {
+      if (snap.exists) {
+        if (snap.data() && snap.data().rewarded === true) { referralRewardDone = true; return; }
+        return payReferral(refDoc, referrerRef);
+      }
+      return refDoc.set({
+        referrerUid: walletReferredBy,
+        rewarded: false,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function () { return payReferral(refDoc, referrerRef); });
+    }).catch(function () { /* transient / rules v4 not live yet: retry on the next wallet update or sign-in */ });
+  }
+  function payReferral(refDoc, referrerRef) {
+    return lfDb.runTransaction(function (tx) {
+      return tx.get(refDoc).then(function (snap) {
+        if (!snap.exists) throw new Error("no-referral");
+        if (snap.data() && snap.data().rewarded === true) { referralRewardDone = true; return; }
+        tx.update(refDoc, { rewarded: true, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        tx.update(referrerRef, {
+          credits: firebase.firestore.FieldValue.increment(REFERRAL_REWARD),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        referralRewardDone = true;
+      });
+    }).catch(function (err) {
+      /* Referrer wallet missing (e.g. the referrer is the owner, who has no
+         wallet): record the referral as rewarded anyway so it never retries
+         forever. Anything else (network, rules v4 not live yet) retries on
+         the next wallet update or sign-in. */
+      if (err && (err.code === "not-found" || (err.message && err.message.indexOf("not exist") !== -1))) {
+        refDoc.update({ rewarded: true, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function () {
+          referralRewardDone = true;
+        }).catch(function () {});
+      }
     });
   }
 
@@ -1781,9 +1978,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       }
       var c = snap.data().credits;
       walletCredits = (typeof c === "number") ? c : 0;
+      walletLastDailyClaim = (typeof snap.data().lastDailyClaim === "string") ? snap.data().lastDailyClaim : null;
+      walletBuilds = (typeof snap.data().builds === "number") ? snap.data().builds : 0;
+      walletReferredBy = (typeof snap.data().referredBy === "string") ? snap.data().referredBy : null;
       walletState = "ready";
       updateBar();
       if (currentUser && currentUser.emailVerified) ensureClaimed(currentUser.email);
+      if (currentUser && currentUser.emailVerified) maybeRewardReferrer();
     }, function () {
       walletState = "unavailable";
       updateBar();
@@ -1795,12 +1996,17 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     currentUser = user || null;
     ensureTried = {};
     claimedTried = {};
+    referralRewardDone = false;
+    referralStatsLoaded = false;
     if (user) {
       watchWallet(user.uid);
     } else {
       if (walletUnsub) { try { walletUnsub(); } catch (e) {} walletUnsub = null; }
       walletState = "guest";
       walletCredits = null;
+      walletLastDailyClaim = null;
+      walletBuilds = 0;
+      walletReferredBy = null;
       updateBar();
     }
   }
