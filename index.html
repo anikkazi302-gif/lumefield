@@ -33,9 +33,37 @@
   .nav-links a:hover { color: #fff; }
   .nav-cta { background: #fff; color: #0a0a12; border: none; border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 14px; }
   .nav-cta:hover { background: #ffd166; }
+  /* ---------- sign-in nav + auth modal (Team 4) ---------- */
+  .nav-actions { display: flex; gap: 10px; align-items: center; }
+  .nav-signin { background: transparent; color: #fff; border: 1px solid #55556a; border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .nav-signin:hover { border-color: #fff; }
+  .nav-user { font-size: 13px; color: #c9c9d8; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+  .modal-backdrop[hidden] { display: none; }
+  .modal { position: relative; background: #12121d; border: 1px solid #26263a; border-radius: 20px; padding: 28px 26px 24px; width: 100%; max-width: 380px; box-shadow: 0 24px 60px rgba(0,0,0,.6); }
+  .modal h3 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+  .modal-sub { margin-top: 6px; font-size: 14px; color: #a9a9bd; }
+  .modal-close { position: absolute; top: 14px; right: 14px; background: transparent; border: none; color: #a9a9bd; font-size: 18px; cursor: pointer; padding: 4px 8px; }
+  .modal-close:hover { color: #fff; }
+  .auth-toggle { display: flex; gap: 8px; margin: 18px 0 14px; }
+  .auth-toggle-btn { flex: 1; background: #1c1c2c; color: #c9c9d8; border: 1px solid #26263a; border-radius: 999px; padding: 9px 0; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
+  .auth-toggle-btn.active { background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border-color: transparent; }
+  .auth-label { display: block; font-size: 13px; font-weight: 700; color: #c9c9d8; margin: 12px 0 6px; }
+  .auth-input { width: 100%; background: #0a0a12; border: 1px solid #26263a; border-radius: 12px; padding: 12px 14px; color: #f2f2f7; font-size: 15px; font-family: inherit; }
+  .auth-input:focus { outline: none; border-color: #7c5cff; }
+  .auth-msg { min-height: 18px; margin-top: 12px; font-size: 13px; line-height: 1.5; color: #ffd166; }
+  .auth-submit { width: 100%; margin-top: 6px; cursor: pointer; font-family: inherit; }
+  .auth-google { width: 100%; margin-top: 10px; background: #fff; color: #0a0a12; border: none; border-radius: 999px; padding: 12px 0; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .auth-google:hover { background: #ffd166; }
+  .modal-note { margin-top: 16px; font-size: 12.5px; line-height: 1.55; color: #a9a9bd; background: #1c1c2c; border: 1px solid #26263a; border-radius: 12px; padding: 10px 12px; }
+  /* ---------- hero background video (Team 4) ---------- */
+  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(rgba(7,7,13,.78), rgba(7,7,13,.86)), radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,92,255,.30), transparent 70%); }
+  .hero > *:not(.hero-video):not(.hero-overlay) { position: relative; z-index: 2; }
+
 
   /* ---------- hero ---------- */
-  .hero { text-align: center; padding: 64px 20px 44px; background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,92,255,.35), transparent 70%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,94,138,.22), transparent 70%); }
+  .hero { position: relative; overflow: hidden; text-align: center; padding: 64px 20px 44px; background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(124,92,255,.35), transparent 70%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(255,94,138,.22), transparent 70%); }
   .hero h1 { font-size: 52px; line-height: 1.05; letter-spacing: -1.5px; font-weight: 800; }
   .hero h1 span { background: linear-gradient(90deg, #ffd166, #ff5e8a, #7c5cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .hero p { margin-top: 18px; font-size: 18px; color: #c9c9d8; line-height: 1.6; }
@@ -217,10 +245,15 @@
 <nav class="nav">
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
   <div class="nav-links"><a href="#tool">Create</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a></div>
-  <a class="nav-cta" href="#tool">Start free</a>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><span class="nav-user" id="navUser" hidden></span><button class="nav-signin" id="signOutBtn" type="button" hidden>Sign out</button><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
+  <!-- Hero background: "Abstract Digital Tunnel with Glowing Particles" by Nicola Narracci, Pexels (free licence). Lazy-loaded; poster shows first. -->
+  <video class="hero-video" id="heroVideo" muted loop autoplay playsinline preload="none" poster="https://images.pexels.com/videos/31391075/pictures/preview-0.jpg" aria-hidden="true" tabindex="-1">
+    <source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay" aria-hidden="true"></div>
   <h1>Turn your photos into<br><span>cinematic videos.</span></h1>
   <p><b>Free AI video generator</b> — turn your reference photos into 30-second cinematic videos with image to video AI.<br>An AI video generator free to use: no sign-up, no card, just create.</p>
   <div class="cta-row">
@@ -400,6 +433,30 @@
 <div class="footer">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
 Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.</div>
 
+
+<!-- Login modal (Firebase Auth). Honest placeholder: login is NOT connected until the owner adds a free Firebase config. -->
+<div class="modal-backdrop" id="authModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <button class="modal-close" id="authClose" type="button" aria-label="Close">✕</button>
+    <h3 id="authTitle">Sign in to LumeField</h3>
+    <p class="modal-sub">Optional — the video tool works without an account.</p>
+    <div class="auth-toggle">
+      <button type="button" id="modeSignIn" class="auth-toggle-btn active">Sign in</button>
+      <button type="button" id="modeSignUp" class="auth-toggle-btn">Sign up</button>
+    </div>
+    <label class="auth-label" for="authEmail">Email</label>
+    <input class="auth-input" id="authEmail" type="email" placeholder="you@example.com" autocomplete="email">
+    <label class="auth-label" for="authPassword">Password</label>
+    <input class="auth-input" id="authPassword" type="password" placeholder="At least 6 characters" autocomplete="current-password">
+    <p class="auth-msg" id="authMsg" role="status"></p>
+    <button class="btn-primary auth-submit" id="authSubmit" type="button">Sign in</button>
+    <button class="auth-google" id="authGoogle" type="button">Continue with Google</button>
+    <p class="modal-note" id="authNote">⚠️ Login is not connected yet — the site owner needs to add the free Firebase config (one-time setup).</p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script>
 const ENGINES = [
   { id: "wan22", name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
@@ -597,6 +654,115 @@ document.getElementById("buildBtn").addEventListener("click", function () {
   const outEl = document.getElementById("output");
   if (outEl.scrollIntoView) outEl.scrollIntoView({ behavior: "smooth" });
 });
+</script>
+
+<script>
+/* ---------- LumeField login (Firebase Auth) — Team 4 ---------- */
+// SETUP NEEDED (site owner, one-time, free): create a Firebase project in your
+// Google account, enable Email/Password + Google sign-in, then paste that
+// project's web config below, replacing every PASTE_YOUR_... value.
+// Until then, Sign in / Sign up / Google honestly say "not connected yet" —
+// this page NEVER pretends a login succeeded.
+const firebaseConfig = {
+  apiKey: "PASTE_YOUR_FIREBASE_API_KEY_HERE",
+  authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "PASTE_YOUR_PROJECT_ID",
+  storageBucket: "PASTE_YOUR_PROJECT_ID.appspot.com",
+  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
+  appId: "PASTE_YOUR_APP_ID"
+};
+const FIREBASE_CONFIGURED = String(firebaseConfig.apiKey || "").indexOf("PASTE_YOUR") !== 0;
+const NOT_CONNECTED_MSG = "Login is not connected yet — the site owner needs to add the free Firebase config (one-time setup).";
+let lfAuth = null;
+if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
+  try { firebase.initializeApp(firebaseConfig); lfAuth = firebase.auth(); } catch (e) { lfAuth = null; }
+}
+(function () {
+  var modal = document.getElementById("authModal");
+  var msg = document.getElementById("authMsg");
+  var note = document.getElementById("authNote");
+  var emailEl = document.getElementById("authEmail");
+  var passEl = document.getElementById("authPassword");
+  var submitBtn = document.getElementById("authSubmit");
+  var modeIn = document.getElementById("modeSignIn");
+  var modeUp = document.getElementById("modeSignUp");
+  var signInBtn = document.getElementById("signInBtn");
+  var signOutBtn = document.getElementById("signOutBtn");
+  var navUser = document.getElementById("navUser");
+  var mode = "signin";
+  if (!modal) return;
+  if (FIREBASE_CONFIGURED && note) note.style.display = "none";
+  function showMsg(t) { if (msg) msg.textContent = t; }
+  function openModal() { modal.hidden = false; showMsg(FIREBASE_CONFIGURED ? "" : NOT_CONNECTED_MSG); }
+  function closeModal() { modal.hidden = true; showMsg(""); }
+  function setMode(m) {
+    mode = m;
+    modeIn.classList.toggle("active", m === "signin");
+    modeUp.classList.toggle("active", m === "signup");
+    submitBtn.textContent = m === "signin" ? "Sign in" : "Sign up";
+    passEl.setAttribute("autocomplete", m === "signin" ? "current-password" : "new-password");
+  }
+  if (signInBtn) signInBtn.addEventListener("click", openModal);
+  document.getElementById("authClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+  modeIn.addEventListener("click", function () { setMode("signin"); });
+  modeUp.addEventListener("click", function () { setMode("signup"); });
+  function notConnected() { showMsg(NOT_CONNECTED_MSG); return false; }
+  submitBtn.addEventListener("click", function () {
+    if (!FIREBASE_CONFIGURED || !lfAuth) return notConnected();
+    var email = emailEl.value.trim(), pass = passEl.value;
+    if (!email || !pass) { showMsg("Enter your email and password."); return; }
+    var p = mode === "signin"
+      ? lfAuth.signInWithEmailAndPassword(email, pass)
+      : lfAuth.createUserWithEmailAndPassword(email, pass);
+    p.then(function () { closeModal(); }).catch(function (err) { showMsg(err && err.message ? err.message : "Sign-in failed. Try again."); });
+  });
+  document.getElementById("authGoogle").addEventListener("click", function () {
+    if (!FIREBASE_CONFIGURED || !lfAuth) return notConnected();
+    lfAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .then(function () { closeModal(); })
+      .catch(function (err) { showMsg(err && err.message ? err.message : "Google sign-in failed. Try again."); });
+  });
+  function renderUser(user) {
+    if (user) {
+      if (signInBtn) signInBtn.hidden = true;
+      if (navUser) { navUser.textContent = user.email || "Signed in"; navUser.hidden = false; }
+      if (signOutBtn) signOutBtn.hidden = false;
+    } else {
+      if (signInBtn) signInBtn.hidden = false;
+      if (navUser) navUser.hidden = true;
+      if (signOutBtn) signOutBtn.hidden = true;
+    }
+  }
+  if (lfAuth) lfAuth.onAuthStateChanged(renderUser);
+  else renderUser(null);
+  if (signOutBtn) signOutBtn.addEventListener("click", function () {
+    if (lfAuth) lfAuth.signOut();
+    renderUser(null);
+  });
+})();
+
+/* ---------- hero background video (lazy load) — Team 4 ---------- */
+(function () {
+  var v = document.getElementById("heroVideo");
+  if (!v) return;
+  var src = v.querySelector("source");
+  function start() {
+    if (!src || src.getAttribute("src")) return;
+    src.setAttribute("src", src.getAttribute("data-src"));
+    v.load();
+    var p = v.play();
+    if (p && p.catch) p.catch(function () {});
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { start(); io.disconnect(); }
+    });
+    io.observe(v);
+  } else if (document.readyState === "complete") start();
+  else window.addEventListener("load", start);
+})();
 </script>
 </body>
 </html>
