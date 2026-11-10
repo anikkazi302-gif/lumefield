@@ -659,18 +659,17 @@ document.getElementById("buildBtn").addEventListener("click", function () {
 
 <script>
 /* ---------- LumeField login (Firebase Auth) — Team 4 ---------- */
-// SETUP NEEDED (site owner, one-time, free): create a Firebase project in your
-// Google account, enable Email/Password + Google sign-in, then paste that
-// project's web config below, replacing every PASTE_YOUR_... value.
-// Until then, Sign in / Sign up / Google honestly say "not connected yet" —
-// this page NEVER pretends a login succeeded.
+// CONFIGURED 2026-11-11: Firebase project "lumefield" (owner's Google account),
+// Email/Password + Google sign-in enabled. Login is live — Sign in / Sign up /
+// Google now use this config. This page NEVER pretends a login succeeded.
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_FIREBASE_API_KEY_HERE",
-  authDomain: "PASTE_YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_YOUR_PROJECT_ID",
-  storageBucket: "PASTE_YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-  appId: "PASTE_YOUR_APP_ID"
+  apiKey: "AIzaSyA2ADYbyX6oWAApgLEvJsFMccQYqGzQGw",
+  authDomain: "lumefield.firebaseapp.com",
+  projectId: "lumefield",
+  storageBucket: "lumefield.firebasestorage.app",
+  messagingSenderId: "1005053966760",
+  appId: "1:1005053966760:web:cc1641a05f93ad45c2c59d",
+  measurementId: "G-9T9VNLNGKD"
 };
 const FIREBASE_CONFIGURED = String(firebaseConfig.apiKey || "").indexOf("PASTE_YOUR") !== 0;
 const NOT_CONNECTED_MSG = "Login is not connected yet — the site owner needs to add the free Firebase config (one-time setup).";
