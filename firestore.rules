@@ -1,30 +1,64 @@
 rules_version = '2';
 
-// LumeField credit wallets — paste this whole file into
-// Firebase console > lumeField project > Build > Firestore Database > Rules tab,
-// then click Publish. See FIRESTORE-SETUP.md for the exact steps.
+// LumeField credit wallets + one-way signup claims (v3) — paste this whole
+// file into Firebase console > lumeField project > Build > Firestore
+// Database > Rules tab, then click Publish. See FIRESTORE-SETUP.md.
 //
-// What it does: a signed-in user with a VERIFIED email can read and write
-// ONLY their own wallet document (collection "wallets", document id = their
-// Firebase Auth user id). Unverified emails get nothing — the site sends a
-// verification email on sign-up, and the wallet only opens after the user
-// clicks the link. This stops unlimited free accounts farming the 60-credit
-// signup bonus with fake/temporary emails.
-//   - Create: only with exactly 60 credits, and only the allowed fields.
-//   - Update: credits may ONLY go down by exactly one valid video cost
-//     (5s = 4, 10s = 7, 20s = 14, 30s = 20). No other field may change
-//     except updatedAt. Nobody can raise their own balance, create extra
-//     credits, or touch another user's wallet.
-//   - Delete: never allowed.
-//   - Everything else in the database: denied.
+// What it does:
+// 1. Wallets (collection "wallets", doc id = Firebase Auth user id): a
+//    signed-in user with a VERIFIED email can read and write ONLY their own
+//    wallet. Unverified emails get nothing — the site sends a verification
+//    email on sign-up, and the wallet only opens after the user clicks the
+//    link. This stops unlimited free accounts farming the 60-credit signup
+//    bonus with fake/temporary emails.
+//      - Create: only with exactly 60 credits, only the allowed fields,
+//        only if this email has never claimed the bonus before, and never
+//        from a temporary/disposable email address (top ~105 domains blocked
+//        here; the site also blocks ~560 at sign-up — no list is complete,
+//        new temp domains appear daily, so update the list over time).
+//      - Update: credits may ONLY go down by exactly one valid video cost
+//        (5s = 4, 10s = 7, 20s = 14, 30s = 20). No other field may change
+//        except updatedAt. Nobody can raise their own balance, create extra
+//        credits, or touch another user's wallet.
+//      - Delete: never allowed.
+// 2. Claims (collection "claimed", doc id = NORMALIZED email): one-way
+//    record that an email has already taken its one 60-credit signup bonus.
+//    The site creates it in the SAME transaction as the wallet, so both
+//    succeed or neither does. Deleting a Firebase Auth account does NOT
+//    delete Firestore documents, so the claim SURVIVES account deletion —
+//    deleting the account and re-registering with the SAME email can never
+//    create a new wallet (the wallet-create rule below blocks it).
+//    Gmail trick closed: dots and +tags are stripped before the key is
+//    built (user.name+tag@gmail.com == username@gmail.com), so the same
+//    Gmail cannot re-claim via +aliases or dots. Clients can only CREATE a
+//    claim for their own verified email, only once; nobody (not even the
+//    owner of that email) can read, update or delete it.
+//    A COMPLETELY NEW email can still register — no site can stop that
+//    without phone verification or a paid identity check.
+// 3. Everything else in the database: denied.
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Normalized email: Gmail ignores dots and +tags, so
+    // user.name+tag@gmail.com and username@gmail.com are the same mailbox.
+    function normEmail(e) {
+      return e.toLowerCase().matches('.*@(gmail\\.com|googlemail\\.com)$')
+        ? e.toLowerCase().split('@')[0].split('+')[0].split('.').join('') + '@gmail.com'
+        : e.toLowerCase();
+    }
+    // Top ~105 temporary/disposable email domains (see the site's sign-up
+    // check for the wider ~560-domain list).
+    function isDisposableEmail(e) {
+      return e.toLowerCase().matches('.*@(0-00\\.usa\\.cc|0-30-24\\.com|0-attorney\\.com|0-mail\\.com|0-mailer\\.dynv6\\.net|00-tv\\.com|00\\.0\\.gmail\\.com\\.gmail\\.8\\.3\\.gmail\\.35\\.cad\\.creou\\.dev|00\\.msk\\.ru|00\\.pe|000-webmail\\.myhome-server\\.de|000000000000000\\.theworkpc\\.com|000000000000000000\\.dynv6\\.net|000476\\.com|000728\\.xyz|000777\\.info|00082cc\\.com|000email\\.com|000webmail\\.ddnss\\.de|000webmail\\.ddnss\\.org|000webmail\\.dyn-ip24\\.de|000webmail\\.dyn\\.ddnss\\.de|000webmail\\.dyn\\.home-webserver\\.de|000webmail\\.dyndns\\.ddnss\\.de|000webmail\\.dyndns1\\.de|000webmail\\.home-webserver\\.de|001\\.igg\\.biz|001041\\.xyz|001218\\.xyz|001260\\.xyz|001310\\.xyz|001gmail\\.com|002gmail\\.com|002r\\.com|002t\\.com|003271\\.com|0033\\.pl|0039\\.cf|0039\\.ga|0039\\.gq|0039\\.ml|003j\\.com|004k\\.com|005005\\.xyz|0055betplataforma\\.com|0058\\.ru|10mail\\.org|10minutemail\\.com|10minutemail\\.net|10minutemail\\.org|20minutemail\\.com|33mail\\.com|anonbox\\.net|dispostable\\.com|e4ward\\.com|emailondeck\\.com|fakeinbox\\.com|getairmail\\.com|getnada\\.com|guerrillamail\\.biz|guerrillamail\\.com|guerrillamail\\.de|guerrillamail\\.net|guerrillamail\\.org|inboxbear\\.com|mailcatch\\.com|maildrop\\.cc|mailforspam\\.com|mailinator\\.com|mailinator\\.net|mailinator\\.org|mailinator2\\.com|mailmetrash\\.com|mailnesia\\.com|mailnull\\.com|mintemail\\.com|moakt\\.com|mohmal\\.com|mytemp\\.email|mytrashmail\\.com|sharklasers\\.com|spam4\\.me|spambox\\.us|spamgourmet\\.com|temp-mail\\.io|temp-mail\\.org|tempail\\.com|tempemail\\.co|tempinbox\\.com|tempmail\\.com|tempmail\\.de|tempmail\\.net|tempmailaddress\\.com|tempmailo\\.com|tempomail\\.fr|throwawaymail\\.com|tmail\\.ws|tmpmail\\.com|tmpmail\\.org|trashmail\\.com|trashmail\\.me|trashmail\\.net|trashmail\\.org|yopmail\\.com|yopmail\\.fr|yopmail\\.net)$');
+    }
+
     match /wallets/{userId} {
       allow read: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId;
 
       allow create: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId
         && request.resource.data.credits == 60
-        && request.resource.data.keys().hasOnly(['credits', 'createdAt', 'updatedAt']);
+        && request.resource.data.keys().hasOnly(['credits', 'createdAt', 'updatedAt'])
+        && !isDisposableEmail(request.auth.token.email)
+        && !exists(/databases/$(database)/documents/claimed/$(normEmail(request.auth.token.email)));
 
       allow update: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt'])
@@ -35,6 +69,17 @@ service cloud.firestore {
             || request.resource.data.credits == resource.data.credits - 20);
 
       allow delete: if false;
+    }
+
+    match /claimed/{email} {
+      allow create: if request.auth != null && request.auth.token.email_verified == true
+        && normEmail(request.auth.token.email) == email
+        && !isDisposableEmail(request.auth.token.email)
+        && !exists(/databases/$(database)/documents/claimed/$(email))
+        && request.resource.data.keys().hasOnly(['email', 'createdAt'])
+        && request.resource.data.email == email;
+
+      allow read, update, delete: if false;
     }
 
     match /{document=**} {
