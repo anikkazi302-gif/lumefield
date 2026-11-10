@@ -573,6 +573,8 @@ let photos = [];
    auto-dismissed by some browsers, which made a missing photo look like
    the site was broken). Shown when a photo engine is picked with no photo. */
 var PHOTO_ERR = "Please upload a reference photo first — this engine needs one, or switch to a text-only engine.";
+var SUBJECT_ERR = "Please enter a subject for your video.";
+var ACTION_ERR = "Please enter an action for your video.";
 function showBuildError(msg) {
   var el = document.getElementById("buildErr");
   if (el) { el.textContent = msg; el.classList.add("show"); if (el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" }); }
@@ -686,8 +688,8 @@ function buildPlan() {
   const sound = document.getElementById("sound").value.trim();
   const engine = ENGINES.find(function (e) { return e.id === selectedEngine; });
 
-  if (!subject) { alert("Please write the subject first (Step 2) — who or what is in the video."); document.getElementById("subject").focus(); return; }
-  if (!action) { alert("Please write the action first (Step 2) — what happens over the 30 seconds."); document.getElementById("action").focus(); return; }
+  if (!subject) { document.getElementById("subject").focus(); showBuildError(SUBJECT_ERR); return; }
+  if (!action) { document.getElementById("action").focus(); showBuildError(ACTION_ERR); return; }
   if (photos.length === 0 && engine.i2v) {
     showBuildError(PHOTO_ERR);
     return;
@@ -902,6 +904,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var FREE_WITHOUT_LOGIN = 3;
   var GUEST_KEY = "lumefield_guest_used";
   var LOGIN_MSG = "৩টা ফ্রি প্ল্যান শেষ, লগইন করো";
+  /* Owner bypass: the site owner always builds free — no credit deduction,
+     no wallet needed. Marked clearly so it is easy to find and audit. */
+  var OWNER_EMAIL = "anikkazi302@gmail.com";
+  function isOwner() { return !!(currentUser && currentUser.email === OWNER_EMAIL); }
   var FINISHED_MSG = "Credits finished";
 
   var bar = document.getElementById("creditBar");
@@ -940,6 +946,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       return;
     }
     if (signInBtn) signInBtn.hidden = true;
+    if (isOwner()) {
+      text.textContent = "💎 Your credits: Unlimited (Owner) · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20 · Builds are free for the owner.";
+      return;
+    }
     if (walletState === "loading") {
       text.textContent = "💎 Loading your credits…";
     } else if (walletState === "unavailable") {
@@ -1040,8 +1050,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function validateInputs() {
     var subject = document.getElementById("subject").value.trim();
     var action = document.getElementById("action").value.trim();
-    if (!subject) { alert("Please write the subject first (Step 2) — who or what is in the video."); document.getElementById("subject").focus(); return false; }
-    if (!action) { alert("Please write the action first (Step 2) — what happens over the 30 seconds."); document.getElementById("action").focus(); return false; }
+    if (!subject) { document.getElementById("subject").focus(); showBuildError(SUBJECT_ERR); return false; }
+    if (!action) { document.getElementById("action").focus(); showBuildError(ACTION_ERR); return false; }
     var engine = null;
     try { engine = ENGINES.find(function (e) { return e.id === selectedEngine; }); } catch (e) {}
     if (photos.length === 0 && engine && engine.i2v) {
@@ -1053,6 +1063,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
   window.lfCreditGate = function (dur, buildPlan) {
     if (!validateInputs()) return;
+    /* Owner bypass (see OWNER_EMAIL above): the owner always builds free —
+       no Firestore deduction, no wallet check, no "credits finished". */
+    if (isOwner()) { buildPlan(); updateBar(); return; }
     var cost = costFor(dur);
 
     /* Not signed in: 3 free videos, counted in this browser. */
