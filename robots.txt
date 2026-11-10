@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://anikkazi302-gif.github.io/free-ai-video-studio/sitemap.xml
