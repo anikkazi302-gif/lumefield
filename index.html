@@ -1829,24 +1829,24 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function ensureWallet(uid, email) {
     if (!lfDb || typeof firebase === "undefined") return Promise.reject(new Error("no-db"));
     var ref = lfDb.collection("wallets").doc(uid);
-    return lfDb.runTransaction(function (tx) {
-      return tx.get(ref).then(function (snap) {
-        if (!snap.exists) {
-          var walletData = {
-            credits: START_CREDITS,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-          };
-          /* Referral: if this browser arrived on an invite link, record who
-             invited this user — only a plausible uid, never the user's own
-             uid (self-referral pays nothing). The referrer is paid later,
-             only after this user verifies email and builds a first plan. */
-          var refUid = pendingReferrer();
-          if (refUid && refUid !== uid && /^[A-Za-z0-9]{10,40}$/.test(refUid)) {
-            walletData.referredBy = refUid;
-            try { window.localStorage.removeItem(REF_KEY); } catch (e) { /* storage unavailable */ }
-          }
-          tx.set(ref, walletData);
+    /* Referral: if this browser arrived on an invite link, record who
+       invited this user — only a plausible uid, never the user's own uid
+       (self-referral pays nothing). The referrer is paid later, only after
+       this user verifies email and builds a first plan. The uid is read once
+       here (a transaction function can run more than once). */
+    var refUid = pendingReferrer();
+    if (!refUid || refUid === uid || !/^[A-Za-z0-9]{10,40}$/.test(refUid)) refUid = null;
+    function createOnce(withRef) {
+      return lfDb.runTransaction(function (tx) {
+        return tx.get(ref).then(function (snap) {
+          if (!snap.exists) {
+            var walletData = {
+              credits: START_CREDITS,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (withRef && refUid) walletData.referredBy = refUid;
+            tx.set(ref, walletData);
           /* One-way claim (see firestore.rules v3): this email has now taken
              its one 60-credit signup bonus. Written in the SAME transaction
              as the wallet, so both succeed or neither does — and deleting
@@ -1861,6 +1861,17 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
           }
         }
       });
+    });
+  }
+    /* Rules v4 (referredBy) may not be published yet: if the v4-shaped
+       create is refused, retry once without it so the signup still gets
+       its wallet. The referrer simply earns nothing for a signup that
+       predates v4. */
+    return createOnce(true).catch(function (err) {
+      if (err && err.code === "permission-denied") return createOnce(false);
+      throw err;
+    }).then(function () {
+      if (refUid) { try { window.localStorage.removeItem(REF_KEY); } catch (e) { /* storage unavailable */ } }
     });
   }
 
@@ -1880,18 +1891,32 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
   function chargeWallet(uid, cost) {
     var ref = lfDb.collection("wallets").doc(uid);
-    return lfDb.runTransaction(function (tx) {
-      return tx.get(ref).then(function (snap) {
-        if (!snap.exists) throw new Error("no-wallet");
-        var cur = snap.data().credits;
-        if (typeof cur !== "number" || cur < cost) throw new Error("insufficient");
-        var builds = (typeof snap.data().builds === "number") ? snap.data().builds : 0;
-        tx.update(ref, {
-          credits: cur - cost,
-          builds: builds + 1,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    function chargeOnce(withBuilds) {
+      return lfDb.runTransaction(function (tx) {
+        return tx.get(ref).then(function (snap) {
+          if (!snap.exists) throw new Error("no-wallet");
+          var cur = snap.data().credits;
+          if (typeof cur !== "number" || cur < cost) throw new Error("insufficient");
+          var upd = {
+            credits: cur - cost,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          };
+          if (withBuilds) {
+            var builds = (typeof snap.data().builds === "number") ? snap.data().builds : 0;
+            upd.builds = builds + 1;
+          }
+          tx.update(ref, upd);
         });
       });
+    }
+    /* Rules v4 (builds counter) may not be published yet: if the v4-shaped
+       charge is refused, retry once in the old v3 shape so builds keep
+       working until v4 lands. The builds count then starts from the first
+       v4-shaped charge — a referred friend who built under v3 gets their
+       reward on their first build after v4 lands. */
+    return chargeOnce(true).catch(function (err) {
+      if (err && err.code === "permission-denied") return chargeOnce(false);
+      throw err;
     });
   }
 
