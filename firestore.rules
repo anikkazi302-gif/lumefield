@@ -1,0 +1,40 @@
+rules_version = '2';
+
+// LumeField credit wallets — paste this whole file into
+// Firebase console > lumeField project > Build > Firestore Database > Rules tab,
+// then click Publish. See FIRESTORE-SETUP.md for the exact steps.
+//
+// What it does: a signed-in user can read and write ONLY their own wallet
+// document (collection "wallets", document id = their Firebase Auth user id).
+//   - Create: only with exactly 60 credits, and only the allowed fields.
+//   - Update: credits may ONLY go down by exactly one valid video cost
+//     (5s = 4, 10s = 7, 20s = 14, 30s = 20). No other field may change
+//     except updatedAt. Nobody can raise their own balance, create extra
+//     credits, or touch another user's wallet.
+//   - Delete: never allowed.
+//   - Everything else in the database: denied.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /wallets/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      allow create: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.credits == 60
+        && request.resource.data.keys().hasOnly(['credits', 'createdAt', 'updatedAt']);
+
+      allow update: if request.auth != null && request.auth.uid == userId
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['credits', 'updatedAt'])
+        && request.resource.data.credits >= 0
+        && (request.resource.data.credits == resource.data.credits - 4
+            || request.resource.data.credits == resource.data.credits - 7
+            || request.resource.data.credits == resource.data.credits - 14
+            || request.resource.data.credits == resource.data.credits - 20);
+
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
