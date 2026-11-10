@@ -48,7 +48,7 @@ Apply to both in parallel and use whichever approves first. Approval is **not gu
 ### 2.1 Paddle (1st choice)
 
 1. Go to **paddle.com** → sign up as a seller (individual, Bangladesh).
-2. Fill in the business details: product name **LumeField**, website **https://anikkazi302-gif.github.io/lumefield/** (or the custom domain once bought), product description (free AI video generator; credit packs), contact email.
+2. Fill in the business details: product name **LumeField**, website [https://anikkazi302-gif.github.io/lumefield/](https://anikkazi302-gif.github.io/lumefield/) (or the custom domain once bought), product description (free AI video generator; credit packs), contact email.
 3. Complete identity verification (Sumsub): upload the NID/passport + proof of address from step 1. Sometimes a short liveness video is asked for.
 4. Add a payout method: **Payoneer** (preferred — avoids the $15 SWIFT fee) or bank wire. Minimum payout **$100** (adjustable up). Payouts are monthly: balance above the threshold on the 1st is sent by the 15th.
 5. **Re-check the fee on Paddle's own pricing page on the day of signup** (published: 5% + $0.50 per sale; Paddle asks sellers of products under $10 to contact sales for custom pricing — check this at signup). Also note: Paddle does **not** refund its fee when a customer is refunded.
