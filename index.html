@@ -105,6 +105,10 @@
   .tool-head { padding: 8px 0 22px; }
   .honest { background: #12121d; border: 1px solid #ffd166; border-radius: 16px; padding: 16px 18px; margin: 18px 0; font-size: .95rem; line-height: 1.6; color: #e5e5ef; }
   .honest b { color: #ffd166; }
+  .credit-bar { background: linear-gradient(90deg, #1a1430, #12121d); border: 1px solid #7c5cff; border-radius: 16px; padding: 14px 18px; margin: 0 0 18px; font-size: .95rem; line-height: 1.6; color: #e5e5ef; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+  .credit-bar b { color: #ffd166; }
+  .credit-signin { background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border: none; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .credit-signin:hover { opacity: .9; }
   .card { background: #10101a; border: 1px solid #232336; border-radius: 16px; padding: 22px; margin: 16px 0; }
   .card h2 { font-size: 1.15rem; margin-bottom: 6px; color: #ffd166; }
   .card h2 .step { color: #77778c; font-size: .9rem; font-weight: 400; }
@@ -209,7 +213,7 @@
       "name": "How many videos can I generate for free per day?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "It depends on the engine you pick. Kling gives 66 free credits a day — about 6 standard 10-second clips. Flow gives 50 free credits a day — about 2 Fast clips or 5 Lite clips. The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits."
+        "text": "On LumeField itself: your first 3 video plans are free with no account. After that, sign in (free) and you get 60 credits — enough for three 30-second videos, or more shorter ones (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 6 standard 10-second clips. Flow gives 50 free credits a day — about 2 Fast clips or 5 Lite clips. The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits."
       }
     },
     {
@@ -255,7 +259,7 @@
   </video>
   <div class="hero-overlay" aria-hidden="true"></div>
   <h1>Turn your photos into<br><span>cinematic videos.</span></h1>
-  <p><b>Free AI video generator</b> — turn your reference photos into 30-second cinematic videos with image to video AI.<br>An AI video generator free to use: no sign-up, no card, just create.</p>
+  <p><b>Free AI video generator</b> — turn your reference photos into 30-second cinematic videos with image to video AI.<br>Start free: your first 3 videos need no account — then sign in (free) for 60 credits. No card, ever.</p>
   <div class="cta-row">
     <a class="btn-primary" href="#tool">▶ Start Creating — Free</a>
     <a class="btn-ghost" href="#howto">See how it works</a>
@@ -278,7 +282,7 @@
 
 <section class="howto-sec" id="howto">
   <h2>How it <span>works</span></h2>
-  <p class="lead">Four steps from a photo to a finished 30-second video — no sign-up, no payment.</p>
+  <p class="lead">Four steps from a photo to a finished 30-second video — start free, no payment, no card.</p>
   <div class="steps-grid">
     <div class="step-cell"><div class="n">1</div><h3>Upload your photo</h3><p>Add 1–2 reference photos. They stay in your browser — nothing is uploaded anywhere by this page.</p></div>
     <div class="step-cell"><div class="n">2</div><h3>Describe your scene</h3><p>Write the subject, the action, the camera move and the style. Be specific — the engine can only animate what you describe.</p></div>
@@ -288,6 +292,10 @@
 </section>
 
 <div class="tool-wrap" id="tool">
+  <div class="credit-bar" id="creditBar" role="status">
+    <span id="creditText">🎬 Loading…</span>
+    <button type="button" class="credit-signin" id="creditSignInBtn" hidden>Sign in — get 60 credits</button>
+  </div>
   <div class="tool-head">
     <h2>Create your <span>video</span></h2>
     <p class="lead">Build your 30-second plan below — then render it free on the engine you choose.</p>
@@ -298,7 +306,7 @@
     30-second video and writes the exact prompts, then sends you to a genuinely free engine
     (free AI models on Hugging Face, or a free tier) where the video is rendered for free with image to video AI.
     Most free engines make <b>5–10 seconds per clip</b>, so a 30-second video is made by
-    <b>chaining 3 × 10-second segments</b> — this tool builds that chain for you, segment by segment.
+    <b>chaining 3 × 10-second segments</b> — this tool builds that chain for you, segment by segment. <b>Free to start:</b> your first 3 video plans need no account. After that, sign in (free) — you get <b>60 credits</b> (5s = 4, 10s = 7, 20s = 14, 30s = 20).
   </div>
 
   <!-- STEP 1 : REFERENCE PHOTOS -->
@@ -410,15 +418,15 @@
   <h2>Frequently asked <span>questions</span></h2>
   <div class="faq-item">
     <h3>Is LumeField really free?</h3>
-    <p>Yes. This page is free to use — no payment, no sign-up, no card. It plans your video and writes the prompts. The video itself is rendered on free engines: free Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX), Kling with 66 free credits a day, Google Flow with 50 free credits a day, and Runway with 125 credits once. Free tiers can change, so always check the engine's own page.</p>
+    <p>Yes. This page is free to use — no payment, no sign-up, no card. It plans your video and writes the prompts. The video itself is rendered on free engines: free Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX), Kling with 66 free credits a day, Google Flow with 50 free credits a day, and Runway with 125 credits once. Free tiers can change, so always check the engine's own page. LumeField itself is free too: your first 3 video plans need no account. After that, sign in (free, email or Google) and you get 60 credits — a 5-second video costs 4 credits, 10 seconds costs 7, 20 seconds costs 14, and a full 30-second video costs 20. No card is ever asked for.</p>
   </div>
   <div class="faq-item">
     <h3>How many videos can I generate for free per day?</h3>
-    <p>It depends on the engine you pick. Kling gives 66 free credits a day — about 6 standard 10-second clips. Flow gives 50 free credits a day — about 2 Fast clips or 5 Lite clips. The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits.</p>
+    <p>On LumeField itself: your first 3 video plans are free with no account. After that, sign in (free) and you get 60 credits — enough for three 30-second videos, or more shorter ones (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 6 standard 10-second clips. Flow gives 50 free credits a day — about 2 Fast clips or 5 Lite clips. The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits.</p>
   </div>
   <div class="faq-item">
     <h3>Do I need to sign up or a credit card?</h3>
-    <p>No sign-up and no credit card are needed to use this page. Some engines need a free account on their own page — Kling needs a free account and Flow needs a Google account — but the Hugging Face Spaces need no account at all. No engine listed here asks for a card for its free tier.</p>
+    <p>No credit card is ever needed — not on this page, and not for any engine's free tier listed here. No sign-up is needed for your first 3 videos. After that, sign up free (email or Google) and you get 60 credits. Some engines need a free account on their own page — Kling needs a free account and Flow needs a Google account — but the Hugging Face Spaces need no account at all. No engine listed here asks for a card for its free tier.</p>
   </div>
   <div class="faq-item">
     <h3>Which engines are free?</h3>
@@ -440,7 +448,7 @@ Plans and prompts only; video is rendered free on the engine you choose. Engine 
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <button class="modal-close" id="authClose" type="button" aria-label="Close">✕</button>
     <h3 id="authTitle">Sign in to LumeField</h3>
-    <p class="modal-sub">Optional — the video tool works without an account.</p>
+    <p class="modal-sub">Free to start — your first 3 videos need no account. After that, sign in (free) for 60 credits.</p>
     <div class="auth-toggle">
       <button type="button" id="modeSignIn" class="auth-toggle-btn active">Sign in</button>
       <button type="button" id="modeSignUp" class="auth-toggle-btn">Sign up</button>
@@ -458,6 +466,7 @@ Plans and prompts only; video is rendered free on the engine you choose. Engine 
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const ENGINES = [
   { id: "wan22", name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
@@ -581,7 +590,7 @@ document.querySelectorAll("[data-copy]").forEach(function (btn) {
 });
 
 /* ---------- build plan ---------- */
-document.getElementById("buildBtn").addEventListener("click", function () {
+function buildPlan() {
   const subject = document.getElementById("subject").value.trim();
   const action = document.getElementById("action").value.trim();
   const camera = document.getElementById("camera").value;
@@ -654,6 +663,11 @@ document.getElementById("buildBtn").addEventListener("click", function () {
   document.getElementById("output").classList.add("show");
   const outEl = document.getElementById("output");
   if (outEl.scrollIntoView) outEl.scrollIntoView({ behavior: "smooth" });
+}
+/* Credit gate (see credit system script below): checks free plans / credits first. */
+document.getElementById("buildBtn").addEventListener("click", function () {
+  if (window.lfCreditGate) { window.lfCreditGate(selectedDur, buildPlan); }
+  else { buildPlan(); }
 });
 </script>
 
@@ -674,8 +688,9 @@ const firebaseConfig = {
 const FIREBASE_CONFIGURED = String(firebaseConfig.apiKey || "").indexOf("PASTE_YOUR") !== 0;
 const NOT_CONNECTED_MSG = "Login is not connected yet — the site owner needs to add the free Firebase config (one-time setup).";
 let lfAuth = null;
+let lfDb = null;
 if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
-  try { firebase.initializeApp(firebaseConfig); lfAuth = firebase.auth(); } catch (e) { lfAuth = null; }
+  try { firebase.initializeApp(firebaseConfig); lfAuth = firebase.auth(); lfDb = firebase.firestore(); } catch (e) { lfAuth = null; lfDb = null; }
 }
 (function () {
   var modal = document.getElementById("authModal");
@@ -694,6 +709,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   if (FIREBASE_CONFIGURED && note) note.style.display = "none";
   function showMsg(t) { if (msg) msg.textContent = t; }
   function openModal() { modal.hidden = false; showMsg(FIREBASE_CONFIGURED ? "" : NOT_CONNECTED_MSG); }
+  window.lfOpenLogin = function (msg) { openModal(); showMsg(msg || ""); };
   function closeModal() { modal.hidden = true; showMsg(""); }
   function setMode(m) {
     mode = m;
@@ -764,5 +780,236 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   else window.addEventListener("load", start);
 })();
 </script>
+<script>
+/* ---------- LumeField credit system (approved 2026-11-11) ---------- */
+// Rules (owner-approved, do not change):
+// - Every user starts with 60 credits. Cost per video: 5s = 4, 10s = 7, 20s = 14, 30s = 20.
+// - Without login: only 3 videos free. On the 4th attempt the login box opens:
+//   "৩টা ফ্রি প্ল্যান শেষ, লগইন করো"
+// - After login: 60 credits again. When they run out: "Credits finished".
+// - The wallet lives in Firestore (collection "wallets", doc id = user uid) and is
+//   enforced by Firestore security rules (see firestore.rules in the repo).
+//   Browser counting alone is NOT the enforcement for signed-in users.
+// Honest limit: the 3 free videos without login are counted in this browser
+// (localStorage) — there is no account to tie them to, so clearing browser data
+// resets that count. The signed-in wallet cannot be reset that way: its balance
+// lives in Firestore and the rules only ever let it go DOWN by a valid video cost.
+(function () {
+  var COST = { 5: 4, 10: 7, 20: 14, 30: 20 };
+  var START_CREDITS = 60;
+  var FREE_WITHOUT_LOGIN = 3;
+  var GUEST_KEY = "lumefield_guest_used";
+  var LOGIN_MSG = "৩টা ফ্রি প্ল্যান শেষ, লগইন করো";
+  var FINISHED_MSG = "Credits finished";
+
+  var bar = document.getElementById("creditBar");
+  var text = document.getElementById("creditText");
+  var signInBtn = document.getElementById("creditSignInBtn");
+  if (!bar || !text) return;
+
+  var currentUser = null;
+  var walletState = "guest"; // guest | loading | ready | unavailable
+  var walletCredits = null;
+  var walletUnsub = null;
+  var ensureTried = {};
+
+  /* ----- guest counter (browser only; no account to tie it to) ----- */
+  function guestUsed() {
+    try { return parseInt(window.localStorage.getItem(GUEST_KEY) || "0", 10) || 0; }
+    catch (e) { return 0; }
+  }
+  function setGuestUsed(n) {
+    try { window.localStorage.setItem(GUEST_KEY, String(n)); } catch (e) { /* storage unavailable */ }
+  }
+
+  /* ----- balance display (always above the tool) ----- */
+  function costFor(dur) { return COST[dur] || COST[30]; }
+  function updateBar() {
+    var dur = (typeof selectedDur === "number") ? selectedDur : 30;
+    var cost = costFor(dur);
+    if (!currentUser) {
+      var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed());
+      if (left > 0) {
+        text.textContent = "🎬 Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN + " — no login needed. After that, sign in (free) for " + START_CREDITS + " credits. This " + dur + "s video costs " + cost + " credits after login.";
+      } else {
+        text.textContent = "🔒 " + LOGIN_MSG + " — sign in (free) to get " + START_CREDITS + " credits.";
+      }
+      if (signInBtn) signInBtn.hidden = false;
+      return;
+    }
+    if (signInBtn) signInBtn.hidden = true;
+    if (walletState === "loading") {
+      text.textContent = "💎 Loading your credits…";
+    } else if (walletState === "unavailable") {
+      text.textContent = "⚠️ Credit wallet is not connected yet — the owner is applying the security rules. Your " + FREE_WITHOUT_LOGIN + " free videos still work.";
+    } else if (walletState === "ready") {
+      if (walletCredits === 0) {
+        text.textContent = "💎 " + FINISHED_MSG + " — you have used all " + START_CREDITS + " credits.";
+      } else {
+        text.textContent = "💎 Your credits: " + walletCredits + " · 5s = 4 · 10s = 7 · 20s = 14 · 30s = 20 · This " + dur + "s video costs " + cost + " credits.";
+      }
+    }
+  }
+
+  if (signInBtn) signInBtn.addEventListener("click", function () {
+    if (window.lfOpenLogin) window.lfOpenLogin("");
+  });
+
+  /* ----- Firestore wallet ----- */
+  function ensureWallet(uid) {
+    if (!lfDb || typeof firebase === "undefined") return Promise.reject(new Error("no-db"));
+    var ref = lfDb.collection("wallets").doc(uid);
+    return lfDb.runTransaction(function (tx) {
+      return tx.get(ref).then(function (snap) {
+        if (!snap.exists) {
+          tx.set(ref, {
+            credits: START_CREDITS,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      });
+    });
+  }
+
+  function chargeWallet(uid, cost) {
+    var ref = lfDb.collection("wallets").doc(uid);
+    return lfDb.runTransaction(function (tx) {
+      return tx.get(ref).then(function (snap) {
+        if (!snap.exists) throw new Error("no-wallet");
+        var cur = snap.data().credits;
+        if (typeof cur !== "number" || cur < cost) throw new Error("insufficient");
+        tx.update(ref, {
+          credits: cur - cost,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+    });
+  }
+
+  function watchWallet(uid) {
+    if (walletUnsub) { try { walletUnsub(); } catch (e) {} walletUnsub = null; }
+    if (!lfDb) { walletState = "unavailable"; updateBar(); return; }
+    walletState = "loading";
+    updateBar();
+    walletUnsub = lfDb.collection("wallets").doc(uid).onSnapshot(function (snap) {
+      if (!snap.exists) {
+        if (!ensureTried[uid]) {
+          ensureTried[uid] = true;
+          ensureWallet(uid).catch(function () { walletState = "unavailable"; updateBar(); });
+        }
+        return;
+      }
+      var c = snap.data().credits;
+      walletCredits = (typeof c === "number") ? c : 0;
+      walletState = "ready";
+      updateBar();
+    }, function () {
+      walletState = "unavailable";
+      updateBar();
+    });
+  }
+
+  function onAuth(user) {
+    currentUser = user || null;
+    ensureTried = {};
+    if (user) {
+      watchWallet(user.uid);
+    } else {
+      if (walletUnsub) { try { walletUnsub(); } catch (e) {} walletUnsub = null; }
+      walletState = "guest";
+      walletCredits = null;
+      updateBar();
+    }
+  }
+
+  if (typeof lfAuth !== "undefined" && lfAuth) {
+    lfAuth.onAuthStateChanged(onAuth);
+  } else {
+    updateBar();
+  }
+
+  /* Refresh the bar when the duration changes (cost depends on it). */
+  document.querySelectorAll("#durBtns button").forEach(function (b) {
+    b.addEventListener("click", updateBar);
+  });
+
+  /* ----- gate: runs before buildPlan ----- */
+  function validateInputs() {
+    var subject = document.getElementById("subject").value.trim();
+    var action = document.getElementById("action").value.trim();
+    if (!subject) { alert("Please write the subject first (Step 2) — who or what is in the video."); document.getElementById("subject").focus(); return false; }
+    if (!action) { alert("Please write the action first (Step 2) — what happens over the 30 seconds."); document.getElementById("action").focus(); return false; }
+    var engine = null;
+    try { engine = ENGINES.find(function (e) { return e.id === selectedEngine; }); } catch (e) {}
+    if (photos.length === 0 && engine && engine.i2v) {
+      if (!confirm("No reference photo uploaded. The engine will animate from text only and the face will not match a photo. Continue anyway?")) return false;
+    }
+    return true;
+  }
+
+  window.lfCreditGate = function (dur, buildPlan) {
+    if (!validateInputs()) return;
+    var cost = costFor(dur);
+
+    /* Not signed in: 3 free videos, counted in this browser. */
+    if (!currentUser) {
+      if (guestUsed() >= FREE_WITHOUT_LOGIN) {
+        updateBar();
+        if (window.lfOpenLogin) window.lfOpenLogin(LOGIN_MSG);
+        return;
+      }
+      buildPlan();
+      setGuestUsed(guestUsed() + 1);
+      updateBar();
+      return;
+    }
+
+    /* Signed in, but the wallet is unreachable (rules not applied yet):
+       retry once, then fall back to the 3 free videos so the tool still works. */
+    if (walletState === "unavailable" || walletState === "loading") {
+      if (walletState === "unavailable" && lfDb) {
+        ensureWallet(currentUser.uid).then(function () { watchWallet(currentUser.uid); }).catch(function () {});
+      }
+      if (walletState === "loading") { alert("Loading your credits — try again in a second."); return; }
+      if (guestUsed() >= FREE_WITHOUT_LOGIN) {
+        updateBar();
+        alert("Credit wallet is not connected yet — the owner is applying the security rules. Your free videos are used up; please wait until the wallet is live.");
+        return;
+      }
+      buildPlan();
+      setGuestUsed(guestUsed() + 1);
+      updateBar();
+      return;
+    }
+
+    /* Signed in with a live wallet: charge in Firestore first, then build. */
+    if (walletCredits === null || walletCredits < cost) {
+      updateBar();
+      alert(walletCredits === 0 ? FINISHED_MSG + " — you have used all " + START_CREDITS + " credits."
+        : "Not enough credits for a " + dur + "s video — it costs " + cost + ", you have " + walletCredits + ".");
+      return;
+    }
+    chargeWallet(currentUser.uid, cost).then(function () {
+      buildPlan();
+      updateBar();
+    }).catch(function (err) {
+      if (err && err.message === "insufficient") {
+        updateBar();
+        alert(FINISHED_MSG + " — you have used all " + START_CREDITS + " credits.");
+      } else if (err && err.message === "no-wallet") {
+        walletState = "unavailable";
+        updateBar();
+        alert("Credit wallet is not connected yet — the owner is applying the security rules. Please try again in a moment.");
+      } else {
+        alert("Could not use your credits right now (" + (err && err.message ? err.message : "unknown error") + "). Nothing was charged — please try again.");
+      }
+    });
+  };
+
+  updateBar();
+})();
+</script>
+
 </body>
 </html>
