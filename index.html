@@ -1067,6 +1067,32 @@ document.getElementById("buildBtn").addEventListener("click", function () {
   else { showBuildError("Credit system unavailable, please reload."); }
 });
 
+/* How-it-works steps are tappable: each step jumps to its place in the tool
+   (user-initiated navigation, not a forced scroll). */
+document.querySelectorAll(".step-cell").forEach(function (cell, idx) {
+  cell.style.cursor = "pointer";
+  cell.addEventListener("click", function () {
+    var step = idx + 1;
+    var tool = document.getElementById("tool");
+    if (step === 1) {
+      if (tool) tool.scrollIntoView();
+      var p = document.getElementById("photoInput");
+      if (p) p.focus();
+    } else if (step === 2) {
+      if (tool) tool.scrollIntoView();
+      var s = document.getElementById("subject");
+      if (s) s.focus();
+    } else if (step === 3) {
+      var s3 = document.getElementById("step3") || tool;
+      if (s3) s3.scrollIntoView();
+    } else {
+      if (tool) tool.scrollIntoView();
+      var b = document.getElementById("buildBtn");
+      if (b) b.focus();
+    }
+  });
+});
+
 /* ---------- preset scene templates + "Try an example" ---------- */
 var PRESETS = [
   { name: "🐉 Dragon at sunset", subject: "A white dragon standing behind a young woman in front of an old stone cottage", action: "The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated", camera: "slow push-in toward the subject", style: "cinematic dark fantasy, film grain, moody light", setting: "Rocky mountainside, old stone cottage, overcast grey sky, light snow falling", sound: "No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end." },
