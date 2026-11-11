@@ -607,8 +607,21 @@
 
   <!-- STEP 3 : DURATION + ENGINE -->
   <div class="card" id="step3">
-    <h2>Step 3 — Duration &amp; free engine</h2>
-    <p class="sub">Pick a length, then an engine. Every engine was verified free.</p>
+    <h2>Step 3 — Resolution, ratio, duration &amp; engine</h2>
+    <p class="sub">Pick a resolution and ratio, then a length and an engine. Every engine was verified free.</p>
+    <label>Resolution</label>
+    <select id="qualitySel" aria-label="Resolution"></select>
+    <label>Ratio</label>
+    <div class="seg-btns" id="ratioBtns">
+      <button data-ratio="16:9" class="active">16:9</button>
+      <button data-ratio="9:16">9:16</button>
+      <button data-ratio="1:1">1:1</button>
+      <button data-ratio="4:3">4:3</button>
+      <button data-ratio="3:4">3:4</button>
+      <button data-ratio="21:9">21:9</button>
+      <button data-ratio="4:5">4:5</button>
+      <button data-ratio="3:2">3:2</button>
+    </div>
     <label>Duration</label>
     <div class="seg-btns" id="durBtns">
       <button data-dur="5">5 seconds</button>
@@ -616,20 +629,13 @@
       <button data-dur="20">20 seconds</button>
       <button data-dur="30" class="active">30 seconds</button>
     </div>
-    <label>Ratio</label>
-    <div class="seg-btns" id="ratioBtns">
-      <button data-ratio="16:9" class="active">16:9</button>
-      <button data-ratio="9:16">9:16</button>
-      <button data-ratio="1:1">1:1</button>
-    </div>
-    <label>Quality</label>
-    <select id="qualitySel" aria-label="Quality"></select>
     <label>Engine (free — pick one)</label>
     <div class="engines" id="engines"></div>
     <div class="warn" id="noI2vWarn">⚠️ <b id="noI2vName"></b> does <b>not</b> take a reference photo — it is
     text-to-video only. Your photo will not be used there. Pick any photo engine (every engine except Mochi 1 takes a reference photo) if the face must match your photo.</div>
   </div>
 
+  <p id="buildCost" style="text-align:center;color:#ffd166;font-size:14px;margin:14px 0 0;"></p>
   <button class="big-btn" id="buildBtn">🎬 Build my video plan</button>
   <div class="warn" id="buildErr" role="alert"></div>
 
@@ -919,7 +925,7 @@ ENGINES.forEach(function (e) {
 });
 
   /* ---------- ratio + quality (owner order: ratio, prompt, quality) ---------- */
-  function ratioText(r) { return r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : "16:9 widescreen"; }
+  function ratioText(r) { return r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : r === "4:3" ? "4:3 standard" : r === "3:4" ? "3:4 portrait" : r === "21:9" ? "21:9 ultrawide" : r === "4:5" ? "4:5 portrait" : r === "3:2" ? "3:2 landscape" : "16:9 widescreen"; }
   function qualityOptionsFor(e) {
     var res = (e && e.res) || "720p";
     var out = [];
@@ -1384,14 +1390,15 @@ function detailVideoHTML(demo, name, siteUrl) {   var sampleTag = (demo && demo.
   return '<div class="detail-video"><div class="no-demo"><span style="font-size:26px;">▶</span><span>No demo video embedded yet.</span><a href="' + siteUrl + '" target="_blank" rel="noopener">Open the tool’s site ↗</a></div></div>';
 }
 function detailCreditsText() {
+  var c = (typeof window !== "undefined" && typeof window.lfCostFor === "function") ? window.lfCostFor((typeof selectedDur === "number") ? selectedDur : 30) : 20;
   try {
-    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "💎 Unlimited (Owner)";
+    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "💎 Unlimited (Owner) — this video is free";
     if (typeof window !== "undefined" && typeof window.lfSignedIn === "function" && window.lfSignedIn()) {
       var b = (typeof window.lfBalanceText === "function") ? window.lfBalanceText() : "";
-      return "💎 " + (b || "0 credits");
+      return "💠 This video: " + c + " credits · " + (b || "0 credits");
     }
   } catch (e) {}
-  try { var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed()); return "🎬 Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN; } catch (e) { return ""; }
+  try { var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed()); return "💠 This video: " + c + " credits · Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN; } catch (e) { return "💠 This video: " + c + " credits"; }
 }
 function detailGenText() {
   try {
@@ -1536,15 +1543,20 @@ function openDetail(kind, id) {
         '<input type="file" id="dPhotoInput" accept="image/*" hidden>' +
         '<input type="file" id="dVideoInput" accept="video/*" hidden>' +
       '</div>' +
-      '<div class="db-section">✍️ Prompt — describe your video</div>' +
+      '<div><div class="db-label">Resolution</div><select id="dQuality">' + qHtml + '</select></div>' +
       '<div><div class="db-label">Ratio</div><div class="seg-btns" data-db-ratio>' +
       '<button type="button" data-ratio="16:9"' + (selectedRatio === "16:9" ? ' class="active"' : '') + '>16:9</button>' +
       '<button type="button" data-ratio="9:16"' + (selectedRatio === "9:16" ? ' class="active"' : '') + '>9:16</button>' +
-      '<button type="button" data-ratio="1:1"' + (selectedRatio === "1:1" ? ' class="active"' : '') + '>1:1</button></div></div>' +
+      '<button type="button" data-ratio="1:1"' + (selectedRatio === "1:1" ? ' class="active"' : '') + '>1:1</button>' +
+      '<button type="button" data-ratio="4:3"' + (selectedRatio === "4:3" ? ' class="active"' : '') + '>4:3</button>' +
+      '<button type="button" data-ratio="3:4"' + (selectedRatio === "3:4" ? ' class="active"' : '') + '>3:4</button>' +
+      '<button type="button" data-ratio="21:9"' + (selectedRatio === "21:9" ? ' class="active"' : '') + '>21:9</button>' +
+      '<button type="button" data-ratio="4:5"' + (selectedRatio === "4:5" ? ' class="active"' : '') + '>4:5</button>' +
+      '<button type="button" data-ratio="3:2"' + (selectedRatio === "3:2" ? ' class="active"' : '') + '>3:2</button></div></div>' +
+      '<div class="db-section">✍️ Prompt — describe your video</div>' +
       '<div><div class="db-label">Subject</div><input id="dSubject" type="text" value="' + subj + '" placeholder="Who / what is in the video"></div>' +
       '<div><div class="db-label">Action</div><textarea id="dAction" placeholder="What happens">' + act + '</textarea></div>' +
       '<div><div class="db-label">Duration</div><div class="seg-btns" data-db-dur>' + durBtns + '</div></div>' +
-      '<div><div class="db-label">Quality</div><select id="dQuality">' + qHtml + '</select></div>' +
       '<p class="db-credits" id="dCredits"></p>' +
       '<button class="big-btn" id="dGenerate" type="button" data-gen-engine="' + item.id + '"></button>' +
       '<p class="db-err" id="dErr" hidden></p>' +
@@ -2190,6 +2202,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var cost = costFor(dur);
     if (isOwner()) b.textContent = "🎬 Build my video plan — free for you";
     else b.textContent = "🎬 Build my video plan — " + cost + " credits";
+    var bc = document.getElementById("buildCost");
+    if (bc) {
+      if (isOwner()) bc.textContent = "💎 Unlimited (Owner) — this video is free for you";
+      else bc.textContent = "💠 This video costs " + cost + " credits · " + dur + "s";
+    }
   }
   function updateBar() {
     updateProfile();
