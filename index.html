@@ -380,6 +380,9 @@
     .profile-name { max-width: 64px; }
     .profile-menu { min-width: 230px; }
     .profile-upgrade { padding: 8px 10px; font-size: 12px; }
+    .nav-cta { white-space: nowrap; padding: 8px 12px; font-size: 12px; }
+    .nav-signin { padding: 8px 12px; font-size: 12px; }
+    .nav-actions { gap: 6px; }
   }
 
   @media (max-width: 640px) {
@@ -585,27 +588,27 @@
       <div class="field-box">
         <label for="camera">Camera move</label>
         <select id="camera">
-          <option value="static, locked-off camera">Static — locked-off camera</option>
-          <option value="slow push-in toward the subject" selected>Slow push-in toward the subject</option>
-          <option value="slow pull-back revealing the scene">Slow pull-back revealing the scene</option>
-          <option value="slow pan left to right">Slow pan left to right</option>
-          <option value="slow pan right to left">Slow pan right to left</option>
-          <option value="slow tracking shot following the subject">Slow tracking shot following the subject</option>
-          <option value="slow crane shot rising upward">Slow crane shot rising upward</option>
-          <option value="slow orbit around the subject">Slow orbit around the subject</option>
-          <option value="dolly in — camera moves forward toward the subject">Dolly in — camera moves forward toward the subject</option>
-          <option value="dolly out — camera pulls back from the subject">Dolly out — camera pulls back from the subject</option>
-          <option value="crane down — camera descends from above">Crane down — camera descends from above</option>
-          <option value="FPV drone fly-through — fast first-person drone flight through the scene">FPV drone fly-through — fast first-person drone flight through the scene</option>
-          <option value="slow tilt up — camera tilts upward">Slow tilt up — camera tilts upward</option>
-          <option value="slow tilt down — camera tilts downward">Slow tilt down — camera tilts downward</option>
+          <option value="static, locked-off camera">Static — locked-off</option>
+          <option value="slow push-in toward the subject" selected>Slow push-in</option>
+          <option value="slow pull-back revealing the scene">Slow pull-back</option>
+          <option value="slow pan left to right">Pan left to right</option>
+          <option value="slow pan right to left">Pan right to left</option>
+          <option value="slow tracking shot following the subject">Tracking shot</option>
+          <option value="slow crane shot rising upward">Crane up</option>
+          <option value="slow orbit around the subject">Orbit around</option>
+          <option value="dolly in — camera moves forward toward the subject">Dolly in</option>
+          <option value="dolly out — camera pulls back from the subject">Dolly out</option>
+          <option value="crane down — camera descends from above">Crane down</option>
+          <option value="FPV drone fly-through — fast first-person drone flight through the scene">FPV drone flight</option>
+          <option value="slow tilt up — camera tilts upward">Tilt up</option>
+          <option value="slow tilt down — camera tilts downward">Tilt down</option>
         </select>
       </div>
       <div class="field-box">
         <label for="style">Style</label>
         <select id="style">
-          <option value="cinematic dark fantasy, film grain, moody light" selected>Cinematic dark fantasy</option>
-          <option value="realistic, natural light, photographic">Realistic / photographic</option>
+          <option value="cinematic dark fantasy, film grain, moody light" selected>Dark fantasy</option>
+          <option value="realistic, natural light, photographic">Realistic</option>
           <option value="bright 3D cartoon, cheerful">Bright 3D cartoon</option>
           <option value="anime style, clean lines">Anime style</option>
           <option value="documentary style, handheld feel">Documentary style</option>
@@ -1771,7 +1774,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     mode = m;
     modeIn.classList.toggle("active", m === "signin");
     modeUp.classList.toggle("active", m === "signup");
-    submitBtn.textContent = m === "signin" ? "Sign in" : "Sign up";
+    submitBtn.textContent = "Continue";
     passEl.setAttribute("autocomplete", m === "signin" ? "current-password" : "new-password");
   }
   if (signInBtn) signInBtn.addEventListener("click", openModal);
