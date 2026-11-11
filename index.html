@@ -416,7 +416,33 @@
   .pack.ultra .buy-btn { background: #111; color: #fff; }
   @media (max-width: 640px) { .pack.plus { transform: none; } .pack.ultra { padding: 22px; } }
 
-  /* ---------- footer ---------- */
+ /* ---------- generator layout (Higgsfield Create Video) ---------- */
+.gen-tabs { display:flex; gap:8px; margin:0 0 14px; }
+.gen-tab { flex:1; padding:10px 6px; border:1px solid #33334a; background:#1c1c2c; color:#cfcfdd; border-radius:10px; font-weight:700; cursor:pointer; }
+.gen-tab.active { background:#c8f542; color:#111; border-color:#c8f542; }
+.preset-card { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.preset-gen { color:#c8f542; font-weight:800; letter-spacing:1px; font-size:13px; }
+.preset-eng { font-size:18px; font-weight:800; }
+.preset-change { background:none; border:1px solid #55557a; color:#e8e8f2; border-radius:8px; padding:6px 12px; cursor:pointer; font-weight:700; }
+.frames-row { display:flex; gap:12px; margin:0 0 12px; }
+.frame-box { flex:1; min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; cursor:pointer; }
+.frame-label { font-weight:700; font-size:13px; }
+.frame-prev { color:#9a9ab0; font-size:13px; }
+.frame-box img { width:100%; height:90px; object-fit:cover; border-radius:8px; }
+.gen-editors { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+.gen-editor-btn { padding:10px; border:1px solid #33334a; background:#1c1c2c; color:#e8e8f2; border-radius:10px; font-weight:700; cursor:pointer; text-align:left; }
+.gen-editor-btn:hover { border-color:#c8f542; }
+.how-tabs { display:flex; gap:8px; margin:0 0 12px; }
+.how-tab { flex:1; padding:8px 6px; border:1px solid #33334a; background:#1c1c2c; color:#cfcfdd; border-radius:8px; font-weight:700; cursor:pointer; }
+.how-tab.active { background:#c8f542; color:#111; border-color:#c8f542; }
+.how-steps { display:grid; gap:12px; }
+.how-step { border:1px solid #33334a; border-radius:12px; padding:10px; background:#1c1c2c; }
+.how-step b { display:block; margin:8px 0 2px; }
+.how-step span { color:#9a9ab0; font-size:13px; }
+.how-thumb { position:relative; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:#000; }
+.how-thumb iframe { width:100%; height:100%; border:0; }
+
+ /* ---------- footer ---------- */
   .footer { text-align: center; padding: 22px; font-size: 13px; color: #77778c; border-top: 1px solid #1c1c2c; line-height: 1.7; }
   .footer a { color: #a9a9bd; }
 
@@ -672,12 +698,30 @@
     <b>Honest note:</b> This page does <b>not</b> render video — it plans your 30-second video and writes the prompts. A free engine renders it. Most engines make <b>5–10 seconds per clip</b>, so this tool chains segments that fit the engine's clip limit. First video needs no account; sign in (free) for <b>20 credits</b> after that.
   </div>
 
+  <div class="gen-tabs" role="tablist">
+    <button type="button" class="gen-tab active" data-gen-tab="create">Create Video</button>
+    <button type="button" class="gen-tab" data-gen-tab="edit">Edit Video</button>
+    <button type="button" class="gen-tab" data-gen-tab="motion">Motion Control</button>
+  </div>
   <div class="tool-layout">
   <div class="tool-panel">
+  <div id="genTabCreate">
+  <div class="card preset-card">
+    <div>
+      <div class="preset-gen">GENERAL</div>
+      <div class="preset-eng" id="presetEngine">Seedance 2.5</div>
+    </div>
+    <button type="button" class="preset-change" id="presetChange">Change</button>
+  </div>
+
   <!-- STEP 1 : REFERENCE PHOTOS -->
   <div class="card">
     <h2>References</h2>
     <p class="sub">Add a reference video for motion, and photos for your characters. Photo 1 is the start frame.</p>
+    <div class="frames-row">
+      <label class="drop frame-box" for="startFrameInput"><span class="frame-label">Start frame</span><span class="frame-prev" id="startFramePrev">+ Add photo</span><input type="file" id="startFrameInput" accept="image/*" hidden></label>
+      <label class="drop frame-box" for="endFrameInput"><span class="frame-label">End frame (optional)</span><span class="frame-prev" id="endFramePrev">+ Add photo</span><input type="file" id="endFrameInput" accept="image/*" hidden></label>
+    </div>
     <label class="drop" for="videoInput">🎬 Add a reference video to extract motion <span class="step">Video duration: 4 to 30 seconds (MP4 / WebM)</span>
       <input type="file" id="videoInput" accept="video/*">
     </label>
@@ -692,7 +736,7 @@
 
   <!-- STEP 2 : SCENE -->
   <div class="card" id="step2">
-    <h2>Prompt <button class="prompt-toggle" id="promptToggle" type="button" aria-pressed="true">On</button></h2>
+    <h2>Prompt <button class="prompt-toggle" id="promptToggle" type="button" aria-pressed="true">On</button> <button class="prompt-toggle" id="enhanceToggle" type="button" aria-pressed="true" title="Enhance adds camera, style and quality detail to the prompt">Enhance: On</button></h2>
     <p class="sub">Describe what happens — be specific.</p>
     <div class="fields-grid">
       <div class="field-box">
@@ -791,30 +835,65 @@
       <div class="opt-pop" id="qualityPop" hidden><div id="qualityPopList"></div></div>
     </div>
     <select id="qualitySel" aria-label="Resolution" hidden></select>
+    <label>Bitrate</label>
+    <div class="opt-wrap">
+      <div class="opt-row" id="bitrateRow" role="button" tabindex="0"><span class="opt-label">Bitrate</span><span class="opt-value" id="bitrateRowVal">High</span><span class="opt-chev">›</span></div>
+      <div class="opt-pop" id="bitratePop" hidden><div id="bitratePopList"></div></div>
+    </div>
+    <label>Multi-shot mode</label>
+    <div class="opt-wrap">
+      <div class="opt-row" id="multiRow" role="button" tabindex="0"><span class="opt-label">Multi-shot mode</span><span class="opt-value" id="multiRowVal">Off</span><span class="opt-chev">›</span></div>
+      <div class="opt-pop" id="multiPop" hidden><div id="multiPopList"></div></div>
+    </div>
     <div class="warn" id="noI2vWarn">⚠️ <b id="noI2vName"></b> does <b>not</b> take a reference photo — it is
     text-to-video only. Your photo will not be used there. Pick any photo engine (every engine except Mochi 1 takes a reference photo) if the face must match your photo.</div>
   </div>
 
   <p id="buildCost" style="text-align:left;color:#c8f542;font-size:14px;font-weight:700;margin:14px 0 0;"></p>
-  <button class="big-btn" id="buildBtn">✦ Build my video plan</button>
+  <button class="big-btn" id="buildBtn">✦ Generate</button>
   <div class="warn" id="buildErr" role="alert"></div>
   </div>
-  <div class="tool-main">
-  <div class="tool-how">
-    <h3>Make videos in one click</h3>
-    <ol>
-      <li><b>01 — Add photo.</b> Upload up to 30 reference photos.</li>
-      <li><b>02 — Describe scene.</b> Write the subject, action, camera and style.</li>
-      <li><b>03 — Get video.</b> Build the plan, open the engine, paste and generate.</li>
-    </ol>
+  <div id="genTabEdit" hidden>
+  <div class="card">
+    <h2>Edit Video</h2>
+    <p class="sub">Edit a photo first, then use it in your video plan. Video edits (reframe, upscale, extend) happen on the engine's page.</p>
+    <div class="gen-editors" id="genEditors"></div>
   </div>
-  <div class="tool-motion">
-    <h3>Motion library</h3>
-    <div class="motion-grid">
+  </div>
+  <div id="genTabMotion" hidden>
+  <div class="card">
+    <h2>Motion Control</h2>
+    <p class="sub">Copy motion from a reference video. Add your reference video in Create Video, then pick a motion below.</p>
+    <div class="tool-motion">
+      <h3>Motion library</h3>
+      <div class="motion-grid">
       <div class="motion-tile"><iframe src="https://www.youtube-nocookie.com/embed/mZja2Ve0Mns?autoplay=1&mute=1&loop=1&playlist=mZja2Ve0Mns&controls=0&rel=0" title="Seedance 2.5" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe><div class="motion-veil"></div><span>Seedance 2.5</span></div>
       <div class="motion-tile"><iframe src="https://www.youtube-nocookie.com/embed/nlM7kL3kv_Y?autoplay=1&mute=1&loop=1&playlist=nlM7kL3kv_Y&controls=0&rel=0" title="Kling 4.0" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe><div class="motion-veil"></div><span>Kling 4.0</span></div>
       <div class="motion-tile"><iframe src="https://www.youtube-nocookie.com/embed/I06Ef8alr2Y?autoplay=1&mute=1&loop=1&playlist=I06Ef8alr2Y&controls=0&rel=0" title="Google Flow (Veo 3.1)" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe><div class="motion-veil"></div><span>Google Flow</span></div>
-      <div class="motion-tile"><iframe src="https://www.youtube-nocookie.com/embed/jJcbxCDRRaw?autoplay=1&mute=1&loop=1&playlist=jJcbxCDRRaw&controls=0&rel=0" title="Vidu Q4" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe><div class="motion-veil"></div><span>Vidu Q4</span></div>
+      <div class="motion-tile"><iframe src="https://www.youtube-nocookie.com/embed/jJcbxCDRRaw?autoplay=1&mute=1&loop=1&playlist=jJcbxCDRRaw&controls=0&rel=0" title="Vidu Q4" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe><div class="motion-veil"></div><span>Vidu Q4</span></div></div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div class="tool-main">
+    <div class="tool-how">
+    <div class="how-tabs">
+      <button type="button" class="how-tab active" id="howTabHow">How it works</button>
+      <button type="button" class="how-tab" id="howTabHistory">History</button>
+    </div>
+    <div id="howPanel">
+      <h3>MAKE VIDEOS IN ONE CLICK</h3>
+      <p class="sub">250+ presets for camera control, framing, and high-quality VFX — or use the general preset for manual control.</p>
+      <div class="how-steps">
+        <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/mZja2Ve0Mns?autoplay=1&mute=1&loop=1&playlist=mZja2Ve0Mns&controls=0&rel=0" title="Seedance 2.5" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>01 — ADD IMAGE</b><span>Upload or generate an image to start your animation</span></div>
+        <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/nlM7kL3kv_Y?autoplay=1&mute=1&loop=1&playlist=nlM7kL3kv_Y&controls=0&rel=0" title="Kling 4.0" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>02 — CHOOSE PRESET</b><span>Pick a preset to control your image movement</span></div>
+        <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/I06Ef8alr2Y?autoplay=1&mute=1&loop=1&playlist=I06Ef8alr2Y&controls=0&rel=0" title="Google Flow (Veo 3.1)" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>03 — GET VIDEO</b><span>Click generate to create your final animated video!</span></div>
+      </div>
+      <p class="sub">Don&rsquo;t know where to start? <a href="#guides">Go to the Academy and start your journey</a></p>
+    </div>
+    <div id="historyPanel" hidden>
+      <h3>Your builds</h3>
+      <div id="historyList"></div>
     </div>
   </div>
 
@@ -1147,6 +1226,9 @@ let selectedEngine = "seedance";
 let selectedDur = 30;
 let selectedRatio = "16:9";
 let selectedQuality = null;
+let selectedBitrate = "High";
+let selectedMultiShot = false;
+let selectedEnhance = true;
 let photos = [];
 let refVideo = null; /* reference video for the plan (name + preview URL) */
 const MAX_PHOTOS = 30; /* highest reference-photo limit across our engines (Seedance 2.5) */
@@ -1252,6 +1334,29 @@ input.addEventListener("change", function () {
   input.value = "";
 });
 
+/* ---------- start / end frame boxes ---------- */
+function refreshFrameBoxes() {
+  var sp = document.getElementById("startFramePrev");
+  var ep = document.getElementById("endFramePrev");
+  if (sp) sp.innerHTML = (photos.length > 0) ? "<img src='" + photos[0].dataUrl + "' alt='Start frame'>" : "+ Add photo";
+  if (ep) ep.innerHTML = (photos.length > 1) ? "<img src='" + photos[1].dataUrl + "' alt='End frame'>" : "+ Add photo";
+}
+function setFramePhoto(which, file) {
+  if (!file || !file.type || file.type.indexOf("image/") !== 0) return;
+  var reader = new FileReader();
+  reader.onload = function (ev) {
+    var item = { name: file.name, dataUrl: ev.target.result };
+    if (which === 0) { if (photos.length === 0) photos.push(item); else photos[0] = item; }
+    else { if (photos.length === 0) photos.push(item); else if (photos.length === 1) photos.push(item); else photos[1] = item; }
+    renderThumbs();
+  };
+  reader.readAsDataURL(file);
+}
+var sfi = document.getElementById("startFrameInput");
+if (sfi) sfi.addEventListener("change", function () { var f = sfi.files && sfi.files[0]; setFramePhoto(0, f); sfi.value = ""; });
+var efi = document.getElementById("endFrameInput");
+if (efi) efi.addEventListener("change", function () { var f = efi.files && efi.files[0]; setFramePhoto(1, f); efi.value = ""; });
+
 /* ---------- reference video (main tool) ---------- */
 const videoInput = document.getElementById("videoInput");
 const videoThumb = document.getElementById("videoThumb");
@@ -1288,8 +1393,9 @@ function renderThumbs() {
   photos.forEach(function (p, i) {
     const d = document.createElement("div");
     d.className = "thumb";
+    var frameLabel = i === 0 ? "Start frame" : (i === 1 ? "End frame" : "Photo " + (i + 1));
     d.innerHTML = "<img src='" + p.dataUrl + "' alt='Reference photo " + (i + 1) + "'>" +
-      "<button type='button' title='Remove'>×</button><div class='tag'>Photo " + (i + 1) + " — " + p.name + "</div>";
+      "<button type='button' title='Remove'>×</button><div class='tag'>" + frameLabel + " — " + p.name + "</div>";
     d.querySelector("button").addEventListener("click", function () {
       photos.splice(i, 1);
       renderThumbs();
@@ -1297,6 +1403,7 @@ function renderThumbs() {
     thumbs.appendChild(d);
   });
   if (typeof refreshDbRefs === "function") refreshDbRefs();
+  if (typeof refreshFrameBoxes === "function") refreshFrameBoxes();
 }
 
 /* ---------- copy helper ---------- */
@@ -1361,14 +1468,16 @@ function buildPlan() {
     const len = baseLen + (i < extra ? 1 : 0);
     const start = t, end = t + len;
     t = end;
-    const beat = (i === segCount - 1) ? beats[beats.length - 1] : beats[Math.min(i, beats.length - 2)];
-    let prompt = subject + ", " + beat + action + ". " +
-      "Camera: " + camera + ". Style: " + style + ". Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ".";
+    const beat = selectedMultiShot ? ("Shot " + (i + 1) + " of " + segCount + " — ") : ((i === segCount - 1) ? beats[beats.length - 1] : beats[Math.min(i, beats.length - 2)]);
+    let prompt = subject + ", " + beat + action + ". ";
+    if (selectedEnhance) {
+      prompt += "Camera: " + camera + ". Style: " + style + ". Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ". Bitrate: " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + ".";
+    }
     if (setting) prompt += " Setting: " + setting + ".";
     if (sound && engine.audio) prompt += " Sound: " + sound + ".";
     if (typeof refVideo !== "undefined" && refVideo) prompt += " Motion reference: " + refVideo.name + " (follow the reference video for motion).";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
-    else if (photos.length > 1) prompt += " Match the reference photos exactly — Photo 1 is the character's face; use every photo for the character, clothes and setting.";
+    else if (photos.length > 1) prompt += " Match the reference photos exactly — Photo 1 is the start frame, Photo 2 is the end frame; use every photo for the character, clothes and setting.";
     else if (photos.length > 0) prompt += " Match the reference photo exactly — same face, same clothes, same setting.";
     else if (typeof refVideo !== "undefined" && refVideo) prompt += " Follow the reference video for motion and style.";
     prompt += " CHARACTER LOCK: The character never changes — same face, same hair, same clothes, same build in every frame. Use the reference photos for the character in every segment.";
@@ -1380,9 +1489,9 @@ function buildPlan() {
     "<b>Engine:</b> " + engine.name + " (" + engine.vendor + ") — " + engine.free + " (on the engine's own site)<br>" +
     "<b>Duration:</b> " + selectedDur + " seconds in <b>" + segCount + " segment" + (segCount > 1 ? "s" : "") + "</b> " +
     "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
-    "<b>Reference photos:</b> " + photos.length + " uploaded" + (engine.refs ? " — " + engine.name + " takes up to " + engine.refs + (engine.refs === 1 ? " photo" : " photos") + " (use Photo 1 as the start frame)" : " — this engine takes no reference photo") + "<br>" +
+    "<b>Reference photos:</b> " + photos.length + " uploaded" + (engine.refs ? " — " + engine.name + " takes up to " + engine.refs + (engine.refs === 1 ? " photo" : " photos") + " (Photo 1 = start frame" + (photos.length > 1 ? ", Photo 2 = end frame" : "") + ")" : " — this engine takes no reference photo") + "<br>" +
     ((typeof refVideo !== "undefined" && refVideo) ? "<b>Reference video:</b> " + escHtml(refVideo.name) + " (upload the same video on the engine's page as motion reference)<br>" : "") +
-    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-");
+    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-") + " · <b>Bitrate:</b> " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + " · <b>Multi-shot:</b> " + (selectedMultiShot ? "On (" + segCount + " shots)" : "Off") + " · <b>Enhance:</b> " + (selectedEnhance ? "On" : "Off");
 
   const segWrap = document.getElementById("segments");
   segWrap.innerHTML = "";
@@ -2652,8 +2761,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!b) return;
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
-    if (isOwner()) b.textContent = "✦ Build my video plan — free for you";
-    else b.textContent = "✦ Build my video plan — " + cost + " credits";
+    if (isOwner()) b.textContent = "✦ Generate — free for you";
+    else b.textContent = "✦ Generate — " + cost + " credits";
     var bc = document.getElementById("buildCost");
     if (bc) {
       if (isOwner()) bc.textContent = "💎 Unlimited (Owner) — this video is free for you";
@@ -3413,6 +3522,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var dv = $("durRowVal"); if (dv) dv.textContent = (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
     var rv = $("ratioRowVal"); if (rv) rv.textContent = (typeof selectedRatio === "string" ? selectedRatio : "16:9");
     var qv = $("qualityRowVal"); if (qv) qv.textContent = currentQuality();
+    var bv = $("bitrateRowVal"); if (bv) bv.textContent = (typeof selectedBitrate === "string" ? selectedBitrate : "High");
+    var mv2 = $("multiRowVal"); if (mv2) mv2.textContent = selectedMultiShot ? "On" : "Off";
+    var pe = $("presetEngine"); if (pe) pe.textContent = e ? e.name : "";
   }
   window.refreshOptRows = refreshOptRows;
   /* Exposed for the detail modal's own rows + popups (same pattern, its own
@@ -3514,10 +3626,43 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       });
     });
   }
+  function buildBitrateList() {
+    var list = $("bitratePopList"); if (!list) return;
+    var html = "";
+    [["High", "Less compression · larger size"], ["Standard", "More compression · smaller size"]].forEach(function (pair) {
+      html += itemHtml("◈", pair[0], pair[1], pair[0] === (typeof selectedBitrate === "string" ? selectedBitrate : "High"), pair[0]);
+    });
+    list.innerHTML = html;
+    list.querySelectorAll(".opt-item").forEach(function (it) {
+      it.addEventListener("click", function () {
+        try { selectedBitrate = it.getAttribute("data-v"); } catch (e) {}
+        refreshOptRows();
+        closeAllPops();
+      });
+    });
+  }
+  function buildMultiList() {
+    var list = $("multiPopList"); if (!list) return;
+    var html = "";
+    [["On", "Split the video into shots"], ["Off", "One continuous video"]].forEach(function (pair) {
+      var on = pair[0] === "On";
+      html += itemHtml("🎬", pair[0], pair[1], on === !!selectedMultiShot, pair[0]);
+    });
+    list.innerHTML = html;
+    list.querySelectorAll(".opt-item").forEach(function (it) {
+      it.addEventListener("click", function () {
+        try { selectedMultiShot = (it.getAttribute("data-v") === "On"); } catch (e) {}
+        refreshOptRows();
+        closeAllPops();
+      });
+    });
+  }
   bindRow("modelRow", "modelPop", buildModelList);
   bindRow("durRow", "durPop", buildDurList);
   bindRow("ratioRow", "ratioPop", buildRatioList);
   bindRow("qualityRow", "qualityPop", buildQualityList);
+  bindRow("bitrateRow", "bitratePop", buildBitrateList);
+  bindRow("multiRow", "multiPop", buildMultiList);
   var ms = $("modelSearch");
   if (ms) ms.addEventListener("input", buildModelList);
   document.addEventListener("click", function (ev) {
@@ -3769,5 +3914,60 @@ function closeTool() {
 })();
 </script>
 
+<script>
+/* ---------- generator tabs + preset + enhance + history ---------- */
+(function () {
+  function $(id) { return document.getElementById(id); }
+  document.querySelectorAll(".gen-tab").forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      var t = tab.getAttribute("data-gen-tab");
+      document.querySelectorAll(".gen-tab").forEach(function (x) { x.classList.toggle("active", x === tab); });
+      ["create", "edit", "motion"].forEach(function (k) {
+        var el = $("genTab" + k.charAt(0).toUpperCase() + k.slice(1));
+        if (el) el.hidden = (k !== t);
+      });
+    });
+  });
+  var pc = $("presetChange");
+  if (pc) pc.addEventListener("click", function () { var r = $("modelRow"); if (r) r.click(); });
+  var et = $("enhanceToggle");
+  if (et) et.addEventListener("click", function () {
+    selectedEnhance = !selectedEnhance;
+    et.setAttribute("aria-pressed", String(selectedEnhance));
+    et.textContent = selectedEnhance ? "Enhance: On" : "Enhance: Off";
+  });
+  var eg = $("genEditors");
+  if (eg && typeof EDITORS !== "undefined") {
+    eg.innerHTML = EDITORS.map(function (ed) {
+      return '<button type="button" class="gen-editor-btn" data-ed="' + ed.id + '">' + ed.name + '</button>';
+    }).join("");
+    eg.querySelectorAll(".gen-editor-btn").forEach(function (b) {
+      b.addEventListener("click", function () { if (typeof openDetail === "function") openDetail("editor", b.getAttribute("data-ed")); });
+    });
+  }
+  var hh = $("howTabHow"), hs = $("howTabHistory");
+  function renderGenHistory() {
+    var el = $("historyList"); if (!el) return;
+    var hist = [];
+    try { hist = JSON.parse(window.localStorage.getItem("lumefield_history") || "[]"); } catch (e) { hist = []; }
+    if (!hist.length) { el.innerHTML = '<p class="sub">No builds yet — build your first video plan.</p>'; return; }
+    var total = hist.reduce(function (a, h) { return a + (h.spent || 0); }, 0);
+    el.innerHTML = '<p class="sub">' + hist.length + ' built · ' + total + ' credits spent (this browser)</p>' +
+      hist.slice(0, 10).map(function (h) {
+        return '<div class="profile-history-row"><span>' + h.dur + 's plan</span><span>' + (h.spent ? h.spent + ' credits' : 'free') + ' · ' + h.at + '</span></div>';
+      }).join("");
+  }
+  function showHow(which) {
+    if (hh) hh.classList.toggle("active", which === "how");
+    if (hs) hs.classList.toggle("active", which === "history");
+    var hp = $("howPanel"), rp = $("historyPanel");
+    if (hp) hp.hidden = (which !== "how");
+    if (rp) rp.hidden = (which !== "history");
+    if (which === "history") renderGenHistory();
+  }
+  if (hh) hh.addEventListener("click", function () { showHow("how"); });
+  if (hs) hs.addEventListener("click", function () { showHow("history"); });
+})();
+</script>
 </body>
 </html>
