@@ -287,6 +287,7 @@
   .info-row .k { flex: 0 0 110px; font-weight: 700; color: #c9c9d8; }
   .info-row .v { flex: 1; color: #e5e5ef; }
   .detail-src { margin-top: 12px; font-size: 12.5px; color: #a9a9bd; line-height: 1.55; }
+  .detail-spec { margin-top: 16px; font-size: 13px; color: #a9a9bd; line-height: 1.55; }
   /* ---------- responsive guards: every device, phone to desktop ---------- */
   img, iframe { max-width: 100%; }
   video { max-width: 100%; }
@@ -804,8 +805,6 @@ ENGINES.forEach(function (e) {
   d.dataset.id = e.id;
   d.innerHTML = "<h3>" + e.name + (NEW_ENGINE_IDS.indexOf(e.id) !== -1 ? " <span class='new-badge'>NEW</span>" : "") + "<span class='badge" + (e.i2v ? "" : " no") + "'>" +
     (e.i2v ? "photo ✓" : "text only") + "</span></h3>" +
-    "<p>" + e.vendor + " · " + e.free + "</p>" +
-    "<p>" + e.note + "</p>" +
     "<div class='limit'>Max " + e.maxSec + "s per clip · " + e.res + (e.audio ? " · with audio" : " · silent") + "</div>";
   d.addEventListener("click", function () {
     document.querySelectorAll(".engine").forEach(function (el) { el.classList.remove("selected"); });
@@ -1052,7 +1051,8 @@ document.getElementById("downloadPlanBtn").addEventListener("click", function (e
 </script>
 <script>
 /* ---------- model cards + detail modal (video + name on the card; in the
-   detail: BUY on top, the model's working info at the very bottom) ---------- */
+   detail: name, demo video, BUY on top, actions, one short spec line at the
+   very bottom — no descriptive paragraphs) ---------- */
 var DEMO = {
   wan22: { yt: "ktDogWm7Hac", kind: "official", by: "Alibaba Cloud" },
   ltx23: { yt: "W4i9xJ8dr5M", kind: "official", by: "LTX" },
@@ -1071,40 +1071,20 @@ var DEMO = {
   luma: { yt: "Zb3tffmBPRE", kind: "official", by: "Luma" },
   firefly: { yt: "puEgugluadk", kind: "official", by: "Adobe Video" }
 };
-/* Quality / Speed / Motion — honest, from the research file (resolution, max
-   length, audio, speed and free-tier notes). No exaggeration, no hidden weakness. */
-var QSM = {
-  wan22: { q: "720p — strong free quality for an open model.", s: "Slow at peak times: the free shared-GPU queue can take several minutes per clip.", m: "Good, natural motion; best for short 5–8s shots chained together." },
-  ltx23: { q: "Up to 1080p, sharp detail.", s: "Fast on the free Space for 10s clips; self-hosting needs a strong GPU.", m: "Strong motion coherence with native vertical video; the only free engine here with synced audio." },
-  hunyuan15: { q: "480p / 720p — solid open-model quality.", s: "Slow: needs high-VRAM hardware self-hosted; the free Space queue varies.", m: "Good physics and motion; silent clips — add sound in your editor." },
-  cogvideox: { q: "Up to 1360×768, strong prompt adherence.", s: "Free Space queue varies; the small 2B version runs on modest GPUs.", m: "Good motion for short clips; short, literal prompts work best." },
-  kling: { q: "720p free (1080p / 4K on paid) — very high quality.", s: "Minutes per clip on free credits; Standard mode is faster and cheaper.", m: "Excellent motion with native dialogue and lip-sync; multi-shot scenes." },
-  flow: { q: "720p / 1080p, up to 4K on Ultra — the best overall quality here.", s: "8s clips; about 5 Lite clips a day free.", m: "Excellent motion and dialogue; Frames-to-Video keeps faces steady across shots." },
-  runway: { q: "720p, cinematic.", s: "Fast Turbo renders.", m: "Good motion; Gen-4 keeps characters and objects consistent across scenes." },
-  mochi: { q: "480p only — low resolution, honest limit.", s: "Slow open model; 250 lifetime playground credits.", m: "Fluid motion for an open model — but text-to-video only, it takes no reference photo." },
-  seedance: { q: "1080p, multi-shot — the #1-ranked video model.", s: "Fast generation; free Dreamina credits may hit an upgrade wall — verify at signup.", m: "Excellent motion with native audio and multi-shot scenes." },
-  vidu: { q: "Up to 2K (free capped at 540p) — best character consistency here.", s: "1–16s clips; free monthly credits are limited.", m: "Strong acting, cinematic camera work, and voice-matched dialogue." },
-  hailuo: { q: "Up to 2K — strong quality.", s: "4–15s clips; welcome credits expire 3 days after they are granted.", m: "Native stereo sound with good dialogue and multi-shot scenes." },
-  wan3: { q: "Up to 1080p; 30s in one take on paid plans (10s free).", s: "Free plan: one video at a time, daily check-in credits.", m: "Strong motion with native sound; also reads documents as a brief." },
-  pixverse: { q: "Free output 540p (1080p on paid).", s: "Up to 15s clips; 30 free credits every day.", m: "Multi-shot storytelling with native audio and good camera control." },
-  pika: { q: "768p open weights (4K on the hosted service).", s: "Very fast — 6 sampling steps; a 15s clip takes about 7 seconds of model compute.", m: "Good motion with synced stereo audio, split into separate dialogue / music / effects stems." },
-  luma: { q: "720p draft on the free tier; cinematic Ray models.", s: "Up to 10s per clip; free tier to verify at signup.", m: "Strong cinematic motion with keyframe camera control — but no native audio." },
-  firefly: { q: "1080p; trained on licensed data, so output is commercially safe.", s: "Free daily generations (Adobe publishes no count).", m: "Motion quality depends on the partner model used (Veo, Kling or Luma)." }
-};
 var IMAGE_TOOLS = [
-  { id: "bing", name: "Bing Image Creator", url: "https://bing.com/create", desc: "DALL-E 3 images free, 15 fast boosts a day then unlimited slow queue.", demo: null, info: [["Output", "DALL-E 3 images, up to 1024px — good for quick drafts and volume."], ["Speed", "Fast with 15 daily boosts; then the unlimited slow queue."], ["Free tier", "Free with a Microsoft account; commercial rights included per Microsoft terms."], ["Limits", "Needs a Microsoft account."]] },
-  { id: "nanobanana", name: "Gemini Nano Banana Pro", url: "https://gemini.google.com", desc: "Free AI image editing and generation with your Google account — Nano Banana Pro, up to 20 a day in Flow.", demo: { yt: "UQsJIo46ZR8", kind: "official", by: "Google DeepMind" }, info: [["Output", "Up to 4K images with excellent text rendering inside images."], ["Speed", "Fast in the Gemini app."], ["Free tier", "Up to 20 Nano Banana Pro generations a day in Flow; free tier in the Gemini app."], ["Limits", "Needs a Google account; 18+ to edit images."]] },
-  { id: "chatgptimg", name: "ChatGPT Image Generation", url: "https://chatgpt.com", desc: "A few free images a day with GPT Image.", demo: null, info: [["Output", "GPT Image 2.6 — strong image editing and text in images."], ["Speed", "Fast."], ["Free tier", "A few free images a day — OpenAI publishes no number."], ["Limits", "Needs a free ChatGPT account."]] }
+  { id: "bing", name: "Bing Image Creator", url: "https://bing.com/create", spec: "DALL-E 3 · up to 1024px", demo: { yt: "smvyxABRZTU", kind: "official", by: "Microsoft Copilot" } },
+  { id: "nanobanana", name: "Gemini Nano Banana Pro", url: "https://gemini.google.com", spec: "Up to 4K images · text in images", demo: { yt: "UQsJIo46ZR8", kind: "official", by: "Google DeepMind" } },
+  { id: "chatgptimg", name: "ChatGPT Image Generation", url: "https://chatgpt.com", spec: "GPT Image 2.6 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
 ];
 var EDITORS = [
-  { id: "photopea", name: "Photopea", url: "https://photopea.com", desc: "A full Photoshop-style editor in your browser, completely free, no account.", demo: null, info: [["What it does", "Full Photoshop-style editing: layers, masks, PSD files — processed locally on your computer."], ["Speed", "Instant in the browser; works offline once loaded."], ["Free tier", "Completely free, no account (ads on the free version)."], ["Limits", "Ads; the paid version only removes ads and adds cloud storage — no extra tools."]] },
-  { id: "capcutedit", name: "CapCut AI Image Editor", url: "https://www.capcut.com/create/ai-image-editor-free", desc: "Free background removal, magic eraser and 4K upscaling, no card needed.", demo: null, info: [["What it does", "One-click background remover, magic eraser, AI upscaler to 4K, auto enhance."], ["Speed", "Fast, one-click tools."], ["Free tier", "Core tools free; no card, no install; works on web, iOS, Android and desktop."], ["Limits", "Items labelled “Pro” need a subscription; limited cloud storage on free."]] },
-  { id: "express", name: "Adobe Express", url: "https://adobe.com/express", desc: "Free background removal and Firefly generative fill, commercially safe.", demo: null, info: [["What it does", "Background removal, basic Firefly generative fill/remove, thousands of templates."], ["Speed", "Fast in the browser."], ["Free tier", "Free with an Adobe account; 5GB storage."], ["Limits", "Generative credits limited (about 25/month reported in 2026); Premium $9.99/mo."]] },
-  { id: "pixlr", name: "Pixlr", url: "https://pixlr.com", desc: "Two free browser editors, layers and AI tools, with ads and a daily save cap.", demo: null, info: [["What it does", "Pixlr Editor (layers, masks, curves) and Pixlr Express (quick edits, filters)."], ["Speed", "Fast in the browser."], ["Free tier", "Both editors free; no account needed for basic editing."], ["Limits", "Ads, a daily save cap and a 10MB file cap on free."]] },
-  { id: "canva", name: "Canva", url: "https://canva.com", desc: "Free design and photo editing with 1.6M+ templates (background remover is Pro).", demo: null, info: [["What it does", "Drag-and-drop design and photo editing, 1.6M+ templates, 4.7M+ free assets."], ["Speed", "Fast in the browser."], ["Free tier", "Free forever, no card, no watermark on exports; 5GB storage."], ["Limits", "Background remover, magic eraser and upscaler are Pro only."]] },
-  { id: "upscayl", name: "Upscayl", url: "https://upscayl.org", desc: "Free open-source AI upscaler, unlimited, up to 16x, runs on your own computer.", demo: null, info: [["What it does", "AI upscaling up to 16x with batch processing, on your own computer."], ["Speed", "Local GPU speed; no upload, no queue."], ["Free tier", "Fully free open source; no account, no watermark."], ["Limits", "Desktop app (Windows, macOS, Linux); needs a Vulkan-compatible GPU."]] },
-  { id: "cleanup", name: "Cleanup.pictures", url: "https://cleanup.pictures", desc: "Brush away anything from a photo, unlimited and free at 720px.", demo: null, info: [["What it does", "Brush away objects, people, text or watermarks from any photo."], ["Speed", "Fast in the browser."], ["Free tier", "Unlimited removal, no account, no install."], ["Limits", "Free exports capped at 720px."]] },
-  { id: "clipdrop", name: "Clipdrop", url: "https://clipdrop.co", desc: "Free daily AI tools: cleanup, background removal, upscaling and relighting.", demo: null, info: [["What it does", "Cleanup, background removal, x2 upscaler, relight and text remover."], ["Speed", "Fast in the browser."], ["Free tier", "Free daily allowances with no login (e.g. 20 cleanups / 24h)."], ["Limits", "Daily caps; Pro $15/mo for high resolution and more."]] }
+  { id: "photopea", name: "Photopea", url: "https://photopea.com", spec: "Photoshop-style editor · layers · PSD", demo: null },
+  { id: "capcutedit", name: "CapCut AI Image Editor", url: "https://www.capcut.com/create/ai-image-editor-free", spec: "Background removal · magic eraser · 4K upscale", demo: { yt: "7DnbaboteCo", kind: "official", by: "CapCut" } },
+  { id: "express", name: "Adobe Express", url: "https://adobe.com/express", spec: "Background removal · Firefly fill · templates", demo: { yt: "1SHPoJJpveg", kind: "official", by: "Adobe Asia Pacific" } },
+  { id: "pixlr", name: "Pixlr", url: "https://pixlr.com", spec: "Layers editor + quick editor · AI tools", demo: { yt: "FvFK1KPJVXI", kind: "official", by: "Pixlr" } },
+  { id: "canva", name: "Canva", url: "https://canva.com", spec: "Design + photo editing · templates", demo: { yt: "vRjtRFLrXC4", kind: "official", by: "Canva" } },
+  { id: "upscayl", name: "Upscayl", url: "https://upscayl.org", spec: "AI upscale up to 16x · desktop app", demo: null },
+  { id: "cleanup", name: "Cleanup.pictures", url: "https://cleanup.pictures", spec: "Brush-away removal · 720px free export", demo: null },
+  { id: "clipdrop", name: "Clipdrop", url: "https://clipdrop.co", spec: "Cleanup · background removal · upscale", demo: { yt: "6ktXlBDf4hQ", kind: "official", by: "Cyril Diagne" } },
 ];
 
 function escHtml(s) {
@@ -1172,7 +1152,7 @@ function applyToolFilter(inputId, gridId, items) {
   Array.prototype.forEach.call(g.children, function (card) {
     var t = items.find(function (x) { return x.id === card.dataset.id; });
     if (!t) return;
-    card.style.display = (!q || (t.name + " " + t.desc).toLowerCase().indexOf(q) !== -1) ? "" : "none";
+    card.style.display = (!q || (t.name + " " + (t.spec || "")).toLowerCase().indexOf(q) !== -1) ? "" : "none";
   });
 }
 (function wireFilters() {
@@ -1203,44 +1183,24 @@ function detailVideoHTML(demo, name, siteUrl) {
   }
   return '<div class="detail-video"><div class="no-demo"><span style="font-size:26px;">▶</span><span>No demo video embedded yet.</span><a href="' + siteUrl + '" target="_blank" rel="noopener">Watch the official demo on the tool’s site ↗</a></div></div>';
 }
-function infoRowsHTML(rows) {
-  return rows.map(function (r) {
-    return '<div class="info-row"><div class="k">' + escHtml(r[0]) + '</div><div class="v">' + escHtml(r[1]) + '</div></div>';
-  }).join("");
-}
 function openDetail(kind, id) {
-  var item = null, demo = null, rows = [], desc = "", siteUrl = "", vendor = "", useEngine = false, srcNote = "";
+  var item = null, demo = null, siteUrl = "", useEngine = false, spec = "";
   if (kind === "video") {
     item = ENGINES.find(function (e) { return e.id === id; });
     if (!item) return;
     demo = DEMO[id];
-    var q = QSM[id] || { q: "", s: "", m: "" };
-    desc = item.note;
     siteUrl = item.url;
-    vendor = item.vendor;
     useEngine = true;
-    rows = [
-      ["Quality", q.q],
-      ["Speed", q.s],
-      ["Motion", q.m],
-      ["Free tier", item.free],
-      ["Max clip", "Up to " + item.maxSec + "s per clip."],
-      ["Resolution", item.res],
-      ["Audio", item.audio ? "Yes — native audio." : "No — silent; add sound in your editor."],
-      ["Photo", item.i2v ? "Takes a reference photo." : "Text-to-video only — takes no reference photo."]
-    ];
+    spec = "Max " + item.maxSec + "s per clip · " + item.res + " · " + (item.audio ? "with audio" : "silent");
   } else if (kind === "image") {
     item = IMAGE_TOOLS.find(function (t) { return t.id === id; });
     if (!item) return;
-    demo = item.demo; desc = item.desc; siteUrl = item.url; vendor = "Image generation — free"; rows = item.info;
+    demo = item.demo; siteUrl = item.url; spec = item.spec || "";
   } else {
     item = EDITORS.find(function (t) { return t.id === id; });
     if (!item) return;
-    demo = item.demo; desc = item.desc; siteUrl = item.url; vendor = "Photo editing — free"; rows = item.info;
+    demo = item.demo; siteUrl = item.url; spec = item.spec || "";
   }
-  if (demo && demo.kind === "official") srcNote = "Demo video: the official " + demo.by + " video on YouTube.";
-  else if (demo && demo.kind === "sample") srcNote = "Demo video: a review showing real " + item.name + " output — not the vendor’s own video.";
-  else srcNote = "No demo video embedded yet — watch it on the official site. Free-tier details were verified 10–11 November 2026; always re-check the tool’s own page.";
   var buyHTML = '<div class="detail-buy"><h4>💎 Buy credits</h4>' +
     '<p>Starter — 60 credits, <b>$4.99</b> · Plus — 150 credits, <b>$9.99</b> · Ultra — 300 credits, <b>$19.99</b>. One pack, no subscription. A 30-second video costs 20 credits.</p>' +
     '<div class="buy-row"><button class="credit-signin" type="button" data-goto-buy>💎 See credit packs</button></div>' +
@@ -1250,13 +1210,10 @@ function openDetail(kind, id) {
   actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
   detailBody.innerHTML =
     '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
-    '<div class="detail-vendor">' + escHtml(vendor) + '</div>' +
     detailVideoHTML(demo, item.name, siteUrl) +
     buyHTML +
-    '<p class="detail-desc">' + escHtml(desc) + '</p>' +
     actions +
-    '<div class="detail-info"><h4>How it works</h4>' + infoRowsHTML(rows) + '</div>' +
-    '<p class="detail-src">' + escHtml(srcNote) + '</p>';
+    '<p class="detail-spec">' + escHtml(spec) + '</p>';
   detailModal.hidden = false;
   document.body.style.overflow = "hidden";
 }
