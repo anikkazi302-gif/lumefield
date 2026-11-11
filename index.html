@@ -249,6 +249,11 @@
   .faq h2 { font-size: 32px; text-align: center; letter-spacing: -0.5px; }
   .faq h2 span { background: linear-gradient(90deg, #ffd166, #ff5e8a, #7c5cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .faq-item { background: #10101c; border: 1px solid #1c1c2c; border-radius: 12px; padding: 18px 20px; margin: 14px 0; }
+.guides { max-width: 980px; margin: 0 auto; padding: 10px 20px 44px; }
+.guide-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 22px; }
+.guide-card { background: #10101a; border: 1px solid #232336; border-radius: 16px; padding: 20px; }
+.guide-card h3 { margin: 0 0 8px; font-size: 18px; text-align: left; }
+.guide-card p { margin: 0; color: #b9b9c9; font-size: 15px; line-height: 1.55; text-align: left; }
   .faq-item h3 { font-size: 17px; color: #ffd166; margin-bottom: 8px; }
   .faq-item p { font-size: 15px; color: #c9c9d8; line-height: 1.65; }
 
@@ -452,7 +457,7 @@
 <nav class="nav">
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-  <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#buy-credits">Buy credits</a></div>
+  <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#buy-credits">Buy credits</a><a href="#guides">Guides</a></div>
   <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
@@ -473,7 +478,7 @@
 
 
 <section class="howto-sec has-bg" id="howto">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/8939910/8939910-hd_1920_1080_25fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>How it <span>works</span></h2>
   <p class="lead">Photo to 30-second video in 4 steps — free, no card.</p>
@@ -486,7 +491,7 @@
 </section>
 
 <section class="model-sec has-bg" id="models">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/36325455/15405322_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>Video <span>models</span> — free</h2>
   <p class="lead">Tap a model to see what it makes — then use it free in the tool.</p>
@@ -503,7 +508,7 @@
 </section>
 
 <section class="model-sec has-bg" id="showcase">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/34531903/14631040_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>Made with <span>LumeField</span></h2>
   <p class="lead">Made with these free engines — tap a clip to watch it.</p>
@@ -511,7 +516,7 @@
 </section>
 
 <div class="tool-wrap has-bg" id="tool">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/1536323/1536323-hd_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <div class="credit-bar" id="creditBar" role="status">
     <span id="creditText">🎬 Loading…</span>
@@ -686,7 +691,7 @@
       <button class="buy-btn" type="button" disabled>Buy — coming soon</button>
     </div>
   </div>
-  <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Paddle or Polar) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (first purchase only, within 7 days, if no credits used) (see <a href="terms.html#refunds" style="color:#ffd166;">Refund Policy</a>). Bought credits stay in your balance until you use them.</p>
+  <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Paddle or Polar) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (first purchase only, within 7 days, if no credits used) (see <a href="terms.html" style="color:#ffd166;">Terms</a>). Bought credits stay in your balance until you use them.</p>
 </section>
 
 <section class="faq" id="faq">
@@ -737,12 +742,23 @@
 </section>
 
 <div class="footer has-bg">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
+  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/34394862/14570774_1920_1080_24fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
 <div class="footer-inner">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
 Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.<br>
-<a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a> · <a href="terms.html#refunds">Refund Policy</a><br>
+<a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a><br>
 Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div></div>
+
+<section class="guides" id="guides">
+  <h2>Guides</h2>
+  <p class="lead">Short answers — no fluff.</p>
+  <div class="guide-grid">
+    <div class="guide-card"><h3>30-second video</h3><p>One plan, chained clips. Most engines make 5–10s per clip — the tool splits 30s into segments that fit the engine. Render each segment with the same Photo 1, then join them in order.</p></div>
+    <div class="guide-card"><h3>Best engine per scene</h3><p>Talking / dialogue → Kling 4.0 (30s, lip-sync). Long clip + motion → Seedance 2.5 (30s). Text only → Mochi 1. Many reference photos → Seedance (30) or Vidu Q4 (15).</p></div>
+    <div class="guide-card"><h3>Same face, every clip</h3><p>Photo 1 is the start frame. Upload up to 30 photos of the same face, hair and clothes. Every plan carries a CHARACTER LOCK — same face, same hair, same clothes in every frame.</p></div>
+    <div class="guide-card"><h3>Fix a bad segment</h3><p>Re-render only that segment — same prompt, same Photo 1. Still wrong? Shorten the segment or switch to a shorter-clip engine. Never re-render the whole video.</p></div>
+  </div>
+</section>
 
 <section class="founder">
   <img src="founder.webp" alt="Founder Raju" width="120" height="120">
@@ -2054,7 +2070,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var profileDailyClaim = document.getElementById("profileDailyClaim");
   var profileDailyClaimState = document.getElementById("profileDailyClaimState");
   /* Daily claim button state: verified signed-in users only (unverified get
-     no wallet at all under rules v3, so no refill); the owner is Unlimited
+     no wallet at all under rules v4, so no refill); the owner is Unlimited
      and needs no refill. One claim per Asia/Dhaka day, enforced here AND in
      Firestore (lastDailyClaim on the wallet doc + rules v5). */
   function updateDailyClaim() {
@@ -2317,7 +2333,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         });
       });
     }
-    /* Rules v4 (builds counter) may not be published yet: if the v4-shaped
+    /* Rules v4 (builds counter) is published (2026-11-11): if the v4-shaped
        charge is refused, retry once in the old v3 shape so builds keep
        working until v4 lands. The builds count then starts from the first
        v4-shaped charge — a referred friend who built under v3 gets their
@@ -2708,7 +2724,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         if (msg) msg.textContent = "✓ Character saved.";
         loadCharacters(false);
       }).catch(function (err) {
-        if (msg) msg.textContent = "Could not save — try again.";
+        if (msg) msg.textContent = "Could not save — " + (err && err.code === "permission-denied" ? "verify your email first." : "try again.");
       });
     });
   }
@@ -2756,7 +2772,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }).catch(function (err) {
       if (btn) {
         var old2 = btn.textContent;
-        btn.textContent = "Could not save — try again";
+        btn.textContent = err && err.code === "permission-denied" ? "Verify your email first" : "Could not save — try again";
         setTimeout(function () { btn.textContent = old2; }, 2500);
       }
     });
