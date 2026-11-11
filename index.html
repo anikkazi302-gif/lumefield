@@ -287,6 +287,17 @@
    .model-badge.no { background: #7F1D1D; color: #FECACA; }
    .detail-builder { margin-top: 16px; border-top: 1px solid #26263a; padding-top: 16px; display: grid; gap: 10px; }
    .detail-builder .db-label { font-size: 12.5px; color: #a9a9bd; font-weight: 700; }
+  .detail-builder .db-refs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .detail-builder .db-ref-box { position: relative; background: #1a1a28; border: 1px dashed #55557a; border-radius: 12px; padding: 12px; cursor: pointer; text-align: center; }
+  .detail-builder .db-ref-box.has { border-style: solid; border-color: #7c5cff; }
+  .detail-builder .db-ref-ic { font-size: 22px; }
+  .detail-builder .db-ref-t { font-weight: 700; font-size: .9rem; margin-top: 4px; }
+  .detail-builder .db-ref-n { font-size: .8rem; color: #a9a9bd; margin-top: 2px; word-break: break-all; }
+  .detail-builder .db-ref-box video { width: 100%; max-height: 72px; border-radius: 8px; display: block; object-fit: cover; margin-bottom: 6px; }
+  .detail-builder .db-ref-box.has .db-ref-ic { display: none; }
+  .detail-builder .db-ref-x { display: none; position: absolute; top: 6px; right: 8px; background: #33334a; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-size: 14px; line-height: 1; }
+  .detail-builder .db-ref-box.has .db-ref-x { display: block; }
+  .detail-builder .db-section { font-weight: 700; margin-top: 4px; }
    .detail-builder input, .detail-builder textarea, .detail-builder select { width: 100%; background: #0d0d18; border: 1px solid #33334a; border-radius: 10px; color: #fff; padding: 10px 12px; font-size: 14px; font-family: inherit; box-sizing: border-box; }
    .detail-builder textarea { min-height: 64px; resize: vertical; }
    .detail-builder .db-credits { font-size: 14px; color: #ffd166; margin: 0; }
@@ -734,7 +745,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 </section>
 
 
-<!-- Model detail modal: video, free-credits line, actions + builder (ratio, prompt, duration, quality, credits + Generate), then BUY, then the model's working info at the very bottom. -->
+<!-- Model detail modal: free-credits line + builder first (references, prompt, ratio, duration, quality, credits + Generate), then video, actions + BUY, then the model's working info at the very bottom. -->
 <div class="detail-backdrop" id="detailModal" hidden>
   <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
     <button class="modal-close" id="detailClose" type="button" aria-label="Close">✕</button>
@@ -844,6 +855,7 @@ let selectedDur = 30;
 let selectedRatio = "16:9";
 let selectedQuality = null;
 let photos = [];
+let refVideo = null; /* reference video for the plan (name + preview URL) */
 
 /* ---------- build error: visible on the page, not a popup (popups are
    auto-dismissed by some browsers, which made a missing photo look like
@@ -959,6 +971,7 @@ function renderThumbs() {
     });
     thumbs.appendChild(d);
   });
+  if (typeof refreshDbRefs === "function") refreshDbRefs();
 }
 
 /* ---------- copy helper ---------- */
@@ -1028,8 +1041,10 @@ function buildPlan() {
       "Camera: " + camera + ". Style: " + style + ". Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ".";
     if (setting) prompt += " Setting: " + setting + ".";
     if (sound && engine.audio) prompt += " Sound: " + sound + ".";
+    if (typeof refVideo !== "undefined" && refVideo) prompt += " Motion reference: " + refVideo.name + " (follow the reference video for motion).";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
-    else prompt += " Match the reference photo exactly — same face, same clothes, same setting.";
+    else if (photos.length > 0) prompt += " Match the reference photo exactly — same face, same clothes, same setting.";
+    else if (typeof refVideo !== "undefined" && refVideo) prompt += " Follow the reference video for motion and style.";
     prompt += " FACE LOCK: Faces must match the reference photos exactly — not even slightly.";
     segs.push({ start: start, end: end, prompt: prompt });
   }
@@ -1039,6 +1054,7 @@ function buildPlan() {
     "<b>Duration:</b> " + selectedDur + " seconds in <b>" + segCount + " segment" + (segCount > 1 ? "s" : "") + "</b> " +
     "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
     "<b>Reference photos:</b> " + photos.length + " uploaded (used as the start frame on the engine's page)<br>" +
+    ((typeof refVideo !== "undefined" && refVideo) ? "<b>Reference video:</b> " + escHtml(refVideo.name) + " (upload the same video on the engine's page as motion reference)<br>" : "") +
     "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-");
 
   const segWrap = document.getElementById("segments");
@@ -1339,6 +1355,31 @@ function refreshDetailGen() {
 }
 function syncToolRatio() { document.querySelectorAll("#ratioBtns button").forEach(function (x) { x.classList.toggle("active", x.getAttribute("data-ratio") === selectedRatio); }); }
 function syncToolDur() { document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.toggle("active", parseInt(x.getAttribute("data-dur"), 10) === selectedDur); }); }
+function refreshDbRefs() {
+  var pn = document.getElementById("dPhotoName");
+  var pb = document.getElementById("dPhotoBox");
+  var hasPhoto = false;
+  try { hasPhoto = (typeof photos !== "undefined" && photos.length > 0); } catch (e) {}
+  if (pn) pn.textContent = hasPhoto ? ("\u2713 " + (photos.length === 1 ? photos[0].name : photos.length + " photos")) : "Add a photo";
+  if (pb) pb.classList.toggle("has", hasPhoto);
+  var vn = document.getElementById("dVideoName");
+  var vb = document.getElementById("dVideoBox");
+  var hasVideo = (typeof refVideo !== "undefined" && !!refVideo);
+  if (vn) vn.textContent = hasVideo ? ("\u2713 " + refVideo.name) : "Add a video";
+  if (vb) {
+    vb.classList.toggle("has", hasVideo);
+    var prev = vb.querySelector("video");
+    if (hasVideo && !prev) {
+      var v = document.createElement("video");
+      v.src = refVideo.url; v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata";
+      v.setAttribute("data-rv", refVideo.url);
+      vb.insertBefore(v, vb.firstChild);
+    } else if (hasVideo && prev && prev.getAttribute("data-rv") !== refVideo.url) {
+      prev.src = refVideo.url; prev.setAttribute("data-rv", refVideo.url);
+    } else if (!hasVideo && prev) { prev.remove(); }
+  }
+}
+
 function modalGenerate(mid) {
   var errEl = document.getElementById("dErr");
   var resEl = document.getElementById("dResult");
@@ -1433,6 +1474,13 @@ function openDetail(kind, id) {
     var act = escAttr(((document.getElementById("action") || {}).value || ""));
     var durBtns = [5, 10, 20, 30].map(function (d) { return '<button type="button" data-dur="' + d + '"' + (d === selectedDur ? ' class="active"' : '') + '>' + d + 's</button>'; }).join('');
     builder = '<div class="detail-builder">' +
+      '<div class="db-refs">' +
+        '<div class="db-ref-box" id="dPhotoBox" role="button" tabindex="0"><button type="button" class="db-ref-x" data-db-clear-photo aria-label="Remove photo">×</button><div class="db-ref-ic">📷</div><div class="db-ref-t">Reference photo</div><div class="db-ref-n" id="dPhotoName">Add a photo</div></div>' +
+        '<div class="db-ref-box" id="dVideoBox" role="button" tabindex="0"><button type="button" class="db-ref-x" data-db-clear-video aria-label="Remove video">×</button><div class="db-ref-ic">🎬</div><div class="db-ref-t">Reference video</div><div class="db-ref-n" id="dVideoName">Add a video</div></div>' +
+        '<input type="file" id="dPhotoInput" accept="image/*" hidden>' +
+        '<input type="file" id="dVideoInput" accept="video/*" hidden>' +
+      '</div>' +
+      '<div class="db-section">✍️ Prompt — describe your video</div>' +
       '<div><div class="db-label">Ratio</div><div class="seg-btns" data-db-ratio>' +
       '<button type="button" data-ratio="16:9"' + (selectedRatio === "16:9" ? ' class="active"' : '') + '>16:9</button>' +
       '<button type="button" data-ratio="9:16"' + (selectedRatio === "9:16" ? ' class="active"' : '') + '>9:16</button>' +
@@ -1449,13 +1497,14 @@ function openDetail(kind, id) {
   }
   detailBody.innerHTML =
     '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
-    detailVideoHTML(demo, item.name, siteUrl) +
     freeFirst +
     builder +
+    detailVideoHTML(demo, item.name, siteUrl) +
     actions +
     buyHTML +
     '<p class="detail-spec">' + escHtml(spec) + '</p>';
   refreshDetailGen();
+  refreshDbRefs();
   try { window.__lfScrollY = window.scrollY || 0; } catch (e) {}
   detailModal.hidden = false;
   document.body.style.overflow = "hidden";
@@ -1506,11 +1555,45 @@ if (detailBody) {
     if (gBtn) { modalGenerate(gBtn.getAttribute("data-gen-engine")); return; }
     var cBtn = t.closest("[data-copy-plan]");
     if (cBtn) { try { copyText(fullPlanText(), cBtn); } catch (e) {} return; }
+    var clrP = t.closest("[data-db-clear-photo]");
+    if (clrP) { try { photos.length = 0; renderThumbs(); } catch (e) {} refreshDbRefs(); return; }
+    var clrV = t.closest("[data-db-clear-video]");
+    if (clrV) { if (typeof refVideo !== "undefined" && refVideo && refVideo.url) { try { URL.revokeObjectURL(refVideo.url); } catch (e) {} } refVideo = null; refreshDbRefs(); return; }
+    var pb = t.closest("#dPhotoBox");
+    if (pb) { var pi = document.getElementById("dPhotoInput"); if (pi) pi.click(); return; }
+    var vb = t.closest("#dVideoBox");
+    if (vb) { var vi = document.getElementById("dVideoInput"); if (vi) vi.click(); return; }
     var lite = t.closest(".lite-yt");
     if (lite) {
       var vid = lite.getAttribute("data-yt");
       var holder = lite.parentNode;
       holder.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + vid + '?autoplay=1&rel=0" title="Demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+    }
+  });
+}
+
+if (detailBody) {
+  detailBody.addEventListener("change", function (ev) {
+    var t = ev.target;
+    if (t.id === "dPhotoInput" && t.files && t.files.length) {
+      var dt = null;
+      try { dt = new DataTransfer(); } catch (e) {}
+      if (dt) {
+        Array.prototype.forEach.call(t.files, function (f) { dt.items.add(f); });
+        var main = document.getElementById("photoInput");
+        if (main) { try { main.files = dt.files; } catch (e) {} main.dispatchEvent(new Event("change")); }
+      }
+      t.value = "";
+      refreshDbRefs();
+    }
+    if (t.id === "dVideoInput" && t.files && t.files.length) {
+      var f = t.files[0];
+      if (f && f.type && f.type.indexOf("video/") === 0) {
+        if (typeof refVideo !== "undefined" && refVideo && refVideo.url) { try { URL.revokeObjectURL(refVideo.url); } catch (e) {} }
+        refVideo = { name: f.name, size: f.size, url: URL.createObjectURL(f) };
+      }
+      t.value = "";
+      refreshDbRefs();
     }
   });
 }
