@@ -840,7 +840,7 @@ var SUBJECT_ERR = "Please enter a subject for your video.";
 var ACTION_ERR = "Please enter an action for your video.";
 function showBuildError(msg) {
   var el = document.getElementById("buildErr");
-  if (el) { el.textContent = msg; el.classList.add("show"); if (el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  if (el) { el.textContent = msg; el.classList.add("show"); /* No forced scroll: the page never pushes the user down. */ }
 }
 function hideBuildError() {
   var el = document.getElementById("buildErr");
@@ -1013,7 +1013,7 @@ function buildPlan() {
   go.textContent = "▶ Open " + engine.name + " free →";
   document.getElementById("output").classList.add("show");
   const outEl = document.getElementById("output");
-  if (outEl.scrollIntoView) outEl.scrollIntoView({ behavior: "smooth" });
+  /* No forced scroll: the page never pushes the user down. */
 }
 /* Credit gate (see credit system script below): checks free plans / credits first. */
 document.getElementById("buildBtn").addEventListener("click", function () {
@@ -1289,7 +1289,7 @@ if (detailBody) {
     var t = ev.target;
     if (t.closest("[data-goto-buy]")) {
       closeDetail();
-      setTimeout(function () { document.getElementById("buy-credits").scrollIntoView({ behavior: "smooth" }); }, 60);
+      /* No forced scroll: the page never pushes the user down. */
       return;
     }
     var useBtn = t.closest("[data-use-engine]");
@@ -1298,7 +1298,7 @@ if (detailBody) {
       closeDetail();
       var el = document.querySelector('.engine[data-id="' + eid + '"]');
       if (el) el.click();
-      setTimeout(function () { document.getElementById("step3").scrollIntoView({ behavior: "smooth" }); }, 60);
+      /* No forced scroll: the page never pushes the user down. */
       return;
     }
     var lite = t.closest(".lite-yt");
@@ -2327,7 +2327,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (subj && !subj.value.trim()) subj.value = c.name + (c.description ? " — " + c.description : "");
     closeCharModal();
     var tool = document.getElementById("tool");
-    if (tool && tool.scrollIntoView) tool.scrollIntoView({ behavior: "smooth" });
+    /* No forced scroll: the page never pushes the user down. */
   }
   function deleteCharacter(id, btn) {
     armDelete(btn, function () {
