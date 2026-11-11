@@ -192,6 +192,7 @@
   .thumbs { display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
   .thumb { position: relative; width: 160px; }
   .thumb img { width: 160px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #33334a; display: block; }
+  .thumb video { width: 160px; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid #33334a; display: block; }
   .thumb button { position: absolute; top: 4px; right: 4px; background: #DC2626; color: #fff; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; line-height: 1; }
   .thumb .tag { font-size: .75rem; color: #a9a9bd; margin-top: 4px; }
   .seg-btns { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -529,12 +530,16 @@
 
   <!-- STEP 1 : REFERENCE PHOTOS -->
   <div class="card">
-    <h2>Step 1 — Reference photos <span class="step">(up to 30 photos)</span></h2>
+    <h2>Step 1 — References <span class="step">(up to 30 photos + 1 video)</span></h2>
     <p class="sub">Upload up to 30 reference photos — Photo 1 is the start frame. More photos = steadier character. You will upload them again on the engine's page.</p>
     <label class="drop" for="photoInput">📷 Click to upload up to 30 reference photos (JPG / PNG / WebP)
       <input type="file" id="photoInput" accept="image/*" multiple>
     </label>
     <div class="thumbs" id="thumbs"></div>
+    <label class="drop" for="videoInput">🎬 Reference video (optional) — for motion <span class="step">(MP4 / WebM)</span>
+      <input type="file" id="videoInput" accept="video/*">
+    </label>
+    <div class="thumbs" id="videoThumb"></div>
     <p class="note">🔒 Your photos stay in your browser. This tool uploads nothing anywhere — the preview is
     local only. When you generate, you upload the photo yourself on the engine's page.</p>
   </div>
@@ -958,6 +963,37 @@ input.addEventListener("change", function () {
   });
   input.value = "";
 });
+
+/* ---------- reference video (main tool) ---------- */
+const videoInput = document.getElementById("videoInput");
+const videoThumb = document.getElementById("videoThumb");
+function renderVideoThumb() {
+  if (!videoThumb) return;
+  videoThumb.innerHTML = "";
+  if (typeof refVideo !== "undefined" && refVideo) {
+    const d = document.createElement("div");
+    d.className = "thumb";
+    d.innerHTML = "<video src='" + refVideo.url + "' muted loop playsinline preload='metadata'></video>" +
+      "<button type='button' title='Remove'>×</button><div class='tag'>🎬 " + refVideo.name + "</div>";
+    d.querySelector("button").addEventListener("click", function () {
+      if (refVideo && refVideo.url) { try { URL.revokeObjectURL(refVideo.url); } catch (e) {} }
+      refVideo = null;
+      renderVideoThumb();
+      if (typeof refreshDbRefs === "function") refreshDbRefs();
+    });
+    videoThumb.appendChild(d);
+  }
+}
+if (videoInput) videoInput.addEventListener("change", function () {
+  const f = videoInput.files && videoInput.files[0];
+  if (f && f.type && f.type.indexOf("video/") === 0) {
+    if (typeof refVideo !== "undefined" && refVideo && refVideo.url) { try { URL.revokeObjectURL(refVideo.url); } catch (e) {} }
+    refVideo = { name: f.name, size: f.size, url: URL.createObjectURL(f) };
+  }
+  videoInput.value = "";
+  renderVideoThumb();
+  if (typeof refreshDbRefs === "function") refreshDbRefs();
+});
 function renderThumbs() {
   hideBuildError();
   thumbs.innerHTML = "";
@@ -1217,9 +1253,9 @@ var DEMO = {
   firefly: { yt: "puEgugluadk", kind: "official", by: "Adobe Video" }
 };
 var IMAGE_TOOLS = [
-  { id: "bing", name: "Bing Image Creator", url: "https://bing.com/create", spec: "DALL-E 3 · up to 1024px", demo: { yt: "smvyxABRZTU", kind: "official", by: "Microsoft Copilot" } },
-  { id: "nanobanana", name: "Gemini Nano Banana Pro", url: "https://gemini.google.com", spec: "Up to 4K images · text in images", demo: { yt: "UQsJIo46ZR8", kind: "official", by: "Google DeepMind" } },
-  { id: "chatgptimg", name: "ChatGPT Image Generation", url: "https://chatgpt.com", spec: "GPT Image 2.6 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "bing", name: "Bing Image Creator", refs: 1, url: "https://bing.com/create", spec: "DALL-E 3 · up to 1024px", demo: { yt: "smvyxABRZTU", kind: "official", by: "Microsoft Copilot" } },
+  { id: "nanobanana", name: "Gemini Nano Banana Pro", refs: 14, url: "https://gemini.google.com", spec: "Up to 4K images · text in images", demo: { yt: "UQsJIo46ZR8", kind: "official", by: "Google DeepMind" } },
+  { id: "chatgptimg", name: "ChatGPT Image Generation", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.6 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
 ];
 var EDITORS = [
   { id: "photopea", name: "Photopea", url: "https://photopea.com", spec: "Photoshop-style editor · layers · PSD", demo: null },
@@ -1354,7 +1390,7 @@ function refreshDetailGen() {
   var dg = document.getElementById("dGenerate");
   if (dg) dg.textContent = detailGenText();
   var ff = document.getElementById("dFreeFirst");
-  if (ff) ff.textContent = (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) ? "💎 Unlimited (Owner) — free for you." : "💠 Use your free credits first — a 30-second video costs 20 credits. Buy more only when they run out.";
+  if (ff) { if (!document.getElementById("dGenerate")) ff.textContent = "💠 Free tools — no credits needed here."; else ff.textContent = (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) ? "💎 Unlimited (Owner) — free for you." : "💠 Use your free credits first — a 30-second video costs 20 credits. Buy more only when they run out."; }
 }
 function syncToolRatio() { document.querySelectorAll("#ratioBtns button").forEach(function (x) { x.classList.toggle("active", x.getAttribute("data-ratio") === selectedRatio); }); }
 function syncToolDur() { document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.toggle("active", parseInt(x.getAttribute("data-dur"), 10) === selectedDur); }); }
@@ -1381,6 +1417,7 @@ function refreshDbRefs() {
       prev.src = refVideo.url; prev.setAttribute("data-rv", refVideo.url);
     } else if (!hasVideo && prev) { prev.remove(); }
   }
+  if (typeof renderVideoThumb === "function") renderVideoThumb();
 }
 
 function modalGenerate(mid) {
@@ -1467,7 +1504,7 @@ function openDetail(kind, id) {
   if (useEngine) actions += '<button class="btn-primary" type="button" data-use-engine="' + item.id + '" style="border:none;cursor:pointer;font-family:inherit;">🎬 Use this engine in the tool</button>';
   if (useEngine) actions += '<button class="btn-ghost" type="button" data-save-video="' + item.id + '">💾 Save this video</button>';
   actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
-  var freeFirst = '<p class="detail-free-first" id="dFreeFirst">💠 Use your free credits first — a 30-second video costs 20 credits. Buy more only when they run out.</p>';
+  var freeFirst = (kind === "image") ? '<p class="detail-free-first" id="dFreeFirst">💠 Free tools — no credits needed here.</p>' : '<p class="detail-free-first" id="dFreeFirst">💠 Use your free credits first — a 30-second video costs 20 credits. Buy more only when they run out.</p>';
   var builder = "";
   if (useEngine) {
     var qOpts = qualityOptionsFor(item);
@@ -1497,7 +1534,22 @@ function openDetail(kind, id) {
       '<p class="db-err" id="dErr" hidden></p>' +
       '<div class="db-result" id="dResult" hidden></div>' +
       '</div>';
-  }
+    } else if (kind === "image") {
+      var imgRefs = (typeof item.refs === "number") ? item.refs : 0;
+      builder = '<div class="detail-builder">' +
+        (imgRefs > 0 ?
+          '<div class="db-refs">' +
+            '<div class="db-ref-box" id="dPhotoBox" role="button" tabindex="0" style="grid-column:1 / -1"><button type="button" class="db-ref-x" data-db-clear-photo aria-label="Remove photo">×</button><div class="db-ref-ic">📷</div><div class="db-ref-t">Reference photo</div><div class="db-ref-n" id="dPhotoName">Add a photo</div></div>' +
+            '<input type="file" id="dPhotoInput" accept="image/*" hidden>' +
+          '</div>' +
+          '<p class="db-credits">📷 ' + escHtml(item.name) + ' takes up to ' + imgRefs + (imgRefs === 1 ? ' reference photo' : ' reference photos') + ' — upload them again on its page.</p>' :
+          '<p class="db-credits">✍️ Text only — ' + escHtml(item.name) + ' takes no reference photo.</p>') +
+        '<div class="db-section">✍️ Prompt — describe your image</div>' +
+        '<div><textarea id="iPrompt" placeholder="Describe the image you want"></textarea></div>' +
+        '<button class="big-btn" id="iCopyBtn" type="button" data-copy-img-prompt data-img-refs="' + imgRefs + '">📋 Copy prompt</button>' +
+        '<p class="db-err" id="dErr" hidden></p>' +
+      '</div>';
+    }
   detailBody.innerHTML =
     '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
     freeFirst +
@@ -1558,6 +1610,8 @@ if (detailBody) {
     if (gBtn) { modalGenerate(gBtn.getAttribute("data-gen-engine")); return; }
     var cBtn = t.closest("[data-copy-plan]");
     if (cBtn) { try { copyText(fullPlanText(), cBtn); } catch (e) {} return; }
+    var ciBtn = t.closest("[data-copy-img-prompt]");
+    if (ciBtn) { try { var ip = document.getElementById("iPrompt"); var txt = ip ? ip.value : ""; var n = (typeof photos !== "undefined") ? photos.length : 0; var lim = parseInt(ciBtn.getAttribute("data-img-refs") || "0", 10); if (n > 0 && lim > 0) txt += (txt ? "\n" : "") + "Reference photos: " + n + " uploaded — upload Photos 1–" + Math.min(n, lim) + " on the tool's page."; else if (n > 0) txt += (txt ? "\n" : "") + "Reference photos: " + n + " uploaded — upload them on the tool's page."; copyText(txt, ciBtn); } catch (e) {} return; }
     var clrP = t.closest("[data-db-clear-photo]");
     if (clrP) { try { photos.length = 0; renderThumbs(); } catch (e) {} refreshDbRefs(); return; }
     var clrV = t.closest("[data-db-clear-video]");
