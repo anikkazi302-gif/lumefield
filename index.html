@@ -44,6 +44,7 @@
   .nav-user { font-size: 13px; color: #c9c9d8; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* ---------- header profile (chip + dropdown menu) ---------- */
   .profile-wrap { position: relative; display: flex; align-items: center; gap: 8px; }
+  .profile-wrap[hidden] { display: none; }
   .profile-upgrade { background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border: none; border-radius: 999px; padding: 9px 14px; font-weight: 700; font-size: 13px; white-space: nowrap; text-decoration: none; }
   .profile-upgrade:hover { filter: brightness(1.12); }
   .profile-chip { display: flex; align-items: center; gap: 8px; background: #1c1c2c; color: #fff; border: 1px solid #7c5cff; border-radius: 999px; padding: 5px 14px 5px 5px; font-weight: 700; font-size: 13px; cursor: pointer; font-family: inherit; max-width: 260px; }
@@ -989,7 +990,8 @@ function applyPreset(p) {
   document.getElementById("setting").value = p.setting || "";
   document.getElementById("sound").value = p.sound || "";
   hideBuildError();
-  document.getElementById("subject").scrollIntoView({ behavior: "smooth", block: "center" });
+  /* No scroll here: applying a preset must not move the page (the old
+     scrollIntoView jumped the page up to Step 1 every time). */
 }
 (function renderPresets() {
   var wrap = document.getElementById("presetBtns");
@@ -1063,8 +1065,8 @@ var DEMO = {
   seedance: { yt: "mZja2Ve0Mns", kind: "official", by: "Dreamina" },
   vidu: { yt: "jJcbxCDRRaw", kind: "official", by: "Vidu AI Official" },
   hailuo: { yt: "AvjamLzt2pg", kind: "official", by: "MiniMax Design" },
-  wan3: { mp4: "https://alizila.oss-us-west-1.aliyuncs.com/uploads/2026/08/Wan3.0-demo-1_30s-2.mp4", kind: "official", by: "Alibaba Cloud" },
-  pixverse: { mp4: "https://media.pixverse.ai/asset/media/v6-hero-18-25.mp4", kind: "official", by: "PixVerse" },
+  wan3: { yt: "g3ihFwqiPcw", kind: "official", by: "Qwen Cloud" },
+  pixverse: { yt: "m-qRU0SY8NQ", kind: "official", by: "PixVerse" },
   pika: { yt: "-R2ftjEOSX0", kind: "official", by: "Pika Labs" },
   luma: { yt: "Zb3tffmBPRE", kind: "official", by: "Luma" },
   firefly: { yt: "puEgugluadk", kind: "official", by: "Adobe Video" }
@@ -1439,6 +1441,14 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   else renderUser(null);
   if (profileSignOut) profileSignOut.addEventListener("click", function () {
     if (lfAuth) lfAuth.signOut();
+    /* Hide the chip + menu right now — do not wait for the async
+       sign-out to resolve. (The hidden attribute alone was not enough:
+       .profile-wrap's display:flex rule beat it, so the chip stayed
+       visible until a reload. The .profile-wrap[hidden] CSS rule fixes
+       that; this keeps the handler explicit too.) */
+    if (profileWrap) profileWrap.hidden = true;
+    var pm = document.getElementById("profileMenu");
+    if (pm) pm.hidden = true;
     renderUser(null);
   });
 })();
@@ -1611,7 +1621,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     return "";
   }
   function updateProfile() {
-    if (!profileWrap || !currentUser) return;
+    if (!profileWrap) return;
+    /* Signed out: never leave a stale chip/menu visible. (The sign-out
+       handler and renderUser() hide them too; this is the same path
+       every balance refresh uses, so no state change can resurrect a
+       signed-out chip.) */
+    if (!currentUser) {
+      profileWrap.hidden = true;
+      if (profileMenu) profileMenu.hidden = true;
+      return;
+    }
     var email = currentUser.email || "";
     var name = email.split("@")[0] || "Signed in";
     if (profileAvatar) profileAvatar.textContent = (name.charAt(0) || "?").toUpperCase();
