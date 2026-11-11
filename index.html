@@ -124,6 +124,10 @@
   .auth-showcase p { margin: 0; color: #c9c9d8; font-size: 14px; line-height: 1.55; }
   .auth-show-chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .auth-show-chips span { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 4px 10px; font-size: 12px; color: #e8e8f0; }
+  .auth-showcase { position: relative; }
+  .auth-show-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .auth-showcase::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,18,.10), rgba(10,10,18,.85)); z-index: 1; }
+  .auth-showcase > *:not(.auth-show-video) { position: relative; z-index: 2; }
   .auth-form { padding: 30px 30px 24px; }
   .auth-or { display: flex; align-items: center; gap: 10px; color: #8a8a9e; font-size: 12px; margin: 16px 0 2px; }
   .auth-or::before, .auth-or::after { content: ""; flex: 1; height: 1px; background: #26263a; }
@@ -830,6 +834,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <button class="modal-close" id="authClose" type="button" aria-label="Close">✕</button>
     <div class="auth-showcase">
+      <video class="auth-show-video" src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" autoplay muted loop playsinline preload="auto" poster="https://images.pexels.com/videos/31391075/pictures/preview-0.jpg" aria-hidden="true" tabindex="-1"></video>
       <div class="auth-show-logo">✦</div>
       <h4>LUMEFIELD STUDIO</h4>
       <p>Turn photos into 30-second cinematic videos — with motion, voice and transitions.</p>
