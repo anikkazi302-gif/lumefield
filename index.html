@@ -3537,7 +3537,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     itemHtml: itemHtml,
     RATIO_LABELS: RATIO_LABELS
   };
-  function closeAllPops() { ["modelPop", "durPop", "ratioPop", "qualityPop"].forEach(function (id) { var p = $(id); if (p) p.hidden = true; }); }
+  function closeAllPops() { ["modelPop", "durPop", "ratioPop", "qualityPop", "bitratePop", "multiPop"].forEach(function (id) { var p = $(id); if (p) p.hidden = true; }); }
   function togglePop(rowId, popId, build) {
     var pop = $(popId); if (!pop) return;
     var wasHidden = pop.hidden;
@@ -3669,7 +3669,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!ev.target.closest(".opt-wrap")) closeAllPops();
   });
   document.addEventListener("keydown", function (ev) {
-    if (ev.key === "Escape") closeAllPops();
+    if (ev.key === "Escape") {
+      var anyOpen = ["modelPop", "durPop", "ratioPop", "qualityPop", "bitratePop", "multiPop"].some(function (id) { var p = $(id); return p && !p.hidden; });
+      if (anyOpen) { closeAllPops(); ev.stopImmediatePropagation(); }
+    }
   });
   refreshOptRows();
 })();
@@ -3929,7 +3932,7 @@ function closeTool() {
     });
   });
   var pc = $("presetChange");
-  if (pc) pc.addEventListener("click", function () { var r = $("modelRow"); if (r) r.click(); });
+  if (pc) pc.addEventListener("click", function (ev) { if (ev) ev.stopPropagation(); var r = $("modelRow"); if (r) r.click(); });
   var et = $("enhanceToggle");
   if (et) et.addEventListener("click", function () {
     selectedEnhance = !selectedEnhance;
