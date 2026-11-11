@@ -1336,7 +1336,9 @@ function modalGenerate(mid) {
   var engine = null;
   try { engine = ENGINES.find(function (e) { return e.id === mid; }); } catch (e) {}
   if (!engine) { showErr("Engine not found."); return; }
-  if (typeof photos !== "undefined" && photos.length === 0 && engine.i2v) { showErr("Add a reference photo in the tool first."); return; }
+  var ts0 = document.getElementById("subject"); if (ts0) ts0.value = s;
+  var ta0 = document.getElementById("action"); if (ta0) ta0.value = a;
+  if (typeof photos !== "undefined" && photos.length === 0 && engine.i2v) { showErr("Please upload a reference photo first — this engine needs one, or switch to a text-only engine."); return; }
   var ts = document.getElementById("subject"); if (ts) ts.value = s;
   var ta = document.getElementById("action"); if (ta) ta.value = a;
   selectedQuality = qSel ? qSel.value : null;
@@ -1435,8 +1437,10 @@ function openDetail(kind, id) {
     buyHTML +
     '<p class="detail-spec">' + escHtml(spec) + '</p>';
   refreshDetailGen();
+  try { window.__lfScrollY = window.scrollY || 0; } catch (e) {}
   detailModal.hidden = false;
   document.body.style.overflow = "hidden";
+  try { if (typeof window.__lfScrollY === "number") window.scrollTo(0, window.__lfScrollY); } catch (e) {}
 }
 function closeDetail() {
   if (!detailModal) return;
@@ -1446,6 +1450,7 @@ function closeDetail() {
   if (f) f.remove();
   detailModal.hidden = true;
   document.body.style.overflow = "";
+  try { if (typeof window.__lfScrollY === "number") window.scrollTo(0, window.__lfScrollY); } catch (e) {}
 }
 if (detailModal) {
   detailModal.addEventListener("click", function (e) { if (e.target === detailModal) closeDetail(); });
@@ -1843,6 +1848,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var inviteLink = document.getElementById("profileInviteLink");
     if (inviteLink) inviteLink.textContent = "Invite link: https://anikkazi302-gif.github.io/lumefield/?ref=" + currentUser.uid;
     renderHistory();
+    /* If the model detail is open, its credits line + Generate text were
+       set when the modal opened — possibly before sign-in resolved. Refresh
+       them now that the balance is known, so the owner sees "free". */
+    if (typeof refreshDetailGen === "function") { try { if (typeof detailModal !== "undefined" && detailModal && !detailModal.hidden) refreshDetailGen(); } catch (e) {} }
     if (window.lfUpdateResendButtons) window.lfUpdateResendButtons();
   }
   if (profileChip && profileMenu) {
