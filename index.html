@@ -292,6 +292,7 @@
   .detail-video .no-demo { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; color: #c9c9d8; font-size: 14px; text-align: center; padding: 12px; }
   .detail-video .no-demo a { color: #ffd166; font-weight: 700; }
   .detail-buy { background: linear-gradient(90deg, #1a1430, #12121d); border: 1px solid #7c5cff; border-radius: 14px; padding: 16px 18px; margin-top: 16px; }
+  .detail-free-first { margin-top: 16px; font-size: 14px; line-height: 1.6; color: #ffd166; }
   .detail-buy h4 { font-size: 16px; color: #ffd166; }
   .detail-buy p { margin-top: 8px; font-size: 14px; color: #e5e5ef; line-height: 1.6; }
   .detail-buy .buy-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
@@ -1258,11 +1259,13 @@ function openDetail(kind, id) {
   if (useEngine) actions += '<button class="btn-primary" type="button" data-use-engine="' + item.id + '" style="border:none;cursor:pointer;font-family:inherit;">🎬 Use this engine in the tool</button>';
   if (useEngine) actions += '<button class="btn-ghost" type="button" data-save-video="' + item.id + '">💾 Save this video</button>';
   actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
+  var freeFirst = '<p class="detail-free-first">\uD83D\uDCA0 Use your free credits first \u2014 a 30-second video costs 20 credits. Buy more only when they run out.</p>';
   detailBody.innerHTML =
     '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
     detailVideoHTML(demo, item.name, siteUrl) +
-    buyHTML +
+    freeFirst +
     actions +
+    buyHTML +
     '<p class="detail-spec">' + escHtml(spec) + '</p>';
   detailModal.hidden = false;
   document.body.style.overflow = "hidden";
