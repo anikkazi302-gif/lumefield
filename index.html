@@ -29,7 +29,7 @@
 
   /* ---------- nav ---------- */
   .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 28px; position: sticky; top: 0; z-index: 50; background: rgba(7,7,13,.92); backdrop-filter: blur(8px); border-bottom: 1px solid #1c1c2c; flex-wrap: wrap; }
-  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .logo-mark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #ffd166, #ff5e8a 55%, #7c5cff); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; }
   .logo-name { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #fff; }
   .logo-name span { background: linear-gradient(90deg, #ffd166, #ff5e8a, #7c5cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -87,6 +87,11 @@
   .credit-signin:disabled { opacity: .55; cursor: default; }
   /* ---------- "JUST ADD" items: NEW badges, filters, hamburger, history, resend ---------- */
   .new-badge { font-size: 10px; background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
+  .top-badge { font-size: 10px; background: #c8f542; color: #111; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
+  .promo-banner { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 8px 16px; background: #111; color: #e8e8f0; font-size: 13px; border-bottom: 1px solid #1c1c2c; flex-wrap: wrap; }
+  .promo-banner b { color: #c8f542; }
+  .promo-banner-link { color: #c8f542; font-weight: 700; text-decoration: none; }
+  .promo-close { background: none; border: none; color: #888; cursor: pointer; font-size: 14px; padding: 2px 6px; }
   .filter-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 18px; }
   .filter-row input[type=text] { flex: 1; min-width: 220px; max-width: 320px; }
   .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -477,19 +482,16 @@
 </script>
 </head>
 <body>
+<div class="promo-banner" id="promoBanner"><span class="promo-banner-text">✦ <b>Free</b> — first video, no account · Sign in free for <b>20 credits</b> · Starter pack $4.99</span><a class="promo-banner-link" href="#buy-credits">See packs →</a><button class="promo-close" type="button" aria-label="Close" onclick="document.getElementById('promoBanner').remove()">✕</button></div>
 
 <nav class="nav">
-  <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
+  <a class="logo" href="#" aria-label="LumeField — home"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></a>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#buy-credits">Buy credits</a><a href="#guides">Guides</a></div>
   <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
-  <!-- Hero background: "Abstract Digital Tunnel with Glowing Particles" by Nicola Narracci, Pexels (free licence). Lazy-loaded; poster shows first. -->
-  <video class="hero-video" id="heroVideo" muted loop autoplay playsinline preload="none" poster="https://images.pexels.com/videos/31391075/pictures/preview-0.jpg" aria-hidden="true" tabindex="-1">
-    <source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4">
-  </video>
   <div class="hero-overlay" aria-hidden="true"></div>
   <h1>Turn your photos into<br><span>cinematic videos.</span></h1>
   <p><b>Free AI video generator</b> — turn your photos into 30-second cinematic videos.<br>First video free, no account. Sign in (free) for 20 credits. No card needed.</p>
@@ -502,7 +504,6 @@
 
 
 <section class="howto-sec has-bg" id="howto">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/8939910/8939910-hd_1920_1080_25fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>How it <span>works</span></h2>
   <p class="lead">Photo to 30-second video in 4 steps — free, no card.</p>
@@ -515,7 +516,6 @@
 </section>
 
 <section class="model-sec has-bg" id="models">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/36325455/15405322_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>Video <span>models</span> — free</h2>
   <p class="lead">Tap a model to see what it makes — then use it free in the tool.</p>
@@ -532,7 +532,6 @@
 </section>
 
 <section class="model-sec has-bg" id="showcase">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/34531903/14631040_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>Made with <span>LumeField</span></h2>
   <p class="lead">Made with these free engines — tap a clip to watch it.</p>
@@ -540,7 +539,6 @@
 </section>
 
 <div class="tool-wrap has-bg" id="tool">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/1536323/1536323-hd_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <div class="credit-bar" id="creditBar" role="status">
     <span id="creditText">🎬 Loading…</span>
@@ -772,7 +770,6 @@
 </section>
 
 <div class="footer has-bg">
-  <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/34394862/14570774_1920_1080_24fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
 <div class="footer-inner">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
 Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.<br>
@@ -873,24 +870,26 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const ENGINES = [
-  { id: "wan22", refs: 1, name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
-  { id: "ltx23", refs: 1, name: "LTX-2.3", vendor: "Lightricks · open weights", url: "https://huggingface.co/spaces/Lightricks/LTX-2-3", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free official Hugging Face Space", note: "The only free engine here with synced audio. 10s per clip on the Space (the model itself supports 20s self-hosted)." },
-  { id: "hunyuan15", refs: 1, name: "HunyuanVideo 1.5", vendor: "Tencent · open source", url: "https://huggingface.co/spaces/multimodalart/Hunyuan-Video-1-5", maxSec: 10, i2v: true, res: "480p / 720p", audio: false, free: "Free Hugging Face Space", note: "Silent clips. Duration settings 5 / 8 / 10 seconds. Runs on a consumer GPU if self-hosted." },
-  { id: "cogvideox", refs: 1, name: "CogVideoX 1.5", vendor: "Zhipu AI · open source", url: "https://huggingface.co/spaces/zai-org/CogVideoX-5B-Space", maxSec: 10, i2v: true, res: "up to 1360×768", audio: false, free: "Free official Hugging Face Space", note: "Strong prompt adherence. 5–10s per clip. The 2B version runs on small GPUs." },
+  { id: "seedance", refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
   { id: "kling", refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "Free monthly credits (amount varies)", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
   { id: "flow", refs: 3, name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
-  { id: "runway", refs: 3, name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
-  { id: "mochi", refs: 0, name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." },
-  { id: "seedance", refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
   { id: "vidu", refs: 15, name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
   { id: "hailuo", refs: 9, name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
   { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
-  { id: "pixverse", refs: 1, name: "Pixverse V6", vendor: "AIsphere", url: "https://pixverse.ai", maxSec: 15, i2v: true, res: "540p", audio: true, free: "60 at signup + 30 free credits/day", note: "Up to 15-second clips with sound, 30 free credits every day." },
   { id: "luma", refs: 2, name: "Luma Dream Machine", vendor: "Luma AI", url: "https://dream-machine.lumalabs.ai", maxSec: 10, i2v: true, res: "720p", audio: false, free: "Free tier — verify at signup", note: "Cinematic Ray models with keyframe control, free tier to verify at signup. Video only — no native audio." },
-  { id: "firefly", refs: 1, name: "Adobe Firefly (video)", vendor: "Adobe", url: "https://firefly.adobe.com", maxSec: 5, i2v: true, res: "1080p", audio: true, free: "Free daily generations", note: "Veo, Kling and Luma models in one place, trained on licensed data, free daily generations. Audio depends on the partner model." }
+  { id: "runway", refs: 3, name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
+  { id: "pixverse", refs: 1, name: "Pixverse V6", vendor: "AIsphere", url: "https://pixverse.ai", maxSec: 15, i2v: true, res: "540p", audio: true, free: "60 at signup + 30 free credits/day", note: "Up to 15-second clips with sound, 30 free credits every day." },
+  { id: "firefly", refs: 1, name: "Adobe Firefly (video)", vendor: "Adobe", url: "https://firefly.adobe.com", maxSec: 5, i2v: true, res: "1080p", audio: true, free: "Free daily generations", note: "Veo, Kling and Luma models in one place, trained on licensed data, free daily generations. Audio depends on the partner model." },
+  { id: "ltx23", refs: 1, name: "LTX-2.3", vendor: "Lightricks · open weights", url: "https://huggingface.co/spaces/Lightricks/LTX-2-3", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free official Hugging Face Space", note: "The only free engine here with synced audio. 10s per clip on the Space (the model itself supports 20s self-hosted)." },
+  { id: "hunyuan15", refs: 1, name: "HunyuanVideo 1.5", vendor: "Tencent · open source", url: "https://huggingface.co/spaces/multimodalart/Hunyuan-Video-1-5", maxSec: 10, i2v: true, res: "480p / 720p", audio: false, free: "Free Hugging Face Space", note: "Silent clips. Duration settings 5 / 8 / 10 seconds. Runs on a consumer GPU if self-hosted." },
+  { id: "cogvideox", refs: 1, name: "CogVideoX 1.5", vendor: "Zhipu AI · open source", url: "https://huggingface.co/spaces/zai-org/CogVideoX-5B-Space", maxSec: 10, i2v: true, res: "up to 1360×768", audio: false, free: "Free official Hugging Face Space", note: "Strong prompt adherence. 5–10s per clip. The 2B version runs on small GPUs." },
+  { id: "wan22", refs: 1, name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
+  { id: "mochi", refs: 0, name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." }
 ];
 /* Newest engines — shown with a NEW badge on their cards. */
-var NEW_ENGINE_IDS = ["kling", "seedance", "vidu", "wan3", "pixverse", "firefly"];
+var NEW_ENGINE_IDS = ["kling", "vidu", "wan3", "pixverse", "firefly"];
+var TOP_ENGINE_IDS = ["seedance"];
+var NEW_IMAGE_IDS = ["gpt26s", "gpt26f"];
 
 const SETTINGS = {
   wan22: "Resolution: 720p · 24 fps · Steps: ~30 · Guidance: 5–7 · Negative prompt: blurry, low quality, distorted face, extra limbs, flicker · Use your photo as the start image.",
@@ -913,7 +912,7 @@ const SETTINGS = {
 const CAMERA_RULE = "CAMERA RULE: The camera does whatever it needs to do to show the characters well — it may turn, move, change angle or cut whenever the scene needs it; that is the camera's own job. All camera decisions belong to the camera alone: where to zoom in, where to zoom out, which angle to use, where to use a tracking shot, when to pull back, when to push forward, who to focus on, and when to zoom onto a face — whatever makes the scene beautiful and brings out its emotion, pain, anger and feeling. The characters pay NO attention to the camera at all: they NEVER look at it, NEVER act for it, and do nothing for it — they stay in their own business and live their scene naturally, as if no camera were there.";
 function faceLockText() { return "FACE LOCK: Faces must match the reference photos exactly — not even slightly. No face changes, no character changes, no clothing changes between segments. " + ratioText(selectedRatio) + ". NO blood ever."; }
 
-let selectedEngine = "mochi";
+let selectedEngine = "seedance";
 let selectedDur = 30;
 let selectedRatio = "16:9";
 let selectedQuality = null;
@@ -942,7 +941,7 @@ ENGINES.forEach(function (e) {
   const d = document.createElement("div");
   d.className = "engine" + (e.id === selectedEngine ? " selected" : "");
   d.dataset.id = e.id;
-  d.innerHTML = "<h3>" + e.name + (NEW_ENGINE_IDS.indexOf(e.id) !== -1 ? " <span class='new-badge'>NEW</span>" : "") + "<span class='badge" + (e.i2v ? "" : " no") + "'>" +
+  d.innerHTML = "<h3>" + e.name + (TOP_ENGINE_IDS.indexOf(e.id) !== -1 ? " <span class='top-badge'>TOP</span>" : "") + (NEW_ENGINE_IDS.indexOf(e.id) !== -1 ? " <span class='new-badge'>NEW</span>" : "") + "<span class='badge" + (e.i2v ? "" : " no") + "'>" +
     (e.i2v ? "photo ✓" : "text only") + "</span></h3>" +
     "<div class='limit'>Max " + e.maxSec + "s per clip · " + e.res + (e.audio ? " · with audio" : " · silent") + "</div>";
   d.addEventListener("click", function () {
@@ -1313,7 +1312,12 @@ var DEMO = {
 var IMAGE_TOOLS = [
   { id: "bing", name: "Bing Image Creator", refs: 1, url: "https://bing.com/create", spec: "DALL-E 3 · up to 1024px", demo: { yt: "smvyxABRZTU", kind: "official", by: "Microsoft Copilot" } },
   { id: "nanobanana", name: "Gemini Nano Banana Pro", refs: 14, url: "https://gemini.google.com", spec: "Up to 4K images · text in images", demo: { yt: "UQsJIo46ZR8", kind: "official", by: "Google DeepMind" } },
-  { id: "chatgptimg", name: "ChatGPT Image Generation", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.6 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "gpt26s", name: "GPT Image 2.6 Sunburst", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.6 Sunburst · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "gpt26f", name: "GPT Image 2.6 Flare", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.6 Flare · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "gpt25s", name: "GPT Image 2.5 Sunburst", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.5 Sunburst · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "gpt25f", name: "GPT Image 2.5 Flare", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.5 Flare · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "gpt2", name: "GPT Image 2", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "gpt15", name: "GPT Image 1.5", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 1.5 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
 ];
 var EDITORS = [
   { id: "photopea", name: "Photopea", url: "https://photopea.com", spec: "Photoshop-style editor · layers · PSD", demo: null },
@@ -1349,7 +1353,7 @@ function makeCard(kind, id, name, demo, siteUrl) {
   var _it = kind === "video" ? ENGINES.find(function (e) { return e.id === id; }) : kind === "image" ? IMAGE_TOOLS.find(function (t) { return t.id === id; }) : EDITORS.find(function (t) { return t.id === id; });
   var _sub = _it ? (_it.note || _it.spec || "") : "";
   var _bdg = kind === "video" && _it ? (_it.i2v ? '<span class="model-badge">photo \u2713</span>' : '<span class="model-badge no">text only</span>') : "";
-  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + _bdg + ((kind === "video" && typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(id) !== -1) ? ' <span class="new-badge">NEW</span>' : '') + '</div>' + (_sub ? '<div class="model-sub">' + escHtml(_sub) + '</div>' : '');
+  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + _bdg + ((kind === "video" && typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS.indexOf(id) !== -1) ? ' <span class="top-badge">TOP</span>' : '') + ((kind === "video" && typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(id) !== -1) || (kind === "image" && typeof NEW_IMAGE_IDS !== "undefined" && NEW_IMAGE_IDS.indexOf(id) !== -1) ? ' <span class="new-badge">NEW</span>' : '') + '</div>' + (_sub ? '<div class="model-sub">' + escHtml(_sub) + '</div>' : '');
   function open() { openDetail(kind, id); }
   c.addEventListener("click", open);
   c.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); } });
