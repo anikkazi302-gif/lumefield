@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// LumeField credit wallets + one-way signup claims + daily refill + referrals (v4) — paste this whole
+// LumeField credit wallets + one-way signup claims + daily refill + referrals (v5) — paste this whole
 // file into Firebase console > lumeField project > Build > Firestore
 // Database > Rules tab, then click Publish. See FIRESTORE-SETUP.md.
 //
@@ -168,7 +168,79 @@ service cloud.firestore {
       allow delete: if false;
     }
 
-    match /{document=**} {
+    match /characters/{charId} {
+      // Create: only your own verified account, exact fields, sane sizes,
+      // photo must be a JPEG/PNG/WebP data URL (downscaled by the site).
+      allow create: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == request.resource.data.uid
+        && request.resource.data.keys().hasOnly(['uid', 'name', 'description', 'photoDataUrl', 'createdAt'])
+        && request.resource.data.uid is string
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1 && request.resource.data.name.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 500
+        && request.resource.data.photoDataUrl is string
+        && request.resource.data.photoDataUrl.size() <= 400000
+        && request.resource.data.photoDataUrl.matches('^data:image/(jpeg|png|webp);base64,.*$');
+
+      // Read: only the owner. A query filtered by uid == request.auth.uid is permitted.
+      allow read: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == resource.data.uid;
+
+      // Update: only the owner; uid and createdAt can never change.
+      allow update: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == resource.data.uid
+        && request.auth.uid == request.resource.data.uid
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.keys().hasOnly(['uid', 'name', 'description', 'photoDataUrl', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() >= 1 && request.resource.data.name.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() <= 500
+        && request.resource.data.photoDataUrl is string
+        && request.resource.data.photoDataUrl.size() <= 400000
+        && request.resource.data.photoDataUrl.matches('^data:image/(jpeg|png|webp);base64,.*$');
+
+      allow delete: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == resource.data.uid;
+    }
+
+    match /savedVideos/{videoId} {
+      // Create: only your own verified account, exact fields, sane sizes,
+      // video URL must be https (an engine page, never javascript: or data:).
+      allow create: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == request.resource.data.uid
+        && request.resource.data.keys().hasOnly(['uid', 'modelId', 'modelName', 'planText', 'videoUrl', 'createdAt'])
+        && request.resource.data.uid is string
+        && request.resource.data.modelId is string && request.resource.data.modelId.size() >= 1 && request.resource.data.modelId.size() <= 40
+        && request.resource.data.modelName is string && request.resource.data.modelName.size() >= 1 && request.resource.data.modelName.size() <= 80
+        && request.resource.data.planText is string && request.resource.data.planText.size() <= 20000
+        && request.resource.data.videoUrl is string
+        && request.resource.data.videoUrl.size() <= 500
+        && request.resource.data.videoUrl.matches('^https://.*$');
+
+      // Read: only the owner. A query filtered by uid == request.auth.uid is permitted.
+      allow read: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == resource.data.uid;
+
+      // Update: only the owner; uid, modelId and createdAt can never change.
+      allow update: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == resource.data.uid
+        && request.auth.uid == request.resource.data.uid
+        && request.resource.data.modelId == resource.data.modelId
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.keys().hasOnly(['uid', 'modelId', 'modelName', 'planText', 'videoUrl', 'createdAt'])
+        && request.resource.data.modelName is string && request.resource.data.modelName.size() >= 1 && request.resource.data.modelName.size() <= 80
+        && request.resource.data.planText is string && request.resource.data.planText.size() <= 20000
+        && request.resource.data.videoUrl is string
+        && request.resource.data.videoUrl.size() <= 500
+        && request.resource.data.videoUrl.matches('^https://.*$');
+
+      allow delete: if request.auth != null && request.auth.token.email_verified == true
+        && request.auth.uid == resource.data.uid;
+    }
+
+match /{document=**} {
       allow read, write: if false;
     }
   }
