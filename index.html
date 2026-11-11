@@ -386,6 +386,36 @@
   .buy-btn { display: inline-block; margin-top: 16px; background: #33334a; color: #c9c9d8; border: none; border-radius: 999px; padding: 11px 24px; font-size: 14px; font-weight: 700; cursor: not-allowed; font-family: inherit; }
 
 
+  /* ---------- sale row (sale panel + tiles) ---------- */
+  .sale-row { display: flex; gap: 14px; max-width: 1100px; margin: 0 auto; padding: 0 18px 40px; }
+  .sale-panel { flex: 0 0 33%; background: linear-gradient(135deg, #ff3d81 0%, #c026d3 100%); border-radius: 18px; padding: 28px; color: #fff; position: relative; }
+  .sale-panel h2 { font-size: 30px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px; }
+  .sale-panel p { font-size: 15px; margin: 0 0 18px; }
+  .sale-panel .sale-btn { display: block; width: 100%; background: #c8f542; color: #111; border: none; border-radius: 999px; padding: 13px 0; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; text-decoration: none; text-align: center; }
+  .sale-panel .sale-sticker { position: absolute; top: 14px; right: -8px; background: #c8f542; color: #111; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 999px; transform: rotate(-6deg); }
+  .sale-panel .sale-fine { font-size: 12px; opacity: .8; margin: 12px 0 0; text-align: center; }
+  .sale-tiles { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .sale-tile { background: #1c1c2c; border: 1px solid transparent; border-radius: 14px; padding: 18px; text-align: left; cursor: pointer; font-family: inherit; }
+  .sale-tile:hover { border-color: #c8f542; }
+  .sale-tile h3 { margin: 0 0 4px; font-size: 16px; color: #fff; }
+  .sale-tile p { margin: 0; font-size: 13px; color: #a9a9bd; }
+  .sale-badge { display: inline-block; background: #c8f542; color: #111; font-size: 10px; font-weight: 800; border-radius: 999px; padding: 2px 7px; vertical-align: middle; margin-left: 4px; }
+  @media (max-width: 900px) { .sale-row { flex-direction: column; } .sale-panel { flex: none; } }
+  /* ---------- pricing cards (Plus raised lime, Ultra tallest pink) ---------- */
+  .pack .per { font-size: 13px; font-weight: 600; color: #a9a9bd; margin-top: 2px; }
+  .pack .incl { margin-top: 6px; }
+  .pack-badge { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .06em; border-radius: 999px; padding: 5px 12px; margin-bottom: 12px; }
+  .packs-note { text-align: center; color: #a9a9bd; font-size: 14px; margin-top: 18px; }
+  .pack.plus { background: linear-gradient(160deg, #c8f542, #9ed62e); border: none; transform: translateY(-12px); }
+  .pack.plus h3, .pack.plus .price, .pack.plus .per, .pack.plus .credits, .pack.plus p { color: #111; }
+  .pack.plus .pack-badge { background: #111; color: #c8f542; }
+  .pack.plus .buy-btn { background: #111; color: #c8f542; }
+  .pack.ultra { background: linear-gradient(160deg, #ff3d81, #c026d3); border: none; padding: 36px 28px; }
+  .pack.ultra h3, .pack.ultra .price, .pack.ultra .per, .pack.ultra .credits, .pack.ultra p { color: #fff; }
+  .pack.ultra .pack-badge { background: #c8f542; color: #111; }
+  .pack.ultra .buy-btn { background: #111; color: #fff; }
+  @media (max-width: 640px) { .pack.plus { transform: none; } .pack.ultra { padding: 22px; } }
+
   /* ---------- footer ---------- */
   .footer { text-align: center; padding: 22px; font-size: 13px; color: #77778c; border-top: 1px solid #1c1c2c; line-height: 1.7; }
   .footer a { color: #a9a9bd; }
@@ -586,6 +616,17 @@
 
 
 
+
+<section class="sale-row" id="sale-row">
+  <div class="sale-panel">
+    <span class="sale-sticker">NO SUBSCRIPTION</span>
+    <h2>First video free</h2>
+    <p>Sign in free &mdash; get 20 credits. Starter pack $4.99.</p>
+    <a class="sale-btn" href="#tool">Start free</a>
+    <p class="sale-fine">No card. No subscription.</p>
+  </div>
+  <div class="sale-tiles" id="saleTiles"></div>
+</section>
 
 <section class="model-sec has-bg" id="models">
   <div class="bg-overlay" aria-hidden="true"></div>
@@ -811,30 +852,37 @@
   <p class="lead">First video free. Sign in free for 20 credits. Then buy a pack — no subscription.</p>
   <div class="packs">
     <div class="pack">
-      <h3>Starter</h3>
+      <h3>STARTER</h3>
       <div class="price">$4.99</div>
+      <div class="per">one-time</div>
       <div class="credits">60 credits</div>
-      <p>3 × 30-second videos — or 15 × 5-second, 8 × 10-second, 4 × 20-second videos. About $1.66 per 30-second video.</p>
+      <p>3 &times; 30-second videos<br>About $1.66 per 30-second video</p>
+      <p class="incl">All 15 video models &middot; All 8 image tools &middot; 8 photo editors</p>
       <span class="tag">Best for trying paid videos</span><br>
-      <button class="buy-btn" type="button" disabled>Buy — coming soon</button>
+      <button class="buy-btn" type="button" disabled>Buy &mdash; coming soon</button>
     </div>
-    <div class="pack pop">
-      <h3>Plus</h3>
+    <div class="pack plus">
+      <span class="pack-badge">MOST POPULAR</span>
+      <h3>PLUS</h3>
       <div class="price">$9.99</div>
+      <div class="per">one-time</div>
       <div class="credits">150 credits</div>
-      <p>7 × 30-second videos (10 credits left over) — or 21 × 10-second videos. About $1.43 per 30-second video.</p>
-      <span class="tag">Most popular</span><br>
-      <button class="buy-btn" type="button" disabled>Buy — coming soon</button>
+      <p>7 &times; 30-second videos<br>About $1.43 per 30-second video</p>
+      <p class="incl">Everything in Starter</p>
+      <button class="buy-btn" type="button" disabled>Buy &mdash; coming soon</button>
     </div>
-    <div class="pack">
-      <h3>Ultra</h3>
+    <div class="pack ultra">
+      <span class="pack-badge">BEST VALUE</span>
+      <h3>ULTRA</h3>
       <div class="price">$19.99</div>
+      <div class="per">one-time</div>
       <div class="credits">300 credits</div>
-      <p>15 × 30-second videos — or 42 × 10-second videos. About $1.33 per 30-second video.</p>
-      <span class="tag">Best value</span><br>
-      <button class="buy-btn" type="button" disabled>Buy — coming soon</button>
+      <p>15 &times; 30-second videos<br>About $1.33 per 30-second video &mdash; lowest</p>
+      <p class="incl">Everything in Plus</p>
+      <button class="buy-btn" type="button" disabled>Buy &mdash; coming soon</button>
     </div>
   </div>
+  <p class="packs-note">One-time payment. No subscription, no monthly bill.</p>
   <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Paddle or Polar) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (first purchase only, within 7 days, if no credits used) (see <a href="terms.html" style="color:#ffd166;">Terms</a>). Bought credits stay in your balance until you use them.</p>
 </section>
 
@@ -1003,8 +1051,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
         <button type="button" id="modeSignUp" class="auth-toggle-btn">Sign up</button>
       </div>
       <button class="auth-google" id="authGoogle" type="button"><span class="auth-logo"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.654 32.657 29.223 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z"/><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571.001-.001.002-.001.003-.002l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z"/></svg></span>Continue with Google</button>
-      <button class="auth-social" type="button" disabled><span class="auth-logo"><svg width="18" height="18" viewBox="0 0 23 23"><rect width="10" height="10" x="1" y="1" fill="#f25022"/><rect width="10" height="10" x="12" y="1" fill="#7fba00"/><rect width="10" height="10" x="1" y="12" fill="#00a4ef"/><rect width="10" height="10" x="12" y="12" fill="#ffb900"/></svg></span>Continue with Microsoft — soon</button>
-      <div class="auth-or">or continue with email</div>
+            <div class="auth-or">or continue with email</div>
       <label class="auth-label" for="authEmail">Email</label>
       <input class="auth-input" id="authEmail" type="email" placeholder="you@example.com" autocomplete="email">
       <p class="auth-bonus">🎁 Sign up free — get 20 credits</p>
@@ -3569,6 +3616,34 @@ function closeTool() {
       var sec = document.getElementById("photo-editing");
       if (sec) sec.scrollIntoView();
     }
+  });
+})();
+</script>
+
+<script>
+/* ---------- sale tiles (built from ENGINES / IMAGE_TOOLS) ---------- */
+(function () {
+  var box = document.getElementById("saleTiles");
+  if (!box || typeof ENGINES === "undefined") return;
+  var tiles = [
+    { kind: "video", id: "seedance", badge: "TOP", tag: "The most advanced video model" },
+    { kind: "video", id: "kling", badge: "", tag: "Perfect motion with advanced video control" },
+    { kind: "video", id: "flow", badge: "", tag: "Precision video with sound control" },
+    { kind: "video", id: "vidu", badge: "", tag: "The most consistent characters" },
+    { kind: "image", id: "nanobanana", badge: "", tag: "Up to 4K images \u00b7 text in images" },
+    { kind: "image", id: "gpt26s", badge: "NEW", tag: "Exceptional quality, precise edits" }
+  ];
+  tiles.forEach(function (t) {
+    var list = t.kind === "video" ? ENGINES : (typeof IMAGE_TOOLS !== "undefined" ? IMAGE_TOOLS : []);
+    var found = null;
+    for (var i = 0; i < list.length; i++) { if (list[i].id === t.id) { found = list[i]; break; } }
+    if (!found) return;
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "sale-tile";
+    b.innerHTML = "<h3>" + found.name + (t.badge ? " <span class=\"sale-badge\">" + t.badge + "</span>" : "") + "</h3><p>" + t.tag + "</p>";
+    b.addEventListener("click", function () { if (typeof openDetail === "function") openDetail(t.kind, t.id); });
+    box.appendChild(b);
   });
 })();
 </script>
