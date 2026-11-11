@@ -477,7 +477,7 @@
   <h2>How it <span>works</span></h2>
   <p class="lead">Photo to 30-second video in 4 steps — free, no card.</p>
   <div class="steps-grid">
-    <div class="step-cell"><div class="n">1</div><h3>Upload your photo</h3><p>Add 1–2 photos. They stay in your browser.</p></div>
+    <div class="step-cell"><div class="n">1</div><h3>Upload your photo</h3><p>Add up to 30 photos. They stay in your browser.</p></div>
     <div class="step-cell"><div class="n">2</div><h3>Describe your scene</h3><p>Write the subject, action, camera and style. Be specific.</p></div>
     <div class="step-cell"><div class="n">3</div><h3>Pick a duration &amp; engine</h3><p>Pick up to 30 seconds and a free engine.</p></div>
     <div class="step-cell"><div class="n">4</div><h3>Generate &amp; join</h3><p>Open the engine, paste the prompts, generate, join.</p></div>
@@ -529,9 +529,9 @@
 
   <!-- STEP 1 : REFERENCE PHOTOS -->
   <div class="card">
-    <h2>Step 1 — Reference photos <span class="step">(1–2 photos)</span></h2>
-    <p class="sub">Upload the photo the video must match. You will upload it again on the engine's page.</p>
-    <label class="drop" for="photoInput">📷 Click to upload 1–2 reference photos (JPG / PNG / WebP)
+    <h2>Step 1 — Reference photos <span class="step">(up to 30 photos)</span></h2>
+    <p class="sub">Upload up to 30 reference photos — Photo 1 is the start frame. More photos = steadier character. You will upload them again on the engine's page.</p>
+    <label class="drop" for="photoInput">📷 Click to upload up to 30 reference photos (JPG / PNG / WebP)
       <input type="file" id="photoInput" accept="image/*" multiple>
     </label>
     <div class="thumbs" id="thumbs"></div>
@@ -810,21 +810,21 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 const ENGINES = [
-  { id: "wan22", name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
-  { id: "ltx23", name: "LTX-2.3", vendor: "Lightricks · open weights", url: "https://huggingface.co/spaces/Lightricks/LTX-2-3", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free official Hugging Face Space", note: "The only free engine here with synced audio. 10s per clip on the Space (the model itself supports 20s self-hosted)." },
-  { id: "hunyuan15", name: "HunyuanVideo 1.5", vendor: "Tencent · open source", url: "https://huggingface.co/spaces/multimodalart/Hunyuan-Video-1-5", maxSec: 10, i2v: true, res: "480p / 720p", audio: false, free: "Free Hugging Face Space", note: "Silent clips. Duration settings 5 / 8 / 10 seconds. Runs on a consumer GPU if self-hosted." },
-  { id: "cogvideox", name: "CogVideoX 1.5", vendor: "Zhipu AI · open source", url: "https://huggingface.co/spaces/zai-org/CogVideoX-5B-Space", maxSec: 10, i2v: true, res: "up to 1360×768", audio: false, free: "Free official Hugging Face Space", note: "Strong prompt adherence. 5–10s per clip. The 2B version runs on small GPUs." },
-  { id: "kling", name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "Free monthly credits (amount varies)", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
-  { id: "flow", name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
-  { id: "runway", name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
-  { id: "mochi", name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." },
-  { id: "seedance", name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
-  { id: "vidu", name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
-  { id: "hailuo", name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
-  { id: "wan3", name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
-  { id: "pixverse", name: "Pixverse V6", vendor: "AIsphere", url: "https://pixverse.ai", maxSec: 15, i2v: true, res: "540p", audio: true, free: "60 at signup + 30 free credits/day", note: "Up to 15-second clips with sound, 30 free credits every day." },
-  { id: "luma", name: "Luma Dream Machine", vendor: "Luma AI", url: "https://dream-machine.lumalabs.ai", maxSec: 10, i2v: true, res: "720p", audio: false, free: "Free tier — verify at signup", note: "Cinematic Ray models with keyframe control, free tier to verify at signup. Video only — no native audio." },
-  { id: "firefly", name: "Adobe Firefly (video)", vendor: "Adobe", url: "https://firefly.adobe.com", maxSec: 5, i2v: true, res: "1080p", audio: true, free: "Free daily generations", note: "Veo, Kling and Luma models in one place, trained on licensed data, free daily generations. Audio depends on the partner model." }
+  { id: "wan22", refs: 1, name: "Wan 2.2 I2V", vendor: "Alibaba · open source", url: "https://huggingface.co/spaces/Saravutw/WAN2.2_I2V_LIGHTNING_4-8step_custom", maxSec: 8, i2v: true, res: "720p", audio: false, free: "Free Hugging Face Space (shared GPU queue)", note: "Best free image-to-video quality. Queue can be slow at peak hours; no account needed." },
+  { id: "ltx23", refs: 1, name: "LTX-2.3", vendor: "Lightricks · open weights", url: "https://huggingface.co/spaces/Lightricks/LTX-2-3", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free official Hugging Face Space", note: "The only free engine here with synced audio. 10s per clip on the Space (the model itself supports 20s self-hosted)." },
+  { id: "hunyuan15", refs: 1, name: "HunyuanVideo 1.5", vendor: "Tencent · open source", url: "https://huggingface.co/spaces/multimodalart/Hunyuan-Video-1-5", maxSec: 10, i2v: true, res: "480p / 720p", audio: false, free: "Free Hugging Face Space", note: "Silent clips. Duration settings 5 / 8 / 10 seconds. Runs on a consumer GPU if self-hosted." },
+  { id: "cogvideox", refs: 1, name: "CogVideoX 1.5", vendor: "Zhipu AI · open source", url: "https://huggingface.co/spaces/zai-org/CogVideoX-5B-Space", maxSec: 10, i2v: true, res: "up to 1360×768", audio: false, free: "Free official Hugging Face Space", note: "Strong prompt adherence. 5–10s per clip. The 2B version runs on small GPUs." },
+  { id: "kling", refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "Free monthly credits (amount varies)", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
+  { id: "flow", refs: 3, name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
+  { id: "runway", refs: 3, name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
+  { id: "mochi", refs: 0, name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." },
+  { id: "seedance", refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
+  { id: "vidu", refs: 15, name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
+  { id: "hailuo", refs: 9, name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
+  { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
+  { id: "pixverse", refs: 1, name: "Pixverse V6", vendor: "AIsphere", url: "https://pixverse.ai", maxSec: 15, i2v: true, res: "540p", audio: true, free: "60 at signup + 30 free credits/day", note: "Up to 15-second clips with sound, 30 free credits every day." },
+  { id: "luma", refs: 2, name: "Luma Dream Machine", vendor: "Luma AI", url: "https://dream-machine.lumalabs.ai", maxSec: 10, i2v: true, res: "720p", audio: false, free: "Free tier — verify at signup", note: "Cinematic Ray models with keyframe control, free tier to verify at signup. Video only — no native audio." },
+  { id: "firefly", refs: 1, name: "Adobe Firefly (video)", vendor: "Adobe", url: "https://firefly.adobe.com", maxSec: 5, i2v: true, res: "1080p", audio: true, free: "Free daily generations", note: "Veo, Kling and Luma models in one place, trained on licensed data, free daily generations. Audio depends on the partner model." }
 ];
 /* Newest engines — shown with a NEW badge on their cards. */
 var NEW_ENGINE_IDS = ["kling", "seedance", "vidu", "wan3", "pixverse", "firefly"];
@@ -856,6 +856,7 @@ let selectedRatio = "16:9";
 let selectedQuality = null;
 let photos = [];
 let refVideo = null; /* reference video for the plan (name + preview URL) */
+const MAX_PHOTOS = 30; /* highest reference-photo limit across our engines (Seedance 2.5) */
 
 /* ---------- build error: visible on the page, not a popup (popups are
    auto-dismissed by some browsers, which made a missing photo look like
@@ -944,7 +945,7 @@ document.querySelectorAll("#durBtns button").forEach(function (b) {
 const input = document.getElementById("photoInput");
 const thumbs = document.getElementById("thumbs");
 input.addEventListener("change", function () {
-  const files = Array.prototype.slice.call(input.files).slice(0, 2 - photos.length);
+  const files = Array.prototype.slice.call(input.files).slice(0, MAX_PHOTOS - photos.length);
   files.forEach(function (f) {
     if (!f.type.startsWith("image/")) return;
     const reader = new FileReader();
@@ -1043,8 +1044,10 @@ function buildPlan() {
     if (sound && engine.audio) prompt += " Sound: " + sound + ".";
     if (typeof refVideo !== "undefined" && refVideo) prompt += " Motion reference: " + refVideo.name + " (follow the reference video for motion).";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
+    else if (photos.length > 1) prompt += " Match the reference photos exactly — Photo 1 is the character's face; use every photo for the character, clothes and setting.";
     else if (photos.length > 0) prompt += " Match the reference photo exactly — same face, same clothes, same setting.";
     else if (typeof refVideo !== "undefined" && refVideo) prompt += " Follow the reference video for motion and style.";
+    prompt += " CHARACTER LOCK: The character never changes — same face, same hair, same clothes, same build in every frame. Use the reference photos for the character in every segment.";
     prompt += " FACE LOCK: Faces must match the reference photos exactly — not even slightly.";
     segs.push({ start: start, end: end, prompt: prompt });
   }
@@ -1053,7 +1056,7 @@ function buildPlan() {
     "<b>Engine:</b> " + engine.name + " (" + engine.vendor + ") — " + engine.free + " (on the engine's own site)<br>" +
     "<b>Duration:</b> " + selectedDur + " seconds in <b>" + segCount + " segment" + (segCount > 1 ? "s" : "") + "</b> " +
     "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
-    "<b>Reference photos:</b> " + photos.length + " uploaded (used as the start frame on the engine's page)<br>" +
+    "<b>Reference photos:</b> " + photos.length + " uploaded" + (engine.refs ? " — " + engine.name + " takes up to " + engine.refs + (engine.refs === 1 ? " photo" : " photos") + " (use Photo 1 as the start frame)" : " — this engine takes no reference photo") + "<br>" +
     ((typeof refVideo !== "undefined" && refVideo) ? "<b>Reference video:</b> " + escHtml(refVideo.name) + " (upload the same video on the engine's page as motion reference)<br>" : "") +
     "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-");
 
@@ -1360,7 +1363,7 @@ function refreshDbRefs() {
   var pb = document.getElementById("dPhotoBox");
   var hasPhoto = false;
   try { hasPhoto = (typeof photos !== "undefined" && photos.length > 0); } catch (e) {}
-  if (pn) pn.textContent = hasPhoto ? ("\u2713 " + (photos.length === 1 ? photos[0].name : photos.length + " photos")) : "Add a photo";
+  if (pn) pn.textContent = hasPhoto ? ("\u2713 " + (photos.length === 1 ? photos[0].name : photos.length + " photos") + ((typeof MAX_PHOTOS !== "undefined" && photos.length >= MAX_PHOTOS) ? " (max)" : "")) : "Add a photo";
   if (pb) pb.classList.toggle("has", hasPhoto);
   var vn = document.getElementById("dVideoName");
   var vb = document.getElementById("dVideoBox");
@@ -2660,9 +2663,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     charsCache.forEach(function (x) { if (x.id === id) c = x; });
     if (!c) return;
     if (typeof photos === "undefined" || typeof renderThumbs !== "function") return;
-    if (photos.length >= 2) {
+    if (photos.length >= MAX_PHOTOS) {
       var m = document.getElementById("charMsg");
-      if (m) m.textContent = "Remove a photo from the tool first (max 2 reference photos).";
+      if (m) m.textContent = "Remove a photo from the tool first (max 30 reference photos).";
       return;
     }
     photos.push({ name: c.name, dataUrl: c.photoDataUrl });
