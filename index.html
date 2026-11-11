@@ -27,6 +27,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body { background: #07070d; color: #f2f2f7; font-family: 'Inter', -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; min-height: 100vh; }
+  [hidden] { display: none !important; }
   a { text-decoration: none; }
 
   /* ---------- nav ---------- */
@@ -3363,9 +3364,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
 <script>
 /* ---------- tool overlay: the generator is its own view, in place ---------- */
+var toolReturnY = 0;
 function openTool() {
   var o = document.getElementById("toolOverlay");
   if (!o) return;
+  toolReturnY = window.scrollY || 0;
   o.hidden = false;
   document.body.style.overflow = "hidden";
   if (typeof refreshOptRows === "function") refreshOptRows();
@@ -3375,6 +3378,7 @@ function closeTool() {
   if (!o) return;
   o.hidden = true;
   document.body.style.overflow = "";
+  window.scrollTo(0, toolReturnY);
 }
 (function () {
   var closeBtn = document.getElementById("toolClose");
