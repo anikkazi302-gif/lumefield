@@ -42,15 +42,22 @@
   .nav-drop { position: relative; }
   .nav-drop-btn { background: none; border: none; color: #b9b9c9; font-size: 14px; font-family: inherit; cursor: pointer; padding: 0; }
   .nav-drop-btn:hover, .nav-drop.open .nav-drop-btn { color: #fff; }
-  .nav-menu { position: absolute; top: 100%; left: 0; z-index: 80; width: 340px; max-height: min(640px, calc(100vh - 100px)); overflow-y: auto; background: #14141f; border: 1px solid #33334a; border-radius: 14px; padding: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.6); }
+  .nav-menu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 80; width: 340px; max-height: 420px; overflow-y: auto; background: #14141f; border: 1px solid #33334a; border-radius: 14px; padding: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.6); }
+  .nav-menu::before { content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 10px; }
   .nav-menu-head { color: #8a8a9e; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 6px 10px 4px; }
   .nav-menu-item { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none; color: #fff; font-size: 14px; font-weight: 600; text-align: left; padding: 9px 10px; border-radius: 10px; cursor: pointer; font-family: inherit; }
   .nav-menu-item:hover { background: #1c1c2c; }
   .nav-menu-item .opt-sub { color: #8a8a9e; font-size: 12px; margin-left: auto; white-space: nowrap; max-width: 130px; overflow: hidden; text-overflow: ellipsis; }
-  .nav-menu-name { flex: 1 1 auto; min-width: 0; white-space: normal; line-height: 1.25; }
+  .nav-menu-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .nav-menu-cta { display: block; width: 100%; background: #c8f542; color: #111; border: none; border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
   .nav-icon { background: #1c1c2c; color: #fff; border: 1px solid #33334a; border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; }
   .nav-icon:hover { border-color: #c8f542; }
+  .explore-tags { max-width: 1100px; margin: 0 auto; padding: 56px 18px 40px; text-align: center; }
+  .explore-tags h2 { font-size: 34px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; margin: 0 0 22px; }
+  .explore-tags h2 span { color: #c8f542; }
+  .tags-cloud { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .tag-pill { background: #1c1c2c; color: #e8e8f0; border: 1px solid #33334a; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+  .tag-pill:hover { border-color: #c8f542; color: #fff; }
   .site-footer { background: #c8f542; color: #111; padding: 48px 28px 28px; }
   .site-footer h2 { font-size: 34px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; margin: 0 0 28px; color: #111; }
   .foot-cols { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; }
@@ -862,6 +869,11 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 </section>
 
 
+
+<section class="explore-tags" id="explore-tags">
+  <h2>Explore more <span>AI features</span></h2>
+  <div class="tags-cloud" id="tagsCloud"></div>
+</section>
 
 <footer class="site-footer">
   <h2>Free AI Video Studio</h2>
@@ -3506,6 +3518,41 @@ function closeTool() {
       var id = act === "daily" ? "profileDailyClaim" : "profileInviteCopy";
       if (w && !w.hidden) { var el = document.getElementById(id); if (el) el.click(); }
       else { var si = document.getElementById("signInBtn"); if (si) si.click(); }
+    }
+  });
+})();
+</script>
+
+
+<script>
+/* ---------- explore-more tags cloud ---------- */
+(function () {
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  var cloud = document.getElementById("tagsCloud");
+  if (!cloud) return;
+  var h = "";
+  try {
+    if (typeof ENGINES !== "undefined") ENGINES.forEach(function (e) { h += '<button class="tag-pill" type="button" data-kind="video" data-id="' + e.id + '">' + esc(e.name) + '</button>'; });
+    if (typeof IMAGE_TOOLS !== "undefined") IMAGE_TOOLS.forEach(function (t) { h += '<button class="tag-pill" type="button" data-kind="image" data-id="' + t.id + '">' + esc(t.name) + '</button>'; });
+  } catch (e) {}
+  ["Camera Controls", "Multi Reference", "Character Lock", "30-second video", "Free video"].forEach(function (f) { h += '<button class="tag-pill" type="button" data-feature="tool">' + f + '</button>'; });
+  ["Upscale", "Edit Image"].forEach(function (f) { h += '<button class="tag-pill" type="button" data-feature="editors">' + f + '</button>'; });
+  cloud.innerHTML = h;
+  cloud.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button");
+    if (!b) return;
+    var kind = b.getAttribute("data-kind");
+    if (kind === "video") {
+      var el = document.querySelector('.engine[data-id="' + b.getAttribute("data-id") + '"]');
+      if (el) el.click();
+      if (typeof openTool === "function") openTool();
+    } else if (kind === "image") {
+      if (typeof openDetail === "function") openDetail("image", b.getAttribute("data-id"));
+    } else if (b.getAttribute("data-feature") === "tool") {
+      if (typeof openTool === "function") openTool();
+    } else if (b.getAttribute("data-feature") === "editors") {
+      var sec = document.getElementById("photo-editing");
+      if (sec) sec.scrollIntoView();
     }
   });
 })();
