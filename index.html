@@ -54,6 +54,26 @@
   .profile-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 110px; }
   .profile-credits { color: #ffd166; white-space: nowrap; }
   .profile-menu { position: absolute; top: calc(100% + 10px); right: 0; min-width: 270px; background: #12121d; border: 1px solid #26263a; border-radius: 16px; padding: 14px; box-shadow: 0 24px 60px rgba(0,0,0,.6); z-index: 60; }
+  .profile-menu::before { content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 10px; }
+  .profile-view-wrap { position: fixed; inset: 0; background: rgba(0,0,0,.78); display: flex; align-items: flex-start; justify-content: center; z-index: 100; padding: 24px 12px; overflow-y: auto; }
+  .profile-view-wrap[hidden] { display: none; }
+  .profile-view { position: relative; width: 100%; max-width: 480px; background: #12121d; border: 1px solid #26263a; border-radius: 20px; padding: 28px 22px 22px; margin-top: 4vh; }
+  .profile-view-close { position: absolute; top: 12px; right: 12px; background: #1c1c2c; color: #fff; border: 1px solid #33334a; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 14px; }
+  .profile-view-head { text-align: center; }
+  .profile-view-avatar { width: 72px; height: 72px; border-radius: 50%; background: #c8f542; color: #111; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; margin: 0 auto 12px; }
+  .profile-view-name { font-size: 20px; font-weight: 800; color: #fff; }
+  .profile-view-email { font-size: 14px; color: #a9a9bd; margin-top: 4px; word-break: break-all; }
+  .profile-view-since { font-size: 12px; color: #888; margin-top: 4px; }
+  .profile-view-credits { margin-top: 16px; background: #1a1a28; border: 1px solid #c8f542; border-radius: 12px; padding: 12px 14px; font-size: 14px; font-weight: 700; color: #fff; text-align: center; }
+  .profile-view-stats { display: flex; gap: 10px; margin-top: 12px; }
+  .profile-view-stat { flex: 1; background: #1a1a28; border: 1px solid #26263a; border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .pv-num { font-size: 18px; font-weight: 800; color: #c8f542; }
+  .pv-lab { font-size: 11px; color: #a9a9bd; margin-top: 2px; }
+  .profile-view-btns { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .profile-view-btn { display: block; width: 100%; background: #1a1a28; border: 1px solid #33334a; color: #fff; border-radius: 12px; padding: 12px 14px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; text-align: left; text-decoration: none; }
+  .profile-view-btn:hover { border-color: #c8f542; }
+  .profile-view-upgrade { background: #c8f542; color: #111; text-align: center; }
+  .profile-view-signout { color: #ff6b6b; }
   .profile-menu[hidden] { display: none; }
   .profile-menu-email { font-size: 13px; color: #fff; font-weight: 700; word-break: break-all; }
   .profile-menu-credits { margin-top: 6px; font-size: 14px; color: #ffd166; font-weight: 700; }
@@ -489,7 +509,7 @@
   <a class="logo" href="#" aria-label="LumeField — home"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></a>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#buy-credits">Buy credits</a><a href="#guides">Guides</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
@@ -869,6 +889,32 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<div class="profile-view-wrap" id="profileViewWrap" hidden>
+  <div class="profile-view" role="dialog" aria-label="Profile">
+    <button class="profile-view-close" id="profileViewClose" type="button">✕</button>
+    <div class="profile-view-head">
+      <div class="profile-view-avatar" id="profileViewAvatar">?</div>
+      <div class="profile-view-name" id="profileViewName"></div>
+      <div class="profile-view-email" id="profileViewEmail"></div>
+      <div class="profile-view-since" id="profileViewSince"></div>
+    </div>
+    <div class="profile-view-credits" id="profileViewCredits"></div>
+    <div class="profile-view-stats">
+      <div class="profile-view-stat"><div class="pv-num" id="profileViewFriends">0</div><div class="pv-lab">Friends joined</div></div>
+      <div class="profile-view-stat"><div class="pv-num" id="profileViewDaily">4/day</div><div class="pv-lab">Daily free credits</div></div>
+      <div class="profile-view-stat"><div class="pv-num" id="profileViewPlan">Free</div><div class="pv-lab">Plan</div></div>
+    </div>
+    <div class="profile-view-btns">
+      <button class="profile-view-btn" id="profileViewMyVideos" type="button">🎬 My videos</button>
+      <button class="profile-view-btn" id="profileViewMyCharacters" type="button">👤 My characters</button>
+      <button class="profile-view-btn" id="profileViewInvite" type="button">🔗 Copy invite link</button>
+      <button class="profile-view-btn" id="profileViewDaily" type="button">🎁 Daily free credits</button>
+      <a class="profile-view-btn profile-view-upgrade" id="profileViewUpgrade" href="#buy-credits">⬆️ Upgrade — Buy credits</a>
+      <button class="profile-view-btn profile-view-signout" id="profileViewSignOut" type="button">Sign out</button>
+    </div>
+  </div>
+</div>
 <script>
 const ENGINES = [
   { id: "seedance", refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
@@ -2098,13 +2144,66 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (typeof refreshDetailGen === "function") { try { if (typeof detailModal !== "undefined" && detailModal && !detailModal.hidden) refreshDetailGen(); } catch (e) {} }
     if (window.lfUpdateResendButtons) window.lfUpdateResendButtons();
   }
+  /* ----- profile page (Higgsfield-style): hover on the avatar opens the
+     dropdown; clicking the avatar opens the profile page. Touch devices
+     have no hover, so a tap toggles the dropdown like before. ----- */
+  var profileViewWrap = null;
+  function openProfileView() {
+    if (!profileViewWrap) profileViewWrap = document.getElementById("profileViewWrap");
+    if (!profileViewWrap || !currentUser) return;
+    var email = currentUser.email || "";
+    var name = email.split("@")[0] || "Signed in";
+    var av = document.getElementById("profileViewAvatar");
+    if (av) av.textContent = (name.charAt(0) || "?").toUpperCase();
+    var nm = document.getElementById("profileViewName");
+    if (nm) nm.textContent = name;
+    var em = document.getElementById("profileViewEmail");
+    if (em) em.textContent = email;
+    var sc = document.getElementById("profileViewSince");
+    if (sc) {
+      var ct = currentUser.metadata && currentUser.metadata.creationTime;
+      sc.textContent = ct ? "Member since " + new Date(ct).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : "";
+    }
+    var cr = document.getElementById("profileViewCredits");
+    if (cr) cr.textContent = "💎 " + profileBalanceText();
+    var fr = document.getElementById("profileViewFriends");
+    var rs = document.getElementById("profileReferralStats");
+    if (fr) fr.textContent = rs ? rs.textContent.split("·")[0].trim() : "0";
+    var dl = document.getElementById("profileViewDaily");
+    var ds = document.getElementById("profileDailyClaimState");
+    if (dl) dl.textContent = ds ? ds.textContent : "4/day";
+    var pl = document.getElementById("profileViewPlan");
+    if (pl) pl.textContent = isOwner() ? "Owner" : "Free";
+    if (profileMenu) profileMenu.hidden = true;
+    profileViewWrap.hidden = false;
+  }
+  function closeProfileView() {
+    if (!profileViewWrap) profileViewWrap = document.getElementById("profileViewWrap");
+    if (profileViewWrap) profileViewWrap.hidden = true;
+  }
+  function clickMenuItem(id) { var el = document.getElementById(id); if (el) el.click(); }
   if (profileChip && profileMenu) {
     profileChip.addEventListener("click", function (e) {
       e.stopPropagation();
+      if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
+        openProfileView();
+        return;
+      }
       var open = profileMenu.hidden;
       profileMenu.hidden = !open;
       profileChip.setAttribute("aria-expanded", String(open));
     });
+    /* Hover opens the dropdown (desktop/laptop). The menu's ::before bridge
+       covers the 10px gap so the pointer never leaves the wrap on the way
+       down to the menu. */
+    if (window.matchMedia && window.matchMedia("(hover: hover)").matches) {
+      profileWrap.addEventListener("mouseenter", function () {
+        if (currentUser && profileMenu) { profileMenu.hidden = false; profileChip.setAttribute("aria-expanded", "true"); }
+      });
+      profileWrap.addEventListener("mouseleave", function () {
+        if (profileMenu) { profileMenu.hidden = true; profileChip.setAttribute("aria-expanded", "false"); }
+      });
+    }
     document.addEventListener("click", function (e) {
       if (!profileMenu.hidden && profileWrap && !profileWrap.contains(e.target)) {
         profileMenu.hidden = true;
@@ -2118,6 +2217,28 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       }
     });
   }
+  /* ----- profile view wiring ----- */
+  (function () {
+    var closeBtn = document.getElementById("profileViewClose");
+    if (closeBtn) closeBtn.addEventListener("click", closeProfileView);
+    var wrap = document.getElementById("profileViewWrap");
+    if (wrap) wrap.addEventListener("click", function (e) { if (e.target === wrap) closeProfileView(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeProfileView(); });
+    var vp = document.getElementById("profileViewProfileBtn");
+    if (vp) vp.addEventListener("click", function () { openProfileView(); });
+    var mv = document.getElementById("profileViewMyVideos");
+    if (mv) mv.addEventListener("click", function () { closeProfileView(); clickMenuItem("profileMyVideos"); });
+    var mc = document.getElementById("profileViewMyCharacters");
+    if (mc) mc.addEventListener("click", function () { closeProfileView(); clickMenuItem("profileMyCharacters"); });
+    var iv = document.getElementById("profileViewInvite");
+    if (iv) iv.addEventListener("click", function () { clickMenuItem("profileInviteCopy"); });
+    var dy = document.getElementById("profileViewDaily");
+    if (dy) dy.addEventListener("click", function () { clickMenuItem("profileDailyClaim"); });
+    var so = document.getElementById("profileViewSignOut");
+    if (so) so.addEventListener("click", function () { closeProfileView(); clickMenuItem("profileSignOut"); });
+    var up = document.getElementById("profileViewUpgrade");
+    if (up) up.addEventListener("click", function () { closeProfileView(); });
+  })();
   /* ----- daily free refill + invite link ----- */
   var dailyClaimBtn = document.getElementById("dailyClaimBtn");
   var profileDailyClaim = document.getElementById("profileDailyClaim");
