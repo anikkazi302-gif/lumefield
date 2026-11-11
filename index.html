@@ -38,11 +38,25 @@
   .logo-name span { background: linear-gradient(90deg, #ffd166, #ff5e8a, #7c5cff); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .nav-links { display: flex; gap: 22px; font-size: 14px; }
   .nav-links a { color: #b9b9c9; }
+  .nav-links { align-items: center; }
+  .nav-drop { position: relative; }
+  .nav-drop-btn { background: none; border: none; color: #b9b9c9; font-size: 14px; font-family: inherit; cursor: pointer; padding: 0; }
+  .nav-drop-btn:hover, .nav-drop.open .nav-drop-btn { color: #fff; }
+  .nav-menu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 80; width: 300px; max-height: 420px; overflow-y: auto; background: #14141f; border: 1px solid #33334a; border-radius: 14px; padding: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.6); }
+  .nav-menu::before { content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 10px; }
+  .nav-menu-head { color: #8a8a9e; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; padding: 6px 10px 4px; }
+  .nav-menu-item { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: none; color: #fff; font-size: 14px; font-weight: 600; text-align: left; padding: 9px 10px; border-radius: 10px; cursor: pointer; font-family: inherit; }
+  .nav-menu-item:hover { background: #1c1c2c; }
+  .nav-menu-item .opt-sub { color: #8a8a9e; font-size: 12px; margin-left: auto; white-space: nowrap; }
+  .nav-menu-cta { display: block; width: 100%; background: #c8f542; color: #111; border: none; border-radius: 10px; padding: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
+  .nav-icon { background: #1c1c2c; color: #fff; border: 1px solid #33334a; border-radius: 50%; width: 36px; height: 36px; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; font-family: inherit; }
+  .nav-icon:hover { border-color: #c8f542; }
+  .nav-search-menu { position: absolute; top: calc(100% + 10px); right: 0; z-index: 80; width: 320px; max-width: 86vw; background: #14141f; border: 1px solid #33334a; border-radius: 14px; padding: 10px; box-shadow: 0 18px 40px rgba(0,0,0,.6); }
   .nav-links a:hover { color: #fff; }
   .nav-cta { background: #1c1c2c; color: #fff; border: 1px solid #33334a; border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 14px; }
   .nav-cta:hover { background: #2a2a3a; }
   /* ---------- sign-in nav + auth modal (Team 4) ---------- */
-  .nav-actions { display: flex; gap: 10px; align-items: center; }
+  .nav-actions { display: flex; gap: 10px; align-items: center; position: relative; }
   .nav-signin { background: #c8f542; color: #111; border: none; border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; }
   .nav-signin:hover { border-color: #fff; }
   .nav-user { font-size: 13px; color: #c9c9d8; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -568,8 +582,8 @@
 <nav class="nav">
   <a class="logo" href="#" aria-label="LumeField — home"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></a>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-  <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#buy-credits">Buy credits</a><a href="#guides">Guides</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-links"><a href="#models">Explore</a><div class="nav-drop" id="navImageDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Image ▾</button><div class="nav-menu" id="navImageMenu" hidden><div class="nav-menu-head">Image models</div><div id="navImageList"></div></div></div><div class="nav-drop" id="navVideoDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Video ▾</button><div class="nav-menu" id="navVideoMenu" hidden><button class="nav-menu-cta" id="navCreateVideo" type="button">✦ Create Video</button><div class="nav-menu-head">Video models</div><div id="navVideoList"></div></div></div><a href="#buy-credits">Pricing</a><a href="#guides">Guides</a></div>
+  <div class="nav-actions"><button class="nav-icon" id="navSearchBtn" type="button" aria-label="Search models">🔍</button><button class="nav-icon" id="navAssetsBtn" type="button" aria-label="My videos">🗂️</button><a class="nav-icon" href="#buy-credits" aria-label="Special offers">🎁</a><div class="nav-menu nav-search-menu" id="navSearchMenu" hidden><input class="opt-search" id="navSearchInput" type="text" placeholder="Search models..." autocomplete="off"><div id="navSearchList"></div></div><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero" aria-label="Featured video models">
@@ -3402,6 +3416,92 @@ function closeTool() {
     pt.textContent = off ? "Off" : "On";
     pt.setAttribute("aria-pressed", off ? "false" : "true");
   });
+})();
+</script>
+
+
+<script>
+/* ---------- dense nav: Image/Video menus, search, assets ---------- */
+(function () {
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function closeAllNavMenus() {
+    document.querySelectorAll(".nav-menu").forEach(function (m) { m.hidden = true; });
+    document.querySelectorAll(".nav-drop").forEach(function (d) { d.classList.remove("open"); });
+  }
+  function menuItem(kind, id, name, sub) {
+    return '<button class="nav-menu-item" type="button" data-kind="' + kind + '" data-id="' + id + '">' + esc(name) + '<span class="opt-sub">' + esc(sub) + '</span></button>';
+  }
+  try {
+    var vl = document.getElementById("navVideoList");
+    if (vl && typeof ENGINES !== "undefined") {
+      var vh = "";
+      ENGINES.forEach(function (e) { vh += menuItem("video", e.id, e.name, e.res + " · " + e.maxSec + "s"); });
+      vl.innerHTML = vh;
+    }
+    var il = document.getElementById("navImageList");
+    if (il && typeof IMAGE_TOOLS !== "undefined") {
+      var ih = "";
+      IMAGE_TOOLS.forEach(function (t) { ih += menuItem("image", t.id, t.name, t.spec || ""); });
+      il.innerHTML = ih;
+    }
+  } catch (e) {}
+  document.querySelectorAll(".nav-menu").forEach(function (m) {
+    m.addEventListener("click", function (ev) {
+      var b = ev.target.closest("[data-kind]");
+      if (!b) return;
+      closeAllNavMenus();
+      var links = document.querySelector(".nav-links");
+      if (links) links.classList.remove("open");
+      if (typeof openDetail === "function") openDetail(b.getAttribute("data-kind"), b.getAttribute("data-id"));
+    });
+  });
+  var cv = document.getElementById("navCreateVideo");
+  if (cv) cv.addEventListener("click", function () { closeAllNavMenus(); if (typeof openTool === "function") openTool(); });
+  document.querySelectorAll(".nav-drop").forEach(function (drop) {
+    var btn = drop.querySelector(".nav-drop-btn"), menu = drop.querySelector(".nav-menu");
+    if (!btn || !menu) return;
+    if (window.matchMedia("(hover: hover)").matches) {
+      drop.addEventListener("mouseenter", function () { closeAllNavMenus(); menu.hidden = false; drop.classList.add("open"); btn.setAttribute("aria-expanded", "true"); });
+      drop.addEventListener("mouseleave", function () { menu.hidden = true; drop.classList.remove("open"); btn.setAttribute("aria-expanded", "false"); });
+    }
+    btn.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      var was = menu.hidden;
+      closeAllNavMenus();
+      if (was) { menu.hidden = false; drop.classList.add("open"); btn.setAttribute("aria-expanded", "true"); }
+    });
+  });
+  var sBtn = document.getElementById("navSearchBtn"), sMenu = document.getElementById("navSearchMenu"),
+      sInput = document.getElementById("navSearchInput"), sList = document.getElementById("navSearchList");
+  function renderSearch() {
+    if (!sList) return;
+    var q = (sInput ? sInput.value : "").trim().toLowerCase();
+    var h = "";
+    try {
+      if (typeof ENGINES !== "undefined") ENGINES.forEach(function (e) { if (!q || e.name.toLowerCase().indexOf(q) !== -1) h += menuItem("video", e.id, e.name, e.res + " · " + e.maxSec + "s"); });
+      if (typeof IMAGE_TOOLS !== "undefined") IMAGE_TOOLS.forEach(function (t) { if (!q || t.name.toLowerCase().indexOf(q) !== -1) h += menuItem("image", t.id, t.name, t.spec || ""); });
+    } catch (e) {}
+    sList.innerHTML = h || "<div style='padding:10px 12px;color:#8a8a9e;font-size:13px;'>No models found.</div>";
+  }
+  if (sBtn && sMenu) {
+    sBtn.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      var was = sMenu.hidden;
+      closeAllNavMenus();
+      if (was) { sMenu.hidden = false; renderSearch(); if (sInput) sInput.focus(); }
+    });
+    if (sInput) sInput.addEventListener("input", renderSearch);
+  }
+  var ab = document.getElementById("navAssetsBtn");
+  if (ab) ab.addEventListener("click", function () {
+    var w = document.getElementById("profileWrap");
+    if (w && !w.hidden) { var mv = document.getElementById("profileMyVideos"); if (mv) mv.click(); }
+    else { var si = document.getElementById("signInBtn"); if (si) si.click(); }
+  });
+  document.addEventListener("click", function (ev) {
+    if (!ev.target.closest(".nav-drop") && !ev.target.closest("#navSearchBtn") && !ev.target.closest(".nav-search-menu")) closeAllNavMenus();
+  });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") closeAllNavMenus(); });
 })();
 </script>
 
