@@ -1448,7 +1448,18 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   if (resendModalBtn) resendModalBtn.addEventListener("click", function () { window.lfResendVerification(); });
   if (resendMenuBtn) resendMenuBtn.addEventListener("click", function () { window.lfResendVerification(); });
   if (lfAuth) lfAuth.onAuthStateChanged(renderUser);
-  else renderUser(null);
+  else {
+    renderUser(null);
+    /* Firebase may not be ready yet when this script runs: keep trying
+       to attach the auth listener so a restored sign-in still shows the
+       profile chip after reload. */
+    var lfTries = 0;
+    var lfTimer = setInterval(function () {
+      lfTries++;
+      if (typeof lfAuth !== "undefined" && lfAuth) { clearInterval(lfTimer); lfAuth.onAuthStateChanged(renderUser); }
+      else if (lfTries >= 40) { clearInterval(lfTimer); }
+    }, 500);
+  }
   if (profileSignOut) profileSignOut.addEventListener("click", function () {
     if (lfAuth) lfAuth.signOut();
     /* Hide the chip + menu right now — do not wait for the async
@@ -1641,6 +1652,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (profileMenu) profileMenu.hidden = true;
       return;
     }
+    /* Signed in: always unhide the chip here too — renderUser() is the
+       other place that shows it, and on a reload it can miss the auth
+       restore, leaving the header with neither chip nor Sign in button. */
+    profileWrap.hidden = false;
     var email = currentUser.email || "";
     var name = email.split("@")[0] || "Signed in";
     if (profileAvatar) profileAvatar.textContent = (name.charAt(0) || "?").toUpperCase();
