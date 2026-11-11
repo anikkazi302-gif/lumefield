@@ -168,6 +168,8 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Count cap (20 per user) is enforced in the site code; these rules bound
+    // each document's size instead. A server-side count needs wallet counters.
     match /characters/{charId} {
       // Create: only your own verified account, exact fields, sane sizes,
       // photo must be a JPEG/PNG/WebP data URL (downscaled by the site).
