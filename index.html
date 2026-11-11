@@ -218,7 +218,21 @@
   .step-cell p { margin-top: 6px; font-size: 13px; color: #a9a9bd; line-height: 1.55; }
 
   /* ---------- tool ---------- */
-  .tool-wrap { max-width: 920px; margin: 0 auto; padding: 0 18px 60px; }
+  .tool-wrap { max-width: 1180px; margin: 0 auto; padding: 0 18px 60px; }
+  .tool-layout { display: grid; grid-template-columns: 360px 1fr; gap: 18px; align-items: start; }
+  .tool-panel { background: #10101a; border: 1px solid #232336; border-radius: 16px; padding: 18px; position: sticky; top: 86px; }
+  .tool-panel .card { background: transparent; border: none; padding: 0; margin: 0 0 4px; }
+  .tool-panel .card h2 { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: #a9a9bd; margin: 18px 0 8px; }
+  .tool-panel .card:first-child h2 { margin-top: 0; }
+  .tool-panel .card h2 .step { color: #77778c; font-size: 12px; text-transform: none; letter-spacing: 0; }
+  .tool-panel .card .sub { font-size: 13px; }
+  .tool-panel .fields-grid { grid-template-columns: 1fr; }
+  .tool-panel .card label { font-size: 13px; }
+  .tool-main .tool-how { background: #10101a; border: 1px solid #232336; border-radius: 16px; padding: 18px 20px; margin: 16px 0; }
+  .tool-main .tool-how h3 { font-size: 15px; color: #fff; margin-bottom: 10px; }
+  .tool-main .tool-how ol { margin: 0; padding-left: 20px; color: #a9a9bd; font-size: 14px; line-height: 1.9; }
+  .tool-main .tool-how ol b { color: #c8f542; }
+  @media (max-width: 900px) { .tool-layout { grid-template-columns: 1fr; } .tool-panel { position: static; } }
   .tool-head { padding: 8px 0 22px; }
   .honest { background: #12121d; border: 1px solid #ffd166; border-radius: 16px; padding: 16px 18px; margin: 18px 0; font-size: .95rem; line-height: 1.6; color: #e5e5ef; }
   .honest b { color: #ffd166; }
@@ -612,9 +626,11 @@
     <b>Honest note:</b> This page does <b>not</b> render video — it plans your 30-second video and writes the prompts. A free engine renders it. Most engines make <b>5–10 seconds per clip</b>, so this tool chains segments that fit the engine's clip limit. First video needs no account; sign in (free) for <b>20 credits</b> after that.
   </div>
 
+  <div class="tool-layout">
+  <div class="tool-panel">
   <!-- STEP 1 : REFERENCE PHOTOS -->
   <div class="card">
-    <h2>Step 1 — References <span class="step">(up to 30 photos + 1 video)</span></h2>
+    <h2>References <span class="step">(up to 30 photos + 1 video)</span></h2>
     <p class="sub">Upload up to 30 reference photos — Photo 1 is the start frame. More photos = steadier character. You will upload them again on the engine's page.</p>
     <label class="drop" for="photoInput">📷 Click to upload up to 30 reference photos (JPG / PNG / WebP)
       <input type="file" id="photoInput" accept="image/*" multiple>
@@ -630,7 +646,7 @@
 
   <!-- STEP 2 : SCENE -->
   <div class="card">
-    <h2>Step 2 — Your scene</h2>
+    <h2>Prompt</h2>
     <p class="sub">Describe what happens — be specific.</p>
     <div class="fields-grid">
       <div class="field-box">
@@ -686,11 +702,18 @@
 
   <!-- STEP 3 : DURATION + ENGINE -->
   <div class="card" id="step3">
-    <h2>Step 3 — Resolution, ratio, duration &amp; engine</h2>
-    <p class="sub">Pick a resolution and ratio, then a length and an engine. Every engine was verified free.</p>
-    <label>Resolution</label>
-    <select id="qualitySel" aria-label="Resolution"></select>
-    <label>Ratio</label>
+    <h2>Options</h2>
+    <p class="sub">Pick a model, length, ratio and quality. Every engine was verified free.</p>
+    <label>Model</label>
+    <div class="engines" id="engines"></div>
+    <label>Duration</label>
+    <div class="seg-btns" id="durBtns">
+      <button data-dur="5">5 seconds</button>
+      <button data-dur="10">10 seconds</button>
+      <button data-dur="20">20 seconds</button>
+      <button data-dur="30" class="active">30 seconds</button>
+    </div>
+    <label>Aspect Ratio</label>
     <div class="seg-btns" id="ratioBtns">
       <button data-ratio="16:9" class="active">16:9</button>
       <button data-ratio="9:16">9:16</button>
@@ -701,22 +724,25 @@
       <button data-ratio="4:5">4:5</button>
       <button data-ratio="3:2">3:2</button>
     </div>
-    <label>Duration</label>
-    <div class="seg-btns" id="durBtns">
-      <button data-dur="5">5 seconds</button>
-      <button data-dur="10">10 seconds</button>
-      <button data-dur="20">20 seconds</button>
-      <button data-dur="30" class="active">30 seconds</button>
-    </div>
-    <label>Engine (free — pick one)</label>
-    <div class="engines" id="engines"></div>
+    <label>Quality</label>
+    <select id="qualitySel" aria-label="Resolution"></select>
     <div class="warn" id="noI2vWarn">⚠️ <b id="noI2vName"></b> does <b>not</b> take a reference photo — it is
     text-to-video only. Your photo will not be used there. Pick any photo engine (every engine except Mochi 1 takes a reference photo) if the face must match your photo.</div>
   </div>
 
-  <p id="buildCost" style="text-align:center;color:#ffd166;font-size:14px;margin:14px 0 0;"></p>
-  <button class="big-btn" id="buildBtn">🎬 Build my video plan</button>
+  <p id="buildCost" style="text-align:left;color:#c8f542;font-size:14px;font-weight:700;margin:14px 0 0;"></p>
+  <button class="big-btn" id="buildBtn">✦ Build my video plan</button>
   <div class="warn" id="buildErr" role="alert"></div>
+  </div>
+  <div class="tool-main">
+  <div class="tool-how">
+    <h3>Make videos in one click</h3>
+    <ol>
+      <li><b>01 — Add photo.</b> Upload up to 30 reference photos.</li>
+      <li><b>02 — Describe scene.</b> Write the subject, action, camera and style.</li>
+      <li><b>03 — Get video.</b> Build the plan, open the engine, paste and generate.</li>
+    </ol>
+  </div>
 
   <!-- OUTPUT -->
   <div class="card out" id="output">
@@ -744,6 +770,8 @@
       <li>If a segment comes out wrong, regenerate only that segment — never the whole video.</li>
     </ol>
     <p class="note">Tip: keep the subject, face, clothes and setting identical in every segment.</p>
+  </div>
+  </div>
   </div>
 </div>
 
