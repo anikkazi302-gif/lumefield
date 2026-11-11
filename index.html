@@ -1647,6 +1647,66 @@ function applyToolFilter(inputId, gridId, items) {
 
 var detailModal = document.getElementById("detailModal");
 var detailBody = document.getElementById("detailBody");
+var detailItem = null; /* the item whose detail modal is open (video/image/editor) */
+function dbQuality() {
+  var q = document.getElementById("dQuality");
+  if (q && q.value) return q.value;
+  if (typeof selectedQuality === "string" && selectedQuality) return selectedQuality;
+  try { var o = qualityOptionsFor(detailItem); return o[o.length - 1]; } catch (e) { return "720p"; }
+}
+function refreshDbRows() {
+  var dv = document.getElementById("dDurRowVal");
+  if (dv) dv.textContent = (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
+  var rv = document.getElementById("dRatioRowVal");
+  if (rv) rv.textContent = (typeof selectedRatio === "string" ? selectedRatio : "16:9");
+  var qv = document.getElementById("dQualityRowVal");
+  if (qv) qv.textContent = dbQuality();
+}
+function closeDbPops() {
+  ["dDurPop", "dRatioPop", "dQualityPop"].forEach(function (id) {
+    var p = document.getElementById(id); if (p) p.hidden = true;
+  });
+}
+function dbPopOpen() {
+  return ["dDurPop", "dRatioPop", "dQualityPop"].some(function (id) {
+    var p = document.getElementById(id); return !!(p && !p.hidden);
+  });
+}
+function toggleDbPop(kind) {
+  if (!window.lfOpt) return;
+  var map = { dur: ["dDurPop", buildDbDurList], ratio: ["dRatioPop", buildDbRatioList], quality: ["dQualityPop", buildDbQualityList] };
+  var m = map[kind]; if (!m) return;
+  var pop = document.getElementById(m[0]); if (!pop) return;
+  var wasHidden = pop.hidden;
+  closeDbPops();
+  if (wasHidden) { m[1](); pop.hidden = false; }
+}
+function buildDbDurList() {
+  var list = document.getElementById("dDurPopList"); if (!list || !window.lfOpt) return;
+  var html = "";
+  [5, 10, 20, 30].forEach(function (d) {
+    html += window.lfOpt.itemHtml("⏱", d + " seconds", d === 30 ? "Full plan" : "Short clip", d === selectedDur, String(d));
+  });
+  list.innerHTML = html;
+}
+function buildDbRatioList() {
+  var list = document.getElementById("dRatioPopList"); if (!list || !window.lfOpt) return;
+  var html = "";
+  Object.keys(window.lfOpt.RATIO_LABELS).forEach(function (r) {
+    html += window.lfOpt.itemHtml("▣", r, window.lfOpt.RATIO_LABELS[r], r === selectedRatio, r);
+  });
+  list.innerHTML = html;
+}
+function buildDbQualityList() {
+  var list = document.getElementById("dQualityPopList"); if (!list || !window.lfOpt) return;
+  var cur = dbQuality();
+  var html = "";
+  /* The MODAL's engine, not the tool's: qualityOptionsFor(detailItem). */
+  qualityOptionsFor(detailItem).forEach(function (q) {
+    html += window.lfOpt.itemHtml("◈", q, q === "720p" ? "Standard" : q === "1080p" ? "Full HD" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
+  });
+  list.innerHTML = html;
+}
 function detailVideoHTML(demo, name, siteUrl) {   var sampleTag = (demo && demo.kind === "sample") ? '<p class="demo-sample">Sample demo \u2014 by ' + escHtml(demo.by || "") + '</p>' : "";
   if (demo && demo.yt) {
     return '<div class="detail-video"><div class="lite-yt" data-yt="' + demo.yt + '"><img src="https://i.ytimg.com/vi/' + demo.yt + '/hqdefault.jpg" alt="Demo video: ' + escHtml(name) + '" loading="lazy"><span class="play-badge"><span>▶</span></span></div>' + sampleTag + '</div>';
@@ -1786,6 +1846,7 @@ function openDetail(kind, id) {
     if (!item) return;
     demo = item.demo; siteUrl = item.url; spec = item.spec || "";
   }
+  detailItem = item;
   var buyHTML = '<div class="detail-buy"><h4>💎 Buy credits</h4>' +
     '<p>Starter — 60 credits, <b>$4.99</b> · Plus — 150 credits, <b>$9.99</b> · Ultra — 300 credits, <b>$19.99</b>. One pack, no subscription. A 30-second video costs 20 credits.</p>' +
     '<div class="buy-row"><button class="credit-signin" type="button" data-goto-buy>💎 See credit packs</button></div>' +
@@ -1810,8 +1871,14 @@ function openDetail(kind, id) {
         '<input type="file" id="dPhotoInput" accept="image/*" hidden>' +
         '<input type="file" id="dVideoInput" accept="video/*" hidden>' +
       '</div>' +
-      '<div><div class="db-label">Resolution</div><select id="dQuality">' + qHtml + '</select></div>' +
-      '<div><div class="db-label">Ratio</div><div class="seg-btns" data-db-ratio>' +
+      '<div><div class="db-label">Quality</div><div class="opt-wrap">' +
+        '<div class="opt-row" role="button" tabindex="0" data-db-row="quality"><span class="opt-label">Quality</span><span class="opt-value" id="dQualityRowVal"></span><span class="opt-chev">›</span></div>' +
+        '<div class="opt-pop" id="dQualityPop" hidden><div id="dQualityPopList"></div></div>' +
+      '</div><select id="dQuality" hidden>' + qHtml + '</select></div>' +
+      '<div><div class="db-label">Aspect Ratio</div><div class="opt-wrap">' +
+        '<div class="opt-row" role="button" tabindex="0" data-db-row="ratio"><span class="opt-label">Aspect Ratio</span><span class="opt-value" id="dRatioRowVal"></span><span class="opt-chev">›</span></div>' +
+        '<div class="opt-pop" id="dRatioPop" hidden><div id="dRatioPopList"></div></div>' +
+      '</div><div class="seg-btns" data-db-ratio hidden>' +
       '<button type="button" data-ratio="16:9"' + (selectedRatio === "16:9" ? ' class="active"' : '') + '>16:9</button>' +
       '<button type="button" data-ratio="9:16"' + (selectedRatio === "9:16" ? ' class="active"' : '') + '>9:16</button>' +
       '<button type="button" data-ratio="1:1"' + (selectedRatio === "1:1" ? ' class="active"' : '') + '>1:1</button>' +
@@ -1823,7 +1890,10 @@ function openDetail(kind, id) {
       '<div class="db-section">✍️ Prompt — describe your video</div>' +
       '<div><div class="db-label">Subject</div><input id="dSubject" type="text" value="' + subj + '" placeholder="Who / what is in the video"></div>' +
       '<div><div class="db-label">Action</div><textarea id="dAction" placeholder="What happens">' + act + '</textarea></div>' +
-      '<div><div class="db-label">Duration</div><div class="seg-btns" data-db-dur>' + durBtns + '</div></div>' +
+      '<div><div class="db-label">Duration</div><div class="opt-wrap">' +
+        '<div class="opt-row" role="button" tabindex="0" data-db-row="dur"><span class="opt-label">Duration</span><span class="opt-value" id="dDurRowVal"></span><span class="opt-chev">›</span></div>' +
+        '<div class="opt-pop" id="dDurPop" hidden><div id="dDurPopList"></div></div>' +
+      '</div><div class="seg-btns" data-db-dur hidden>' + durBtns + '</div></div>' +
       '<p class="db-credits" id="dCredits"></p>' +
       '<button class="big-btn" id="dGenerate" type="button" data-gen-engine="' + item.id + '"></button>' +
       '<p class="db-err" id="dErr" hidden></p>' +
@@ -1855,6 +1925,8 @@ function openDetail(kind, id) {
     '<p class="detail-spec">' + escHtml(spec) + '</p>';
   refreshDetailGen();
   refreshDbRefs();
+  refreshDbRows();
+  closeDbPops();
   try { window.__lfScrollY = window.scrollY || 0; } catch (e) {}
   detailModal.hidden = false;
   document.body.style.overflow = "hidden";
@@ -1873,11 +1945,22 @@ function closeDetail() {
 if (detailModal) {
   detailModal.addEventListener("click", function (e) { if (e.target === detailModal) closeDetail(); });
   document.getElementById("detailClose").addEventListener("click", closeDetail);
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !detailModal.hidden) closeDetail(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Escape" || detailModal.hidden) return;
+    if (dbPopOpen()) { closeDbPops(); return; }
+    closeDetail();
+  });
+  detailBody.addEventListener("keydown", function (ev) {
+    if ((ev.key === "Enter" || ev.key === " ") && ev.target && ev.target.closest) {
+      var r = ev.target.closest("[data-db-row]");
+      if (r) { ev.preventDefault(); toggleDbPop(r.getAttribute("data-db-row")); }
+    }
+  });
 }
 if (detailBody) {
   detailBody.addEventListener("click", function (ev) {
     var t = ev.target;
+    if (!t.closest(".opt-wrap")) closeDbPops();
     if (t.closest("[data-goto-buy]")) {
       closeDetail();
       /* User tapped "See credit packs" — take them there. (User-initiated
@@ -1896,10 +1979,35 @@ if (detailBody) {
       if (typeof openTool === "function") openTool();
       return;
     }
-    var rBtn = t.closest("[data-db-ratio] button");
-    if (rBtn) { selectedRatio = rBtn.getAttribute("data-ratio"); var rg = rBtn.closest("[data-db-ratio]"); if (rg) { rg.querySelectorAll("button").forEach(function (x) { x.classList.remove("active"); }); rBtn.classList.add("active"); } syncToolRatio(); return; }
-    var dBtn = t.closest("[data-db-dur] button");
-    if (dBtn) { selectedDur = parseInt(dBtn.getAttribute("data-dur"), 10); var dg2 = dBtn.closest("[data-db-dur]"); if (dg2) { dg2.querySelectorAll("button").forEach(function (x) { x.classList.remove("active"); }); dBtn.classList.add("active"); } syncToolDur(); refreshDetailGen(); if (typeof updateBuildBtn === "function") updateBuildBtn(); return; }
+    var dbRow = t.closest("[data-db-row]");
+    if (dbRow) { toggleDbPop(dbRow.getAttribute("data-db-row")); return; }
+    var dbIt = t.closest(".opt-pop .opt-item");
+    if (dbIt) {
+      var pop = dbIt.closest("#dDurPopList, #dRatioPopList, #dQualityPopList");
+      var v = dbIt.getAttribute("data-v");
+      if (pop && v != null) {
+        if (pop.id === "dDurPopList") {
+          var b = document.querySelector('#durBtns button[data-dur="' + v + '"]');
+          if (b) b.click();
+          refreshDetailGen();
+          if (typeof updateBuildBtn === "function") updateBuildBtn();
+        } else if (pop.id === "dRatioPopList") {
+          var b2 = document.querySelector('#ratioBtns button[data-ratio="' + v + '"]');
+          if (b2) b2.click();
+          syncToolRatio();
+        } else if (pop.id === "dQualityPopList") {
+          var dq = document.getElementById("dQuality");
+          if (dq) dq.value = v;
+          var sq = document.getElementById("qualitySel");
+          if (sq) { sq.value = v; try { sq.dispatchEvent(new Event("change")); } catch (e) {} }
+          try { selectedQuality = v; } catch (e) {}
+        }
+        refreshDbRows();
+        if (typeof refreshOptRows === "function") refreshOptRows();
+        closeDbPops();
+      }
+      return;
+    }
     var gBtn = t.closest("[data-gen-engine]");
     if (gBtn) { modalGenerate(gBtn.getAttribute("data-gen-engine")); return; }
     var cBtn = t.closest("[data-copy-plan]");
@@ -3304,6 +3412,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var qv = $("qualityRowVal"); if (qv) qv.textContent = currentQuality();
   }
   window.refreshOptRows = refreshOptRows;
+  /* Exposed for the detail modal's own rows + popups (same pattern, its own
+     list containers — the tool's build*List() functions write into the
+     tool's lists and are NOT shared). */
+  window.lfOpt = {
+    closeAllPops: closeAllPops,
+    togglePop: togglePop,
+    bindRow: bindRow,
+    itemHtml: itemHtml,
+    RATIO_LABELS: RATIO_LABELS
+  };
   function closeAllPops() { ["modelPop", "durPop", "ratioPop", "qualityPop"].forEach(function (id) { var p = $(id); if (p) p.hidden = true; }); }
   function togglePop(rowId, popId, build) {
     var pop = $(popId); if (!pop) return;
