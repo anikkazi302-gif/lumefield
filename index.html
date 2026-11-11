@@ -64,6 +64,25 @@
   .profile-invite-link { font-size: 11px; color: #a9a9bd; word-break: break-all; padding: 8px 2px 0; line-height: 1.5; }
   .profile-menu-item[hidden] { display: none; }
   .profile-menu-item:disabled { opacity: .55; cursor: default; }
+  .lf-field { width: 100%; background: #10101a; border: 1px solid #33334a; color: #f2f2f7; border-radius: 10px; padding: 10px 12px; font-size: 15px; font-family: inherit; margin-top: 6px; box-sizing: border-box; }
+  .lf-field-label { display: block; margin-top: 12px; font-size: 14px; font-weight: 700; color: #e5e5ef; }
+  .lf-msg { font-size: 13px; color: #ffd166; margin-top: 8px; min-height: 18px; }
+  .lf-panel-list { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .lf-char-item { display: flex; gap: 10px; align-items: center; background: #10101a; border: 1px solid #232336; border-radius: 12px; padding: 10px; }
+  .lf-char-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+  .lf-char-name { font-weight: 800; }
+  .lf-char-desc { font-size: 13px; color: #a9a9bd; margin-top: 2px; }
+  .lf-char-actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .lf-mini-btn { background: #33334a; color: #f2f2f7; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; font-size: .82rem; font-family: inherit; }
+  .lf-mini-btn:hover { background: #44445e; }
+  .lf-mini-btn.danger { background: #450A0A; }
+  .lf-myv-group { margin-top: 16px; }
+  .lf-myv-group h4 { font-size: 16px; margin-bottom: 8px; }
+  .lf-myv-item { background: #10101a; border: 1px solid #232336; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
+  .lf-myv-item .lf-myv-date { font-size: 12px; color: #a9a9bd; }
+  .lf-myv-item details { margin-top: 6px; }
+  .lf-myv-item pre { white-space: pre-wrap; word-break: break-word; font-size: 12.5px; color: #d7d7e6; background: #0a0a12; border-radius: 8px; padding: 10px; max-height: 220px; overflow: auto; }
+  .lf-myv-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
   .credit-signin:disabled { opacity: .55; cursor: default; }
   /* ---------- "JUST ADD" items: NEW badges, filters, hamburger, history, resend ---------- */
   .new-badge { font-size: 10px; background: linear-gradient(90deg, #ff5e8a, #7c5cff); color: #fff; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
@@ -403,7 +422,7 @@
   <div class="logo"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></div>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#tool">Create</a><a href="#models">Models</a><a href="#step3">Engines</a><a href="#limits">Free Limits</a><a href="#buy-credits">Buy credits</a></div>
-  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><div class="profile-menu-item profile-soon-row">🎬 My videos <span class="profile-soon">coming soon</span></div><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero">
@@ -585,6 +604,7 @@
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin:0 0 6px;">
       <button class="copy-btn" id="copyPlanBtn" type="button">📋 Copy whole plan</button>
       <button class="copy-btn" id="downloadPlanBtn" type="button">⬇️ Download plan (.txt)</button>
+      <button class="copy-btn" id="savePlanBtn" type="button">💾 Save this video to My videos</button>
     </div>
     <div id="segments"></div>
     <p class="note">✏️ <b>Customize your plan:</b> every segment prompt above is editable — change any part of it, then copy it. Change the style, camera or duration above and press “Build my video plan” again to rebuild the whole plan your way. You control every part.</p>
@@ -706,6 +726,35 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
   <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
     <button class="modal-close" id="detailClose" type="button" aria-label="Close">✕</button>
     <div id="detailBody"></div>
+  </div>
+</div>
+
+<!-- My characters modal (Firestore collection "characters"). -->
+<div class="detail-backdrop" id="charModal" hidden>
+  <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="charTitle">
+    <button class="modal-close" id="charClose" type="button" aria-label="Close">✕</button>
+    <h3 id="charTitle">👤 My characters</h3>
+    <p class="detail-vendor">Save a character once, reuse it in any build. Photos are stored small (max 512px) so they sync to your account.</p>
+    <label class="lf-field-label" for="charName">Character name</label>
+    <input class="lf-field" id="charName" type="text" maxlength="80" placeholder="e.g. Ember the white dragon">
+    <label class="lf-field-label" for="charDesc">Short description (optional)</label>
+    <input class="lf-field" id="charDesc" type="text" maxlength="500" placeholder="e.g. White dragon, dark red eyes, smooth scales">
+    <label class="lf-field-label" for="charPhoto">Reference photo</label>
+    <input class="lf-field" id="charPhoto" type="file" accept="image/*">
+    <p class="lf-msg" id="charMsg" role="status"></p>
+    <div class="detail-actions"><button class="btn-primary" id="charSaveBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">💾 Save character</button></div>
+    <div class="lf-panel-list" id="charList"></div>
+  </div>
+</div>
+
+<!-- My videos modal (Firestore collection "savedVideos", grouped by model). -->
+<div class="detail-backdrop" id="videosModal" hidden>
+  <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="videosTitle">
+    <button class="modal-close" id="videosClose" type="button" aria-label="Close">✕</button>
+    <h3 id="videosTitle">🎬 My videos</h3>
+    <p class="detail-vendor">Your saved video plans, grouped by model.</p>
+    <p class="lf-msg" id="videosMsg" role="status"></p>
+    <div id="myVideosList"></div>
   </div>
 </div>
 
@@ -1207,6 +1256,7 @@ function openDetail(kind, id) {
     '<p class="note">Checkout opens soon — pack prices are proposed for now. Your first 3 videos are free, and signing in (free) gives you 60 credits.</p></div>';
   var actions = '<div class="detail-actions">';
   if (useEngine) actions += '<button class="btn-primary" type="button" data-use-engine="' + item.id + '" style="border:none;cursor:pointer;font-family:inherit;">🎬 Use this engine in the tool</button>';
+  if (useEngine) actions += '<button class="btn-ghost" type="button" data-save-video="' + item.id + '">💾 Save this video</button>';
   actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
   detailBody.innerHTML =
     '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
@@ -2126,6 +2176,318 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       b.setAttribute("aria-expanded", "false");
     }
   });
+})();
+</script>
+
+
+<script>
+/* ---------- My characters + My videos (Firestore) — 2026-11-11 ----------
+   characters:  { uid, name, description, photoDataUrl, createdAt }
+   savedVideos: { uid, modelId, modelName, planText, videoUrl, createdAt }
+   Both collections are owner-only + verified-email-only, enforced in
+   Firestore rules v5 (see firestore-rules-v5-additions.txt — the parent
+   publishes the rules; this page never trusts the client alone).
+   Photos are downscaled to max 512px JPEG before saving, so a character
+   doc stays far under Firestore's 1 MB document limit. */
+(function () {
+  var MAX_CHARS = 20;
+  var MAX_PHOTO_PX = 512;
+  var charsCache = [];
+  var videosCache = [];
+
+  function libReady() {
+    return !!(typeof lfDb !== "undefined" && lfDb && typeof currentUser !== "undefined" && currentUser && currentUser.emailVerified);
+  }
+  function libNeedLogin() {
+    if (window.lfOpenLogin) window.lfOpenLogin("Sign in (free) and verify your email to save characters and videos.");
+  }
+  function fmtDate(ts) {
+    try {
+      var d = ts && ts.toDate ? ts.toDate() : (ts ? new Date(ts) : new Date());
+      return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    } catch (e) { return ""; }
+  }
+  function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+
+  /* Downscale an image file to a small JPEG data URL (max 512px, q 0.8). */
+  function fileToDataUrl(file, cb) {
+    var reader = new FileReader();
+    reader.onload = function (ev) {
+      var img = new Image();
+      img.onload = function () {
+        var s = Math.min(1, MAX_PHOTO_PX / Math.max(img.width, img.height));
+        var w = Math.max(1, Math.round(img.width * s));
+        var h = Math.max(1, Math.round(img.height * s));
+        var cv = document.createElement("canvas");
+        cv.width = w; cv.height = h;
+        cv.getContext("2d").drawImage(img, 0, 0, w, h);
+        cb(cv.toDataURL("image/jpeg", 0.8));
+      };
+      img.onerror = function () { cb(null); };
+      img.src = ev.target.result;
+    };
+    reader.onerror = function () { cb(null); };
+    reader.readAsDataURL(file);
+  }
+
+  /* Two-tap delete (no confirm() dialogs on this site): first tap arms
+     the button ("Sure?"), second tap within 3s deletes. */
+  function armDelete(btn, fn) {
+    if (btn.getAttribute("data-armed") === "1") { fn(); return; }
+    btn.setAttribute("data-armed", "1");
+    var old = btn.textContent;
+    btn.textContent = "Sure?";
+    setTimeout(function () { btn.removeAttribute("data-armed"); btn.textContent = old; }, 3000);
+  }
+
+  function updateCounts() {
+    var vc = document.getElementById("profileMyVideosCount");
+    if (vc) vc.textContent = videosCache.length ? videosCache.length + " saved" : "";
+    var cc = document.getElementById("profileMyCharactersCount");
+    if (cc) cc.textContent = charsCache.length ? charsCache.length + " saved" : "";
+  }
+
+  /* ---------- characters ---------- */
+  function loadCharacters(silent) {
+    if (!libReady()) return;
+    lfDb.collection("characters").where("uid", "==", currentUser.uid).get().then(function (qs) {
+      charsCache = [];
+      qs.forEach(function (doc) { var d = doc.data(); d.id = doc.id; charsCache.push(d); });
+      charsCache.sort(function (a, b) {
+        var ta = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
+        var tb = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+        return tb - ta;
+      });
+      updateCounts();
+      if (!silent) renderCharacters();
+    }).catch(function () { if (!silent) { var m = document.getElementById("charMsg"); if (m) m.textContent = "Could not load your characters right now."; } });
+  }
+  function renderCharacters() {
+    var list = document.getElementById("charList");
+    if (!list) return;
+    if (!charsCache.length) { list.innerHTML = "<p class=\"lf-msg\">No characters saved yet — add one above.</p>"; return; }
+    list.innerHTML = "";
+    charsCache.forEach(function (c) {
+      var d = document.createElement("div");
+      d.className = "lf-char-item";
+      d.innerHTML = '<img src="' + esc(c.photoDataUrl || "") + '" alt="">' +
+        '<div><div class="lf-char-name">' + esc(c.name) + '</div>' +
+        (c.description ? '<div class="lf-char-desc">' + esc(c.description) + '</div>' : "") + '</div>' +
+        '<div class="lf-char-actions"><button class="lf-mini-btn" type="button" data-use-char="' + esc(c.id) + '">🎬 Use in build</button>' +
+        '<button class="lf-mini-btn danger" type="button" data-del-char="' + esc(c.id) + '">Delete</button></div>';
+      list.appendChild(d);
+    });
+  }
+  function saveCharacter() {
+    var msg = document.getElementById("charMsg");
+    if (!libReady()) { libNeedLogin(); return; }
+    var name = (document.getElementById("charName").value || "").trim();
+    var desc = (document.getElementById("charDesc").value || "").trim();
+    var file = (document.getElementById("charPhoto").files || [])[0];
+    if (!name) { if (msg) msg.textContent = "Give your character a name first."; return; }
+    if (!file) { if (msg) msg.textContent = "Pick a reference photo for your character."; return; }
+    if (charsCache.length >= MAX_CHARS) { if (msg) msg.textContent = "You have " + MAX_CHARS + " characters saved — delete one to add another."; return; }
+    if (msg) msg.textContent = "Saving…";
+    fileToDataUrl(file, function (dataUrl) {
+      if (!dataUrl) { if (msg) msg.textContent = "That photo could not be read — try a JPG or PNG."; return; }
+      if (dataUrl.length > 400000) { if (msg) msg.textContent = "That photo is too large even after shrinking — try a smaller one."; return; }
+      lfDb.collection("characters").add({
+        uid: currentUser.uid,
+        name: name,
+        description: desc,
+        photoDataUrl: dataUrl,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function () {
+        document.getElementById("charName").value = "";
+        document.getElementById("charDesc").value = "";
+        document.getElementById("charPhoto").value = "";
+        if (msg) msg.textContent = "✓ Character saved.";
+        loadCharacters(false);
+      }).catch(function (err) {
+        if (msg) msg.textContent = "Could not save — " + (err && err.code === "permission-denied" ? "verify your email first." : "try again.");
+      });
+    });
+  }
+  function useCharacter(id) {
+    var c = null;
+    charsCache.forEach(function (x) { if (x.id === id) c = x; });
+    if (!c) return;
+    if (typeof photos === "undefined" || typeof renderThumbs !== "function") return;
+    if (photos.length >= 2) {
+      var m = document.getElementById("charMsg");
+      if (m) m.textContent = "Remove a photo from the tool first (max 2 reference photos).";
+      return;
+    }
+    photos.push({ name: c.name, dataUrl: c.photoDataUrl });
+    renderThumbs();
+    var subj = document.getElementById("subject");
+    if (subj && !subj.value.trim()) subj.value = c.name + (c.description ? " — " + c.description : "");
+    closeCharModal();
+    var tool = document.getElementById("tool");
+    if (tool && tool.scrollIntoView) tool.scrollIntoView({ behavior: "smooth" });
+  }
+  function deleteCharacter(id, btn) {
+    armDelete(btn, function () {
+      lfDb.collection("characters").doc(id).delete().then(function () { loadCharacters(false); });
+    });
+  }
+
+  /* ---------- saved videos ---------- */
+  function saveVideo(modelId, modelName, planText, videoUrl, btn) {
+    if (!libReady()) { libNeedLogin(); return; }
+    lfDb.collection("savedVideos").add({
+      uid: currentUser.uid,
+      modelId: modelId,
+      modelName: modelName,
+      planText: String(planText || "").slice(0, 20000),
+      videoUrl: videoUrl,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function () {
+      if (btn) {
+        var old = btn.textContent;
+        btn.textContent = "✓ Saved to My videos";
+        setTimeout(function () { btn.textContent = old; }, 2000);
+      }
+      loadSavedVideos(true);
+    }).catch(function (err) {
+      if (btn) {
+        var old2 = btn.textContent;
+        btn.textContent = err && err.code === "permission-denied" ? "Verify your email first" : "Could not save — try again";
+        setTimeout(function () { btn.textContent = old2; }, 2500);
+      }
+    });
+  }
+  function loadSavedVideos(silent) {
+    if (!libReady()) return;
+    lfDb.collection("savedVideos").where("uid", "==", currentUser.uid).get().then(function (qs) {
+      videosCache = [];
+      qs.forEach(function (doc) { var d = doc.data(); d.id = doc.id; videosCache.push(d); });
+      videosCache.sort(function (a, b) {
+        var ta = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
+        var tb = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+        return tb - ta;
+      });
+      updateCounts();
+      if (!silent) renderVideos();
+    }).catch(function () { if (!silent) { var m = document.getElementById("videosMsg"); if (m) m.textContent = "Could not load your saved videos right now."; } });
+  }
+  function renderVideos() {
+    var wrap = document.getElementById("myVideosList");
+    if (!wrap) return;
+    if (!videosCache.length) { wrap.innerHTML = "<p class=\"lf-msg\">Nothing saved yet — open any video model and tap “💾 Save this video”, or save a plan after you build one.</p>"; return; }
+    var groups = [];
+    var byName = {};
+    videosCache.forEach(function (v) {
+      var key = v.modelName || "Unknown model";
+      if (!byName[key]) { byName[key] = []; groups.push(key); }
+      byName[key].push(v);
+    });
+    wrap.innerHTML = "";
+    groups.forEach(function (name) {
+      var g = document.createElement("div");
+      g.className = "lf-myv-group";
+      var html = "<h4>" + esc(name) + " · " + byName[name].length + "</h4>";
+      byName[name].forEach(function (v) {
+        html += '<div class="lf-myv-item"><div class="lf-myv-date">' + esc(fmtDate(v.createdAt)) + '</div>' +
+          '<details><summary>View saved plan</summary><pre>' + esc(v.planText || "") + '</pre></details>' +
+          '<div class="lf-myv-links"><a class="btn-ghost" href="' + esc(v.videoUrl || "#") + '" target="_blank" rel="noopener" style="padding:8px 16px;font-size:14px;">▶ Open engine free ↗</a>' +
+          '<button class="lf-mini-btn danger" type="button" data-del-video="' + esc(v.id) + '">Delete</button></div></div>';
+      });
+      g.innerHTML = html;
+      wrap.appendChild(g);
+    });
+  }
+  function deleteVideo(id, btn) {
+    armDelete(btn, function () {
+      lfDb.collection("savedVideos").doc(id).delete().then(function () { loadSavedVideos(false); });
+    });
+  }
+
+  /* ---------- modals ---------- */
+  var charModal = document.getElementById("charModal");
+  var videosModal = document.getElementById("videosModal");
+  function openCharModal() {
+    if (!libReady()) { libNeedLogin(); return; }
+    loadCharacters(false);
+    if (charModal) { charModal.hidden = false; document.body.style.overflow = "hidden"; }
+  }
+  function closeCharModal() { if (charModal) { charModal.hidden = true; document.body.style.overflow = ""; } }
+  function openVideosModal() {
+    if (!libReady()) { libNeedLogin(); return; }
+    loadSavedVideos(false);
+    if (videosModal) { videosModal.hidden = false; document.body.style.overflow = "hidden"; }
+  }
+  function closeVideosModal() { if (videosModal) { videosModal.hidden = true; document.body.style.overflow = ""; } }
+  if (charModal) {
+    charModal.addEventListener("click", function (e) { if (e.target === charModal) closeCharModal(); });
+    var cc = document.getElementById("charClose");
+    if (cc) cc.addEventListener("click", closeCharModal);
+  }
+  if (videosModal) {
+    videosModal.addEventListener("click", function (e) { if (e.target === videosModal) closeVideosModal(); });
+    var vc = document.getElementById("videosClose");
+    if (vc) vc.addEventListener("click", closeVideosModal);
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { closeCharModal(); closeVideosModal(); }
+  });
+
+  /* ---------- wiring ---------- */
+  var pm = document.getElementById("profileMenu");
+  var pv = document.getElementById("profileMyVideos");
+  if (pv) pv.addEventListener("click", function () { if (pm) pm.hidden = true; openVideosModal(); });
+  var pc = document.getElementById("profileMyCharacters");
+  if (pc) pc.addEventListener("click", function () { if (pm) pm.hidden = true; openCharModal(); });
+  var csb = document.getElementById("charSaveBtn");
+  if (csb) csb.addEventListener("click", saveCharacter);
+  var cl = document.getElementById("charList");
+  if (cl) cl.addEventListener("click", function (ev) {
+    var u = ev.target.closest ? ev.target.closest("[data-use-char]") : null;
+    if (u) { useCharacter(u.getAttribute("data-use-char")); return; }
+    var d = ev.target.closest ? ev.target.closest("[data-del-char]") : null;
+    if (d) deleteCharacter(d.getAttribute("data-del-char"), d);
+  });
+  var mvl = document.getElementById("myVideosList");
+  if (mvl) mvl.addEventListener("click", function (ev) {
+    var d = ev.target.closest ? ev.target.closest("[data-del-video]") : null;
+    if (d) deleteVideo(d.getAttribute("data-del-video"), d);
+  });
+  var spb = document.getElementById("savePlanBtn");
+  if (spb) spb.addEventListener("click", function () {
+    var eng = null;
+    try { eng = ENGINES.find(function (e) { return e.id === selectedEngine; }); } catch (e) {}
+    if (!eng) return;
+    var planText = "";
+    try { planText = fullPlanText(); } catch (e) { planText = ""; }
+    saveVideo(eng.id, eng.name, planText, eng.url, spb);
+  });
+  /* Save from a model's detail view (delegated — the detail body is
+     rendered by the earlier script). Uses the built plan when one was
+     just built for this same engine, otherwise the model's spec line. */
+  var detailBody = document.getElementById("detailBody");
+  if (detailBody) detailBody.addEventListener("click", function (ev) {
+    var b = ev.target.closest ? ev.target.closest("[data-save-video]") : null;
+    if (!b) return;
+    var mid = b.getAttribute("data-save-video");
+    var eng = null;
+    try { eng = ENGINES.find(function (e) { return e.id === mid; }); } catch (e) {}
+    if (!eng) return;
+    var planText = "";
+    var outShown = document.getElementById("output") && document.getElementById("output").classList.contains("show");
+    if (outShown && selectedEngine === mid && typeof fullPlanText === "function") {
+      try { planText = fullPlanText(); } catch (e) { planText = ""; }
+    }
+    if (!planText) planText = eng.name + " — Max " + eng.maxSec + "s per clip · " + eng.res + " · " + (eng.audio ? "with audio" : "silent") + "\nBuild your plan in the tool, then save it from there to keep the full prompts.";
+    saveVideo(eng.id, eng.name, planText, eng.url, b);
+  });
+
+  /* Load caches + menu counts when a verified user signs in. */
+  if (typeof lfAuth !== "undefined" && lfAuth) {
+    lfAuth.onAuthStateChanged(function (u) {
+      if (u && u.emailVerified) { loadCharacters(true); loadSavedVideos(true); }
+      else { charsCache = []; videosCache = []; updateCounts(); }
+    });
+  }
 })();
 </script>
 
