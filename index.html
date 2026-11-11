@@ -2426,8 +2426,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!b) return;
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
-    if (isOwner()) b.textContent = "🎬 Build my video plan — free for you";
-    else b.textContent = "🎬 Build my video plan — " + cost + " credits";
+    if (isOwner()) b.textContent = "✦ Build my video plan — free for you";
+    else b.textContent = "✦ Build my video plan — " + cost + " credits";
     var bc = document.getElementById("buildCost");
     if (bc) {
       if (isOwner()) bc.textContent = "💎 Unlimited (Owner) — this video is free for you";
