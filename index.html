@@ -214,9 +214,9 @@
 
   /* ---------- hero ---------- */
   .hero { position: relative; overflow: hidden; padding: 14px 0 10px; }
-  .hero-carousel { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .hero-carousel { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: none; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .hero-carousel::-webkit-scrollbar { display: none; }
-  .hero-card { flex: 0 0 min(460px, 84vw); scroll-snap-align: start; cursor: pointer; }
+  .hero-card { flex: 0 0 min(460px, 84vw); cursor: pointer; }
   .hero-card-video { position: relative; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; background: #111; }
   .hero-card-video iframe { width: 100%; height: 100%; border: 0; display: block; }
   .hero-card-veil { position: absolute; inset: 0; cursor: pointer; }
@@ -539,24 +539,40 @@
 (function () {
   var track = document.getElementById("heroCarousel");
   if (!track) return;
-  var cards = track.querySelectorAll(".hero-card");
-  cards.forEach(function (card) {
+  function bindCard(card) {
     function go() { if (typeof openDetail === "function") openDetail("video", card.dataset.engine); }
     card.addEventListener("click", go);
     card.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); go(); } });
-  });
-  var timer = null, paused = false, visible = true;
-  function step() {
-    if (paused || !visible) return;
-    var w = cards[0] ? cards[0].offsetWidth + 14 : 480;
-    if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 8) {
-      track.scrollTo({ left: 0, behavior: "smooth" });
-    } else {
-      track.scrollBy({ left: w, behavior: "smooth" });
-    }
   }
-  function start() { stop(); timer = setInterval(step, 6000); }
-  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  var cards = Array.prototype.slice.call(track.querySelectorAll(".hero-card"));
+  cards.forEach(bindCard);
+  /* Seamless slow loop: duplicate the 6 cards so the row can slide in one
+     direction forever — when the first set has passed, jump back by exactly
+     one set (invisible, the second set is identical). */
+  cards.forEach(function (card) {
+    var c = card.cloneNode(true);
+    track.appendChild(c);
+    bindCard(c);
+  });
+  var setW = 0;
+  function measure() {
+    var first = track.querySelector(".hero-card");
+    setW = first ? (first.offsetWidth + 14) * 6 : 0;
+  }
+  measure();
+  window.addEventListener("resize", measure);
+  var paused = false, visible = true, last = 0;
+  function tick(now) {
+    if (!paused && visible && setW > 0) {
+      var dt = last ? Math.min(now - last, 50) : 16;
+      last = now;
+      track.scrollLeft += 0.5 * dt / 16;
+      if (track.scrollLeft >= setW) track.scrollLeft -= setW;
+    } else {
+      last = now;
+    }
+    requestAnimationFrame(tick);
+  }
   track.addEventListener("mouseenter", function () { paused = true; });
   track.addEventListener("mouseleave", function () { paused = false; });
   track.addEventListener("touchstart", function () { paused = true; }, { passive: true });
@@ -564,7 +580,7 @@
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(track);
   }
-  start();
+  requestAnimationFrame(tick);
 })();
 </script>
 
