@@ -180,6 +180,11 @@
   textarea { min-height: 64px; resize: vertical; }
   input[type=text]:focus, textarea:focus, select:focus { outline: 2px solid #7c5cff; border-color: #7c5cff; }
   .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .field-box { background: #0a0a12; border: 1px solid #33334a; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; }
+  .field-box label { margin: 0 0 8px; }
+  .field-box textarea { flex: 1; }
+  @media (max-width: 640px) { .fields-grid { grid-template-columns: 1fr; } }
   @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
   .drop { border: 2px dashed #44445e; border-radius: 12px; padding: 22px 14px; text-align: center; color: #a9a9bd; cursor: pointer; transition: border-color .2s; }
   .drop:hover { border-color: #ff5e8a; }
@@ -527,12 +532,16 @@
   <div class="card">
     <h2>Step 2 — Your scene</h2>
     <p class="sub">Describe what happens — be specific.</p>
-    <label for="subject">Subject (who / what is in the video)</label>
-    <input type="text" id="subject" placeholder="e.g. A white dragon standing behind a young woman in front of an old stone cottage">
-    <label for="action">Action (what happens over the 30 seconds)</label>
-    <textarea id="action" placeholder="e.g. The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated"></textarea>
-    <div class="row">
-      <div>
+    <div class="fields-grid">
+      <div class="field-box">
+        <label for="subject">Subject (who / what is in the video)</label>
+        <input type="text" id="subject" placeholder="e.g. A white dragon standing behind a young woman in front of an old stone cottage">
+      </div>
+      <div class="field-box">
+        <label for="action">Action (what happens over the 30 seconds)</label>
+        <textarea id="action" placeholder="e.g. The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated"></textarea>
+      </div>
+      <div class="field-box">
         <label for="camera">Camera move</label>
         <select id="camera">
           <option value="static, locked-off camera">Static — locked-off camera</option>
@@ -551,7 +560,7 @@
           <option value="slow tilt down — camera tilts downward">Slow tilt down — camera tilts downward</option>
         </select>
       </div>
-      <div>
+      <div class="field-box">
         <label for="style">Style</label>
         <select id="style">
           <option value="cinematic dark fantasy, film grain, moody light" selected>Cinematic dark fantasy</option>
@@ -562,11 +571,15 @@
           <option value="epic fantasy, dramatic light, rich colour">Epic fantasy</option>
         </select>
       </div>
+      <div class="field-box">
+        <label for="setting">Setting / place (optional)</label>
+        <input type="text" id="setting" placeholder="e.g. Rocky mountainside, old stone cottage, overcast grey sky, light snow falling">
+      </div>
+      <div class="field-box">
+        <label for="sound">Sound / dialogue note (optional — only engines marked "with audio" render it)</label>
+        <input type="text" id="sound" placeholder="e.g. No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end.">
+      </div>
     </div>
-    <label for="setting">Setting / place (optional)</label>
-    <input type="text" id="setting" placeholder="e.g. Rocky mountainside, old stone cottage, overcast grey sky, light snow falling">
-    <label for="sound">Sound / dialogue note (optional — only engines marked "with audio" render it)</label>
-    <input type="text" id="sound" placeholder="e.g. No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end.">
     <label>✨ Try an example — one click fills the scene</label>
     <div class="seg-btns" id="presetBtns"></div>
   </div>
