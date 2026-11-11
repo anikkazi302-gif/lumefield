@@ -277,6 +277,19 @@
   .model-thumb .no-demo { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; justify-content: center; color: #c9c9d8; font-size: 13px; text-align: center; padding: 10px; }
   .model-thumb .no-demo .big-play { font-size: 26px; }
   .model-name { padding: 12px 14px 14px; font-size: 15px; font-weight: 700; color: #fff; line-height: 1.35; }
+   .model-sub { padding: 0 14px 12px; font-size: 13px; line-height: 1.45; color: #a9a9bd; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+   .model-badge { font-size: .68rem; background: #065F46; color: #A7F3D0; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; font-weight: 700; }
+   .model-badge.no { background: #7F1D1D; color: #FECACA; }
+   .detail-builder { margin-top: 16px; border-top: 1px solid #26263a; padding-top: 16px; display: grid; gap: 10px; }
+   .detail-builder .db-label { font-size: 12.5px; color: #a9a9bd; font-weight: 700; }
+   .detail-builder input, .detail-builder textarea, .detail-builder select { width: 100%; background: #0d0d18; border: 1px solid #33334a; border-radius: 10px; color: #fff; padding: 10px 12px; font-size: 14px; font-family: inherit; box-sizing: border-box; }
+   .detail-builder textarea { min-height: 64px; resize: vertical; }
+   .detail-builder .db-credits { font-size: 14px; color: #ffd166; margin: 0; }
+   .detail-builder .db-err { color: #ff7a7a; font-size: 13.5px; margin: 0; }
+   .detail-builder .db-result { font-size: 14px; line-height: 1.6; color: #e5e5ef; }
+   .detail-builder .db-result .db-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+   .demo-sample { font-size: 12.5px; color: #a9a9bd; margin: 8px 0 0; }
+
   /* ---------- model detail modal: buy on top, info at the very bottom ---------- */
   .detail-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.78); display: flex; align-items: flex-start; justify-content: center; z-index: 100; padding: 20px 12px; overflow-y: auto; }
   .detail-backdrop[hidden] { display: none; }
@@ -370,7 +383,7 @@
       "name": "How many videos can I generate for free per day?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "On LumeField itself: your first video plan is free with no account. After that, sign in (free) and you get 20 credits — enough for one 30-second video (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 1 standard 10-second clip (or two 5-second clips). Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits. Every verified user also gets 4 free credits every day. Invite friends with your personal link and earn 20 credits when a friend verifies their email and builds their first video plan."
+        "text": "On LumeField itself: your first video plan is free with no account. After that, sign in (free) and you get 20 credits — enough for one 30-second video (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling’s free plan gives monthly free credits (Kling doesn’t publish how many) — free clips are 720p and watermarked. Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits. Every verified user also gets 4 free credits every day. Invite friends with your personal link and earn 20 credits when a friend verifies their email and builds their first video plan."
       }
     },
     {
@@ -473,7 +486,7 @@
   <video class="bg-video" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"><source data-src="https://videos.pexels.com/video-files/31391075/13394524_1920_1080_30fps.mp4" type="video/mp4"></video>
   <div class="bg-overlay" aria-hidden="true"></div>
   <h2>Video <span>models</span> — free</h2>
-  <p class="lead">Tap any model to watch what it makes and see its true quality, speed and motion — then buy credits or use it free in the tool below.</p>
+  <p class="lead">Tap any model to watch what it makes and see its true quality, speed and motion — then use it free in the tool below, or buy credits.</p>
   <div class="filter-row">
     <input type="text" id="modelSearch" placeholder="🔍 Search models…" aria-label="Search video models">
     <div class="filter-chips" id="modelFilterChips">
@@ -589,6 +602,14 @@
       <button data-dur="20">20 seconds</button>
       <button data-dur="30" class="active">30 seconds</button>
     </div>
+    <label>Ratio</label>
+    <div class="seg-btns" id="ratioBtns">
+      <button data-ratio="16:9" class="active">16:9</button>
+      <button data-ratio="9:16">9:16</button>
+      <button data-ratio="1:1">1:1</button>
+    </div>
+    <label>Quality</label>
+    <select id="qualitySel" aria-label="Quality"></select>
     <label>Engine (free — pick one)</label>
     <div class="engines" id="engines"></div>
     <div class="warn" id="noI2vWarn">⚠️ <b id="noI2vName"></b> does <b>not</b> take a reference photo — it is
@@ -658,7 +679,7 @@
       <button class="buy-btn" type="button" disabled>Buy — coming soon</button>
     </div>
   </div>
-  <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Paddle or Polar) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (see <a href="terms.html" style="color:#ffd166;">Terms</a>). Bought credits stay in your balance until you use them.</p>
+  <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Paddle or Polar) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (first purchase only, within 7 days, if no credits used) (see <a href="terms.html" style="color:#ffd166;">Terms</a>). Bought credits stay in your balance until you use them.</p>
 </section>
 
 <section class="faq" id="faq">
@@ -669,7 +690,7 @@
   </div>
   <div class="faq-item">
     <h3>How many videos can I generate for free per day?</h3>
-    <p>On LumeField itself: your first video plan is free with no account. After that, sign in (free) and you get 20 credits — enough for one 30-second video (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling gives 66 free credits a day — about 1 standard 10-second clip (or two 5-second clips). Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits. Every verified user also gets 4 free credits every day — tap “Claim today's 4 free credits” in the credit bar. Invite friends with your personal link (in the profile menu) and earn 20 credits when a friend verifies their email and builds their first video plan.</p>
+    <p>On LumeField itself: your first video plan is free with no account. After that, sign in (free) and you get 20 credits — enough for one 30-second video (5s = 4 credits, 10s = 7, 20s = 14, 30s = 20). The engines have their own separate free limits. Kling’s free plan gives monthly free credits (Kling doesn’t publish how many) — free clips are 720p and watermarked. Flow gives 50 free credits a day — about 5 Lite clips (Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash). The Hugging Face Spaces (Wan 2.2, LTX-2.3, HunyuanVideo 1.5 and CogVideoX) run on free shared queues with no daily limit shown, but queues can be slow at busy times. Runway's 125 credits are one-time only and never refill. A 30-second video needs 3 chained 10-second segments, so one 30-second video uses about 3 clips' worth of credits. Every verified user also gets 4 free credits every day — tap “Claim today's 4 free credits” in the credit bar. Invite friends with your personal link (in the profile menu) and earn 20 credits when a friend verifies their email and builds their first video plan.</p>
   </div>
   <div class="faq-item">
     <h3>Can I buy more credits?</h3>
@@ -722,7 +743,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 </section>
 
 
-<!-- Model detail modal: video, then BUY on top, then the model's working info at the very bottom. -->
+<!-- Model detail modal: video, free-credits line, actions + builder (ratio, prompt, duration, quality, credits + Generate), then BUY, then the model's working info at the very bottom. -->
 <div class="detail-backdrop" id="detailModal" hidden>
   <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
     <button class="modal-close" id="detailClose" type="button" aria-label="Close">✕</button>
@@ -790,11 +811,11 @@ const ENGINES = [
   { id: "ltx23", name: "LTX-2.3", vendor: "Lightricks · open weights", url: "https://huggingface.co/spaces/Lightricks/LTX-2-3", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free official Hugging Face Space", note: "The only free engine here with synced audio. 10s per clip on the Space (the model itself supports 20s self-hosted)." },
   { id: "hunyuan15", name: "HunyuanVideo 1.5", vendor: "Tencent · open source", url: "https://huggingface.co/spaces/multimodalart/Hunyuan-Video-1-5", maxSec: 10, i2v: true, res: "480p / 720p", audio: false, free: "Free Hugging Face Space", note: "Silent clips. Duration settings 5 / 8 / 10 seconds. Runs on a consumer GPU if self-hosted." },
   { id: "cogvideox", name: "CogVideoX 1.5", vendor: "Zhipu AI · open source", url: "https://huggingface.co/spaces/zai-org/CogVideoX-5B-Space", maxSec: 10, i2v: true, res: "up to 1360×768", audio: false, free: "Free official Hugging Face Space", note: "Strong prompt adherence. 5–10s per clip. The 2B version runs on small GPUs." },
-  { id: "kling", name: "Kling 3.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 15, i2v: true, res: "720p / 1080p", audio: true, free: "Free credits daily (amount varies)", note: "Up to 15-second clips with native dialogue and lip-sync. The '66 credits/day' figure is disputed — check the site. Needs a free account." },
+  { id: "kling", name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "Free monthly credits (amount varies)", note: "Up to 15-second clips with native dialogue and lip-sync. The '66 credits/day' figure is disputed — check the site. Needs a free account." },
   { id: "flow", name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
   { id: "runway", name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
   { id: "mochi", name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." },
-  { id: "seedance", name: "Seedance", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 10, i2v: true, res: "1080p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
+  { id: "seedance", name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
   { id: "vidu", name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
   { id: "hailuo", name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
   { id: "wan3", name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
@@ -804,7 +825,7 @@ const ENGINES = [
   { id: "firefly", name: "Adobe Firefly (video)", vendor: "Adobe", url: "https://firefly.adobe.com", maxSec: 5, i2v: true, res: "1080p", audio: true, free: "Free daily generations", note: "Veo, Kling and Luma models in one place, trained on licensed data, free daily generations. Audio depends on the partner model." }
 ];
 /* Newest engines — shown with a NEW badge on their cards. */
-var NEW_ENGINE_IDS = ["seedance", "vidu", "wan3", "pixverse", "firefly"];
+var NEW_ENGINE_IDS = ["kling", "seedance", "vidu", "wan3", "pixverse", "firefly"];
 
 const SETTINGS = {
   wan22: "Resolution: 720p · 24 fps · Steps: ~30 · Guidance: 5–7 · Negative prompt: blurry, low quality, distorted face, extra limbs, flicker · Use your photo as the start image.",
@@ -830,6 +851,8 @@ const FACE_LOCK = "FACE LOCK: Faces must match the reference photos exactly — 
 
 let selectedEngine = "wan22";
 let selectedDur = 30;
+let selectedRatio = "16:9";
+let selectedQuality = null;
 let photos = [];
 
 /* ---------- build error: visible on the page, not a popup (popups are
@@ -860,6 +883,7 @@ ENGINES.forEach(function (e) {
     document.querySelectorAll(".engine").forEach(function (el) { el.classList.remove("selected"); });
     d.classList.add("selected");
     selectedEngine = e.id;
+    refreshQualityOptions();
     hideBuildError();
     const w = document.getElementById("noI2vWarn");
     if (!e.i2v) {
@@ -870,6 +894,41 @@ ENGINES.forEach(function (e) {
   engWrap.appendChild(d);
 });
 
+  /* ---------- ratio + quality (owner order: ratio, prompt, quality) ---------- */
+  function ratioText(r) { return r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : "16:9 widescreen"; }
+  function qualityOptionsFor(e) {
+    var res = (e && e.res) || "720p";
+    var out = [];
+    res.split("/").forEach(function (p) {
+      p = p.trim();
+      var up = p.match(/^up to (.+)$/i);
+      if (up) { var v = up[1].trim(); if (/^\d+p$/i.test(v)) { out.push("720p"); out.push(v.toLowerCase()); } else { out.push(v); } }
+      else if (p) { out.push(p.toLowerCase()); }
+    });
+    var seen = {};
+    out = out.filter(function (q) { if (seen[q]) return false; seen[q] = true; return true; });
+    return out.length ? out : ["720p"];
+  }
+  function refreshQualityOptions() {
+    var sel = document.getElementById("qualitySel");
+    if (!sel) return;
+    var engine = null;
+    try { engine = ENGINES.find(function (e) { return e.id === selectedEngine; }); } catch (e) {}
+    if (!engine) return;
+    var opts = qualityOptionsFor(engine);
+    sel.innerHTML = opts.map(function (q) { return '<option value="' + q + '">' + q + '</option>'; }).join('');
+    selectedQuality = opts[opts.length - 1];
+    sel.value = selectedQuality;
+  }
+  document.querySelectorAll("#ratioBtns button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#ratioBtns button").forEach(function (x) { x.classList.remove("active"); });
+      b.classList.add("active");
+      selectedRatio = b.dataset.ratio;
+    });
+  });
+  (function () { var qs = document.getElementById("qualitySel"); if (qs) qs.addEventListener("change", function () { selectedQuality = qs.value; }); })();
+  refreshQualityOptions();
 /* ---------- duration picker ---------- */
 document.querySelectorAll("#durBtns button").forEach(function (b) {
   b.addEventListener("click", function () {
@@ -975,7 +1034,7 @@ function buildPlan() {
     t = end;
     const beat = beats[Math.min(i, beats.length - 1)];
     let prompt = subject + ", " + beat + action + ". " +
-      "Camera: " + camera + ". Style: " + style + ".";
+      "Camera: " + camera + ". Style: " + style + ". Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ".";
     if (setting) prompt += " Setting: " + setting + ".";
     if (sound && engine.audio) prompt += " Sound: " + sound + ".";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
@@ -985,11 +1044,11 @@ function buildPlan() {
   }
 
   document.getElementById("summary").innerHTML =
-    "<b>Engine:</b> " + engine.name + " (" + engine.vendor + ") — free: " + engine.free + "<br>" +
+    "<b>Engine:</b> " + engine.name + " (" + engine.vendor + ") — " + engine.free + " (on the engine's own site)<br>" +
     "<b>Duration:</b> " + selectedDur + " seconds in <b>" + segCount + " segment" + (segCount > 1 ? "s" : "") + "</b> " +
     "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
     "<b>Reference photos:</b> " + photos.length + " uploaded (used as the start frame on the engine's page)<br>" +
-    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera;
+    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-");
 
   const segWrap = document.getElementById("segments");
   segWrap.innerHTML = "";
@@ -1147,7 +1206,7 @@ function thumbHTML(demo, name, siteUrl) {
   if (demo && demo.mp4) {
     return '<video muted loop playsinline preload="none" data-mp4="' + demo.mp4 + '"></video><span class="play-badge"><span>▶</span></span>';
   }
-  return '<span class="no-demo"><span class="big-play">▶</span><span>Watch the official demo on the tool’s site ↗</span></span>';
+  return '<span class="no-demo"><span class="big-play">▶</span><span>Open the tool’s site ↗</span></span>';
 }
 function makeCard(kind, id, name, demo, siteUrl) {
   var c = document.createElement("article");
@@ -1157,7 +1216,10 @@ function makeCard(kind, id, name, demo, siteUrl) {
   c.setAttribute("aria-label", name + " — tap for video and details");
   c.dataset.kind = kind;
   c.dataset.id = id;
-  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + ((kind === "video" && typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(id) !== -1) ? ' <span class="new-badge">NEW</span>' : '') + '</div>';
+  var _it = kind === "video" ? ENGINES.find(function (e) { return e.id === id; }) : kind === "image" ? IMAGE_TOOLS.find(function (t) { return t.id === id; }) : EDITORS.find(function (t) { return t.id === id; });
+  var _sub = _it ? (_it.note || _it.spec || "") : "";
+  var _bdg = kind === "video" && _it ? (_it.i2v ? '<span class="model-badge">photo \u2713</span>' : '<span class="model-badge no">text only</span>') : "";
+  c.innerHTML = '<div class="model-thumb">' + thumbHTML(demo, name, siteUrl) + '</div><div class="model-name">' + escHtml(name) + _bdg + ((kind === "video" && typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(id) !== -1) ? ' <span class="new-badge">NEW</span>' : '') + '</div>' + (_sub ? '<div class="model-sub">' + escHtml(_sub) + '</div>' : '');
   function open() { openDetail(kind, id); }
   c.addEventListener("click", open);
   c.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); open(); } });
@@ -1224,14 +1286,95 @@ function applyToolFilter(inputId, gridId, items) {
 
 var detailModal = document.getElementById("detailModal");
 var detailBody = document.getElementById("detailBody");
-function detailVideoHTML(demo, name, siteUrl) {
+function detailVideoHTML(demo, name, siteUrl) {   var sampleTag = (demo && demo.kind === "sample") ? '<p class="demo-sample">Sample demo \u2014 by ' + escHtml(demo.by || "") + '</p>' : "";
   if (demo && demo.yt) {
-    return '<div class="detail-video"><div class="lite-yt" data-yt="' + demo.yt + '"><img src="https://i.ytimg.com/vi/' + demo.yt + '/hqdefault.jpg" alt="Demo video: ' + escHtml(name) + '" loading="lazy"><span class="play-badge"><span>▶</span></span></div></div>';
+    return '<div class="detail-video"><div class="lite-yt" data-yt="' + demo.yt + '"><img src="https://i.ytimg.com/vi/' + demo.yt + '/hqdefault.jpg" alt="Demo video: ' + escHtml(name) + '" loading="lazy"><span class="play-badge"><span>▶</span></span></div>' + sampleTag + '</div>';
   }
   if (demo && demo.mp4) {
-    return '<div class="detail-video"><video src="' + demo.mp4 + '" autoplay muted loop playsinline controls preload="auto"></video></div>';
+    return '<div class="detail-video"><video src="' + demo.mp4 + '" autoplay muted loop playsinline controls preload="auto"></video>' + sampleTag + '</div>';
   }
-  return '<div class="detail-video"><div class="no-demo"><span style="font-size:26px;">▶</span><span>No demo video embedded yet.</span><a href="' + siteUrl + '" target="_blank" rel="noopener">Watch the official demo on the tool’s site ↗</a></div></div>';
+  return '<div class="detail-video"><div class="no-demo"><span style="font-size:26px;">▶</span><span>No demo video embedded yet.</span><a href="' + siteUrl + '" target="_blank" rel="noopener">Open the tool’s site ↗</a></div></div>';
+}
+function detailCreditsText() {
+  try {
+    if (typeof isOwner === "function" && isOwner()) return "\uD83D\uDCA0 Unlimited (Owner)";
+    if (typeof currentUser !== "undefined" && currentUser) {
+      var b = (typeof profileBalanceText === "function") ? profileBalanceText() : "";
+      return "\uD83D\uDCA0 " + (b || "0 credits");
+    }
+  } catch (e) {}
+  try { var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed()); return "\uD83C\uDFAC Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN; } catch (e) { return ""; }
+}
+function detailGenText() {
+  try {
+    if (typeof isOwner === "function" && isOwner()) return "\uD83C\uDFAC Generate \u2014 free";
+    var c = (typeof costFor === "function") ? costFor((typeof selectedDur === "number") ? selectedDur : 30) : 20;
+    return "\uD83C\uDFAC Generate \u2014 " + c + " credits";
+  } catch (e) { return "\uD83C\uDFAC Generate"; }
+}
+function refreshDetailGen() {
+  var dc = document.getElementById("dCredits");
+  if (dc) dc.textContent = detailCreditsText();
+  var dg = document.getElementById("dGenerate");
+  if (dg) dg.textContent = detailGenText();
+}
+function syncToolRatio() { document.querySelectorAll("#ratioBtns button").forEach(function (x) { x.classList.toggle("active", x.getAttribute("data-ratio") === selectedRatio); }); }
+function syncToolDur() { document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.toggle("active", parseInt(x.getAttribute("data-dur"), 10) === selectedDur); }); }
+function modalGenerate(mid) {
+  var errEl = document.getElementById("dErr");
+  var resEl = document.getElementById("dResult");
+  function showErr(msg) { if (errEl) { errEl.textContent = msg; errEl.hidden = false; } if (resEl) resEl.hidden = true; }
+  if (errEl) errEl.hidden = true;
+  if (resEl) resEl.hidden = true;
+  var subj = document.getElementById("dSubject");
+  var act = document.getElementById("dAction");
+  var qSel = document.getElementById("dQuality");
+  var s = subj ? subj.value.trim() : "";
+  var a = act ? act.value.trim() : "";
+  if (!s) { showErr("Add a subject."); return; }
+  if (!a) { showErr("Add an action."); return; }
+  var engine = null;
+  try { engine = ENGINES.find(function (e) { return e.id === mid; }); } catch (e) {}
+  if (!engine) { showErr("Engine not found."); return; }
+  if (typeof photos !== "undefined" && photos.length === 0 && engine.i2v) { showErr("Add a reference photo in the tool first."); return; }
+  var ts = document.getElementById("subject"); if (ts) ts.value = s;
+  var ta = document.getElementById("action"); if (ta) ta.value = a;
+  selectedQuality = qSel ? qSel.value : null;
+  var el = document.querySelector('.engine[data-id="' + mid + '"]');
+  if (el) el.click();
+  syncToolRatio(); syncToolDur();
+  refreshDetailGen();
+  if (typeof window.lfCreditGate === "function") { window.lfCreditGate(selectedDur, buildPlan); }
+  else { showErr("Credit system unavailable \u2014 reload."); return; }
+  var tries = 0;
+  var timer = setInterval(function () {
+    tries++;
+    var out = document.getElementById("output");
+    var bErr = document.getElementById("buildErr");
+    var am = document.getElementById("authModal");
+    var loginOpen = false;
+    try { loginOpen = !!(am && getComputedStyle(am).display !== "none" && !am.hidden); } catch (e) {}
+    if (loginOpen) { clearInterval(timer); return; }
+    if (bErr && bErr.classList.contains("show")) { clearInterval(timer); showErr(bErr.textContent || "Something went wrong."); return; }
+    if (out && out.classList.contains("show")) { clearInterval(timer); showModalResult(mid); return; }
+    if (tries >= 27) { clearInterval(timer); showErr("Taking too long \u2014 try again."); }
+  }, 300);
+}
+function showModalResult(mid) {
+  var resEl = document.getElementById("dResult");
+  if (!resEl) return;
+  var sum = document.getElementById("summary");
+  var go = document.getElementById("goBtn");
+  var sumHtml = sum ? sum.innerHTML : "";
+  var goHref = go ? go.getAttribute("href") : "#";
+  var goText = go ? go.textContent : "\u25B6 Open the free engine \u2192";
+  resEl.innerHTML = '<div>' + sumHtml + '</div>' +
+    '<div class="db-actions">' +
+    '<a class="btn-ghost" href="' + goHref + '" target="_blank" rel="noopener">' + escHtml(goText) + '</a>' +
+    '<button class="btn-ghost" type="button" data-copy-plan="1">\uD83D\uDCCB Copy plan</button>' +
+    '</div>';
+  resEl.hidden = false;
+  refreshDetailGen();
 }
 function openDetail(kind, id) {
   var item = null, demo = null, siteUrl = "", useEngine = false, spec = "";
@@ -1260,13 +1403,38 @@ function openDetail(kind, id) {
   if (useEngine) actions += '<button class="btn-ghost" type="button" data-save-video="' + item.id + '">💾 Save this video</button>';
   actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
   var freeFirst = '<p class="detail-free-first">\uD83D\uDCA0 Use your free credits first \u2014 a 30-second video costs 20 credits. Buy more only when they run out.</p>';
+  var builder = "";
+  if (useEngine) {
+    var qOpts = qualityOptionsFor(item);
+    var qHtml = qOpts.map(function (q, qi) { return '<option value="' + q + '"' + (qi === qOpts.length - 1 ? ' selected' : '') + '>' + q + '</option>'; }).join('');
+    var escAttr = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
+    var subj = escAttr(((document.getElementById("subject") || {}).value || ""));
+    var act = escAttr(((document.getElementById("action") || {}).value || ""));
+    var durBtns = [5, 10, 20, 30].map(function (d) { return '<button type="button" data-dur="' + d + '"' + (d === selectedDur ? ' class="active"' : '') + '>' + d + 's</button>'; }).join('');
+    builder = '<div class="detail-builder">' +
+      '<div><div class="db-label">Ratio</div><div class="seg-btns" data-db-ratio>' +
+      '<button type="button" data-ratio="16:9"' + (selectedRatio === "16:9" ? ' class="active"' : '') + '>16:9</button>' +
+      '<button type="button" data-ratio="9:16"' + (selectedRatio === "9:16" ? ' class="active"' : '') + '>9:16</button>' +
+      '<button type="button" data-ratio="1:1"' + (selectedRatio === "1:1" ? ' class="active"' : '') + '>1:1</button></div></div>' +
+      '<div><div class="db-label">Subject</div><input id="dSubject" type="text" value="' + subj + '" placeholder="Who / what is in the video"></div>' +
+      '<div><div class="db-label">Action</div><textarea id="dAction" placeholder="What happens">' + act + '</textarea></div>' +
+      '<div><div class="db-label">Duration</div><div class="seg-btns" data-db-dur>' + durBtns + '</div></div>' +
+      '<div><div class="db-label">Quality</div><select id="dQuality">' + qHtml + '</select></div>' +
+      '<p class="db-credits" id="dCredits"></p>' +
+      '<button class="big-btn" id="dGenerate" type="button" data-gen-engine="' + item.id + '"></button>' +
+      '<p class="db-err" id="dErr" hidden></p>' +
+      '<div class="db-result" id="dResult" hidden></div>' +
+      '</div>';
+  }
   detailBody.innerHTML =
     '<h3 id="detailTitle">' + escHtml(item.name) + '</h3>' +
     detailVideoHTML(demo, item.name, siteUrl) +
     freeFirst +
+    builder +
     actions +
     buyHTML +
     '<p class="detail-spec">' + escHtml(spec) + '</p>';
+  refreshDetailGen();
   detailModal.hidden = false;
   document.body.style.overflow = "hidden";
 }
@@ -1301,6 +1469,14 @@ if (detailBody) {
       /* No forced scroll: the page never pushes the user down. */
       return;
     }
+    var rBtn = t.closest("[data-db-ratio] button");
+    if (rBtn) { selectedRatio = rBtn.getAttribute("data-ratio"); var rg = rBtn.closest("[data-db-ratio]"); if (rg) { rg.querySelectorAll("button").forEach(function (x) { x.classList.remove("active"); }); rBtn.classList.add("active"); } syncToolRatio(); return; }
+    var dBtn = t.closest("[data-db-dur] button");
+    if (dBtn) { selectedDur = parseInt(dBtn.getAttribute("data-dur"), 10); var dg2 = dBtn.closest("[data-db-dur]"); if (dg2) { dg2.querySelectorAll("button").forEach(function (x) { x.classList.remove("active"); }); dBtn.classList.add("active"); } syncToolDur(); refreshDetailGen(); if (typeof updateBuildBtn === "function") updateBuildBtn(); return; }
+    var gBtn = t.closest("[data-gen-engine]");
+    if (gBtn) { modalGenerate(gBtn.getAttribute("data-gen-engine")); return; }
+    var cBtn = t.closest("[data-copy-plan]");
+    if (cBtn) { try { copyText(fullPlanText(), cBtn); } catch (e) {} return; }
     var lite = t.closest(".lite-yt");
     if (lite) {
       var vid = lite.getAttribute("data-yt");
@@ -1365,7 +1541,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   modeIn.addEventListener("click", function () { setMode("signin"); });
   modeUp.addEventListener("click", function () { setMode("signup"); });
   /* Temporary / disposable email addresses may not sign up: they are the
-     standard way to farm the 60-credit bonus again and again. List: top
+     standard way to farm the 20-credit bonus again and again. List: top
      ~560 domains from the public disposable-email-domains list
      (github.com/disposable/disposable-email-domains) plus the well-known
      services. No list is ever complete — new temp domains appear daily —
@@ -1389,7 +1565,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (mode === "signup" && cred && cred.user && cred.user.sendEmailVerification) {
         /* New account: send the verification email. The credit wallet
            (Firestore rules) only opens for verified emails, so the user
-           must click the link before the 60 free credits activate. */
+           must click the link before the 20 free credits activate. */
         cred.user.sendEmailVerification().then(function () {
           showMsg("Account created — we sent a verification email. Click the link in it to activate your 20 free credits, then sign in.");
         }).catch(function () {
@@ -1525,7 +1701,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   /* Claimed-bonus key: for Gmail, dots and +tags do not make a new mailbox
      (user.name+tag@gmail.com IS username@gmail.com), so strip them before
      using the email as the claimed-registry key — otherwise the same Gmail
-     could take the 60-credit bonus again via +aliases or dots. */
+     could take the 20-credit bonus again via +aliases or dots. */
   function normalizeEmailForClaim(email) {
     var e = String(email || "").trim().toLowerCase();
     var parts = e.split("@");
@@ -1538,7 +1714,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     return local + "@" + domain;
   }
   var FINISHED_MSG = "Credits finished";
-  /* Daily free refill + referral (v4): verified users get 4 free credits
+  /* Daily free refill + referral (v5): verified users get 4 free credits
      every day; inviting a friend earns 20 credits when the friend verifies
      their email AND builds their first video plan. Both cost the site $0
      (video renders on the engines' free tiers); credits are our own numbers. */
@@ -1696,7 +1872,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   /* Daily claim button state: verified signed-in users only (unverified get
      no wallet at all under rules v3, so no refill); the owner is Unlimited
      and needs no refill. One claim per Asia/Dhaka day, enforced here AND in
-     Firestore (lastDailyClaim on the wallet doc + rules v4). */
+     Firestore (lastDailyClaim on the wallet doc + rules v5). */
   function updateDailyClaim() {
     var show = !!(currentUser && currentUser.emailVerified && !isOwner() && walletState === "ready");
     var claimedToday = walletLastDailyClaim === todayDhaka();
@@ -1891,8 +2067,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
             };
             if (withRef && refUid) walletData.referredBy = refUid;
             tx.set(ref, walletData);
-          /* One-way claim (see firestore.rules v3): this email has now taken
-             its one 60-credit signup bonus. Written in the SAME transaction
+          /* One-way claim (see firestore.rules v5): this email has now taken
+             its one 20-credit signup bonus. Written in the SAME transaction
              as the wallet, so both succeed or neither does — and deleting
              the Auth account does NOT delete this document, so
              re-registering with the same email can never create a new wallet. */
@@ -1968,7 +2144,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function loadReferralStats() {
     var statsEl = document.getElementById("profileReferralStats");
     if (!statsEl || !currentUser || !lfDb || referralStatsLoaded) return;
-    referralStatsLoaded = true; // best effort: no retry spam if rules v4 is not live yet
+    referralStatsLoaded = true; // best effort: no retry spam if rules v5 is not live yet
     lfDb.collection("referrals").where("referrerUid", "==", currentUser.uid).get().then(function (qs) {
       var joined = 0, earned = 0;
       qs.forEach(function (doc) {
@@ -1986,7 +2162,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      Runs on every wallet update and on sign-in (covers a closed tab).
      The referrals doc (keyed by the referred uid) makes the reward pay at
      most once; the +20 wallet update and the rewarded flip happen in ONE
-     transaction, and rules v4 only allows that +20 while the doc is still
+     transaction, and rules v5 only allows that +20 while the doc is still
      unpaid. If the referrer has no wallet (e.g. the owner), the flip still
      records the referral and no credits are paid. */
   function maybeRewardReferrer() {
@@ -2005,7 +2181,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         rewarded: false,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       }).then(function () { return payReferral(refDoc, referrerRef); });
-    }).catch(function () { /* transient / rules v4 not live yet: retry on the next wallet update or sign-in */ });
+    }).catch(function () { /* transient / rules v5 not live yet: retry on the next wallet update or sign-in */ });
   }
   function payReferral(refDoc, referrerRef) {
     return lfDb.runTransaction(function (tx) {
@@ -2022,7 +2198,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }).catch(function (err) {
       /* Referrer wallet missing (e.g. the referrer is the owner, who has no
          wallet): record the referral as rewarded anyway so it never retries
-         forever. Anything else (network, rules v4 not live yet) retries on
+         forever. Anything else (network, rules v5 not live yet) retries on
          the next wallet update or sign-in. */
       if (err && (err.code === "not-found" || (err.message && err.message.indexOf("not exist") !== -1))) {
         refDoc.update({ rewarded: true, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }).then(function () {
