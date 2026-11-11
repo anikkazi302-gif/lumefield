@@ -9,9 +9,9 @@ rules_version = '2';
 //    signed-in user with a VERIFIED email can read and write ONLY their own
 //    wallet. Unverified emails get nothing — the site sends a verification
 //    email on sign-up, and the wallet only opens after the user clicks the
-//    link. This stops unlimited free accounts farming the 60-credit signup
+//    link. This stops unlimited free accounts farming the 20-credit signup
 //    bonus with fake/temporary emails.
-//      - Create: only with exactly 60 credits, only the allowed fields,
+//      - Create: only with exactly 20 credits, only the allowed fields,
 //        only if this email has never claimed the bonus before, and never
 //        from a temporary/disposable email address (top ~105 domains blocked
 //        here; the site also blocks ~560 at sign-up — no list is complete,
@@ -23,7 +23,7 @@ rules_version = '2';
 //        new, later, valid YYYY-MM-DD date (the site only ever claims
 //        today's Asia/Dhaka date; the rules enforce format + strictly
 //        increasing date, so a fake future date is the only residual hole —
-//        worth 4 credits a throw, far less than a fresh email's 60, see §4);
+//        worth 4 credits a throw, far less than a fresh email's 20, see §4);
 //        (b) the REFERRAL REWARD — credits up by exactly 20, only paid by
 //        the referred user themself, only while their referrals doc names
 //        this wallet as referrer and is still unpaid (rewarded == false).
@@ -35,7 +35,7 @@ rules_version = '2';
 //        absent at creation).
 //      - Delete: never allowed.
 // 2. Claims (collection "claimed", doc id = NORMALIZED email): one-way
-//    record that an email has already taken its one 60-credit signup bonus.
+//    record that an email has already taken its one 20-credit signup bonus.
 //    The site creates it in the SAME transaction as the wallet, so both
 //    succeed or neither does. Deleting a Firebase Auth account does NOT
 //    delete Firestore documents, so the claim SURVIVES account deletion —
@@ -59,7 +59,7 @@ rules_version = '2';
 //    date string, so they enforce format + strictly increasing date. A user
 //    calling Firestore directly with fake future dates could claim +4 per
 //    fake day — deliberate SDK abuse for 4 credits a throw, while the same
-//    user could simply register a new email for 60. Not worth a Cloud
+//    user could simply register a new email for 20. Not worth a Cloud
 //    Function; the client always claims the real Asia/Dhaka date.
 // 5. Everything else in the database: denied.
 service cloud.firestore {
@@ -81,7 +81,7 @@ service cloud.firestore {
       allow read: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId;
 
       allow create: if request.auth != null && request.auth.token.email_verified == true && request.auth.uid == userId
-        && request.resource.data.credits == 60
+        && request.resource.data.credits == 20
         && request.resource.data.keys().hasOnly(['credits', 'createdAt', 'updatedAt', 'referredBy', 'lastDailyClaim'])
         && (!('referredBy' in request.resource.data) || (request.resource.data.referredBy is string && request.resource.data.referredBy != request.auth.uid))
         && (!('lastDailyClaim' in request.resource.data) || (request.resource.data.lastDailyClaim is string && request.resource.data.lastDailyClaim.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}$')))
