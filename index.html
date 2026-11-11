@@ -1297,26 +1297,28 @@ function detailVideoHTML(demo, name, siteUrl) {   var sampleTag = (demo && demo.
 }
 function detailCreditsText() {
   try {
-    if (typeof isOwner === "function" && isOwner()) return "\uD83D\uDCA0 Unlimited (Owner)";
-    if (typeof currentUser !== "undefined" && currentUser) {
-      var b = (typeof profileBalanceText === "function") ? profileBalanceText() : "";
-      return "\uD83D\uDCA0 " + (b || "0 credits");
+    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "💎 Unlimited (Owner)";
+    if (typeof window !== "undefined" && typeof window.lfSignedIn === "function" && window.lfSignedIn()) {
+      var b = (typeof window.lfBalanceText === "function") ? window.lfBalanceText() : "";
+      return "💎 " + (b || "0 credits");
     }
   } catch (e) {}
-  try { var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed()); return "\uD83C\uDFAC Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN; } catch (e) { return ""; }
+  try { var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed()); return "🎬 Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN; } catch (e) { return ""; }
 }
 function detailGenText() {
   try {
-    if (typeof isOwner === "function" && isOwner()) return "\uD83C\uDFAC Generate \u2014 free";
-    var c = (typeof costFor === "function") ? costFor((typeof selectedDur === "number") ? selectedDur : 30) : 20;
-    return "\uD83C\uDFAC Generate \u2014 " + c + " credits";
-  } catch (e) { return "\uD83C\uDFAC Generate"; }
+    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "🎬 Generate — free";
+    var c = (typeof window !== "undefined" && typeof window.lfCostFor === "function") ? window.lfCostFor((typeof selectedDur === "number") ? selectedDur : 30) : 20;
+    return "🎬 Generate — " + c + " credits";
+  } catch (e) { return "🎬 Generate"; }
 }
 function refreshDetailGen() {
   var dc = document.getElementById("dCredits");
   if (dc) dc.textContent = detailCreditsText();
   var dg = document.getElementById("dGenerate");
   if (dg) dg.textContent = detailGenText();
+  var ff = document.getElementById("dFreeFirst");
+  if (ff) ff.textContent = (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) ? "💎 Unlimited (Owner) — free for you." : "💠 Use your free credits first — a 30-second video costs 20 credits. Buy more only when they run out.";
 }
 function syncToolRatio() { document.querySelectorAll("#ratioBtns button").forEach(function (x) { x.classList.toggle("active", x.getAttribute("data-ratio") === selectedRatio); }); }
 function syncToolDur() { document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.toggle("active", parseInt(x.getAttribute("data-dur"), 10) === selectedDur); }); }
@@ -1404,7 +1406,7 @@ function openDetail(kind, id) {
   if (useEngine) actions += '<button class="btn-primary" type="button" data-use-engine="' + item.id + '" style="border:none;cursor:pointer;font-family:inherit;">🎬 Use this engine in the tool</button>';
   if (useEngine) actions += '<button class="btn-ghost" type="button" data-save-video="' + item.id + '">💾 Save this video</button>';
   actions += '<a class="btn-ghost" href="' + siteUrl + '" target="_blank" rel="noopener">▶ Open ' + escHtml(item.name) + ' free ↗</a></div>';
-  var freeFirst = '<p class="detail-free-first">\uD83D\uDCA0 Use your free credits first \u2014 a 30-second video costs 20 credits. Buy more only when they run out.</p>';
+  var freeFirst = '<p class="detail-free-first" id="dFreeFirst">💠 Use your free credits first — a 30-second video costs 20 credits. Buy more only when they run out.</p>';
   var builder = "";
   if (useEngine) {
     var qOpts = qualityOptionsFor(item);
@@ -2293,6 +2295,15 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }
     return true;
   }
+
+  /* Read-only helpers for the card-detail builder: it lives in a separate
+     top-level script and cannot see this IIFE's privates (isOwner, costFor,
+     profileBalanceText, currentUser). Display only — the real charge still
+     runs through lfCreditGate + the Firestore transaction below. */
+  window.lfIsOwner = isOwner;
+  window.lfCostFor = costFor;
+  window.lfBalanceText = profileBalanceText;
+  window.lfSignedIn = function () { return !!currentUser; };
 
   window.lfCreditGate = function (dur, buildPlan) {
     if (!authResolved) { showBuildError("Please wait \u2014 checking your sign-in\u2026"); return; }
