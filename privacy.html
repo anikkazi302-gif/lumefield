@@ -41,20 +41,26 @@
 
 <main class="legal">
   <h1>Privacy <span>Policy</span></h1>
-  <p class="updated">Last updated: 11 November 2026</p>
+  <p class="updated">Last updated: 12 November 2026</p>
 
   <h2>The short version</h2>
   <p>LumeField collects <b>almost nothing</b>. You can start without an account — your first video need no sign-in — and nothing you type or upload on this site is sent to us.</p>
 
   <h2>What we collect</h2>
   <p>If you use the tool without signing in, this site collects <b>no personal data at all</b>.</p>
-  <p>If you sign in (free, email or Google, through Firebase), the only personal data we keep is your login email, your credit balance, and the characters and video plans you choose to save. Your <b>login email</b> is handled by Firebase; your <b>credit balance</b> and saved items are stored in our database (Firestore) under your account, only so the tool knows how many credits you have left and can show your saved characters and videos. We never see your password, and we never sell or share your email or your credit balance.</p>
+  <p>If you sign in (free, email or Google, through Firebase), we keep: your login email, your account ID, whether your email is verified, how you signed in, and when your account was created and last used — plus, if you sign in with Google, the display name and profile photo from your Google account; your credit balance, the date of your last daily free-credit claim, and how many friends joined through your invite link; the characters and video plans you choose to save (name, description, a downscaled photo for characters; model, plan text and engine link for videos); and a one-way anti-abuse record that your email has already claimed its one free signup bonus (see "One email, one free bonus" below). We never see your password. We never sell or share your email, your credit balance, or your saved items.</p>
+
+  <h2>One email, one free bonus</h2>
+  <p>To stop one email taking the free signup bonus again and again, we keep a record that an email has already claimed it. That record holds only the email address and the date it was claimed. It cannot be read, changed or deleted through the site — not even by you — and it stays even if you delete your account. If you want it removed, ask us (see "Deleting your account") and we will remove it by hand.</p>
+
+  <h2>We never train AI on your data. We collect no biometrics.</h2>
+  <p>We never train any AI model on your photos, prompts, characters or video plans. We do not run any AI model at all — your video is rendered on a third-party engine you open yourself. We do not extract faceprints, voiceprints or any other biometric data from your photos. A photo you save as a character is stored as a plain image and is never analyzed.</p>
 
   <h2>Your photos stay in your browser</h2>
   <p>When you upload reference photos in the video tool, they are <b>previewed only in your own browser</b> — never uploaded by this site and never stored by us. The exception is a photo you choose to save as a character in My characters: that photo (downscaled) is stored in our database under your account, together with the name and description you give it, and so are video plans you choose to save in My videos. When you generate a video, you upload the photo yourself on the engine's own page — that is the only place it goes.</p>
 
-  <h2>Tracking</h2>
-  <p>We do <b>no tracking</b> beyond basic anonymous usage counts, if any — the kind of counts a static host keeps (for example, how many times a page was loaded). There are no advertising trackers, no analytics profiles, and nothing that follows you across the web.</p>
+  <h2>Cookies &amp; local storage</h2>
+  <p>This site sets <b>no cookies of its own</b> and runs no analytics or advertising trackers. Your browser stores three things locally, only in your own browser: (1) how many free guest videos you have used; (2) a referral code if you arrived through an invite link; (3) the list of video plans you built in this browser. Clearing your browser data removes all three. Signing in with Google happens on Google's own page and is governed by Google's privacy policy. Demo videos load from YouTube in privacy-enhanced mode and from Pexels; when a demo loads, YouTube or Pexels sees your IP address, as on any site that embeds a video.</p>
 
   <h2>Payments</h2>
   <p>If you buy extra credits, payment is handled <b>only by our payment provider</b> (Paddle or Polar — the Merchant of Record shown on the checkout page). Your <b>card details go only to the payment provider</b> and are never sent to, seen by, or stored by LumeField. The only payment information we keep is the record we need to add your credits: your email, which credit pack you bought, and your credit balance — stored in our database (Firestore) under your account. We never sell or share that record. The payment provider has its own privacy policy, which applies to the payment itself.</p>
@@ -62,8 +68,26 @@
   <h2>Third-party engines</h2>
   <p>Your video is rendered on <b>third-party engines</b> (such as Hugging Face Spaces, Kling, Google Flow, or Runway). When you open one of them, you leave this site and <b>that engine's own privacy policy applies</b> — including whatever it collects when you upload a photo or create an account there. Please read the engine's policy before you upload anything to it.</p>
 
+  <h2>How long we keep your data</h2>
+  <p>Your wallet, saved characters and saved videos stay until you delete them — there is no expiry and no inactivity rule. If you delete your account, your wallet, characters and saved videos are deleted at once. We keep no database backups, so there is no backup copy left behind. The anti-abuse email record above is the only thing that survives, and only until you ask us to remove it by hand. Your browser-only items disappear when you clear your browser data.</p>
+
+  <h2>Deleting your account</h2>
+  <p>You can delete your saved characters and videos yourself from My characters / My videos. To delete your whole account — wallet, saved items and sign-in — ask us through the project on GitHub (a "Delete my account" button in your profile menu is coming next). Deletion is immediate and permanent: your wallet, characters and saved videos are deleted at once and cannot be recovered.</p>
+
+  <h2>Your rights</h2>
+  <p>You can ask us for a copy of the data we hold about you, ask us to correct it, or ask us to delete it. Ask through the project on GitHub and we will answer within 30 days. You can also delete your saved characters and videos yourself at any time, and sign out at any time. We will never charge you, punish you or degrade the service for asking.</p>
+
+  <h2>If something goes wrong</h2>
+  <p>If we ever learn that your data has been exposed, we will tell you by email within 72 hours of confirming it, and tell you what happened and what we did. To report a security problem in this site, open a GitHub issue in the project repository or use GitHub's private "Report a vulnerability" button on the repository — do not post the details in public. We will acknowledge your report within 3 business days and fix confirmed problems as fast as we can.</p>
+
+  <h2>Who can use LumeField</h2>
+  <p>LumeField is for people aged 13 or older. If you are under 13, do not create an account. If you are under 18, use it only with a parent or guardian's permission. We do not knowingly collect personal data from children under 13; if we learn that we have, we will delete it.</p>
+
+  <h2>Where your data lives</h2>
+  <p>This site is a static website hosted on GitHub Pages and your account data is stored on Google Firebase (Firestore, in the nam5 region). GitHub and Google have their own privacy policies for the hosting and database services they provide. All pages are served over HTTPS.</p>
+
   <h2>Changes to this policy</h2>
-  <p>This policy may change if the service changes — for example, when the credit system changes. The "Last updated" date at the top will change with it.</p>
+  <p>If we change this policy in a way that matters to you, we will put a notice on the site and change the "Last updated" date before the change takes effect. Other small changes take effect when we post them. If you keep using the site after a change takes effect, you accept the new policy.</p>
 
   <h2>Contact</h2>
   <p>Questions about this policy? Reach us through the project on GitHub: <a href="https://github.com/anikkazi302-gif/lumefield">github.com/anikkazi302-gif/lumefield</a>.</p>
