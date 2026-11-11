@@ -591,18 +591,22 @@
   }
   measure();
   window.addEventListener("resize", measure);
-  var paused = false, visible = true, last = 0;
-  function tick(now) {
+  var paused = false, visible = true, last = Date.now();
+  /* setInterval, not requestAnimationFrame: rAF stops completely when the
+     tab is in the background (and in headless browsers), which froze the
+     slide at scrollLeft 0. setInterval keeps firing (1 Hz when backgrounded)
+     and the real elapsed time keeps the speed right. */
+  function step() {
+    var now = Date.now();
     if (!paused && visible && setW > 0) {
-      var dt = last ? Math.min(now - last, 50) : 16;
-      last = now;
-      track.scrollLeft += 0.5 * dt / 16;
-      if (track.scrollLeft >= setW) track.scrollLeft -= setW;
-    } else {
-      last = now;
+      var dt = Math.min(now - last, 2000);
+      if (dt > 0) {
+        track.scrollLeft = (track.scrollLeft + 0.5 * dt / 16) % setW;
+      }
     }
-    requestAnimationFrame(tick);
+    last = now;
   }
+  setInterval(step, 50);
   track.addEventListener("mouseenter", function () { paused = true; });
   track.addEventListener("mouseleave", function () { paused = false; });
   track.addEventListener("touchstart", function () { paused = true; }, { passive: true });
@@ -610,7 +614,6 @@
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (entries) { visible = entries[0].isIntersecting; }).observe(track);
   }
-  requestAnimationFrame(tick);
 })();
 </script>
 
