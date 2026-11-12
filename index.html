@@ -1139,7 +1139,7 @@
       <div class="per">one-time</div>
       <div class="credits">60 credits</div>
       <p>3 &times; 30-second videos<br>About $1.66 per 30-second video</p>
-      <p class="incl">All 15 video models &middot; All 8 image tools &middot; 8 photo editors</p>
+      <p class="incl">All 33 video models &middot; All 20 image tools &middot; 8 photo editors</p>
       <span class="tag">Best for trying paid videos</span><br>
       <button class="buy-btn" type="button" disabled>Buy &mdash; coming soon</button>
     </div>
@@ -1381,11 +1381,29 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 <script>
 const ENGINES = [
   { id: "seedance", refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
-  { id: "kling", refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "Free monthly credits (amount varies)", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
+  { id: "seedance25draft", refs: 30, name: "Seedance 2.5 Draft", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "480p", audio: true, free: "120 free credits/day on Dreamina", note: "Draft is a 480p preview mode of Seedance 2.5, not a separate model \u2014 a draft costs the normal 480p price. Same 120 free credits/day." },
+  { id: "seedance25edit", refs: 30, name: "Seedance 2.5 Edit", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Edit mode of Seedance 2.5 \u2014 change a moment, add, remove or replace, and redo sound on a finished clip. Same free credits." },
+  { id: "seedance20", refs: 30, name: "Seedance 2.0", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 \u2014 costs less per second than 2.5, so the 120 daily credits go further. Real human faces are blocked on 2.0 in Dreamina." },
+  { id: "seedance20fast", refs: 30, name: "Seedance 2.0 Fast", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "The budget 2.0 variant (480p/720p) \u2014 cheapest per second in the family." },
+  { id: "seedance20mini", refs: 30, name: "Seedance 2.0 Mini", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 Mini \u2014 5 credits/sec, about 24 seconds/day from the free allowance." },
+  { id: "kling", refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
+  { id: "klingflash", refs: 10, name: "Kling 4.0 Flash", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 4.0 Flash \u2014 the faster, cheaper 4.0 variant, so more clips fit in the daily credits. 720p cap on free, watermarked, personal use only." },
+  { id: "kling3", refs: 10, name: "Kling 3.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 3.0 \u2014 the older version; cheaper per clip than 4.0. 720p cap on free, watermarked, personal use only." },
   { id: "flow", refs: 3, name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
+  { id: "omniflash12", refs: 3, name: "Gemini Omni Flash 1.2", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 10, i2v: true, res: "720p", audio: true, free: "50 free credits/day on Google Flow", note: "Google\u2019s fastest video model in Flow \u2014 3\u201310s clips at 360p/720p free. Peak hours 2\u20135 PM UTC may block free video." },
+  { id: "veo31lite", refs: 3, name: "Veo 3.1 Lite", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits/day on Google Flow", note: "Veo 3.1 Lite \u2014 10 credits per clip, up to 5 clips/day free. Veo 3.1 Fast retires Dec 5, 2026 \u2014 use Lite instead." },
   { id: "vidu", refs: 15, name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
   { id: "hailuo", refs: 9, name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
+  { id: "h3", refs: 12, name: "MiniMax H3", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "MiniMax H3 \u2014 4\u201315s clips with native sound, up to 12 reference files (9 images, 3 video, 3 audio). Welcome pack, not a daily allowance." },
+  { id: "h3max", refs: 12, name: "MiniMax H3 Max", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Max \u2014 the highest-quality H3 variant. Same welcome credits, watermarked." },
+  { id: "h3highspeed", refs: 12, name: "MiniMax H3 Highspeed", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Highspeed \u2014 the fast H3 variant. Same welcome credits, watermarked." },
+  { id: "h3lite", refs: 12, name: "MiniMax H3 Lite", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Lite \u2014 the light, cheap H3 variant. Same welcome credits, watermarked." },
   { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
+  { id: "wan3prime", refs: 1, name: "Wan 3.0 Prime", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 3.0 Prime \u2014 the top Wan 3.0 tier. Free quota: 30s, 90 days, Singapore region only; sign-up asks for payment details." },
+  { id: "wan25", refs: 1, name: "Wan 2.5", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.5 \u2014 free quota 50s (shared with 2.6/2.7), 90 days, Singapore only." },
+  { id: "wan26", refs: 1, name: "Wan 2.6", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.6 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
+  { id: "wan27", refs: 1, name: "Wan 2.7", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.7 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
+  { id: "happyhorse", refs: 9, name: "HappyHorse", vendor: "Alibaba", url: "https://happyhorse.com", maxSec: 15, i2v: true, res: "1080p", audio: true, free: "Free plan with daily login credits", note: "HappyHorse \u2014 text-to-video, first-frame and reference-to-video, native audio, 1080p, clips up to 15s. Use happyhorse.com only \u2014 lookalike sites are not official." },
   { id: "luma", refs: 2, name: "Luma Dream Machine", vendor: "Luma AI", url: "https://dream-machine.lumalabs.ai", maxSec: 10, i2v: true, res: "720p", audio: false, free: "Free tier — verify at signup", note: "Cinematic Ray models with keyframe control, free tier to verify at signup. Video only — no native audio." },
   { id: "runway", refs: 3, name: "Runway Gen-4 Turbo", vendor: "Runway", url: "https://runwayml.com", maxSec: 5, i2v: true, res: "720p", audio: false, free: "125 credits once — never refills", note: "Free-tier clips are 5 seconds and watermarked. Good for one test, not for daily work." },
   { id: "pixverse", refs: 1, name: "Pixverse V6", vendor: "AIsphere", url: "https://pixverse.ai", maxSec: 15, i2v: true, res: "540p", audio: true, free: "60 at signup + 30 free credits/day", note: "Up to 15-second clips with sound, 30 free credits every day." },
@@ -1397,9 +1415,9 @@ const ENGINES = [
   { id: "mochi", refs: 0, name: "Mochi 1", vendor: "Genmo · open source", url: "https://genmo.ai/play", maxSec: 5, i2v: false, res: "480p", audio: false, free: "Free playground (250 lifetime credits)", note: "Text-to-video ONLY — it takes no reference photo. Listed here so you know why it is not for photo work." }
 ];
 /* Newest engines — shown with a NEW badge on their cards. */
-var NEW_ENGINE_IDS = ["kling", "vidu", "wan3", "pixverse", "firefly"];
+var NEW_ENGINE_IDS = ["kling", "vidu", "wan3", "pixverse", "firefly", "klingflash", "kling3", "seedance25draft", "seedance25edit", "omniflash12", "veo31lite", "seedance20", "seedance20fast", "seedance20mini", "h3", "h3max", "h3highspeed", "h3lite", "wan3prime", "wan25", "wan26", "wan27", "happyhorse"];
 var TOP_ENGINE_IDS = ["seedance"];
-var NEW_IMAGE_IDS = ["gpt26s", "gpt26f"];
+var NEW_IMAGE_IDS = ["gpt26s", "gpt26f", "h3image", "seedream50lite", "nanobanana21", "nanobanana2lite", "ideogram45", "ideogram45edit", "recraft41", "grokimagine", "grokimagine20", "zimage", "klingo1", "flux3klein"];
 
 const SETTINGS = {
   wan22: "Resolution: 720p · 24 fps · Steps: ~30 · Guidance: 5–7 · Negative prompt: blurry, low quality, distorted face, extra limbs, flicker · Use your photo as the start image.",
@@ -1416,7 +1434,25 @@ const SETTINGS = {
   wan3: "Model: Wan 3.0 · 10 seconds on the free plan (up to 30s paid) · Audio: ON · Upload your photo as the start frame. Daily check-in credits on the free plan.",
   pixverse: "Model: Pixverse V6 · Up to 15 seconds · Audio: ON · Upload your photo as the start frame. 30 free credits every day.",
   luma: "Model: Ray 3.2 / Ray 2 · Up to 10 seconds · Keyframes for camera control · No native audio — add sound later in your editor.",
-  firefly: "Pick a model (Veo, Kling, Luma Ray) · Free daily generations · Audio depends on the partner model · Upload your photo as the first frame."
+  firefly: "Pick a model (Veo, Kling, Luma Ray) · Free daily generations · Audio depends on the partner model · Upload your photo as the first frame.",
+  klingflash: "Mode: Standard \u00b7 15 seconds \u00b7 720p \u00b7 Flash is faster and cheaper than 4.0, so more clips fit in the daily credits \u00b7 Upload your photo as the first frame.",
+  kling3: "Mode: Standard \u00b7 10 seconds \u00b7 720p \u00b7 Older version, cheaper per clip than 4.0 \u00b7 Upload your photo as the first frame.",
+  seedance25draft: "Open Dreamina (dreamina.capcut.com) \u2192 Video \u2192 Seedance 2.5 \u2192 Draft/Preview mode \u00b7 480p preview \u00b7 Audio: ON \u00b7 Upload your photo as the start frame.",
+  seedance25edit: "Open Dreamina (dreamina.capcut.com) \u2192 Video \u2192 Seedance 2.5 Edit \u00b7 Change a moment, add/remove/replace, redo sound \u00b7 Audio: ON.",
+  omniflash12: "Model: Gemini Omni Flash 1.2 in Google Flow \u00b7 3\u201310 seconds \u00b7 720p \u00b7 Audio: ON \u00b7 Best for motion and dialogue \u00b7 Use Frames-to-Video with your photo.",
+  veo31lite: "Model: Veo 3.1 Lite in Google Flow \u00b7 8 seconds \u00b7 720p / 1080p \u00b7 Audio: ON \u00b7 10 credits per clip \u00b7 Use Frames-to-Video with your photo.",
+  seedance20: "Open Dreamina (dreamina.capcut.com) \u2192 Video \u2192 Seedance 2.0 \u00b7 5\u201310 seconds \u00b7 1080p \u00b7 Audio: ON \u00b7 Upload your photo as the start frame. Real human faces are blocked on 2.0.",
+  seedance20fast: "Open Dreamina (dreamina.capcut.com) \u2192 Video \u2192 Seedance 2.0 Fast \u00b7 480p/720p \u00b7 Audio: ON \u00b7 Cheapest per second in the family.",
+  seedance20mini: "Open Dreamina (dreamina.capcut.com) \u2192 Video \u2192 Seedance 2.0 Mini \u00b7 5 credits/sec \u00b7 Audio: ON \u00b7 Upload your photo as the start frame.",
+  h3: "Model: MiniMax H3 on Hailuo (hailuoai.video) \u00b7 4\u201315 seconds \u00b7 Audio: ON (native sound) \u00b7 Up to 12 reference files \u00b7 Upload your photo as the first frame.",
+  h3max: "Model: MiniMax H3 Max on Hailuo \u00b7 4\u201315 seconds \u00b7 Audio: ON \u00b7 Highest-quality H3 variant \u00b7 Upload your photo as the first frame.",
+  h3highspeed: "Model: MiniMax H3 Highspeed on Hailuo \u00b7 4\u201315 seconds \u00b7 Audio: ON \u00b7 Fast H3 variant \u00b7 Upload your photo as the first frame.",
+  h3lite: "Model: MiniMax H3 Lite on Hailuo \u00b7 4\u201315 seconds \u00b7 Audio: ON \u00b7 Light, cheap H3 variant \u00b7 Upload your photo as the first frame.",
+  wan3prime: "Model: Wan 3.0 Prime on create.wan.video \u00b7 10 seconds on the free plan \u00b7 Audio: ON \u00b7 Upload your photo as the start frame. Daily check-in credits.",
+  wan25: "Model: Wan 2.5 on create.wan.video \u00b7 10 seconds on the free plan \u00b7 Audio: ON \u00b7 Upload your photo as the start frame.",
+  wan26: "Model: Wan 2.6 on create.wan.video \u00b7 10 seconds on the free plan \u00b7 Audio: ON \u00b7 Upload your photo as the start frame.",
+  wan27: "Model: Wan 2.7 on create.wan.video \u00b7 10 seconds on the free plan \u00b7 Audio: ON \u00b7 Upload your photo as the start frame.",
+  happyhorse: "Open happyhorse.com \u2192 Text-to-video or reference-to-video \u00b7 Up to 15 seconds \u00b7 1080p \u00b7 Audio: ON \u00b7 Upload your photo as the first frame. happyhorse.com only \u2014 lookalikes are not official.",
 };
 
 const CAMERA_RULE = "CAMERA RULE: The camera does whatever it needs to do to show the characters well — it may turn, move, change angle or cut whenever the scene needs it; that is the camera's own job. All camera decisions belong to the camera alone: where to zoom in, where to zoom out, which angle to use, where to use a tracking shot, when to pull back, when to push forward, who to focus on, and when to zoom onto a face — whatever makes the scene beautiful and brings out its emotion, pain, anger and feeling. The characters pay NO attention to the camera at all: they NEVER look at it, NEVER act for it, and do nothing for it — they stay in their own business and live their scene naturally, as if no camera were there.";
@@ -1814,6 +1850,18 @@ var IMAGE_TOOLS = [
   { id: "gpt25f", name: "GPT Image 2.5 Flare", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2.5 Flare · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
   { id: "gpt2", name: "GPT Image 2", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 2 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
   { id: "gpt15", name: "GPT Image 1.5", refs: 16, url: "https://chatgpt.com", spec: "GPT Image 1.5 · image editing", demo: { yt: "-7JSa_luc6k", kind: "official", by: "OpenAI" } },
+  { id: "h3image", name: "MiniMax H3 Image", refs: 16, url: "https://huggingface.co/MiniMaxAI/MiniMax-H3-Image", spec: "Up to 16 reference images \u00b7 native 4K", demo: null },
+  { id: "seedream50lite", name: "Seedream 5.0 Lite", refs: 14, url: "https://dreamina.capcut.com", spec: "Seedream 5.0 Lite \u00b7 ~20 images/day free", demo: null },
+  { id: "nanobanana21", name: "Nano Banana 2.1", refs: 14, url: "https://flow.google", spec: "Nano Banana 2.1 \u00b7 up to 400 images/day", demo: null },
+  { id: "nanobanana2lite", name: "Nano Banana 2 Lite", refs: 14, url: "https://flow.google", spec: "Nano Banana 2 Lite \u00b7 up to 400 images/day (shared pool)", demo: null },
+  { id: "ideogram45", name: "Ideogram 4.5", refs: 1, url: "https://ideogram.ai", spec: "Ideogram 4.5 \u00b7 30 free credits/week", demo: null },
+  { id: "ideogram45edit", name: "Ideogram 4.5 Precise Edit", refs: 1, url: "https://ideogram.ai", spec: "Ideogram 4.5 Precise Edit \u00b7 30 free credits/week", demo: null },
+  { id: "recraft41", name: "Recraft V4.1", refs: 2, url: "https://recraft.ai", spec: "Recraft V4.1 \u00b7 30 free credits/day", demo: null },
+  { id: "grokimagine", name: "Grok Imagine", refs: 1, url: "https://grok.com", spec: "Grok Imagine \u00b7 free image generation (limited)", demo: null },
+  { id: "grokimagine20", name: "Grok Imagine 2.0", refs: 1, url: "https://grok.com", spec: "Grok Imagine 2.0 \u00b7 free image generation (limited)", demo: null },
+  { id: "zimage", name: "Z-Image Turbo", refs: 0, url: "https://huggingface.co/spaces/Tongyi-MAI/Z-Image-Turbo", spec: "Z-Image Turbo \u00b7 open source \u00b7 text-to-image only", demo: null },
+  { id: "klingo1", name: "Kling O1", refs: 10, url: "https://kling.ai", spec: "Kling O1 \u00b7 up to 10 reference images", demo: null },
+  { id: "flux3klein", name: "FLUX 3 Image Klein", refs: 10, url: "https://playground.bfl.ai", spec: "FLUX 3 Image Klein \u00b7 open weights \u00b7 up to 10 refs", demo: null },
 ];
 var EDITORS = [
   { id: "photopea", name: "Photopea", url: "https://photopea.com", spec: "Photoshop-style editor · layers · PSD", demo: null },
