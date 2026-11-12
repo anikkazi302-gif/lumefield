@@ -723,7 +723,7 @@
     </div>
     <div class="lfai-row">
       <button type="button" class="lfai-gen" id="lfAIGenerate">✦ Generate — 20 credits</button>
-      <button type="button" class="lfai-daily" id="lfAIDaily">🎁 +50 daily</button>
+      <button type="button" class="lfai-daily" id="lfAIDaily">🎁 Daily free</button>
     </div>
     <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
     <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
@@ -3376,7 +3376,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      exactly like real people; nothing unrealistic. Appended to every
      prompt sent to the engine (not shown as a separate option). */
   var REALISM_CUE = ", photorealistic, real people, natural realistic motion, cinematic realism";
-  var OWN_AI_DAILY = 50;
+  var OWN_AI_DAILY = 50; /* daily-free top-up cap: tops the balance up to 50, never more */
+  var OWN_AI_TRIAL_DAYS = 3; /* daily free only for the first 3 days after signup */
   var $ = function (id) { return document.getElementById(id); };
   var promptEl = $("lfAIPrompt"), photoEl = $("lfAIPhoto"), prevEl = $("lfAIPhotoPrev"),
       photoWrap = $("lfAIPhotoWrap"),
@@ -3535,16 +3536,36 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (typeof window.lfCreditGate !== "function") { setErr("Credits are still loading — try again in a second."); return; }
     window.lfCreditGate(selectedDur, doGenerate, ownCost(selectedDur), true);
   });
-  /* Daily +50 credits (own-AI tool only). Separate from the 4/day refill:
-     its own Firestore field lastOwnAIDailyClaim, same Dhaka-date + transaction
-     pattern as claimDaily. If the wallet rules do not allow the new field yet,
-     the transaction is denied and the same "try again in a bit" message shows. */
+  /* Daily free credits (own-AI tool only) — FIRST 3 DAYS after signup, then
+     users must buy. Separate from the 4/day refill: its own Firestore field
+     lastOwnAIDailyClaim, same Dhaka-date + transaction pattern as claimDaily.
+     Inside the trial the grant TOPS UP the balance to 50 (never accumulates:
+     balance 0 -> +50, 20 -> +30, 50+ -> +0). If the wallet rules do not allow
+     the new field yet, the transaction is denied and the same "try again in a
+     bit" message shows. */
   function lfAIToday() {
     try { return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }); }
     catch (e) {
       var d = new Date();
       return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
     }
+  }
+  /* Trial window: daily free only while the wallet is less than 3 days old.
+     Missing/unreadable createdAt = trial over (fail closed — no free credits
+     when the signup date cannot be verified). */
+  function lfAITrialActive(createdAt) {
+    var ms = 0;
+    try {
+      if (!createdAt) return false;
+      if (typeof createdAt.toMillis === "function") ms = createdAt.toMillis();
+      else if (createdAt instanceof Date) ms = createdAt.getTime();
+      else if (typeof createdAt === "number") ms = createdAt;
+      else if (typeof createdAt.seconds === "number") ms = createdAt.seconds * 1000;
+      else return false;
+    } catch (e) { return false; }
+    var elapsed = Date.now() - ms;
+    if (elapsed < 0) return true; /* clock skew: just signed up */
+    return elapsed < OWN_AI_TRIAL_DAYS * 24 * 60 * 60 * 1000;
   }
   if (dailyBtn) dailyBtn.addEventListener("click", function () {
     setErr("");
@@ -3561,21 +3582,35 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     dailyBtn.disabled = true;
     var today = lfAIToday();
     var ref = lfDb.collection("wallets").doc(user.uid);
+    var grantGot = 0;
+    var trialState = null; /* true/false once the wallet is read; null if the read itself failed */
     lfDb.runTransaction(function (tx) {
       return tx.get(ref).then(function (snap) {
         if (!snap.exists) throw new Error("no-wallet");
         var d = snap.data();
         if (d.lastOwnAIDailyClaim === today) throw new Error("already-claimed");
+        trialState = lfAITrialActive(d.createdAt);
+        if (!trialState) throw new Error("trial-over");
         var cur = (typeof d.credits === "number") ? d.credits : 0;
-        tx.update(ref, { credits: cur + OWN_AI_DAILY, lastOwnAIDailyClaim: today, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        grantGot = Math.max(0, OWN_AI_DAILY - cur);
+        tx.update(ref, { credits: cur + grantGot, lastOwnAIDailyClaim: today, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
       });
     }).then(function () {
-      dailyBtn.textContent = "Claimed ✓ +50";
-      setStatus("50 credits added ✓");
+      if (grantGot > 0) {
+        dailyBtn.textContent = "Claimed ✓ +" + grantGot;
+        setStatus(grantGot + " credits added ✓");
+      } else {
+        dailyBtn.textContent = "Claimed ✓";
+        setStatus("You already have your 50 free credits ✓");
+      }
     }).catch(function (err) {
       dailyBtn.disabled = false;
       if (err && err.message === "already-claimed") { dailyBtn.textContent = "Claimed ✓"; dailyBtn.disabled = true; setStatus("Already claimed today ✓"); return; }
-      if (err && err.code === "permission-denied") { setErr("Daily free credits are being switched on — please try again in a bit. Nothing was charged."); return; }
+      if (err && err.message === "trial-over") { dailyBtn.textContent = "Free trial over"; dailyBtn.disabled = true; setStatus("3-day free trial over — buy credits to keep making videos."); return; }
+      if (err && err.code === "permission-denied") {
+        if (trialState === false) { dailyBtn.textContent = "Free trial over"; dailyBtn.disabled = true; setStatus("3-day free trial over — buy credits to keep making videos."); return; }
+        setErr("Daily free credits are being switched on — please try again in a bit. Nothing was charged."); return;
+      }
       setErr("Could not claim your free credits right now. Nothing changed — please try again.");
     });
   });
