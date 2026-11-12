@@ -649,7 +649,11 @@
 .lfai-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 .lfai-photo { width: 44px; height: 44px; flex-shrink: 0; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 50%; font-size: 22px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
 .lfai-photo:hover { border-color: #c8f542; }
-.lfai-model { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 10px 14px; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.lfai-model { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 10px 14px; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; font-family: inherit; }
+.lfai-model:hover { border-color: #c8f542; }
+.lfai-model .lfai-chev { color: #8a8a9e; margin-left: 2px; }
+.lfai-model-pop { background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 10px; margin-top: 10px; max-height: 340px; overflow-y: auto; }
+.lfai-model-pop[hidden] { display: none; }
 .lfai-settings { width: 44px; height: 44px; flex-shrink: 0; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 50%; font-size: 18px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; padding: 0; }
 .lfai-settings:hover { border-color: #c8f542; }
 .lfai-settings-pop { background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 14px; margin-top: 10px; }
@@ -710,7 +714,7 @@
       <label class="lfai-photo" for="lfAIPhoto" title="Add a reference photo" aria-label="Add a reference photo">＋</label>
       <input type="file" id="lfAIPhoto" accept="image/*" hidden>
       <span class="lfai-photowrap" id="lfAIPhotoWrap" hidden><img id="lfAIPhotoPrev" alt=""><button type="button" class="lfai-photorm" id="lfAIPhotoRm" aria-label="Remove photo">&times;</button></span>
-      <span class="lfai-model">✦ LumeField AI</span>
+      <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ LumeField AI <span class="lfai-chev">›</span></button>
       <button type="button" class="lfai-settings" id="lfAISettingsBtn" aria-label="Settings" aria-haspopup="true" aria-expanded="false">⚙</button>
       <button type="button" class="lfai-gen" id="lfAIGenerate">✦ Generate — 20 credits</button>
     </div>
@@ -720,6 +724,10 @@
         <button type="button" class="lfai-dur" data-dur="5">5s</button>
         <button type="button" class="lfai-dur on" data-dur="10">10s</button>
       </div>
+    </div>
+    <div class="lfai-model-pop" id="lfAIModelPop" hidden>
+      <input class="opt-search" id="lfAIModelSearch" type="text" placeholder="Search models..." autocomplete="off">
+      <div id="lfAIModelList"></div>
     </div>
     <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
     <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
@@ -3478,6 +3486,72 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideSettingsPop(); });
   }
+  /* Model picker for this tool: the "✦ LumeField AI" chip is a real
+     button. The picker lists LumeField AI first (this tool — in-site LTX
+     render, 10s = 20 credits), then the 33 generator models with their
+     per-model default-duration cost. Picking LumeField AI stays here;
+     picking another model selects it in the main generator (per-model
+     options applied exactly as the generator does) and opens it. */
+  var modelBtn = $("lfAIModelBtn"), modelPop = $("lfAIModelPop"),
+      modelListEl = $("lfAIModelList"), modelSearch = $("lfAIModelSearch");
+  function lfModelCost(d) {
+    try { if (typeof window.lfCostFor === "function") return window.lfCostFor(d); } catch (e) {}
+    var tiers = [5, 10, 20, 30], costs = { 5: 4, 10: 7, 20: 14, 30: 20 };
+    for (var i = 0; i < tiers.length; i++) { if (d <= tiers[i]) return costs[tiers[i]]; }
+    return 20;
+  }
+  function lfDefaultDur(e) {
+    try {
+      if (e && e.opts && e.opts.dur && e.opts.dur.def != null) return e.opts.dur.def;
+      if (e && e.opts && e.opts.dur && e.opts.dur.ticks && e.opts.dur.ticks.length) return e.opts.dur.ticks[0];
+    } catch (err) {}
+    return 5;
+  }
+  function lfEsc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function hideLfModelPop() { if (modelPop) modelPop.hidden = true; if (modelBtn) modelBtn.setAttribute("aria-expanded", "false"); }
+  function buildLfModelList() {
+    if (!modelListEl) return;
+    var q = (modelSearch ? modelSearch.value : "").trim().toLowerCase();
+    var html = "";
+    if (!q || "lumefield ai".indexOf(q) !== -1) {
+      html += "<div class='opt-item' data-lfmodel='__lfai'><span class='opt-ic'>✦</span><span><span class='opt-nm'>LumeField AI</span><span class='opt-sub' style='display:block;'>In-site · up to 10s · ✦ 20</span></span><span class='opt-check'>✓</span></div>";
+    }
+    try {
+      (typeof ENGINES !== "undefined" ? ENGINES : []).forEach(function (e) {
+        if (q && e.name.toLowerCase().indexOf(q) === -1) return;
+        var badges = ((typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='top-badge'>TOP</span>" : "") + ((typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='new-badge'>NEW</span>" : "");
+        html += "<div class='opt-item' data-lfmodel='" + lfEsc(e.id) + "'><span class='opt-ic'>✦</span><span><span class='opt-nm'>" + lfEsc(e.name) + badges + "</span><span class='opt-sub' style='display:block;'>" + lfEsc(e.res) + " · up to " + e.maxSec + "s · ✦ " + lfModelCost(lfDefaultDur(e)) + "</span></span></div>";
+      });
+    } catch (err) {}
+    modelListEl.innerHTML = html || "<div class='opt-sub' style='padding:10px 12px;color:#8a8a9e;'>No models found.</div>";
+    modelListEl.querySelectorAll(".opt-item").forEach(function (it) {
+      it.addEventListener("click", function () {
+        var id = it.getAttribute("data-lfmodel");
+        hideLfModelPop();
+        if (!id || id === "__lfai") return; /* this tool stays LumeField AI */
+        var el = document.querySelector('.engine[data-id="' + id + '"]');
+        if (el) el.click(); /* selects the engine + applies its per-model options */
+        if (typeof window.refreshOptRows === "function") { try { window.refreshOptRows(); } catch (e) {} }
+        if (typeof updateBuildBtn === "function") { try { updateBuildBtn(); } catch (e) {} }
+        if (typeof openTool === "function") openTool();
+      });
+    });
+  }
+  if (modelBtn && modelPop) {
+    modelBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = modelPop.hidden;
+      hideSettingsPop();
+      if (open) { buildLfModelList(); modelPop.hidden = false; modelBtn.setAttribute("aria-expanded", "true"); }
+      else hideLfModelPop();
+    });
+    document.addEventListener("click", function (e) {
+      if (!modelPop.hidden && !modelPop.contains(e.target) && e.target !== modelBtn && !modelBtn.contains(e.target)) hideLfModelPop();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideLfModelPop(); });
+    if (modelSearch) modelSearch.addEventListener("input", buildLfModelList);
+    if (settingsBtn) settingsBtn.addEventListener("click", function () { hideLfModelPop(); });
+  }
   var durBtns = document.querySelectorAll(".lfai-dur");
   durBtns.forEach(function (b) {
     b.addEventListener("click", function () {
@@ -4099,6 +4173,22 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function itemHtml(ic, nm, sub, checked, extra) {
     return "<div class='opt-item' data-v='" + (extra || "") + "'><span class='opt-ic'>" + ic + "</span><span><span class='opt-nm'>" + nm + "</span><span class='opt-sub' style='display:block;'>" + sub + "</span></span>" + (checked ? "<span class='opt-check'>✓</span>" : "") + "</div>";
   }
+  /* Credit cost of one clip at a model's default duration, from OUR
+     cost table (window.lfCostFor: 5s=4, 10s=7, 20s=14, 30s=20). Only
+     displayed — no cost is changed. Models without a per-model default
+     use their first duration tick (5s for the generic list). */
+  function modelCostFor(e) {
+    var d = 5;
+    try {
+      var dr = (typeof durRangeFor === "function") ? durRangeFor(e) : null;
+      if (dr && dr.def != null) d = dr.def;
+      else { var tk = (typeof durTicksFor === "function") ? durTicksFor(e) : [5, 10, 20, 30]; if (tk && tk.length) d = tk[0]; }
+    } catch (err) {}
+    try { if (typeof window.lfCostFor === "function") return window.lfCostFor(d); } catch (err) {}
+    var tiers = [5, 10, 20, 30], costs = { 5: 4, 10: 7, 20: 14, 30: 20 };
+    for (var i = 0; i < tiers.length; i++) { if (d <= tiers[i]) return costs[tiers[i]]; }
+    return 20;
+  }
   function buildModelList() {
     var list = $("modelPopList"); if (!list) return;
     var q = ($("modelSearch") ? $("modelSearch").value : "").trim().toLowerCase();
@@ -4107,7 +4197,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       (typeof ENGINES !== "undefined" ? ENGINES : []).forEach(function (e) {
         if (q && e.name.toLowerCase().indexOf(q) === -1) return;
         var badges = ((typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='top-badge'>TOP</span>" : "") + ((typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='new-badge'>NEW</span>" : "");
-        html += itemHtml("✦", e.name + badges, e.res + " · up to " + e.maxSec + "s", e.id === selectedEngine, e.id);
+        html += itemHtml("✦", e.name + badges, e.res + " · up to " + e.maxSec + "s · ✦ " + modelCostFor(e), e.id === selectedEngine, e.id);
       });
     } catch (err) {}
     list.innerHTML = html || "<div class='opt-sub' style='padding:10px 12px;color:#8a8a9e;'>No models found.</div>";
@@ -4690,6 +4780,20 @@ var selectedSound = true;
   function mItemHtml(icon, name, sub, badges, checked, kind, id) {
     return "<div class='m-item' data-kind='" + kind + "' data-id='" + id + "'><span class='m-ic'>" + icon + "</span><span class='m-tx2'><span class='m-nm'>" + escHtml(name) + badges + "</span><span class='m-sub'>" + escHtml(sub) + "</span></span>" + (checked ? "<span class='m-check'>✓</span>" : "") + "</div>";
   }
+  /* Same per-model default-duration cost as the desktop picker (see
+     modelCostFor there): display only, no cost is changed. */
+  function modelCostFor(e) {
+    var d = 5;
+    try {
+      var dr = (typeof durRangeFor === "function") ? durRangeFor(e) : null;
+      if (dr && dr.def != null) d = dr.def;
+      else { var tk = (typeof durTicksFor === "function") ? durTicksFor(e) : [5, 10, 20, 30]; if (tk && tk.length) d = tk[0]; }
+    } catch (err) {}
+    try { if (typeof window.lfCostFor === "function") return window.lfCostFor(d); } catch (err) {}
+    var tiers = [5, 10, 20, 30], costs = { 5: 4, 10: 7, 20: 14, 30: 20 };
+    for (var i = 0; i < tiers.length; i++) { if (d <= tiers[i]) return costs[tiers[i]]; }
+    return 20;
+  }
   function buildMModelLists() {
     var q = (($("mModelSearch") ? $("mModelSearch").value : "") || "").trim().toLowerCase();
     var il = $("mImageList"), vl = $("mVideoList");
@@ -4705,7 +4809,7 @@ var selectedSound = true;
       (typeof ENGINES !== "undefined" ? ENGINES : []).forEach(function (e) {
         if (q && e.name.toLowerCase().indexOf(q) === -1) return;
         var badges = ((typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='top-badge'>TOP</span>" : "") + ((typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='new-badge'>NEW</span>" : "") + ((e.res && e.res.indexOf("4K") !== -1) ? " <span class='m-4k'>4K</span>" : "");
-        vh += mItemHtml("🎬", e.name, e.res + " · up to " + e.maxSec + "s", badges, e.id === selectedEngine, "video", e.id);
+        vh += mItemHtml("🎬", e.name, e.res + " · up to " + e.maxSec + "s · ✦ " + modelCostFor(e), badges, e.id === selectedEngine, "video", e.id);
       });
     } catch (e) {}
     if (il) il.innerHTML = ih || "<div class='m-sub' style='padding:10px 4px;'>No image tools found.</div>";
