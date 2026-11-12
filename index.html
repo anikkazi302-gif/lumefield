@@ -3401,6 +3401,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var SPACE = "Lightricks/LTX-2-3";
   var ENDPOINT = "/generate_video";
   var COSTS = { 5: 10, 10: 20 };
+  /* User rule — REALISM MOTTO: videos must be beautiful AND realistic,
+     exactly like real people; nothing unrealistic. Appended to every
+     prompt sent to the engine (not shown as a separate option). */
+  var REALISM_CUE = ", photorealistic, real people, natural realistic motion, cinematic realism";
   var OWN_AI_DAILY = 50;
   var $ = function (id) { return document.getElementById(id); };
   var promptEl = $("lfAIPrompt"), photoEl = $("lfAIPhoto"), prevEl = $("lfAIPhotoPrev"),
@@ -3504,7 +3508,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }).then(function (client) {
       setStatus("Generating… (free queue — can take a few minutes)");
       var seed = Math.floor(Math.random() * 2147483647);
-      var args = [photoFile || null, promptEl.value.trim(), selectedDur, false, seed, true, 1024, 1536];
+      var args = [photoFile || null, promptEl.value.trim() + REALISM_CUE, selectedDur, true, seed, true, 1024, 1536];
       return client.predict(ENDPOINT, args);
     }).then(function (result) {
       var url = extractVideoUrl(result);
