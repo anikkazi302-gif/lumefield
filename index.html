@@ -561,6 +561,8 @@
 
   /* ---------- mobile generator (Higgsfield phone style) ---------- */
   #mGen, #mModelSheet, #mSettingsSheet, #mRefsSheet { display: none; }
+  .m-xplore, .m-xsearch, .hero-dots { display: none; }
+  .sale-btn-m { display: none; }
   @media (max-width: 768px) {
     #mGen { display: block; padding: 4px 0 0; }
     #toolOverlay .tool-head, #toolOverlay .honest, #toolOverlay .gen-tabs,
@@ -618,6 +620,19 @@
     .m-item .m-nm { display: block; color: #fff; font-size: 15px; font-weight: 700; }
     .m-item .m-sub { display: block; color: #8a8a9e; font-size: 12px; margin-top: 2px; }
     .m-item .m-check { margin-left: auto; width: 24px; height: 24px; border-radius: 50%; background: #c8f542; color: #111; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .m-xplore { display: flex; justify-content: space-between; gap: 8px; padding: 14px 20px 4px; }
+    .m-xbtn { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: 0; cursor: pointer; font-family: inherit; text-decoration: none; color: #fff; }
+    .m-xbtn .m-xic { width: 56px; height: 56px; border-radius: 50%; background: #1c1c2c; border: 1px solid #33334a; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+    .m-xbtn .m-xlb { font-size: 13px; font-weight: 700; text-align: center; line-height: 1.3; }
+    .m-xsearch { display: flex; align-items: center; gap: 8px; background: #1c1c2c; border: 1px solid #33334a; border-radius: 999px; margin: 12px 20px 0; padding: 0 14px; }
+    .m-xsearch input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; color: #fff; font-size: 15px; font-family: inherit; padding: 12px 0; }
+    .m-xsearch input::placeholder { color: #8a8a9e; }
+    .hero-dots { display: flex; justify-content: center; gap: 6px; padding: 2px 0 10px; }
+    .hero-dot { width: 7px; height: 7px; border-radius: 50%; border: 0; background: #33334a; padding: 0; cursor: pointer; }
+    .hero-dot.on { background: #fff; }
+    .sale-btn { background: #fff; color: #111; }
+    .sale-btn-d { display: none; }
+    .sale-btn-m { display: inline; }
   }
 </style>
 <script type="application/ld+json">
@@ -651,7 +666,15 @@
   <div class="hero-carousel" id="heroCarousel">
     <div class="hero-card" data-engine="seedance" tabindex="0" role="button" aria-label="Seedance 2.5 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/mZja2Ve0Mns?autoplay=1&mute=1&loop=1&playlist=mZja2Ve0Mns&controls=0&rel=0" title="Seedance 2.5 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Seedance 2.5</h3><p>The most advanced video model</p></div><div class="hero-card" data-engine="kling" tabindex="0" role="button" aria-label="Kling 4.0 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/nlM7kL3kv_Y?autoplay=1&mute=1&loop=1&playlist=nlM7kL3kv_Y&controls=0&rel=0" title="Kling 4.0 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Kling 4.0</h3><p>Perfect motion with advanced video control</p></div><div class="hero-card" data-engine="flow" tabindex="0" role="button" aria-label="Google Flow (Veo 3.1) — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/I06Ef8alr2Y?autoplay=1&mute=1&loop=1&playlist=I06Ef8alr2Y&controls=0&rel=0" title="Google Flow (Veo 3.1) demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Google Flow (Veo 3.1)</h3><p>Precision video with sound control</p></div><div class="hero-card" data-engine="vidu" tabindex="0" role="button" aria-label="Vidu Q4 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/jJcbxCDRRaw?autoplay=1&mute=1&loop=1&playlist=jJcbxCDRRaw&controls=0&rel=0" loading="lazy" title="Vidu Q4 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Vidu Q4</h3><p>The most consistent characters</p></div><div class="hero-card" data-engine="hailuo" tabindex="0" role="button" aria-label="MiniMax Hailuo — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/J18idUz87LA?autoplay=1&mute=1&loop=1&playlist=J18idUz87LA&controls=0&rel=0" loading="lazy" title="MiniMax Hailuo demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>MiniMax Hailuo</h3><p>High-dynamic, VFX-ready</p></div><div class="hero-card" data-engine="wan3" tabindex="0" role="button" aria-label="Wan 3.0 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/g3ihFwqiPcw?autoplay=1&mute=1&loop=1&playlist=g3ihFwqiPcw&controls=0&rel=0" loading="lazy" title="Wan 3.0 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Wan 3.0</h3><p>Camera-controlled video with sound</p></div>
   </div>
+  <div class="hero-dots" id="heroDots" aria-hidden="true"></div>
 </section>
+<div class="m-xplore" id="mXplore">
+  <a class="m-xbtn" href="#image-tools"><span class="m-xic">🖼</span><span class="m-xlb">Create<br>Image</span></a>
+  <a class="m-xbtn" href="#tool"><span class="m-xic">🎬</span><span class="m-xlb">Create<br>Video</span></a>
+  <button class="m-xbtn" type="button" id="mXAssets"><span class="m-xic">🗂</span><span class="m-xlb">My<br>Assets</span></button>
+  <button class="m-xbtn" type="button" id="mXChars"><span class="m-xic">👤</span><span class="m-xlb">My<br>Characters</span></button>
+</div>
+<div class="m-xsearch"><span aria-hidden="true">🔍</span><input type="text" id="mXSearch" placeholder="Search" autocomplete="off" aria-label="Search models"></div>
 <script>
 (function () {
   var track = document.getElementById("heroCarousel");
@@ -703,6 +726,49 @@
   }
 })();
 </script>
+<script>
+(function () {
+  var track = document.getElementById("heroCarousel");
+  var dotsBox = document.getElementById("heroDots");
+  if (track && dotsBox) {
+    var N = 6, dots = [];
+    for (var i = 0; i < N; i++) {
+      var d = document.createElement("button");
+      d.type = "button"; d.className = "hero-dot"; d.setAttribute("aria-label", "Go to card " + (i + 1));
+      (function (idx) { d.addEventListener("click", function () { var card = track.querySelector(".hero-card"); var w = card ? card.offsetWidth + 14 : 0; if (w > 0) track.scrollLeft = idx * w; }); })(i);
+      dotsBox.appendChild(d); dots.push(d);
+    }
+    function syncDots() {
+      var card = track.querySelector(".hero-card");
+      var w = card ? card.offsetWidth + 14 : 0;
+      var idx = w > 0 ? Math.round(track.scrollLeft / w) % N : 0;
+      if (idx < 0) idx = 0;
+      dots.forEach(function (dt, j) { dt.classList.toggle("on", j === idx); });
+    }
+    track.addEventListener("scroll", syncDots, { passive: true });
+    setInterval(syncDots, 500);
+    syncDots();
+  }
+  var xa = document.getElementById("mXAssets");
+  if (xa) xa.addEventListener("click", function () { var ab = document.getElementById("navAssetsBtn"); if (ab) ab.click(); });
+  var xc = document.getElementById("mXChars");
+  if (xc) xc.addEventListener("click", function () {
+    var w = document.getElementById("profileWrap");
+    if (w && !w.hidden) { var mc = document.getElementById("profileMyCharacters"); if (mc) mc.click(); }
+    else { var si = document.getElementById("signInBtn"); if (si) si.click(); }
+  });
+  var xs = document.getElementById("mXSearch");
+  if (xs) {
+    xs.addEventListener("input", function () {
+      var ms = document.getElementById("modelSearch");
+      if (ms) { ms.value = xs.value; ms.dispatchEvent(new Event("input", { bubbles: true })); }
+    });
+    xs.addEventListener("keydown", function (ev) {
+      if (ev.key === "Enter") { var m = document.getElementById("models"); if (m) m.scrollIntoView(); }
+    });
+  }
+})();
+</script>
 
 
 
@@ -712,7 +778,7 @@
     <span class="sale-sticker">NO SUBSCRIPTION</span>
     <h2>First video free</h2>
     <p>Sign in free &mdash; get 20 credits. Starter pack $4.99.</p>
-    <a class="sale-btn" href="#tool">Start free</a>
+    <a class="sale-btn" href="#tool"><span class="sale-btn-d">Start free</span><span class="sale-btn-m">Get Now</span></a>
     <p class="sale-fine">No card. No subscription.</p>
   </div>
   <div class="sale-tiles" id="saleTiles"></div>
