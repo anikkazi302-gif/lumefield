@@ -1606,6 +1606,8 @@ document.querySelectorAll("#durBtns button").forEach(function (b) {
     document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.remove("active"); });
     b.classList.add("active");
     selectedDur = parseInt(b.dataset.dur, 10);
+    if (typeof refreshOptRows === "function") { try { refreshOptRows(); } catch (err) {} }
+    if (typeof updateBuildBtn === "function") { try { updateBuildBtn(); } catch (err) {} }
   });
 });
 
@@ -3336,6 +3338,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      runs through lfCreditGate + the Firestore transaction below. */
   window.lfIsOwner = isOwner;
   window.lfCostFor = costFor;
+  /* Cost display (planner Generate button + cost line) must refresh
+     when the model or duration changes. updateBuildBtn lives in
+     this IIFE, so expose it: without this, every typeof
+     updateBuildBtn guard outside the IIFE silently does nothing
+     and the planner cost goes stale. Display only — the real
+     charge still runs through lfCreditGate + Firestore. */
+  window.updateBuildBtn = updateBuildBtn;
   window.lfBalanceText = profileBalanceText;
   window.lfSignedIn = function () { return !!currentUser; };
 
@@ -4220,6 +4229,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var showFrames = isFlow || ((typeof isH3Family === "function") && isH3Family(selectedEngine));
     var fr = document.querySelector(".frames-row");
     if (fr) fr.style.display = showFrames ? "" : "none";
+    /* Keep the planner cost in step with the Duration row above:
+       the cost is always computed from the same selectedDur the
+       row displays, on every model/duration change. */
+    if (typeof updateBuildBtn === "function") { try { updateBuildBtn(); } catch (err) {} }
   }
   window.refreshOptRows = refreshOptRows;
   /* Exposed for the detail modal's own rows + popups (same pattern, its own
