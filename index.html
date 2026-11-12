@@ -310,6 +310,7 @@
   .honest b { color: #ffd166; }
   .credit-bar { background: linear-gradient(90deg, #1a1430, #12121d); border: 1px solid #c8f542; border-radius: 16px; padding: 14px 18px; margin: 0 0 18px; font-size: .95rem; line-height: 1.6; color: #e5e5ef; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
   .credit-bar b { color: #ffd166; }
+  #creditBar { display: none !important; }
   .credit-signin { background: #c8f542; color: #111; border: none; border-radius: 999px; padding: 8px 18px; font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; white-space: nowrap; }
   .credit-signin:hover { opacity: .9; }
   .card { background: #10101a; border: 1px solid #232336; border-radius: 16px; padding: 22px; margin: 16px 0; }
@@ -325,6 +326,9 @@
   .field-box { background: #1a1a28; border: 1px solid #55557a; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; }
   .field-box label { margin: 0 0 8px; }
   .field-box textarea { flex: 1; }
+  #action { background: transparent; border: 0; border-radius: 0; padding: 10px 2px; }
+  #action:focus { outline: none; }
+  .field-box:focus-within { border-color: #c8f542; }
   @media (max-width: 640px) { .fields-grid { gap: 8px; } .field-box { padding: 10px; } }
   @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
   .drop { border: 2px dashed #44445e; border-radius: 12px; padding: 22px 14px; text-align: center; color: #a9a9bd; cursor: pointer; transition: border-color .2s; }
@@ -569,7 +573,7 @@
     #toolOverlay .tool-panel, #toolOverlay .tool-how { display: none !important; }
     #toolOverlay .tool-wrap { padding: 0 12px 40px; }
     #mSettingsSheet, #mRefsSheet, #mModelSheet { display: block; }
-    .m-bar { display: flex; flex-direction: column; align-items: stretch; gap: 10px; background: #14141f; border: 1px solid #33334a; border-radius: 18px; padding: 12px; }
+    .m-bar { display: flex; flex-direction: column; align-items: stretch; gap: 10px; background: #14141f; border: 1px solid #33334a; border-radius: 20px; padding: 14px; }
     .m-bar-controls { display: flex; align-items: center; gap: 8px; }
     .m-add { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; border: 1px solid #33334a; background: #1c1c2c; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; position: relative; font-family: inherit; }
     .m-add .m-count { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; border-radius: 8px; background: #c8f542; color: #111; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
@@ -642,8 +646,10 @@
 .lfai-head h2 { color: #fff; font-size: 26px; margin: 0; }
 .lfai-tag { background: #c8f542; color: #111; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 3px 10px; }
 .lfai-sub { color: #a5a5b8; font-size: 14px; margin: 6px 0 14px; }
-#lfAIPrompt { width: 100%; box-sizing: border-box; background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; color: #fff; font-size: 16px; font-family: inherit; padding: 12px 14px; resize: vertical; min-height: 74px; }
-#lfAIPrompt:focus { outline: none; border-color: #c8f542; }
+.lfai-composer { background: #1c1c2c; border: 1px solid #33334a; border-radius: 18px; padding: 14px 14px 12px; }
+.lfai-composer:focus-within { border-color: #c8f542; }
+#lfAIPrompt { width: 100%; box-sizing: border-box; background: transparent; border: 0; border-radius: 0; color: #fff; font-size: 16px; font-family: inherit; padding: 4px 2px; resize: vertical; min-height: 64px; }
+#lfAIPrompt:focus { outline: none; border-color: transparent; }
 .lfai-photowrap { position: relative; display: inline-block; }
 .lfai-photorm { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: #ff7a7a; color: #111; font-size: 12px; font-weight: 800; cursor: pointer; line-height: 1; padding: 0; }
 .lfai-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
@@ -709,6 +715,7 @@
   <div class="lfai-box">
     <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span></div>
     <p class="lfai-sub">Make a video — right here.</p>
+    <div class="lfai-composer">
     <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="Describe the video you want..."></textarea>
     <div class="lfai-row">
       <label class="lfai-photo" for="lfAIPhoto" title="Add a reference photo" aria-label="Add a reference photo">＋</label>
@@ -717,6 +724,7 @@
       <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ LumeField AI <span class="lfai-chev">›</span></button>
       <button type="button" class="lfai-settings" id="lfAISettingsBtn" aria-label="Settings" aria-haspopup="true" aria-expanded="false">⚙</button>
       <button type="button" class="lfai-gen" id="lfAIGenerate">✦ Generate — 20 credits</button>
+    </div>
     </div>
     <div class="lfai-settings-pop" id="lfAISettingsPop" hidden>
       <div class="lfai-settings-title">Duration</div>
@@ -898,7 +906,7 @@
     </div>
     <div class="m-err" id="mErr" role="alert"></div>
     <div class="m-examples" id="mExamples"></div>
-    <p class="m-hint">Tip: add a photo with <b>+</b> so the face stays the same. Pick a model with the chip, settings with <b>🎛</b>. This plans your video — the engine renders it free on its own page.</p>
+    <p class="m-hint">Tip: add a photo with <b>+</b> so the face stays the same. Pick a model with the chip, settings with <b>🎛</b>.</p>
   </div>
   <div class="tool-head">
     <h2>Create your <span>video</span></h2>
@@ -2089,7 +2097,7 @@ function detailVideoHTML(demo, name, siteUrl) {   var sampleTag = (demo && demo.
 function detailCreditsText() {
   var c = (typeof window !== "undefined" && typeof window.lfCostFor === "function") ? window.lfCostFor((typeof selectedDur === "number") ? selectedDur : 30) : 20;
   try {
-    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "💎 Unlimited (Owner) — this video is free";
+    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "💠 This video: " + c + " credits";
     if (typeof window !== "undefined" && typeof window.lfSignedIn === "function" && window.lfSignedIn()) {
       var b = (typeof window.lfBalanceText === "function") ? window.lfBalanceText() : "";
       return "💠 This video: " + c + " credits · " + (b || "0 credits");
@@ -2099,7 +2107,6 @@ function detailCreditsText() {
 }
 function detailGenText() {
   try {
-    if (typeof window !== "undefined" && typeof window.lfIsOwner === "function" && window.lfIsOwner()) return "🎬 Generate — free";
     var c = (typeof window !== "undefined" && typeof window.lfCostFor === "function") ? window.lfCostFor((typeof selectedDur === "number") ? selectedDur : 30) : 20;
     return "🎬 Generate — " + c + " credits";
   } catch (e) { return "🎬 Generate"; }
@@ -3015,12 +3022,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!b) return;
     var dur = (typeof selectedDur === "number") ? selectedDur : 30;
     var cost = costFor(dur);
-    if (isOwner()) b.textContent = "✦ Generate — free for you";
-    else b.textContent = "✦ Generate — " + cost + " credits";
+    b.textContent = "✦ Generate — " + cost + " credits";
     var bc = document.getElementById("buildCost");
     if (bc) {
-      if (isOwner()) bc.textContent = "💎 Unlimited (Owner) — this video is free for you";
-      else bc.textContent = "💠 This video costs " + cost + " credits · " + dur + "s";
+      bc.textContent = "💠 This video costs " + cost + " credits · " + dur + "s";
     }
     if (typeof refreshMBar === "function") { try { refreshMBar(); } catch (e) {} }
   }
@@ -3467,7 +3472,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (window.lfIsOwner && window.lfIsOwner()) free = true;
       else if (window.lfSignedIn && !window.lfSignedIn() && guestUsed() < 1) free = true;
     } catch (e) {}
-    genBtn.textContent = free ? "✦ Generate — free" : "✦ Generate — " + ownCost(selectedDur) + " credits";
+    if (genBtn) genBtn.textContent = "✦ Generate — " + ownCost(selectedDur) + " credits";
   }
   /* Settings popup: PLACEHOLDER contents (duration only) — the parent is
      checking Higgsfield's settings directly and will send the exact
@@ -4642,9 +4647,9 @@ var selectedSound = true;
     var e = eng();
     var chip = $("mModelChipName"); if (chip) chip.textContent = e ? e.name : "";
     var go = $("mGenerateBtn");
-    if (go) go.textContent = isOwner() ? "✦ free" : "✦ " + mCost();
+    if (go) go.textContent = "✦ " + mCost();
     var ap = $("mApplyBtn");
-    if (ap) ap.textContent = isOwner() ? "Apply — free for you" : "Apply ✦ " + mCost();
+    if (ap) ap.textContent = "Apply ✦ " + mCost();
     var ro1 = (typeof ratioOptsFor === "function") ? ratioOptsFor(e) : ["16:9"];
     var rr1 = $("mRatioRow"); if (rr1) rr1.style.display = ro1 ? "" : "none";
     var bo1 = (typeof bitrateOptsFor === "function") ? bitrateOptsFor(e) : ["High"];
