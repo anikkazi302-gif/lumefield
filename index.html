@@ -985,6 +985,7 @@
     </div>
     <div class="seg-btns" id="ratioBtns" hidden>
       <button data-ratio="Auto">Auto</button>
+      <button data-ratio="adaptive">adaptive</button>
       <button data-ratio="16:9" class="active">16:9</button>
       <button data-ratio="9:16">9:16</button>
       <button data-ratio="1:1">1:1</button>
@@ -1383,16 +1384,16 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 <script>
 const ENGINES = [
   { id: "seedance", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, ratio: { opts: ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "16:9" }, quality: { opts: ["480p", "720p", "1080p", "4K"], def: "1080p" }, bitrate: { opts: ["High", "Standard"], def: "High" } }, refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
-  { id: "seedance25draft", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, quality: { opts: ["480p"], def: "480p" } }, refs: 30, name: "Seedance 2.5 Draft", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "480p", audio: true, free: "120 free credits/day on Dreamina", note: "Draft is a 480p preview mode of Seedance 2.5, not a separate model \u2014 a draft costs the normal 480p price. Same 120 free credits/day." },
-  { id: "seedance25edit", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, quality: { opts: ["480p", "720p"], def: "720p" } }, refs: 30, name: "Seedance 2.5 Edit", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Edit mode of Seedance 2.5 \u2014 change a moment, add, remove or replace, and redo sound on a finished clip. Same free credits." },
+  { id: "seedance25draft", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, ratio: { opts: ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "16:9" }, quality: { opts: ["480p", "1080p"], def: "1080p" } }, refs: 30, name: "Seedance 2.5 Draft", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "1080p", audio: true, free: "120 free credits/day on Dreamina", note: "Draft is a 480p preview of Seedance 2.5, not a separate model \u2014 the preview renders at 480p, then the final video renders at 1080p. Same 120 free credits/day." },
+  { id: "seedance25edit", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, ratio: { opts: ["adaptive"], def: "adaptive" }, quality: { opts: ["480p", "720p", "1080p"], def: "720p" } }, refs: 30, name: "Seedance 2.5 Edit", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "up to 1080p", audio: true, free: "120 free credits/day on Dreamina", note: "Edit task on Seedance 2.5, not a separate model \u2014 change a moment, add, remove or replace, and redo sound on a finished clip. Ratio is adaptive and duration matches your input video. Same free credits." },
   { id: "seedance20", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 8 }, ratio: { opts: ["Auto", "16:9", "9:16", "4:3", "3:4", "1:1", "21:9"], def: "Auto" }, quality: { opts: ["480p", "720p", "1080p", "4K"], def: "720p" }, bitrate: { opts: ["High", "Standard"], def: "High" } }, refs: 30, name: "Seedance 2.0", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 15, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 \u2014 costs less per second than 2.5, so the 120 daily credits go further. Real human faces are blocked on 2.0 in Dreamina." },
   { id: "seedance20fast", refs: 30, name: "Seedance 2.0 Fast", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "The budget 2.0 variant (480p/720p) \u2014 cheapest per second in the family." },
   { id: "seedance20mini", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 8 }, ratio: { opts: ["Auto", "16:9", "9:16", "4:3", "3:4", "1:1", "21:9"], def: "Auto" }, quality: { opts: ["480p", "720p"], def: "720p" }, bitrate: null }, refs: 30, name: "Seedance 2.0 Mini", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 15, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 Mini \u2014 5 credits/sec, about 24 seconds/day from the free allowance." },
-  { id: "kling", opts: { dur: { min: 3, max: 30, ticks: [3, 5, 10, 20, 30], def: 5 }, quality: { opts: ["480p", "720p", "1080p"], def: "720p" } }, refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
-  { id: "klingflash", opts: { dur: { min: 3, max: 20, ticks: [3, 5, 10, 20], def: 5 }, quality: { opts: ["480p", "720p"], def: "720p" } }, refs: 10, name: "Kling 4.0 Flash", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 20, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 4.0 Flash \u2014 the faster, cheaper 4.0 variant, so more clips fit in the daily credits. 720p cap on free, watermarked, personal use only." },
+  { id: "kling", opts: { dur: { min: 3, max: 30, ticks: [3, 5, 10, 15, 20, 30], def: 10 }, ratio: { opts: ["21:9", "16:9", "1:1", "9:16", "Auto"], def: "Auto" }, quality: { opts: ["720p", "1080p", "4K"], def: "720p" } }, refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "up to 4K", audio: true, free: "66 free credits/day", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
+  { id: "klingflash", opts: { dur: { min: 3, max: 20, ticks: [3, 5, 10, 20], def: 5 }, ratio: { opts: ["21:9", "16:9", "1:1", "9:16", "Auto"], def: "Auto" }, quality: { opts: ["480p", "720p"], def: "720p" } }, refs: 10, name: "Kling 4.0 Flash", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 20, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 4.0 Flash \u2014 the faster, cheaper 4.0 variant, so more clips fit in the daily credits. 720p cap on free, watermarked, personal use only." },
   { id: "kling3", refs: 10, name: "Kling 3.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 3.0 \u2014 the older version; cheaper per clip than 4.0. 720p cap on free, watermarked, personal use only." },
   { id: "flow", refs: 3, name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
-  { id: "omniflash12", opts: { dur: { min: 3, max: 15, ticks: [3, 5, 10, 15], def: 5 }, quality: { opts: ["480p", "720p", "1080p", "4K"], def: "720p" } }, refs: 3, name: "Gemini Omni Flash 1.2", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 15, i2v: true, res: "720p", audio: true, free: "50 free credits/day on Google Flow", note: "Google\u2019s fastest video model in Flow \u2014 3\u201310s clips at 360p/720p free. Peak hours 2\u20135 PM UTC may block free video." },
+  { id: "omniflash12", opts: { dur: { min: 3, max: 15, ticks: [3, 5, 10, 15], def: 5 }, ratio: { opts: ["16:9", "9:16"], def: "16:9" }, quality: { opts: ["360p", "720p", "1080p", "4K"], def: "720p", upscaled: ["1080p", "4K"] } }, refs: 3, name: "Gemini Omni Flash 1.2", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 15, i2v: true, res: "720p", audio: true, free: "50 free credits/day on Google Flow", note: "Google\u2019s fastest video model in Flow \u2014 3\u201310s clips at 360p/720p free. Peak hours 2\u20135 PM UTC may block free video." },
   { id: "veo31lite", refs: 3, name: "Veo 3.1 Lite", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits/day on Google Flow", note: "Veo 3.1 Lite \u2014 10 credits per clip, up to 5 clips/day free. Veo 3.1 Fast retires Dec 5, 2026 \u2014 use Lite instead." },
   { id: "vidu", refs: 15, name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
   { id: "hailuo", refs: 9, name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
@@ -1401,7 +1402,7 @@ const ENGINES = [
   { id: "h3highspeed", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 5 }, ratio: { opts: ["Auto", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "Auto" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Highspeed", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Highspeed \u2014 the fast H3 variant. Same welcome credits, watermarked." },
   { id: "h3lite", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 5 }, ratio: { opts: ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "16:9" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Lite", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Lite \u2014 the light, cheap H3 variant. Same welcome credits, watermarked." },
   { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
-  { id: "wan3prime", opts: { dur: { min: 2, max: 30, ticks: [2, 5, 10, 20, 30], def: 5 }, quality: { opts: ["480p", "720p", "1080p"], def: "720p" } }, refs: 1, name: "Wan 3.0 Prime", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 30, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 3.0 Prime \u2014 the top Wan 3.0 tier. Free quota: 30s, 90 days, Singapore region only; sign-up asks for payment details." },
+  { id: "wan3prime", opts: { dur: { min: 2, max: 30, ticks: [2, 5, 10, 20, 30], def: 5 }, ratio: { opts: ["16:9", "4:3", "1:1", "3:4", "9:16", "adaptive", "21:9"], def: "adaptive" }, quality: { opts: ["480p", "720p", "1080p"], def: "1080p" } }, refs: 1, name: "Wan 3.0 Prime", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 30, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 3.0 Prime \u2014 the top Wan 3.0 tier. Free quota: 30s, 90 days, Singapore region only; sign-up asks for payment details." },
   { id: "wan25", refs: 1, name: "Wan 2.5", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.5 \u2014 free quota 50s (shared with 2.6/2.7), 90 days, Singapore only." },
   { id: "wan26", refs: 1, name: "Wan 2.6", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.6 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
   { id: "wan27", refs: 1, name: "Wan 2.7", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.7 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
@@ -1513,7 +1514,7 @@ ENGINES.forEach(function (e) {
 });
 
   /* ---------- ratio + quality (owner order: ratio, prompt, quality) ---------- */
-  function ratioText(r) { return r === "Auto" ? "Auto" : r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : r === "4:3" ? "4:3 standard" : r === "3:4" ? "3:4 portrait" : r === "21:9" ? "21:9 ultrawide" : r === "4:5" ? "4:5 portrait" : r === "3:2" ? "3:2 landscape" : "16:9 widescreen"; }
+  function ratioText(r) { return r === "Auto" ? "Auto" : r === "adaptive" ? "Adaptive (matches input)" : r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : r === "4:3" ? "4:3 standard" : r === "3:4" ? "3:4 portrait" : r === "21:9" ? "21:9 ultrawide" : r === "4:5" ? "4:5 portrait" : r === "3:2" ? "3:2 landscape" : "16:9 widescreen"; }
   function qualityOptionsFor(e) {
     if (e && e.opts && e.opts.quality && e.opts.quality.opts) return e.opts.quality.opts.slice();
     var res = (e && e.res) || "720p";
@@ -2007,7 +2008,7 @@ function dbQuality() {
 }
 function refreshDbRows() {
   var dv = document.getElementById("dDurRowVal");
-  if (dv) dv.textContent = (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
+  if (dv) dv.textContent = (typeof selectedEngine === "string" && selectedEngine === "seedance25edit") ? "Input length" : (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
   var rv = document.getElementById("dRatioRowVal");
   if (rv) rv.textContent = (typeof selectedRatio === "string" ? selectedRatio : "16:9");
   var qv = document.getElementById("dQualityRowVal");
@@ -2036,6 +2037,11 @@ function buildDbDurList() {
   var list = document.getElementById("dDurPopList"); if (!list || !window.lfOpt) return;
   var html = "";
   var ticks = (typeof durTicksFor === "function") ? durTicksFor(detailItem) : [5, 10, 20, 30];
+  /* Seedance 2.5 Edit: duration is locked to the input video's length. */
+  if (detailItem && detailItem.id === "seedance25edit") {
+    list.innerHTML = window.lfOpt.itemHtml("⏱", "Input length", "Duration matches your video", true, String(selectedDur));
+    return;
+  }
   ticks.forEach(function (d) {
     html += window.lfOpt.itemHtml("⏱", d + " seconds", d === ticks[ticks.length - 1] ? "Full plan" : "Short clip", d === selectedDur, String(d));
   });
@@ -2056,8 +2062,10 @@ function buildDbQualityList() {
   var cur = dbQuality();
   var html = "";
   /* The MODAL's engine, not the tool's: qualityOptionsFor(detailItem). */
+  var upQd = (detailItem && detailItem.opts && detailItem.opts.quality && detailItem.opts.quality.upscaled) || [];
   qualityOptionsFor(detailItem).forEach(function (q) {
-    html += window.lfOpt.itemHtml("◈", q, q === "480p" ? "Draft" : q === "720p" ? "Standard" : q === "768p" ? "HD" : q === "1080p" ? "Full HD" : q === "2K" ? "2K" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
+    var disp = (upQd.indexOf(q) !== -1) ? q + " (upscaled)" : q;
+    html += window.lfOpt.itemHtml("◈", disp, q === "360p" ? "Low" : q === "480p" ? "Draft" : q === "720p" ? "Standard" : q === "768p" ? "HD" : q === "1080p" ? "Full HD" : q === "2K" ? "2K" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
   });
   list.innerHTML = html;
 }
@@ -4001,7 +4009,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 <script>
 /* ---------- option popups (Higgsfield-style rows + popup cards) ---------- */
 (function () {
-  var RATIO_LABELS = { "Auto": "Auto (model default)", "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
+  var RATIO_LABELS = { "Auto": "Auto (model default)", "adaptive": "Adaptive (matches input)", "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
   function $(id) { return document.getElementById(id); }
   function eng() { try { return (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (e) { return e.id === selectedEngine; }) || null; } catch (e) { return null; } }
   function qualityOptions(e) {
@@ -4038,7 +4046,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (o.bitrate && o.bitrate.opts.indexOf(typeof selectedBitrate === "string" ? selectedBitrate : "High") === -1) { selectedBitrate = o.bitrate.def; }
     })();
     var mv = $("modelRowVal"); if (mv) mv.textContent = e ? e.name : (typeof selectedEngine === "string" ? selectedEngine : "");
-    var dv = $("durRowVal"); if (dv) dv.textContent = (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
+    var dv = $("durRowVal"); if (dv) dv.textContent = (typeof selectedEngine === "string" && selectedEngine === "seedance25edit") ? "Input length" : (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
     var rv = $("ratioRowVal"); if (rv) rv.textContent = (typeof selectedRatio === "string" ? selectedRatio : "16:9");
     var qv = $("qualityRowVal"); if (qv) qv.textContent = currentQuality();
     var bv = $("bitrateRowVal"); if (bv) bv.textContent = (typeof selectedBitrate === "string" ? selectedBitrate : "High");
@@ -4117,6 +4125,12 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var list = $("durPopList"); if (!list) return;
     var html = "";
     var ticks = (typeof durTicksFor === "function") ? durTicksFor(eng()) : [5, 10, 20, 30];
+    /* Seedance 2.5 Edit: duration is locked to the input video's length. */
+    if (eng() && eng().id === "seedance25edit") {
+      list.innerHTML = itemHtml("⏱", "Input length", "Duration matches your video", true, String(selectedDur));
+      list.querySelectorAll(".opt-item").forEach(function (it) { it.addEventListener("click", function () { closeAllPops(); }); });
+      return;
+    }
     ticks.forEach(function (d) {
       html += itemHtml("⏱", d + " seconds", d === ticks[ticks.length - 1] ? "Full plan" : "Short clip", d === selectedDur, String(d));
     });
@@ -4153,8 +4167,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var list = $("qualityPopList"); if (!list) return;
     var cur = currentQuality();
     var html = "";
+    var upQ = (eng() && eng().opts && eng().opts.quality && eng().opts.quality.upscaled) || [];
     qualityOptions(eng()).forEach(function (q) {
-      html += itemHtml("◈", q, q === "480p" ? "Draft" : q === "720p" ? "Standard" : q === "768p" ? "HD" : q === "1080p" ? "Full HD" : q === "2K" ? "2K" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
+      var disp = (upQ.indexOf(q) !== -1) ? q + " (upscaled)" : q;
+      html += itemHtml("◈", disp, q === "360p" ? "Low" : q === "480p" ? "Draft" : q === "720p" ? "Standard" : q === "768p" ? "HD" : q === "1080p" ? "Full HD" : q === "2K" ? "2K" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
     });
     list.innerHTML = html;
     list.querySelectorAll(".opt-item").forEach(function (it) {
@@ -4582,7 +4598,7 @@ var selectedSound = true;
   function mOptHtml(name, sub, sel, val) {
     return "<div class='m-opt" + (sel ? " sel" : "") + "' data-v='" + val + "'><span class='m-tx'><span class='m-nm'>" + name + "</span>" + (sub ? "<small>" + sub + "</small>" : "") + "</span><span class='m-dot'></span></div>";
   }
-  var RATIO_LABELS_M = (typeof window.lfOpt !== "undefined" && window.lfOpt.RATIO_LABELS) ? window.lfOpt.RATIO_LABELS : { "Auto": "Auto (model default)", "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
+  var RATIO_LABELS_M = (typeof window.lfOpt !== "undefined" && window.lfOpt.RATIO_LABELS) ? window.lfOpt.RATIO_LABELS : { "Auto": "Auto (model default)", "adaptive": "Adaptive (matches input)", "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
   function buildMRatioPop() {
     var list = $("mRatioPop"); if (!list) return;
     var html = "";
@@ -4609,8 +4625,9 @@ var selectedSound = true;
     var cur = (typeof selectedQuality === "string" && selectedQuality) ? selectedQuality : "720p";
     var html = "";
     var qopts = (typeof qualityOptionsFor === "function") ? qualityOptionsFor(eng()) : ["480p", "720p", "1080p", "4K"];
-    var qlabels = { "480p": "Draft", "720p": "Standard", "768p": "HD", "1080p": "Full HD", "2K": "2K", "4K": "Ultra HD" };
-    var opts = qopts.map(function (q) { return [q, qlabels[q] || "High"]; });
+    var qlabels = { "360p": "Low", "480p": "Draft", "720p": "Standard", "768p": "HD", "1080p": "Full HD", "2K": "2K", "4K": "Ultra HD" };
+    var upQm = (eng() && eng().opts && eng().opts.quality && eng().opts.quality.upscaled) || [];
+    var opts = qopts.map(function (q) { return [q, (qlabels[q] || "High") + ((upQm.indexOf(q) !== -1) ? " · upscaled" : "")]; });
     opts.forEach(function (pair) {
       html += mOptHtml(pair[0], pair[1], pair[0] === cur, pair[0]);
     });
