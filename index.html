@@ -567,12 +567,13 @@
     #toolOverlay .tool-panel, #toolOverlay .tool-how { display: none !important; }
     #toolOverlay .tool-wrap { padding: 0 12px 40px; }
     #mSettingsSheet, #mRefsSheet, #mModelSheet { display: block; }
-    .m-bar { display: flex; align-items: center; gap: 8px; background: #14141f; border: 1px solid #33334a; border-radius: 18px; padding: 8px; }
+    .m-bar { display: flex; flex-direction: column; align-items: stretch; gap: 10px; background: #14141f; border: 1px solid #33334a; border-radius: 18px; padding: 12px; }
+    .m-bar-controls { display: flex; align-items: center; gap: 8px; }
     .m-add { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; border: 1px solid #33334a; background: #1c1c2c; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; position: relative; font-family: inherit; }
     .m-add .m-count { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; border-radius: 8px; background: #c8f542; color: #111; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
-    .m-prompt { flex: 1 1 auto; min-width: 0; background: transparent; border: 0; outline: none; color: #fff; font-size: 15px; font-family: inherit; padding: 8px 2px; }
+    .m-prompt { width: 100%; box-sizing: border-box; background: transparent; border: 0; outline: none; color: #fff; font-size: 17px; font-family: inherit; padding: 6px 2px; }
     .m-prompt::placeholder { color: #8a8a9e; }
-    .m-chip { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 8px 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; max-width: 108px; }
+    .m-chip { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 8px 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; max-width: 150px; }
     .m-chip span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .m-set { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; border: 1px solid #33334a; background: #1c1c2c; color: #cfcfdd; font-size: 17px; cursor: pointer; font-family: inherit; }
     .m-go { flex: 0 0 auto; background: #c8f542; color: #111; border: 0; border-radius: 999px; padding: 10px 13px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; }
@@ -753,11 +754,13 @@
   <!-- Mobile generator (Higgsfield phone style): prompt bar. Desktop keeps the full form below. -->
   <div id="mGen">
     <div class="m-bar">
-      <button type="button" class="m-add" id="mAddRef" aria-label="Add reference">+<span class="m-count" id="mRefCount" hidden>0</span></button>
       <input type="text" class="m-prompt" id="mPrompt" placeholder="Describe the scene you imagine..." autocomplete="off">
-      <button type="button" class="m-chip" id="mModelChip"><span>🎬</span><span id="mModelChipName">Seedance 2.5</span></button>
-      <button type="button" class="m-set" id="mSettingsBtn" aria-label="Settings">🎛</button>
-      <button type="button" class="m-go" id="mGenerateBtn">✦ 20</button>
+      <div class="m-bar-controls">
+        <button type="button" class="m-add" id="mAddRef" aria-label="Add reference">+<span class="m-count" id="mRefCount" hidden>0</span></button>
+        <button type="button" class="m-chip" id="mModelChip"><span>🎬</span><span id="mModelChipName">Seedance 2.5</span></button>
+        <button type="button" class="m-set" id="mSettingsBtn" aria-label="Settings">🎛</button>
+        <button type="button" class="m-go" id="mGenerateBtn">✦ 20</button>
+      </div>
     </div>
     <div class="m-err" id="mErr" role="alert"></div>
     <div class="m-examples" id="mExamples"></div>
@@ -1008,7 +1011,7 @@
     <div class="m-sheet-h"><h3>Settings</h3><button type="button" class="m-x" id="mSettingsClose" aria-label="Close">✕</button></div>
     <div class="m-row" id="mRatioRow"><span class="m-ic">▣</span><span class="m-lb">Aspect ratio</span><span class="m-val"><span id="mRatioVal">16:9</span><span class="m-chev">›</span></span></div>
     <div class="m-pop" id="mRatioPop" hidden></div>
-    <div class="m-row" style="cursor:default;"><span class="m-ic">⏱</span><span class="m-lb">Duration</span><input type="range" class="m-slider" id="mDurSlider" min="5" max="30" step="5" value="30"><span class="m-val"><span id="mDurVal">30</span></span></div>
+    <div class="m-row" style="cursor:default;"><span class="m-ic">⏱</span><span class="m-lb">Duration</span><input type="range" class="m-slider" id="mDurSlider" min="4" max="30" step="1" value="30"><span class="m-val"><span id="mDurVal">30</span></span></div>
     <div class="m-row" id="mQualityRow"><span class="m-ic">◆</span><span class="m-lb">Quality <span class="m-4k">NOW IN 4K</span></span><span class="m-val"><span id="mQualityVal">720p</span><span class="m-chev">›</span></span></div>
     <div class="m-pop" id="mQualityPop" hidden></div>
     <div class="m-row" id="mBitrateRow"><span class="m-ic">📶</span><span class="m-lb">Bitrate</span><span class="m-val"><span id="mBitrateVal">High</span><span class="m-chev">›</span></span></div>
@@ -1021,6 +1024,7 @@
   <div class="m-full" id="mModelSheet" hidden>
     <div class="m-sheet-h"><h3>Model</h3><button type="button" class="m-x" id="mModelClose" aria-label="Close">✕</button></div>
     <input class="m-search" id="mModelSearch" type="text" placeholder="Search" autocomplete="off">
+    <div class="m-item" id="mAutoMode"><span class="m-ic">✦</span><span class="m-tx2"><span class="m-nm">Auto mode</span><span class="m-sub">Auto picks a model for you</span></span><span class="m-check" id="mAutoCheck" hidden>✓</span></div>
     <div class="m-sec">🖼 Image ›</div>
     <div id="mImageList"></div>
     <div class="m-sec">🎬 Video ›</div>
@@ -2864,7 +2868,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
 
   /* ----- balance display (always above the tool) ----- */
-  function costFor(dur) { return COST[dur] || COST[30]; }
+  function costFor(dur) { var tiers = [5, 10, 20, 30]; for (var i = 0; i < tiers.length; i++) { if (dur <= tiers[i]) return COST[tiers[i]]; } return COST[30]; }
   /* Build button shows its cost (updates with the duration). */
   function updateBuildBtn() {
     var b = document.getElementById("buildBtn");
@@ -4241,6 +4245,8 @@ var selectedSound = true;
     } catch (e) {}
     if (il) il.innerHTML = ih || "<div class='m-sub' style='padding:10px 4px;'>No image tools found.</div>";
     if (vl) vl.innerHTML = vh || "<div class='m-sub' style='padding:10px 4px;'>No models found.</div>";
+    var autoId = (typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS[0]) ? TOP_ENGINE_IDS[0] : "seedance";
+    var ac = $("mAutoCheck"); if (ac) ac.hidden = !(selectedEngine === autoId);
     document.querySelectorAll("#mModelSheet .m-item").forEach(function (it) {
       it.addEventListener("click", function () {
         var kind = it.getAttribute("data-kind"), id = it.getAttribute("data-id");
@@ -4281,6 +4287,16 @@ var selectedSound = true;
   if (addBtn) addBtn.addEventListener("click", function () { refreshMRefs(); openMSheet("mRefsSheet"); });
   var chip = $("mModelChip");
   if (chip) chip.addEventListener("click", function () { var s = $("mModelSearch"); if (s) s.value = ""; buildMModelLists(); openMSheet("mModelSheet"); });
+  var autoMode = $("mAutoMode");
+  if (autoMode) autoMode.addEventListener("click", function () {
+    var autoId = (typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS[0]) ? TOP_ENGINE_IDS[0] : "seedance";
+    var el = document.querySelector('.engine[data-id="' + autoId + '"]');
+    if (el) el.click();
+    if (typeof refreshOptRows === "function") refreshOptRows();
+    if (typeof updateBuildBtn === "function") updateBuildBtn();
+    refreshMBar();
+    closeMSheets();
+  });
   var setBtn = $("mSettingsBtn");
   if (setBtn) setBtn.addEventListener("click", function () { syncMSettings(); openMSheet("mSettingsSheet"); });
   var search = $("mModelSearch");
@@ -4306,11 +4322,12 @@ var selectedSound = true;
     });
     durSlider.addEventListener("change", function () {
       var v = parseInt(durSlider.value, 10) || 30;
-      var snap = [5, 10, 20, 30].reduce(function (a, b) { return Math.abs(b - v) < Math.abs(a - v) ? b : a; });
-      durSlider.value = String(snap);
-      var dv = $("mDurVal"); if (dv) dv.textContent = String(snap);
-      var b = document.querySelector('#durBtns button[data-dur="' + snap + '"]');
-      if (b) b.click();
+      if (v < 4) v = 4;
+      if (v > 30) v = 30;
+      durSlider.value = String(v);
+      var dv = $("mDurVal"); if (dv) dv.textContent = String(v);
+      try { selectedDur = v; } catch (e) {}
+      document.querySelectorAll("#durBtns button").forEach(function (x) { x.classList.toggle("active", parseInt(x.dataset.dur, 10) === v); });
       if (typeof updateBuildBtn === "function") updateBuildBtn();
       if (typeof refreshOptRows === "function") refreshOptRows();
       refreshMBar();
