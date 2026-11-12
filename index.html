@@ -634,6 +634,32 @@
     .sale-btn-d { display: none; }
     .sale-btn-m { display: inline; }
   }
+/* ---------- LumeField AI — own-AI video tool (top of page) ---------- */
+.lfai { padding: 26px 20px 10px; background: #0b0b14; }
+.lfai-box { max-width: 860px; margin: 0 auto; background: #14141f; border: 1px solid #2a2a3d; border-radius: 20px; padding: 22px; }
+.lfai-head { display: flex; align-items: center; gap: 10px; }
+.lfai-mark { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, #c8f542, #7ee0a3); color: #111; font-size: 22px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.lfai-head h2 { color: #fff; font-size: 26px; margin: 0; }
+.lfai-tag { background: #c8f542; color: #111; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 3px 10px; }
+.lfai-sub { color: #a5a5b8; font-size: 14px; margin: 6px 0 14px; }
+#lfAIPrompt { width: 100%; box-sizing: border-box; background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; color: #fff; font-size: 16px; font-family: inherit; padding: 12px 14px; resize: vertical; min-height: 74px; }
+#lfAIPrompt:focus { outline: none; border-color: #c8f542; }
+.lfai-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.lfai-photo { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
+.lfai-photo span { color: #8a8a9e; font-weight: 400; }
+#lfAIPhotoPrev { width: 44px; height: 44px; object-fit: cover; border-radius: 10px; border: 1px solid #33334a; }
+.lfai-durs { display: flex; gap: 6px; margin-left: auto; }
+.lfai-dur { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.lfai-dur.on { background: #c8f542; border-color: #c8f542; color: #111; }
+.lfai-gen { flex: 1; background: #c8f542; border: 0; color: #111; border-radius: 999px; padding: 13px 18px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; min-width: 200px; }
+.lfai-gen:disabled { opacity: .55; cursor: wait; }
+.lfai-daily { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 13px 16px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+.lfai-daily:disabled { opacity: .5; cursor: default; }
+.lfai-status { color: #c8f542; font-size: 14px; min-height: 20px; margin-top: 12px; }
+.lfai-error { color: #ff7a7a; font-size: 14px; min-height: 20px; }
+#lfAIVideo { width: 100%; border-radius: 14px; margin-top: 10px; background: #000; }
+#lfAIDownload { display: inline-block; margin-top: 10px; color: #c8f542; font-weight: 700; font-size: 14px; text-decoration: none; }
+@media (max-width: 640px) { .lfai { padding: 18px 14px 6px; } .lfai-box { padding: 16px; } .lfai-head h2 { font-size: 22px; } .lfai-gen { width: 100%; } }
 </style>
 <script type="application/ld+json">
 {
@@ -661,6 +687,31 @@
   <div class="nav-links"><a href="#models">Explore</a><div class="nav-drop" id="navImageDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Image ▾</button><div class="nav-menu" id="navImageMenu" hidden><div class="nav-menu-head">Image models</div><div id="navImageList"></div></div></div><div class="nav-drop" id="navVideoDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Video ▾</button><div class="nav-menu" id="navVideoMenu" hidden><button class="nav-menu-cta" id="navCreateVideo" type="button">✦ Create Video</button><div class="nav-menu-head">Video models</div><div id="navVideoList"></div></div></div><a href="#buy-credits">Pricing</a><a href="#guides">Guides</a></div>
   <div class="nav-actions"><button class="nav-icon" id="navSearchBtn" type="button" aria-label="Search models">🔍</button><button class="nav-icon" id="navAssetsBtn" type="button" aria-label="My videos">🗂️</button><a class="nav-icon" href="#buy-credits" aria-label="Special offers">🎁</a><div class="nav-menu nav-search-menu" id="navSearchMenu" hidden><input class="opt-search" id="navSearchInput" type="text" placeholder="Search models..." autocomplete="off"><div id="navSearchList"></div></div><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
+
+<section class="lfai" id="lfAI" aria-label="LumeField AI video studio">
+  <div class="lfai-box">
+    <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span></div>
+    <p class="lfai-sub">Make a video — right here.</p>
+    <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="Describe the video you want..."></textarea>
+    <div class="lfai-row">
+      <label class="lfai-photo" for="lfAIPhoto">＋ Photo <span>(optional)</span></label>
+      <input type="file" id="lfAIPhoto" accept="image/*" hidden>
+      <img id="lfAIPhotoPrev" alt="" hidden>
+      <div class="lfai-durs" role="group" aria-label="Duration">
+        <button type="button" class="lfai-dur" data-dur="5">5s</button>
+        <button type="button" class="lfai-dur on" data-dur="10">10s</button>
+      </div>
+    </div>
+    <div class="lfai-row">
+      <button type="button" class="lfai-gen" id="lfAIGenerate">✦ Generate — 20 credits</button>
+      <button type="button" class="lfai-daily" id="lfAIDaily">🎁 +50 daily</button>
+    </div>
+    <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
+    <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
+    <video id="lfAIVideo" controls autoplay loop playsinline hidden></video>
+    <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
+  </div>
+</section>
 
 <section class="hero" aria-label="Featured video models">
   <div class="hero-carousel" id="heroCarousel">
@@ -3267,13 +3318,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (g) g.disabled = disabled;
   }
 
-  window.lfCreditGate = function (dur, buildPlan) {
+  window.lfCreditGate = function (dur, buildPlan, costOverride, skipValidation) {
     if (!authResolved) { showBuildError("Please wait \u2014 checking your sign-in\u2026"); return; }
-    if (!validateInputs()) return;
+    if (!skipValidation && !validateInputs()) return;
     /* Owner bypass (see OWNER_EMAIL above): the owner always builds free —
        no Firestore deduction, no wallet check, no "credits finished". */
     if (isOwner()) { buildPlan(); recordBuild(dur, 0); updateBar(); return; }
-    var cost = costFor(dur);
+    var cost = (typeof costOverride === "number") ? costOverride : costFor(dur);
 
     /* Not signed in: 1 free video, counted in this browser. */
     if (!currentUser) {
@@ -3339,6 +3390,196 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   updateBar();
 })();
 </script>
+<script type="module">
+/* ---------- LumeField AI — own-AI video tool (in-site generation) ----------
+   Generates video INSIDE LumeField via the free LTX-2.3 Gradio Space
+   (Lightricks/LTX-2-3, endpoint /generate_video). No outbound links: the
+   prompt/photo stay in this tool and the video plays in #lfAIVideo below.
+   Free route = LTX-2.3, max 10s. The free queue is slow (can take minutes)
+   and quota-limited — status text says so honestly. */
+(function () {
+  var SPACE = "Lightricks/LTX-2-3";
+  var ENDPOINT = "/generate_video";
+  var COSTS = { 5: 10, 10: 20 };
+  var OWN_AI_DAILY = 50;
+  var $ = function (id) { return document.getElementById(id); };
+  var promptEl = $("lfAIPrompt"), photoEl = $("lfAIPhoto"), prevEl = $("lfAIPhotoPrev"),
+      genBtn = $("lfAIGenerate"), dailyBtn = $("lfAIDaily"),
+      statusEl = $("lfAIStatus"), errEl = $("lfAIError"),
+      videoEl = $("lfAIVideo"), dlEl = $("lfAIDownload");
+  if (!promptEl || !genBtn) return;
+  var selectedDur = 10;
+  var generating = false;
+  var photoFile = null;
+  var clientPromise = null;
+
+  function setErr(m) { if (errEl) errEl.textContent = m || ""; }
+  function setStatus(m) { if (statusEl) statusEl.textContent = m || ""; }
+  function ownCost(d) { return COSTS[d] || 20; }
+  function guestUsed() {
+    try { return parseInt(window.localStorage.getItem("lumefield_guest_used") || "0", 10) || 0; }
+    catch (e) { return 0; }
+  }
+  function refreshGenLabel() {
+    var free = false;
+    try {
+      if (window.lfIsOwner && window.lfIsOwner()) free = true;
+      else if (window.lfSignedIn && !window.lfSignedIn() && guestUsed() < 1) free = true;
+    } catch (e) {}
+    genBtn.textContent = free ? "✦ Generate — free" : "✦ Generate — " + ownCost(selectedDur) + " credits";
+  }
+  var durBtns = document.querySelectorAll(".lfai-dur");
+  durBtns.forEach(function (b) {
+    b.addEventListener("click", function () {
+      selectedDur = parseInt(b.getAttribute("data-dur"), 10) || 10;
+      durBtns.forEach(function (x) { x.classList.toggle("on", x === b); });
+      refreshGenLabel();
+    });
+  });
+  if (photoEl) photoEl.addEventListener("change", function () {
+    var f = photoEl.files && photoEl.files[0];
+    photoFile = f || null;
+    if (f) {
+      var r = new FileReader();
+      r.onload = function (ev) { prevEl.src = ev.target.result; prevEl.hidden = false; };
+      r.readAsDataURL(f);
+    } else { prevEl.hidden = true; prevEl.removeAttribute("src"); }
+  });
+  /* Content rules: no 18+/adult, no blood/gore. Simple word check. */
+  var BLOCK_RE = /\b(sex|porn|nude|naked|erotic|xxx|hentai|blood|bleeding|gore|behead|dismember|torture|rape|suicide)\b/i;
+  /* Gradio client, loaded lazily so a CDN failure shows a clear error
+     instead of breaking the tool. A failed load clears the cache so the
+     next click can retry. */
+  function getClient() {
+    if (!clientPromise) {
+      clientPromise = import("https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.js").then(function (m) {
+        if (!m || !m.Client) throw new Error("cdn");
+        return m.Client;
+      }).catch(function (e) { clientPromise = null; throw e; });
+    }
+    return clientPromise;
+  }
+  function extractVideoUrl(result) {
+    if (!result) return null;
+    var data = result.data || result;
+    if (!data) return null;
+    var out = Array.isArray(data) ? data[0] : data;
+    if (!out) return null;
+    if (typeof out === "string") return out;
+    if (out.url) return out.url;
+    if (out.path) return out.path;
+    return null;
+  }
+  function friendlyErr(err) {
+    var m = (err && err.message) ? String(err.message) : "";
+    if (m === "no-video") return "The video did not come back — please try again.";
+    if (m === "cdn") return "Could not load the video engine — check your connection and try again.";
+    if (/queue|quota|capacity|busy|rate/i.test(m)) return "The free video queue is busy right now — please try again in a bit.";
+    if (/sign|auth|401|403/i.test(m)) return "The free engine needs a Hugging Face sign-in for more quota — try again later.";
+    if (/network|fetch|Failed to fetch|Load failed/i.test(m)) return "Could not reach the video engine — check your connection and try again.";
+    return "Video generation failed — please try again.";
+  }
+  function setupDownload(url) {
+    dlEl.hidden = true;
+    fetch(url).then(function (r) { if (!r.ok) throw new Error("fetch"); return r.blob(); }).then(function (b) {
+      dlEl.href = URL.createObjectURL(b);
+      dlEl.hidden = false;
+    }).catch(function () {
+      dlEl.href = url;
+      dlEl.hidden = false;
+    });
+  }
+  /* Runs AFTER the credit gate approves (or immediately for owner / the
+     one free guest video, per the gate's existing logic). */
+  function doGenerate() {
+    if (generating) return;
+    generating = true;
+    genBtn.disabled = true;
+    genBtn.textContent = "Generating…";
+    setErr(""); setStatus("Connecting…");
+    videoEl.hidden = true; videoEl.removeAttribute("src"); dlEl.hidden = true;
+    getClient().then(function (Client) {
+      setStatus("In queue…");
+      return Client.connect(SPACE);
+    }).then(function (client) {
+      setStatus("Generating… (free queue — can take a few minutes)");
+      var seed = Math.floor(Math.random() * 2147483647);
+      var args = [photoFile || null, promptEl.value.trim(), selectedDur, false, seed, true, 1024, 1536];
+      return client.predict(ENDPOINT, args);
+    }).then(function (result) {
+      var url = extractVideoUrl(result);
+      if (!url) throw new Error("no-video");
+      setStatus("Done ✓");
+      videoEl.src = url;
+      videoEl.hidden = false;
+      try { videoEl.play(); } catch (e) {}
+      setupDownload(url);
+    }).catch(function (err) {
+      setStatus("");
+      setErr(friendlyErr(err));
+    }).finally(function () {
+      generating = false;
+      genBtn.disabled = false;
+      refreshGenLabel();
+    });
+  }
+  genBtn.addEventListener("click", function () {
+    if (generating) return;
+    var p = promptEl.value.trim();
+    if (!p) { setErr("Please describe the video you want."); promptEl.focus(); return; }
+    if (BLOCK_RE.test(p)) { setErr("That kind of video is not allowed here — no adult or bloody content."); return; }
+    setErr(""); setStatus("");
+    if (typeof window.lfCreditGate !== "function") { setErr("Credits are still loading — try again in a second."); return; }
+    window.lfCreditGate(selectedDur, doGenerate, ownCost(selectedDur), true);
+  });
+  /* Daily +50 credits (own-AI tool only). Separate from the 4/day refill:
+     its own Firestore field lastOwnAIDailyClaim, same Dhaka-date + transaction
+     pattern as claimDaily. If the wallet rules do not allow the new field yet,
+     the transaction is denied and the same "try again in a bit" message shows. */
+  function lfAIToday() {
+    try { return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Dhaka" }); }
+    catch (e) {
+      var d = new Date();
+      return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    }
+  }
+  if (dailyBtn) dailyBtn.addEventListener("click", function () {
+    setErr("");
+    var user = null;
+    try { user = (typeof lfAuth !== "undefined" && lfAuth) ? lfAuth.currentUser : null; } catch (e) {}
+    if (!user) {
+      if (window.lfOpenLogin) window.lfOpenLogin("Sign in (free) to claim your daily credits.");
+      else setErr("Please sign in to claim your daily credits.");
+      return;
+    }
+    if (!user.emailVerified) { setErr("Please verify your email to claim your daily credits."); return; }
+    if (window.lfIsOwner && window.lfIsOwner()) { setErr("You are the owner — videos are already free for you."); return; }
+    if (typeof lfDb === "undefined" || !lfDb) { setErr("Credit wallet is not connected yet — please try again in a moment."); return; }
+    dailyBtn.disabled = true;
+    var today = lfAIToday();
+    var ref = lfDb.collection("wallets").doc(user.uid);
+    lfDb.runTransaction(function (tx) {
+      return tx.get(ref).then(function (snap) {
+        if (!snap.exists) throw new Error("no-wallet");
+        var d = snap.data();
+        if (d.lastOwnAIDailyClaim === today) throw new Error("already-claimed");
+        var cur = (typeof d.credits === "number") ? d.credits : 0;
+        tx.update(ref, { credits: cur + OWN_AI_DAILY, lastOwnAIDailyClaim: today, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+      });
+    }).then(function () {
+      dailyBtn.textContent = "Claimed ✓ +50";
+      setStatus("50 credits added ✓");
+    }).catch(function (err) {
+      dailyBtn.disabled = false;
+      if (err && err.message === "already-claimed") { dailyBtn.textContent = "Claimed ✓"; dailyBtn.disabled = true; setStatus("Already claimed today ✓"); return; }
+      if (err && err.code === "permission-denied") { setErr("Daily free credits are being switched on — please try again in a bit. Nothing was charged."); return; }
+      setErr("Could not claim your free credits right now. Nothing changed — please try again.");
+    });
+  });
+  refreshGenLabel();
+})();
+</script>
+
 <script>
 /* ---------- phone nav hamburger (≤640px the nav links hide) ---------- */
 (function () {
