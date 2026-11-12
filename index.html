@@ -558,6 +558,66 @@
     .nav-links.open { display: flex; flex-direction: column; gap: 12px; width: 100%; padding: 6px 0 2px; }
     .nav-burger { display: inline-flex; }
   }
+
+  /* ---------- mobile generator (Higgsfield phone style) ---------- */
+  #mGen, #mModelSheet, #mSettingsSheet, #mRefsSheet { display: none; }
+  @media (max-width: 768px) {
+    #mGen { display: block; padding: 4px 0 0; }
+    #toolOverlay .tool-head, #toolOverlay .honest, #toolOverlay .gen-tabs,
+    #toolOverlay .tool-panel, #toolOverlay .tool-how { display: none !important; }
+    #toolOverlay .tool-wrap { padding: 0 12px 40px; }
+    #mSettingsSheet, #mRefsSheet, #mModelSheet { display: block; }
+    .m-bar { display: flex; align-items: center; gap: 8px; background: #14141f; border: 1px solid #33334a; border-radius: 18px; padding: 8px; }
+    .m-add { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; border: 1px solid #33334a; background: #1c1c2c; color: #fff; font-size: 20px; line-height: 1; cursor: pointer; position: relative; font-family: inherit; }
+    .m-add .m-count { position: absolute; top: -4px; right: -4px; min-width: 16px; height: 16px; border-radius: 8px; background: #c8f542; color: #111; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+    .m-prompt { flex: 1 1 auto; min-width: 0; background: transparent; border: 0; outline: none; color: #fff; font-size: 15px; font-family: inherit; padding: 8px 2px; }
+    .m-prompt::placeholder { color: #8a8a9e; }
+    .m-chip { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 8px 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; max-width: 108px; }
+    .m-chip span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .m-set { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; border: 1px solid #33334a; background: #1c1c2c; color: #cfcfdd; font-size: 17px; cursor: pointer; font-family: inherit; }
+    .m-go { flex: 0 0 auto; background: #c8f542; color: #111; border: 0; border-radius: 999px; padding: 10px 13px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; }
+    .m-err { display: none; color: #ff7a7a; font-size: 13px; font-weight: 700; margin: 10px 4px 0; }
+    .m-err.show { display: block; }
+    .m-examples { display: flex; gap: 8px; overflow-x: auto; margin-top: 12px; padding-bottom: 4px; }
+    .m-examples button { flex: 0 0 auto; background: #1c1c2c; border: 1px solid #33334a; color: #cfcfdd; border-radius: 999px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .m-hint { color: #8a8a9e; font-size: 13px; margin: 14px 4px 0; line-height: 1.6; }
+    .m-hint b { color: #c8f542; }
+    .m-sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 200; background: #12121d; border: 1px solid #33334a; border-bottom: 0; border-radius: 20px 20px 0 0; padding: 10px 18px calc(18px + env(safe-area-inset-bottom)); max-height: 82vh; overflow-y: auto; box-shadow: 0 -12px 40px rgba(0,0,0,.6); }
+    .m-grip { width: 44px; height: 5px; border-radius: 3px; background: #33334a; margin: 2px auto 12px; }
+    .m-sheet-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+    .m-sheet-h h3 { color: #fff; font-size: 18px; margin: 0; }
+    .m-x { width: 34px; height: 34px; border-radius: 50%; border: 1px solid #33334a; background: #1c1c2c; color: #fff; font-size: 16px; cursor: pointer; font-family: inherit; }
+    .m-row { display: flex; align-items: center; gap: 10px; padding: 13px 2px; border-bottom: 1px solid #232336; cursor: pointer; }
+    .m-row .m-ic { color: #8a8a9e; font-size: 17px; width: 24px; text-align: center; flex: 0 0 auto; }
+    .m-row .m-lb { color: #fff; font-size: 15px; font-weight: 700; }
+    .m-row .m-val { margin-left: auto; color: #fff; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .m-row .m-chev { color: #8a8a9e; font-size: 17px; }
+    .m-4k { background: #ff3d81; color: #fff; font-size: 10px; font-weight: 800; border-radius: 5px; padding: 2px 5px; letter-spacing: .4px; }
+    .m-slider { flex: 1; accent-color: #c8f542; min-width: 0; }
+    .m-toggle { position: relative; width: 46px; height: 26px; border-radius: 999px; border: 0; background: #33334a; cursor: pointer; flex: 0 0 auto; }
+    .m-toggle::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: left .15s; }
+    .m-toggle.on { background: #c8f542; }
+    .m-toggle.on::after { left: 23px; }
+    .m-apply { width: 100%; background: #c8f542; color: #111; border: 0; border-radius: 999px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; margin-top: 16px; }
+    .m-pop { background: #fff; color: #111; border-radius: 16px; padding: 6px 0; margin: 4px 0 10px; }
+    .m-pop .m-opt { display: flex; align-items: center; gap: 10px; padding: 13px 18px; font-size: 16px; cursor: pointer; }
+    .m-pop .m-opt + .m-opt { border-top: 1px solid #eee; }
+    .m-pop .m-opt .m-tx { flex: 1; min-width: 0; }
+    .m-pop .m-opt .m-nm { display: block; font-weight: 700; }
+    .m-pop .m-opt small { display: block; color: #666; font-size: 13px; margin-top: 2px; }
+    .m-pop .m-opt .m-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #999; flex: 0 0 auto; }
+    .m-pop .m-opt.sel .m-dot { border-color: #6b7c00; background: #6b7c00; box-shadow: inset 0 0 0 3px #fff; }
+    .m-full { position: fixed; inset: 0; z-index: 210; background: #0a0a12; overflow-y: auto; padding: 14px 16px calc(20px + env(safe-area-inset-bottom)); }
+    .m-full .m-sheet-h { position: sticky; top: 0; background: #0a0a12; padding: 6px 0 10px; z-index: 2; }
+    .m-search { width: 100%; box-sizing: border-box; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 12px; padding: 12px 14px; font-size: 15px; font-family: inherit; margin-bottom: 6px; }
+    .m-sec { color: #fff; font-size: 16px; font-weight: 800; padding: 14px 2px 6px; }
+    .m-item { display: flex; align-items: center; gap: 12px; padding: 12px 4px; cursor: pointer; border-bottom: 1px solid #1c1c2c; }
+    .m-item .m-ic { width: 44px; height: 44px; border-radius: 12px; background: #1c1c2c; border: 1px solid #33334a; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .m-item .m-tx2 { flex: 1; min-width: 0; }
+    .m-item .m-nm { display: block; color: #fff; font-size: 15px; font-weight: 700; }
+    .m-item .m-sub { display: block; color: #8a8a9e; font-size: 12px; margin-top: 2px; }
+    .m-item .m-check { margin-left: auto; width: 24px; height: 24px; border-radius: 50%; background: #c8f542; color: #111; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  }
 </style>
 <script type="application/ld+json">
 {
@@ -688,6 +748,20 @@
     <button type="button" class="credit-signin" id="creditSignInBtn" hidden>Sign in — get 20 credits</button>
     <a class="credit-signin" href="#buy-credits" id="creditBuyBtn" style="text-align:center;">💎 Buy credits</a>
     <button type="button" class="credit-signin" id="dailyClaimBtn" hidden>🎁 Claim today's 4 free credits</button>
+  </div>
+
+  <!-- Mobile generator (Higgsfield phone style): prompt bar. Desktop keeps the full form below. -->
+  <div id="mGen">
+    <div class="m-bar">
+      <button type="button" class="m-add" id="mAddRef" aria-label="Add reference">+<span class="m-count" id="mRefCount" hidden>0</span></button>
+      <input type="text" class="m-prompt" id="mPrompt" placeholder="Describe the scene you imagine..." autocomplete="off">
+      <button type="button" class="m-chip" id="mModelChip"><span>🎬</span><span id="mModelChipName">Seedance 2.5</span></button>
+      <button type="button" class="m-set" id="mSettingsBtn" aria-label="Settings">🎛</button>
+      <button type="button" class="m-go" id="mGenerateBtn">✦ 20</button>
+    </div>
+    <div class="m-err" id="mErr" role="alert"></div>
+    <div class="m-examples" id="mExamples"></div>
+    <p class="m-hint">Tip: add a photo with <b>+</b> so the face stays the same. Pick a model with the chip, settings with <b>🎛</b>. This plans your video — the engine renders it free on its own page.</p>
   </div>
   <div class="tool-head">
     <h2>Create your <span>video</span></h2>
@@ -927,6 +1001,42 @@
   </div>
   </div>
 </div>
+
+  <!-- Mobile sheets: settings, model picker, references. -->
+  <div class="m-sheet" id="mSettingsSheet" hidden>
+    <div class="m-grip"></div>
+    <div class="m-sheet-h"><h3>Settings</h3><button type="button" class="m-x" id="mSettingsClose" aria-label="Close">✕</button></div>
+    <div class="m-row" id="mRatioRow"><span class="m-ic">▣</span><span class="m-lb">Aspect ratio</span><span class="m-val"><span id="mRatioVal">16:9</span><span class="m-chev">›</span></span></div>
+    <div class="m-pop" id="mRatioPop" hidden></div>
+    <div class="m-row" style="cursor:default;"><span class="m-ic">⏱</span><span class="m-lb">Duration</span><input type="range" class="m-slider" id="mDurSlider" min="5" max="30" step="5" value="30"><span class="m-val"><span id="mDurVal">30</span></span></div>
+    <div class="m-row" id="mQualityRow"><span class="m-ic">◆</span><span class="m-lb">Quality <span class="m-4k">NOW IN 4K</span></span><span class="m-val"><span id="mQualityVal">720p</span><span class="m-chev">›</span></span></div>
+    <div class="m-pop" id="mQualityPop" hidden></div>
+    <div class="m-row" id="mBitrateRow"><span class="m-ic">📶</span><span class="m-lb">Bitrate</span><span class="m-val"><span id="mBitrateVal">High</span><span class="m-chev">›</span></span></div>
+    <div class="m-pop" id="mBitratePop" hidden></div>
+    <div class="m-row" id="mSoundRow"><span class="m-ic">🔊</span><span class="m-lb">Sound</span><span class="m-val"><button type="button" class="m-toggle on" id="mSoundToggle" aria-label="Sound on or off"></button></span></div>
+    <div class="m-row" style="cursor:default;"><span class="m-ic">🗂</span><span class="m-lb">Batch size</span><span class="m-val">1 video</span></div>
+    <button type="button" class="m-apply" id="mApplyBtn">Apply ✦ 20</button>
+  </div>
+
+  <div class="m-full" id="mModelSheet" hidden>
+    <div class="m-sheet-h"><h3>Model</h3><button type="button" class="m-x" id="mModelClose" aria-label="Close">✕</button></div>
+    <input class="m-search" id="mModelSearch" type="text" placeholder="Search" autocomplete="off">
+    <div class="m-sec">🖼 Image ›</div>
+    <div id="mImageList"></div>
+    <div class="m-sec">🎬 Video ›</div>
+    <div id="mVideoList"></div>
+  </div>
+
+  <div class="m-sheet" id="mRefsSheet" hidden>
+    <div class="m-grip"></div>
+    <div class="m-sheet-h"><h3>Add references</h3><button type="button" class="m-x" id="mRefsClose" aria-label="Close">✕</button></div>
+    <p class="m-hint" style="margin-top:0;">Image, video or audio — your photos stay in this browser and are never uploaded by this tool.</p>
+    <div class="m-row" id="mStartRow"><span class="m-ic">🖼</span><span class="m-lb">Start frame</span><span class="m-val"><span id="mStartVal">+ Add photo</span></span></div>
+    <div class="m-row" id="mEndRow"><span class="m-ic">🖼</span><span class="m-lb">End frame (optional)</span><span class="m-val"><span id="mEndVal">+ Add photo</span></span></div>
+    <div class="m-row" id="mVideoRow"><span class="m-ic">🎬</span><span class="m-lb">Reference video (motion)</span><span class="m-val"><span id="mVideoVal">+ Add video</span></span></div>
+    <div class="m-row" id="mPhotosRow"><span class="m-ic">📷</span><span class="m-lb">Photos</span><span class="m-val"><span id="mPhotosVal">0 attached</span></span></div>
+    <button type="button" class="m-apply" id="mRefsDone">Done</button>
+  </div>
 </div>
 
 <section class="buy" id="buy-credits">
@@ -1474,7 +1584,7 @@ function buildPlan() {
       prompt += "Camera: " + camera + ". Style: " + style + ". Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ". Bitrate: " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + ".";
     }
     if (setting) prompt += " Setting: " + setting + ".";
-    if (sound && engine.audio) prompt += " Sound: " + sound + ".";
+    if (sound && engine.audio && (typeof selectedSound === "undefined" || selectedSound)) prompt += " Sound: " + sound + ".";
     if (typeof refVideo !== "undefined" && refVideo) prompt += " Motion reference: " + refVideo.name + " (follow the reference video for motion).";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
     else if (photos.length > 1) prompt += " Match the reference photos exactly — Photo 1 is the start frame, Photo 2 is the end frame; use every photo for the character, clothes and setting.";
@@ -1491,7 +1601,7 @@ function buildPlan() {
     "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
     "<b>Reference photos:</b> " + photos.length + " uploaded" + (engine.refs ? " — " + engine.name + " takes up to " + engine.refs + (engine.refs === 1 ? " photo" : " photos") + " (Photo 1 = start frame" + (photos.length > 1 ? ", Photo 2 = end frame" : "") + ")" : " — this engine takes no reference photo") + "<br>" +
     ((typeof refVideo !== "undefined" && refVideo) ? "<b>Reference video:</b> " + escHtml(refVideo.name) + " (upload the same video on the engine's page as motion reference)<br>" : "") +
-    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-") + " · <b>Bitrate:</b> " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + " · <b>Multi-shot:</b> " + (selectedMultiShot ? "On (" + segCount + " shots)" : "Off") + " · <b>Enhance:</b> " + (selectedEnhance ? "On" : "Off");
+    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-") + " · <b>Bitrate:</b> " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + " · <b>Multi-shot:</b> " + (selectedMultiShot ? "On (" + segCount + " shots)" : "Off") + " · <b>Enhance:</b> " + (selectedEnhance ? "On" : "Off") + " · <b>Sound:</b> " + ((typeof selectedSound === "undefined" || selectedSound) ? "On" : "Off");
 
   const segWrap = document.getElementById("segments");
   segWrap.innerHTML = "";
@@ -2768,6 +2878,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (isOwner()) bc.textContent = "💎 Unlimited (Owner) — this video is free for you";
       else bc.textContent = "💠 This video costs " + cost + " credits · " + dur + "s";
     }
+    if (typeof refreshMBar === "function") { try { refreshMBar(); } catch (e) {} }
   }
   function updateBar() {
     updateProfile();
@@ -3689,6 +3800,7 @@ function openTool() {
   o.hidden = false;
   document.body.style.overflow = "hidden";
   if (typeof refreshOptRows === "function") refreshOptRows();
+  if (typeof refreshMBar === "function") { try { refreshMBar(); } catch (e) {} }
 }
 function closeTool() {
   var o = document.getElementById("toolOverlay");
@@ -3970,6 +4082,296 @@ function closeTool() {
   }
   if (hh) hh.addEventListener("click", function () { showHow("how"); });
   if (hs) hs.addEventListener("click", function () { showHow("history"); });
+})();
+</script>
+
+<script>
+/* ---------- mobile generator (Higgsfield phone style) ---------- */
+var selectedSound = true;
+(function () {
+  function $(id) { return document.getElementById(id); }
+  function eng() { try { return (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (e) { return e.id === selectedEngine; }) || null; } catch (e) { return null; } }
+  function mCost() {
+    var d = (typeof selectedDur === "number") ? selectedDur : 30;
+    try { if (typeof window.lfCostFor === "function") return window.lfCostFor(d); } catch (e) {}
+    var c = { 5: 4, 10: 7, 20: 14, 30: 20 };
+    return c[d] || 20;
+  }
+  function isOwner() { try { return (typeof window.lfIsOwner === "function") && window.lfIsOwner(); } catch (e) { return false; } }
+  function shortName(n) { n = String(n || ""); return n.length > 22 ? n.slice(0, 20) + "…" : n; }
+  function refreshMBar() {
+    var e = eng();
+    var chip = $("mModelChipName"); if (chip) chip.textContent = e ? e.name : "";
+    var go = $("mGenerateBtn");
+    if (go) go.textContent = isOwner() ? "✦ free" : "✦ " + mCost();
+    var ap = $("mApplyBtn");
+    if (ap) ap.textContent = isOwner() ? "Apply — free for you" : "Apply ✦ " + mCost();
+    refreshMRefs();
+  }
+  window.refreshMBar = refreshMBar;
+  function refreshMRefs() {
+    var start = "", end = "", vid = "", count = 0, total = 0;
+    try {
+      if (typeof photos !== "undefined") {
+        total = photos.length;
+        if (photos[0]) start = photos[0].name || "photo";
+        if (photos[1]) end = photos[1].name || "photo";
+      }
+      count = total;
+      if (typeof refVideo !== "undefined" && refVideo) { vid = refVideo.name || "video"; count += 1; }
+    } catch (err) {}
+    var sv = $("mStartVal"); if (sv) sv.textContent = start ? shortName(start) : "+ Add photo";
+    var ev = $("mEndVal"); if (ev) ev.textContent = end ? shortName(end) : "+ Add photo";
+    var vv = $("mVideoVal"); if (vv) vv.textContent = vid ? shortName(vid) : "+ Add video";
+    var pv = $("mPhotosVal"); if (pv) pv.textContent = total + " attached";
+    var badge = $("mRefCount");
+    if (badge) { badge.hidden = count === 0; badge.textContent = String(count); }
+  }
+  function mShowErr(msg) { var el = $("mErr"); if (el) { el.textContent = msg; el.classList.add("show"); } }
+  function mHideErr() { var el = $("mErr"); if (el) { el.textContent = ""; el.classList.remove("show"); } }
+  function closeMPops() { ["mRatioPop", "mQualityPop", "mBitratePop"].forEach(function (id) { var p = $(id); if (p) p.hidden = true; }); }
+  function closeMSheets() { ["mModelSheet", "mSettingsSheet", "mRefsSheet"].forEach(function (id) { var s = $(id); if (s) s.hidden = true; }); closeMPops(); }
+  function openMSheet(id) { closeMSheets(); var s = $(id); if (s) s.hidden = false; }
+  function toggleMPop(id, build) {
+    var p = $(id); if (!p) return;
+    var wasHidden = p.hidden;
+    closeMPops();
+    if (wasHidden) { if (typeof build === "function") build(); p.hidden = false; }
+  }
+  function mOptHtml(name, sub, sel, val) {
+    return "<div class='m-opt" + (sel ? " sel" : "") + "' data-v='" + val + "'><span class='m-tx'><span class='m-nm'>" + name + "</span>" + (sub ? "<small>" + sub + "</small>" : "") + "</span><span class='m-dot'></span></div>";
+  }
+  var RATIO_LABELS_M = (typeof window.lfOpt !== "undefined" && window.lfOpt.RATIO_LABELS) ? window.lfOpt.RATIO_LABELS : { "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
+  function buildMRatioPop() {
+    var list = $("mRatioPop"); if (!list) return;
+    var html = "";
+    Object.keys(RATIO_LABELS_M).forEach(function (r) {
+      html += mOptHtml(r, RATIO_LABELS_M[r], r === selectedRatio, r);
+    });
+    list.innerHTML = html;
+    list.querySelectorAll(".m-opt").forEach(function (it) {
+      it.addEventListener("click", function () {
+        var r = it.getAttribute("data-v");
+        var b = document.querySelector('#ratioBtns button[data-ratio="' + r + '"]');
+        if (b) b.click();
+        var rv = $("mRatioVal"); if (rv) rv.textContent = r;
+        if (typeof refreshOptRows === "function") refreshOptRows();
+        refreshMBar();
+        closeMPops();
+      });
+    });
+  }
+  function buildMQualityPop() {
+    var list = $("mQualityPop"); if (!list) return;
+    var cur = (typeof selectedQuality === "string" && selectedQuality) ? selectedQuality : "720p";
+    var html = "";
+    var opts = [["480p", "Draft"], ["720p", "Standard"], ["1080p", "Full HD"], ["4K", "Ultra HD"]];
+    opts.forEach(function (pair) {
+      html += mOptHtml(pair[0], pair[1], pair[0] === cur, pair[0]);
+    });
+    list.innerHTML = html;
+    list.querySelectorAll(".m-opt").forEach(function (it) {
+      it.addEventListener("click", function () {
+        var q = it.getAttribute("data-v");
+        var sel = $("qualitySel");
+        if (sel) {
+          var has = false;
+          for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].value === q) { has = true; break; } }
+          if (!has) { var o = document.createElement("option"); o.value = q; o.textContent = q; sel.appendChild(o); }
+          sel.value = q;
+          try { sel.dispatchEvent(new Event("change")); } catch (e) {}
+        }
+        try { selectedQuality = q; } catch (e) {}
+        var qv = $("mQualityVal"); if (qv) qv.textContent = q;
+        if (typeof refreshOptRows === "function") refreshOptRows();
+        refreshMBar();
+        closeMPops();
+      });
+    });
+  }
+  function buildMBitratePop() {
+    var list = $("mBitratePop"); if (!list) return;
+    var cur = (typeof selectedBitrate === "string") ? selectedBitrate : "High";
+    var html = "";
+    var opts = [["High", "Less compression · larger size"], ["Standard", "More compression · smaller size"]];
+    opts.forEach(function (pair) {
+      html += mOptHtml(pair[0], pair[1], pair[0] === cur, pair[0]);
+    });
+    list.innerHTML = html;
+    list.querySelectorAll(".m-opt").forEach(function (it) {
+      it.addEventListener("click", function () {
+        try { selectedBitrate = it.getAttribute("data-v"); } catch (e) {}
+        var bv = $("mBitrateVal"); if (bv) bv.textContent = it.getAttribute("data-v");
+        if (typeof refreshOptRows === "function") refreshOptRows();
+        refreshMBar();
+        closeMPops();
+      });
+    });
+  }
+  function syncMSettings() {
+    var rv = $("mRatioVal"); if (rv) rv.textContent = (typeof selectedRatio === "string") ? selectedRatio : "16:9";
+    var ds = $("mDurSlider"); if (ds) ds.value = String((typeof selectedDur === "number") ? selectedDur : 30);
+    var dv = $("mDurVal"); if (dv) dv.textContent = String((typeof selectedDur === "number") ? selectedDur : 30);
+    var qv = $("mQualityVal"); if (qv) qv.textContent = (typeof selectedQuality === "string" && selectedQuality) ? selectedQuality : "720p";
+    var bv = $("mBitrateVal"); if (bv) bv.textContent = (typeof selectedBitrate === "string") ? selectedBitrate : "High";
+    var st = $("mSoundToggle"); if (st) { st.classList.toggle("on", selectedSound !== false); st.setAttribute("aria-pressed", String(selectedSound !== false)); }
+    refreshMBar();
+    closeMPops();
+  }
+  function mItemHtml(icon, name, sub, badges, checked, kind, id) {
+    return "<div class='m-item' data-kind='" + kind + "' data-id='" + id + "'><span class='m-ic'>" + icon + "</span><span class='m-tx2'><span class='m-nm'>" + escHtml(name) + badges + "</span><span class='m-sub'>" + escHtml(sub) + "</span></span>" + (checked ? "<span class='m-check'>✓</span>" : "") + "</div>";
+  }
+  function buildMModelLists() {
+    var q = (($("mModelSearch") ? $("mModelSearch").value : "") || "").trim().toLowerCase();
+    var il = $("mImageList"), vl = $("mVideoList");
+    var ih = "", vh = "";
+    try {
+      (typeof IMAGE_TOOLS !== "undefined" ? IMAGE_TOOLS : []).forEach(function (t) {
+        if (q && t.name.toLowerCase().indexOf(q) === -1) return;
+        var badges = ((typeof NEW_IMAGE_IDS !== "undefined" && NEW_IMAGE_IDS.indexOf(t.id) !== -1) ? " <span class='new-badge'>NEW</span>" : "");
+        ih += mItemHtml("🖼", t.name, t.spec || "", badges, false, "image", t.id);
+      });
+    } catch (e) {}
+    try {
+      (typeof ENGINES !== "undefined" ? ENGINES : []).forEach(function (e) {
+        if (q && e.name.toLowerCase().indexOf(q) === -1) return;
+        var badges = ((typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='top-badge'>TOP</span>" : "") + ((typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='new-badge'>NEW</span>" : "") + ((e.res && e.res.indexOf("4K") !== -1) ? " <span class='m-4k'>4K</span>" : "");
+        vh += mItemHtml("🎬", e.name, e.res + " · up to " + e.maxSec + "s", badges, e.id === selectedEngine, "video", e.id);
+      });
+    } catch (e) {}
+    if (il) il.innerHTML = ih || "<div class='m-sub' style='padding:10px 4px;'>No image tools found.</div>";
+    if (vl) vl.innerHTML = vh || "<div class='m-sub' style='padding:10px 4px;'>No models found.</div>";
+    document.querySelectorAll("#mModelSheet .m-item").forEach(function (it) {
+      it.addEventListener("click", function () {
+        var kind = it.getAttribute("data-kind"), id = it.getAttribute("data-id");
+        closeMSheets();
+        if (kind === "image") {
+          if (typeof closeTool === "function") closeTool();
+          if (typeof openDetail === "function") openDetail("image", id);
+        } else {
+          var el = document.querySelector('.engine[data-id="' + id + '"]');
+          if (el) el.click();
+          if (typeof refreshOptRows === "function") refreshOptRows();
+          if (typeof updateBuildBtn === "function") updateBuildBtn();
+          refreshMBar();
+        }
+      });
+    });
+  }
+  function mGenerate() {
+    mHideErr();
+    var mp = $("mPrompt");
+    var prompt = mp ? mp.value.trim() : "";
+    if (!prompt) { mShowErr("Please describe your scene first."); if (mp) mp.focus(); return; }
+    var subj = $("subject"), act = $("action");
+    if (act) act.value = prompt;
+    if (subj && !subj.value.trim()) subj.value = prompt;
+    var e = eng();
+    if (!e) { mShowErr("Please pick a model first."); return; }
+    var nPhotos = 0;
+    try { nPhotos = (typeof photos !== "undefined") ? photos.length : 0; } catch (err) {}
+    if (e.i2v && nPhotos === 0) {
+      var pe = (typeof PHOTO_ERR === "string") ? PHOTO_ERR : "Please upload a reference photo first — this engine needs one, or switch to a text-only engine.";
+      mShowErr(pe); return;
+    }
+    if (typeof window.lfCreditGate === "function") { window.lfCreditGate((typeof selectedDur === "number") ? selectedDur : 30, buildPlan); }
+    else { mShowErr("Credit system unavailable, please reload."); }
+  }
+  var addBtn = $("mAddRef");
+  if (addBtn) addBtn.addEventListener("click", function () { refreshMRefs(); openMSheet("mRefsSheet"); });
+  var chip = $("mModelChip");
+  if (chip) chip.addEventListener("click", function () { var s = $("mModelSearch"); if (s) s.value = ""; buildMModelLists(); openMSheet("mModelSheet"); });
+  var setBtn = $("mSettingsBtn");
+  if (setBtn) setBtn.addEventListener("click", function () { syncMSettings(); openMSheet("mSettingsSheet"); });
+  var search = $("mModelSearch");
+  if (search) search.addEventListener("input", buildMModelLists);
+  var go = $("mGenerateBtn");
+  if (go) go.addEventListener("click", mGenerate);
+  var mp = $("mPrompt");
+  if (mp) mp.addEventListener("keydown", function (ev) { if (ev.key === "Enter") { ev.preventDefault(); mGenerate(); } });
+  var rr = $("mRatioRow"); if (rr) rr.addEventListener("click", function () { toggleMPop("mRatioPop", buildMRatioPop); });
+  var qr = $("mQualityRow"); if (qr) qr.addEventListener("click", function () { toggleMPop("mQualityPop", buildMQualityPop); });
+  var br = $("mBitrateRow"); if (br) br.addEventListener("click", function () { toggleMPop("mBitratePop", buildMBitratePop); });
+  var sr = $("mSoundRow");
+  if (sr) sr.addEventListener("click", function () {
+    selectedSound = !selectedSound;
+    var st = $("mSoundToggle");
+    if (st) { st.classList.toggle("on", selectedSound !== false); st.setAttribute("aria-pressed", String(selectedSound !== false)); }
+  });
+  var durSlider = $("mDurSlider");
+  if (durSlider) {
+    durSlider.addEventListener("input", function () {
+      var v = parseInt(durSlider.value, 10) || 30;
+      var dv = $("mDurVal"); if (dv) dv.textContent = String(v);
+    });
+    durSlider.addEventListener("change", function () {
+      var v = parseInt(durSlider.value, 10) || 30;
+      var snap = [5, 10, 20, 30].reduce(function (a, b) { return Math.abs(b - v) < Math.abs(a - v) ? b : a; });
+      durSlider.value = String(snap);
+      var dv = $("mDurVal"); if (dv) dv.textContent = String(snap);
+      var b = document.querySelector('#durBtns button[data-dur="' + snap + '"]');
+      if (b) b.click();
+      if (typeof updateBuildBtn === "function") updateBuildBtn();
+      if (typeof refreshOptRows === "function") refreshOptRows();
+      refreshMBar();
+    });
+  }
+  ["mSettingsSheet", "mRefsSheet"].forEach(function (sid) {
+    var sh = $(sid); if (!sh) return;
+    sh.addEventListener("click", function (ev) {
+      if (!ev.target.closest(".m-row") && !ev.target.closest(".m-pop") && !ev.target.closest(".m-apply") && !ev.target.closest(".m-x")) closeMPops();
+    });
+  });
+  var sc = $("mSettingsClose"); if (sc) sc.addEventListener("click", closeMSheets);
+  var mc = $("mModelClose"); if (mc) mc.addEventListener("click", closeMSheets);
+  var rc = $("mRefsClose"); if (rc) rc.addEventListener("click", closeMSheets);
+  var ap = $("mApplyBtn"); if (ap) ap.addEventListener("click", function () { closeMSheets(); });
+  var dn = $("mRefsDone"); if (dn) dn.addEventListener("click", function () { closeMSheets(); });
+  function bindMRef(rowId, inputId) {
+    var row = $(rowId); if (!row) return;
+    row.addEventListener("click", function () { var inp = $(inputId); if (inp) inp.click(); });
+  }
+  bindMRef("mStartRow", "startFrameInput");
+  bindMRef("mEndRow", "endFrameInput");
+  bindMRef("mVideoRow", "videoInput");
+  bindMRef("mPhotosRow", "photoInput");
+  ["startFrameInput", "endFrameInput", "videoInput", "photoInput"].forEach(function (id) {
+    var inp = $(id); if (inp) inp.addEventListener("change", function () { setTimeout(refreshMRefs, 150); });
+  });
+  (function renderMExamples() {
+    var wrap = $("mExamples"); if (!wrap) return;
+    if (typeof PRESETS === "undefined") return;
+    PRESETS.forEach(function (p) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = p.name;
+      b.addEventListener("click", function () {
+        if (typeof applyPreset === "function") applyPreset(p);
+        var mp2 = $("mPrompt"); if (mp2) mp2.value = p.action || "";
+        mHideErr();
+      });
+      wrap.appendChild(b);
+    });
+    var r = document.createElement("button");
+    r.type = "button"; r.textContent = "🎲 Try an example";
+    r.addEventListener("click", function () {
+      var p = PRESETS[Math.floor(Math.random() * PRESETS.length)];
+      if (typeof applyPreset === "function") applyPreset(p);
+      var mp2 = $("mPrompt"); if (mp2) mp2.value = p.action || "";
+      mHideErr();
+    });
+    wrap.appendChild(r);
+  })();
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key !== "Escape") return;
+    var anyPop = ["mRatioPop", "mQualityPop", "mBitratePop"].some(function (id) { var p = $(id); return p && !p.hidden; });
+    var anySheet = ["mModelSheet", "mSettingsSheet", "mRefsSheet"].some(function (id) { var s = $(id); return s && !s.hidden; });
+    if (anyPop) { closeMPops(); ev.stopImmediatePropagation(); ev.preventDefault(); return; }
+    if (anySheet) { closeMSheets(); ev.stopImmediatePropagation(); ev.preventDefault(); return; }
+  }, true);
+  var tc = $("toolClose");
+  if (tc) tc.addEventListener("click", closeMSheets);
+  refreshMBar();
+  refreshMRefs();
 })();
 </script>
 </body>
