@@ -644,23 +644,23 @@
 .lfai-sub { color: #a5a5b8; font-size: 14px; margin: 6px 0 14px; }
 #lfAIPrompt { width: 100%; box-sizing: border-box; background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; color: #fff; font-size: 16px; font-family: inherit; padding: 12px 14px; resize: vertical; min-height: 74px; }
 #lfAIPrompt:focus { outline: none; border-color: #c8f542; }
-.lfai-hint { color: #8a8a9e; font-size: 12px; margin: 8px 2px 0; }
-.lfai-chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-.lfai-chip { background: #1c1c2c; border: 1px solid #33334a; color: #d7d7e6; border-radius: 999px; padding: 7px 12px; font-size: 13px; cursor: pointer; font-family: inherit; text-align: left; }
-.lfai-chip:hover { border-color: #c8f542; color: #fff; }
 .lfai-photowrap { position: relative; display: inline-block; }
 .lfai-photorm { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: #ff7a7a; color: #111; font-size: 12px; font-weight: 800; cursor: pointer; line-height: 1; padding: 0; }
-.lfai-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-.lfai-photo { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
-.lfai-photo span { color: #8a8a9e; font-weight: 400; }
+.lfai-row { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.lfai-photo { width: 44px; height: 44px; flex-shrink: 0; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 50%; font-size: 22px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+.lfai-photo:hover { border-color: #c8f542; }
+.lfai-model { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 10px 14px; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.lfai-settings { width: 44px; height: 44px; flex-shrink: 0; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 50%; font-size: 18px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; padding: 0; }
+.lfai-settings:hover { border-color: #c8f542; }
+.lfai-settings-pop { background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 14px; margin-top: 10px; }
+.lfai-settings-pop[hidden] { display: none; }
+.lfai-settings-title { color: #a5a5b8; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
 #lfAIPhotoPrev { width: 44px; height: 44px; object-fit: cover; border-radius: 10px; border: 1px solid #33334a; }
-.lfai-durs { display: flex; gap: 6px; margin-left: auto; }
+.lfai-durs { display: flex; gap: 6px; }
 .lfai-dur { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
 .lfai-dur.on { background: #c8f542; border-color: #c8f542; color: #111; }
 .lfai-gen { flex: 1; background: #c8f542; border: 0; color: #111; border-radius: 999px; padding: 13px 18px; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; min-width: 200px; }
 .lfai-gen:disabled { opacity: .55; cursor: wait; }
-.lfai-daily { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 13px 16px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
-.lfai-daily:disabled { opacity: .5; cursor: default; }
 .lfai-status { color: #c8f542; font-size: 14px; min-height: 20px; margin-top: 12px; }
 .lfai-error { color: #ff7a7a; font-size: 14px; min-height: 20px; }
 #lfAIVideo { width: 100%; border-radius: 14px; margin-top: 10px; background: #000; }
@@ -691,7 +691,7 @@
   <a class="logo" href="#" aria-label="LumeField — home"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></a>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#models">Explore</a><div class="nav-drop" id="navImageDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Image ▾</button><div class="nav-menu" id="navImageMenu" hidden><div class="nav-menu-head">Image models</div><div id="navImageList"></div></div></div><div class="nav-drop" id="navVideoDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Video ▾</button><div class="nav-menu" id="navVideoMenu" hidden><button class="nav-menu-cta" id="navCreateVideo" type="button">✦ Create Video</button><div class="nav-menu-head">Video models</div><div id="navVideoList"></div></div></div><a href="#buy-credits">Pricing</a><a href="#guides">Guides</a></div>
-  <div class="nav-actions"><button class="nav-icon" id="navSearchBtn" type="button" aria-label="Search models">🔍</button><button class="nav-icon" id="navAssetsBtn" type="button" aria-label="My videos">🗂️</button><a class="nav-icon" href="#buy-credits" aria-label="Special offers">🎁</a><div class="nav-menu nav-search-menu" id="navSearchMenu" hidden><input class="opt-search" id="navSearchInput" type="text" placeholder="Search models..." autocomplete="off"><div id="navSearchList"></div></div><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-icon" id="navSearchBtn" type="button" aria-label="Search models">🔍</button><button class="nav-icon" id="navAssetsBtn" type="button" aria-label="My videos">🗂️</button><a class="nav-icon" href="#buy-credits" aria-label="Special offers">🎁</a><div class="nav-menu nav-search-menu" id="navSearchMenu" hidden><input class="opt-search" id="navSearchInput" type="text" placeholder="Search models..." autocomplete="off"><div id="navSearchList"></div></div><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="lfAIDaily" type="button">🎁 Daily free video credits <span class="profile-soon" id="lfAIDailyState">3-day trial</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero" aria-label="Featured video models">
@@ -706,24 +706,20 @@
     <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span></div>
     <p class="lfai-sub">Make a video — right here.</p>
     <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="Describe the video you want..."></textarea>
-    <div class="lfai-hint">Subject &rarr; Action &rarr; Setting &rarr; Camera &rarr; Mood &mdash; one action per clip.</div>
-    <div class="lfai-chips">
-      <button type="button" class="lfai-chip" data-ex="A warrior in armor raises his sword, ancient village square at night, torchlight, camera pushes in, tense mood">Warrior raises sword</button>
-      <button type="button" class="lfai-chip" data-ex="A young woman dances in a sunny flower garden, bright daylight, camera arcs around her, joyful mood">Garden dance</button>
-      <button type="button" class="lfai-chip" data-ex="A fisherman rows his boat on a calm river at dawn, golden light, camera pulls back wide, peaceful mood">Dawn river</button>
-    </div>
     <div class="lfai-row">
-      <label class="lfai-photo" for="lfAIPhoto">＋ Photo <span>(optional)</span></label>
+      <label class="lfai-photo" for="lfAIPhoto" title="Add a reference photo" aria-label="Add a reference photo">＋</label>
       <input type="file" id="lfAIPhoto" accept="image/*" hidden>
       <span class="lfai-photowrap" id="lfAIPhotoWrap" hidden><img id="lfAIPhotoPrev" alt=""><button type="button" class="lfai-photorm" id="lfAIPhotoRm" aria-label="Remove photo">&times;</button></span>
+      <span class="lfai-model">✦ LumeField AI</span>
+      <button type="button" class="lfai-settings" id="lfAISettingsBtn" aria-label="Settings" aria-haspopup="true" aria-expanded="false">⚙</button>
+      <button type="button" class="lfai-gen" id="lfAIGenerate">✦ Generate — 20 credits</button>
+    </div>
+    <div class="lfai-settings-pop" id="lfAISettingsPop" hidden>
+      <div class="lfai-settings-title">Duration</div>
       <div class="lfai-durs" role="group" aria-label="Duration">
         <button type="button" class="lfai-dur" data-dur="5">5s</button>
         <button type="button" class="lfai-dur on" data-dur="10">10s</button>
       </div>
-    </div>
-    <div class="lfai-row">
-      <button type="button" class="lfai-gen" id="lfAIGenerate">✦ Generate — 20 credits</button>
-      <button type="button" class="lfai-daily" id="lfAIDaily">🎁 Daily free</button>
     </div>
     <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
     <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
@@ -972,8 +968,13 @@
       <div class="opt-pop" id="durPop" hidden><div id="durPopList"></div></div>
     </div>
     <div class="seg-btns" id="durBtns" hidden>
+      <button data-dur="2">2 seconds</button>
+      <button data-dur="3">3 seconds</button>
+      <button data-dur="4">4 seconds</button>
       <button data-dur="5">5 seconds</button>
+      <button data-dur="8">8 seconds</button>
       <button data-dur="10">10 seconds</button>
+      <button data-dur="15">15 seconds</button>
       <button data-dur="20">20 seconds</button>
       <button data-dur="30" class="active">30 seconds</button>
     </div>
@@ -983,6 +984,7 @@
       <div class="opt-pop" id="ratioPop" hidden><div id="ratioPopList"></div></div>
     </div>
     <div class="seg-btns" id="ratioBtns" hidden>
+      <button data-ratio="Auto">Auto</button>
       <button data-ratio="16:9" class="active">16:9</button>
       <button data-ratio="9:16">9:16</button>
       <button data-ratio="1:1">1:1</button>
@@ -1380,26 +1382,26 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 </div>
 <script>
 const ENGINES = [
-  { id: "seedance", refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
-  { id: "seedance25draft", refs: 30, name: "Seedance 2.5 Draft", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "480p", audio: true, free: "120 free credits/day on Dreamina", note: "Draft is a 480p preview mode of Seedance 2.5, not a separate model \u2014 a draft costs the normal 480p price. Same 120 free credits/day." },
-  { id: "seedance25edit", refs: 30, name: "Seedance 2.5 Edit", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Edit mode of Seedance 2.5 \u2014 change a moment, add, remove or replace, and redo sound on a finished clip. Same free credits." },
-  { id: "seedance20", refs: 30, name: "Seedance 2.0", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 \u2014 costs less per second than 2.5, so the 120 daily credits go further. Real human faces are blocked on 2.0 in Dreamina." },
+  { id: "seedance", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, ratio: { opts: ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "16:9" }, quality: { opts: ["480p", "720p", "1080p", "4K"], def: "1080p" }, bitrate: { opts: ["High", "Standard"], def: "High" } }, refs: 30, name: "Seedance 2.5", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "ByteDance's Seedance — the #1-ranked video model, with native audio and multi-shot scenes, free daily on Dreamina. Open Dreamina only — seedance.tv / seedance.ai are NOT ByteDance sites. Free credits may hit an upgrade wall — verify at signup." },
+  { id: "seedance25draft", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, quality: { opts: ["480p"], def: "480p" } }, refs: 30, name: "Seedance 2.5 Draft", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "480p", audio: true, free: "120 free credits/day on Dreamina", note: "Draft is a 480p preview mode of Seedance 2.5, not a separate model \u2014 a draft costs the normal 480p price. Same 120 free credits/day." },
+  { id: "seedance25edit", opts: { dur: { min: 4, max: 30, ticks: [4, 10, 15, 20, 30], def: 5 }, quality: { opts: ["480p", "720p"], def: "720p" } }, refs: 30, name: "Seedance 2.5 Edit", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Edit mode of Seedance 2.5 \u2014 change a moment, add, remove or replace, and redo sound on a finished clip. Same free credits." },
+  { id: "seedance20", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 8 }, ratio: { opts: ["Auto", "16:9", "9:16", "4:3", "3:4", "1:1", "21:9"], def: "Auto" }, quality: { opts: ["480p", "720p", "1080p", "4K"], def: "720p" }, bitrate: { opts: ["High", "Standard"], def: "High" } }, refs: 30, name: "Seedance 2.0", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 15, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 \u2014 costs less per second than 2.5, so the 120 daily credits go further. Real human faces are blocked on 2.0 in Dreamina." },
   { id: "seedance20fast", refs: 30, name: "Seedance 2.0 Fast", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "The budget 2.0 variant (480p/720p) \u2014 cheapest per second in the family." },
-  { id: "seedance20mini", refs: 30, name: "Seedance 2.0 Mini", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 Mini \u2014 5 credits/sec, about 24 seconds/day from the free allowance." },
-  { id: "kling", refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
-  { id: "klingflash", refs: 10, name: "Kling 4.0 Flash", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 4.0 Flash \u2014 the faster, cheaper 4.0 variant, so more clips fit in the daily credits. 720p cap on free, watermarked, personal use only." },
+  { id: "seedance20mini", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 8 }, ratio: { opts: ["Auto", "16:9", "9:16", "4:3", "3:4", "1:1", "21:9"], def: "Auto" }, quality: { opts: ["480p", "720p"], def: "720p" }, bitrate: null }, refs: 30, name: "Seedance 2.0 Mini", vendor: "ByteDance", url: "https://dreamina.capcut.com", maxSec: 15, i2v: true, res: "720p", audio: true, free: "120 free credits/day on Dreamina", note: "Seedance 2.0 Mini \u2014 5 credits/sec, about 24 seconds/day from the free allowance." },
+  { id: "kling", opts: { dur: { min: 3, max: 30, ticks: [3, 5, 10, 20, 30], def: 5 }, quality: { opts: ["480p", "720p", "1080p"], def: "720p" } }, refs: 10, name: "Kling 4.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Up to 30-second clips with native dialogue and lip-sync. Needs a free account." },
+  { id: "klingflash", opts: { dur: { min: 3, max: 20, ticks: [3, 5, 10, 20], def: 5 }, quality: { opts: ["480p", "720p"], def: "720p" } }, refs: 10, name: "Kling 4.0 Flash", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 20, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 4.0 Flash \u2014 the faster, cheaper 4.0 variant, so more clips fit in the daily credits. 720p cap on free, watermarked, personal use only." },
   { id: "kling3", refs: 10, name: "Kling 3.0", vendor: "Kuaishou", url: "https://klingai.com", maxSec: 30, i2v: true, res: "720p", audio: true, free: "66 free credits/day", note: "Kling 3.0 \u2014 the older version; cheaper per clip than 4.0. 720p cap on free, watermarked, personal use only." },
   { id: "flow", refs: 3, name: "Google Flow (Veo 3.1)", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits every day", note: "Best overall quality + audio. About 5 Lite clips a day free. Veo 3.1 Fast retires Dec 5, 2026 — use Lite / Omni Flash. Needs a Google account." },
-  { id: "omniflash12", refs: 3, name: "Gemini Omni Flash 1.2", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 10, i2v: true, res: "720p", audio: true, free: "50 free credits/day on Google Flow", note: "Google\u2019s fastest video model in Flow \u2014 3\u201310s clips at 360p/720p free. Peak hours 2\u20135 PM UTC may block free video." },
+  { id: "omniflash12", opts: { dur: { min: 3, max: 15, ticks: [3, 5, 10, 15], def: 5 }, quality: { opts: ["480p", "720p", "1080p", "4K"], def: "720p" } }, refs: 3, name: "Gemini Omni Flash 1.2", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 15, i2v: true, res: "720p", audio: true, free: "50 free credits/day on Google Flow", note: "Google\u2019s fastest video model in Flow \u2014 3\u201310s clips at 360p/720p free. Peak hours 2\u20135 PM UTC may block free video." },
   { id: "veo31lite", refs: 3, name: "Veo 3.1 Lite", vendor: "Google", url: "https://labs.google/fx/tools/flow", maxSec: 8, i2v: true, res: "720p / 1080p", audio: true, free: "50 free credits/day on Google Flow", note: "Veo 3.1 Lite \u2014 10 credits per clip, up to 5 clips/day free. Veo 3.1 Fast retires Dec 5, 2026 \u2014 use Lite instead." },
   { id: "vidu", refs: 15, name: "Vidu Q4", vendor: "ShengShu (Vidu)", url: "https://vidu.com", maxSec: 16, i2v: true, res: "up to 2K", audio: true, free: "Free monthly credits (amount varies)", note: "Reference-to-video with up to 15 images and voice references, for the most consistent characters. 1–16s clips with native audio." },
   { id: "hailuo", refs: 9, name: "MiniMax Hailuo", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~150, 3 days)", note: "15-second clips with native stereo sound, free welcome credits." },
-  { id: "h3", refs: 12, name: "MiniMax H3", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "MiniMax H3 \u2014 4\u201315s clips with native sound, up to 12 reference files (9 images, 3 video, 3 audio). Welcome pack, not a daily allowance." },
-  { id: "h3max", refs: 12, name: "MiniMax H3 Max", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Max \u2014 the highest-quality H3 variant. Same welcome credits, watermarked." },
-  { id: "h3highspeed", refs: 12, name: "MiniMax H3 Highspeed", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Highspeed \u2014 the fast H3 variant. Same welcome credits, watermarked." },
-  { id: "h3lite", refs: 12, name: "MiniMax H3 Lite", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Lite \u2014 the light, cheap H3 variant. Same welcome credits, watermarked." },
+  { id: "h3", opts: { dur: { min: 5, max: 15, ticks: [5, 10, 15], def: 5 }, ratio: null, quality: { opts: ["2K"], def: "2K" }, bitrate: null }, refs: 12, name: "MiniMax H3", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "MiniMax H3 \u2014 4\u201315s clips with native sound, up to 12 reference files (9 images, 3 video, 3 audio). Welcome pack, not a daily allowance." },
+  { id: "h3max", opts: { dur: { min: 5, max: 15, ticks: [5, 10, 15], def: 5 }, ratio: { opts: ["Auto", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "Auto" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Max", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Max \u2014 the highest-quality H3 variant. Same welcome credits, watermarked." },
+  { id: "h3highspeed", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 5 }, ratio: { opts: ["Auto", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "Auto" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Highspeed", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Highspeed \u2014 the fast H3 variant. Same welcome credits, watermarked." },
+  { id: "h3lite", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 5 }, ratio: { opts: ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "16:9" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Lite", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Lite \u2014 the light, cheap H3 variant. Same welcome credits, watermarked." },
   { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
-  { id: "wan3prime", refs: 1, name: "Wan 3.0 Prime", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 3.0 Prime \u2014 the top Wan 3.0 tier. Free quota: 30s, 90 days, Singapore region only; sign-up asks for payment details." },
+  { id: "wan3prime", opts: { dur: { min: 2, max: 30, ticks: [2, 5, 10, 20, 30], def: 5 }, quality: { opts: ["480p", "720p", "1080p"], def: "720p" } }, refs: 1, name: "Wan 3.0 Prime", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 30, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 3.0 Prime \u2014 the top Wan 3.0 tier. Free quota: 30s, 90 days, Singapore region only; sign-up asks for payment details." },
   { id: "wan25", refs: 1, name: "Wan 2.5", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.5 \u2014 free quota 50s (shared with 2.6/2.7), 90 days, Singapore only." },
   { id: "wan26", refs: 1, name: "Wan 2.6", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.6 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
   { id: "wan27", refs: 1, name: "Wan 2.7", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.7 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
@@ -1498,6 +1500,7 @@ ENGINES.forEach(function (e) {
     d.classList.add("selected");
     selectedEngine = e.id;
     refreshQualityOptions();
+    if (typeof applyEngineDefaults === "function") applyEngineDefaults();
     if (typeof refreshOptRows === "function") refreshOptRows();
     hideBuildError();
     const w = document.getElementById("noI2vWarn");
@@ -1510,8 +1513,9 @@ ENGINES.forEach(function (e) {
 });
 
   /* ---------- ratio + quality (owner order: ratio, prompt, quality) ---------- */
-  function ratioText(r) { return r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : r === "4:3" ? "4:3 standard" : r === "3:4" ? "3:4 portrait" : r === "21:9" ? "21:9 ultrawide" : r === "4:5" ? "4:5 portrait" : r === "3:2" ? "3:2 landscape" : "16:9 widescreen"; }
+  function ratioText(r) { return r === "Auto" ? "Auto" : r === "9:16" ? "9:16 vertical" : r === "1:1" ? "1:1 square" : r === "4:3" ? "4:3 standard" : r === "3:4" ? "3:4 portrait" : r === "21:9" ? "21:9 ultrawide" : r === "4:5" ? "4:5 portrait" : r === "3:2" ? "3:2 landscape" : "16:9 widescreen"; }
   function qualityOptionsFor(e) {
+    if (e && e.opts && e.opts.quality && e.opts.quality.opts) return e.opts.quality.opts.slice();
     var res = (e && e.res) || "720p";
     var out = [];
     res.split("/").forEach(function (p) {
@@ -1524,6 +1528,34 @@ ENGINES.forEach(function (e) {
     out = out.filter(function (q) { if (seen[q]) return false; seen[q] = true; return true; });
     return out.length ? out : ["720p"];
   }
+  /* Per-model options (Higgsfield): each engine carries its own Duration /
+     Ratio / Quality / Bitrate in e.opts. ratio/bitrate === null means the
+     model has no such row (hide it); absent means the generic defaults. */
+  function engineOpts(e) {
+    var o = (e && e.opts) || {};
+    return { dur: o.dur || null, ratio: ("ratio" in o) ? o.ratio : undefined, quality: o.quality || null, bitrate: ("bitrate" in o) ? o.bitrate : undefined };
+  }
+  function durTicksFor(e) { var o = engineOpts(e); if (o.dur && o.dur.ticks) return o.dur.ticks.slice(); return [5, 10, 20, 30]; }
+  function durRangeFor(e) { var o = engineOpts(e); if (o.dur) return { min: o.dur.min, max: o.dur.max, def: o.dur.def }; return { min: 4, max: (e && e.maxSec) || 30, def: null }; }
+  function ratioOptsFor(e) { var o = engineOpts(e); if (o.ratio === null) return null; if (o.ratio) return o.ratio.opts.slice(); return ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9", "4:5", "3:2"]; }
+  function ratioDefFor(e) { var o = engineOpts(e); if (o.ratio === null) return null; if (o.ratio) return o.ratio.def; return "16:9"; }
+  function qualityDefFor(e) { var o = engineOpts(e); if (o.quality) return o.quality.def; return null; }
+  function bitrateOptsFor(e) { var o = engineOpts(e); if (o.bitrate === null) return null; if (o.bitrate) return o.bitrate.opts.slice(); return ["High", "Standard"]; }
+  function bitrateDefFor(e) { var o = engineOpts(e); if (o.bitrate === null) return null; if (o.bitrate) return o.bitrate.def; return "High"; }
+  function isH3Family(id) { return id === "h3" || id === "h3max" || id === "h3highspeed" || id === "h3lite"; }
+  function applyEngineDefaults() {
+    var e = null;
+    try { e = ENGINES.find(function (x) { return x.id === selectedEngine; }); } catch (err) {}
+    if (!e) return;
+    var dr = durRangeFor(e);
+    if (dr.def != null) { try { selectedDur = dr.def; } catch (err) {} }
+    var rd = ratioDefFor(e);
+    if (rd != null) { try { selectedRatio = rd; } catch (err) {} }
+    var qd = qualityDefFor(e);
+    if (qd != null) { try { selectedQuality = qd; } catch (err) {} }
+    var bd = bitrateDefFor(e);
+    if (bd != null) { try { selectedBitrate = bd; } catch (err) {} }
+  }
   function refreshQualityOptions() {
     var sel = document.getElementById("qualitySel");
     if (!sel) return;
@@ -1532,7 +1564,8 @@ ENGINES.forEach(function (e) {
     if (!engine) return;
     var opts = qualityOptionsFor(engine);
     sel.innerHTML = opts.map(function (q) { return '<option value="' + q + '">' + q + '</option>'; }).join('');
-    selectedQuality = opts[opts.length - 1];
+    var qd0 = qualityDefFor(engine);
+    selectedQuality = (qd0 && opts.indexOf(qd0) !== -1) ? qd0 : opts[opts.length - 1];
     sel.value = selectedQuality;
   }
   document.querySelectorAll("#ratioBtns button").forEach(function (b) {
@@ -1544,6 +1577,7 @@ ENGINES.forEach(function (e) {
   });
   (function () { var qs = document.getElementById("qualitySel"); if (qs) qs.addEventListener("change", function () { selectedQuality = qs.value; }); })();
   refreshQualityOptions();
+  if (typeof applyEngineDefaults === "function") applyEngineDefaults();
 /* ---------- duration picker ---------- */
 document.querySelectorAll("#durBtns button").forEach(function (b) {
   b.addEventListener("click", function () {
@@ -1969,7 +2003,7 @@ function dbQuality() {
   var q = document.getElementById("dQuality");
   if (q && q.value) return q.value;
   if (typeof selectedQuality === "string" && selectedQuality) return selectedQuality;
-  try { var o = qualityOptionsFor(detailItem); return o[o.length - 1]; } catch (e) { return "720p"; }
+  try { var o = qualityOptionsFor(detailItem); var d = (typeof qualityDefFor === "function") ? qualityDefFor(detailItem) : null; return (d && o.indexOf(d) !== -1) ? d : o[o.length - 1]; } catch (e) { return "720p"; }
 }
 function refreshDbRows() {
   var dv = document.getElementById("dDurRowVal");
@@ -2001,16 +2035,19 @@ function toggleDbPop(kind) {
 function buildDbDurList() {
   var list = document.getElementById("dDurPopList"); if (!list || !window.lfOpt) return;
   var html = "";
-  [5, 10, 20, 30].forEach(function (d) {
-    html += window.lfOpt.itemHtml("⏱", d + " seconds", d === 30 ? "Full plan" : "Short clip", d === selectedDur, String(d));
+  var ticks = (typeof durTicksFor === "function") ? durTicksFor(detailItem) : [5, 10, 20, 30];
+  ticks.forEach(function (d) {
+    html += window.lfOpt.itemHtml("⏱", d + " seconds", d === ticks[ticks.length - 1] ? "Full plan" : "Short clip", d === selectedDur, String(d));
   });
   list.innerHTML = html;
 }
 function buildDbRatioList() {
   var list = document.getElementById("dRatioPopList"); if (!list || !window.lfOpt) return;
   var html = "";
-  Object.keys(window.lfOpt.RATIO_LABELS).forEach(function (r) {
-    html += window.lfOpt.itemHtml("▣", r, window.lfOpt.RATIO_LABELS[r], r === selectedRatio, r);
+  var ropts = (typeof ratioOptsFor === "function") ? ratioOptsFor(detailItem) : Object.keys(window.lfOpt.RATIO_LABELS);
+  if (!ropts) return;
+  ropts.forEach(function (r) {
+    html += window.lfOpt.itemHtml("▣", r, window.lfOpt.RATIO_LABELS[r] || r, r === selectedRatio, r);
   });
   list.innerHTML = html;
 }
@@ -2020,7 +2057,7 @@ function buildDbQualityList() {
   var html = "";
   /* The MODAL's engine, not the tool's: qualityOptionsFor(detailItem). */
   qualityOptionsFor(detailItem).forEach(function (q) {
-    html += window.lfOpt.itemHtml("◈", q, q === "720p" ? "Standard" : q === "1080p" ? "Full HD" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
+    html += window.lfOpt.itemHtml("◈", q, q === "480p" ? "Draft" : q === "720p" ? "Standard" : q === "768p" ? "HD" : q === "1080p" ? "Full HD" : q === "2K" ? "2K" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
   });
   list.innerHTML = html;
 }
@@ -2175,11 +2212,19 @@ function openDetail(kind, id) {
   var builder = "";
   if (useEngine) {
     var qOpts = qualityOptionsFor(item);
-    var qHtml = qOpts.map(function (q, qi) { return '<option value="' + q + '"' + (qi === qOpts.length - 1 ? ' selected' : '') + '>' + q + '</option>'; }).join('');
+    var qDef = (typeof qualityDefFor === "function") ? qualityDefFor(item) : null;
+    var qSelIdx = (qDef && qOpts.indexOf(qDef) !== -1) ? qOpts.indexOf(qDef) : qOpts.length - 1;
+    var qHtml = qOpts.map(function (q, qi) { return '<option value="' + q + '"' + (qi === qSelIdx ? ' selected' : '') + '>' + q + '</option>'; }).join('');
     var escAttr = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
     var subj = escAttr(((document.getElementById("subject") || {}).value || ""));
     var act = escAttr(((document.getElementById("action") || {}).value || ""));
-    var durBtns = [5, 10, 20, 30].map(function (d) { return '<button type="button" data-dur="' + d + '"' + (d === selectedDur ? ' class="active"' : '') + '>' + d + 's</button>'; }).join('');
+    var durBtns = ((typeof durTicksFor === "function") ? durTicksFor(item) : [5, 10, 20, 30]).map(function (d) { return '<button type="button" data-dur="' + d + '"' + (d === selectedDur ? ' class="active"' : '') + '>' + d + 's</button>'; }).join('');
+    var ratioOptsDb = (typeof ratioOptsFor === "function") ? ratioOptsFor(item) : ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9", "4:5", "3:2"];
+    var ratioBtnsDb = ratioOptsDb ? ratioOptsDb.map(function (r) { return '<button type="button" data-ratio="' + r + '"' + (selectedRatio === r ? ' class="active"' : '') + '>' + r + '</button>'; }).join('') : "";
+    var ratioRowDb = ratioOptsDb ? ('<div><div class="db-label">Aspect Ratio</div><div class="opt-wrap">' +
+      '<div class="opt-row" role="button" tabindex="0" data-db-row="ratio"><span class="opt-label">Aspect Ratio</span><span class="opt-value" id="dRatioRowVal"></span><span class="opt-chev">›</span></div>' +
+      '<div class="opt-pop" id="dRatioPop" hidden><div id="dRatioPopList"></div></div>' +
+      '</div><div class="seg-btns" data-db-ratio hidden>' + ratioBtnsDb + '</div></div>') : "";
     builder = '<div class="detail-builder">' +
       '<div class="db-refs">' +
         '<div class="db-ref-box" id="dPhotoBox" role="button" tabindex="0"><button type="button" class="db-ref-x" data-db-clear-photo aria-label="Remove photo">×</button><div class="db-ref-ic">📷</div><div class="db-ref-t">Reference photo</div><div class="db-ref-n" id="dPhotoName">Add a photo</div></div>' +
@@ -2191,18 +2236,7 @@ function openDetail(kind, id) {
         '<div class="opt-row" role="button" tabindex="0" data-db-row="quality"><span class="opt-label">Quality</span><span class="opt-value" id="dQualityRowVal"></span><span class="opt-chev">›</span></div>' +
         '<div class="opt-pop" id="dQualityPop" hidden><div id="dQualityPopList"></div></div>' +
       '</div><select id="dQuality" hidden>' + qHtml + '</select></div>' +
-      '<div><div class="db-label">Aspect Ratio</div><div class="opt-wrap">' +
-        '<div class="opt-row" role="button" tabindex="0" data-db-row="ratio"><span class="opt-label">Aspect Ratio</span><span class="opt-value" id="dRatioRowVal"></span><span class="opt-chev">›</span></div>' +
-        '<div class="opt-pop" id="dRatioPop" hidden><div id="dRatioPopList"></div></div>' +
-      '</div><div class="seg-btns" data-db-ratio hidden>' +
-      '<button type="button" data-ratio="16:9"' + (selectedRatio === "16:9" ? ' class="active"' : '') + '>16:9</button>' +
-      '<button type="button" data-ratio="9:16"' + (selectedRatio === "9:16" ? ' class="active"' : '') + '>9:16</button>' +
-      '<button type="button" data-ratio="1:1"' + (selectedRatio === "1:1" ? ' class="active"' : '') + '>1:1</button>' +
-      '<button type="button" data-ratio="4:3"' + (selectedRatio === "4:3" ? ' class="active"' : '') + '>4:3</button>' +
-      '<button type="button" data-ratio="3:4"' + (selectedRatio === "3:4" ? ' class="active"' : '') + '>3:4</button>' +
-      '<button type="button" data-ratio="21:9"' + (selectedRatio === "21:9" ? ' class="active"' : '') + '>21:9</button>' +
-      '<button type="button" data-ratio="4:5"' + (selectedRatio === "4:5" ? ' class="active"' : '') + '>4:5</button>' +
-      '<button type="button" data-ratio="3:2"' + (selectedRatio === "3:2" ? ' class="active"' : '') + '>3:2</button></div></div>' +
+      ratioRowDb +
       '<div class="db-section">✍️ Prompt — describe your video</div>' +
       '<div><div class="db-label">Subject</div><input id="dSubject" type="text" value="' + subj + '" placeholder="Who / what is in the video"></div>' +
       '<div><div class="db-label">Action</div><textarea id="dAction" placeholder="What happens">' + act + '</textarea></div>' +
@@ -3384,6 +3418,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       genBtn = $("lfAIGenerate"), dailyBtn = $("lfAIDaily"),
       statusEl = $("lfAIStatus"), errEl = $("lfAIError"),
       videoEl = $("lfAIVideo"), dlEl = $("lfAIDownload");
+  /* Daily claim now lives in the profile menu: its state shows in the
+     menu item's right-hand span instead of the button's own text. */
+  var dailyState = $("lfAIDailyState");
+  function setDailyState(t) { if (dailyState) dailyState.textContent = t; }
   if (!promptEl || !genBtn) return;
   var selectedDur = 10;
   var generating = false;
@@ -3415,12 +3453,30 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     } catch (e) {}
     genBtn.textContent = free ? "✦ Generate — free" : "✦ Generate — " + ownCost(selectedDur) + " credits";
   }
+  /* Settings popup: PLACEHOLDER contents (duration only) — the parent is
+     checking Higgsfield's settings directly and will send the exact
+     contents to fill in here. No other option lives in this popup. */
+  var settingsBtn = $("lfAISettingsBtn"), settingsPop = $("lfAISettingsPop");
+  function hideSettingsPop() { if (settingsPop) settingsPop.hidden = true; if (settingsBtn) settingsBtn.setAttribute("aria-expanded", "false"); }
+  if (settingsBtn && settingsPop) {
+    settingsBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = settingsPop.hidden;
+      settingsPop.hidden = !open;
+      settingsBtn.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) {
+      if (!settingsPop.hidden && !settingsPop.contains(e.target) && e.target !== settingsBtn) hideSettingsPop();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideSettingsPop(); });
+  }
   var durBtns = document.querySelectorAll(".lfai-dur");
   durBtns.forEach(function (b) {
     b.addEventListener("click", function () {
       selectedDur = parseInt(b.getAttribute("data-dur"), 10) || 10;
       durBtns.forEach(function (x) { x.classList.toggle("on", x === b); });
       refreshGenLabel();
+      hideSettingsPop();
     });
   });
   if (photoEl) photoEl.addEventListener("change", function () {
@@ -3440,14 +3496,6 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     try { photoEl.value = ""; } catch (e) {}
     if (photoWrap) photoWrap.hidden = true;
     prevEl.removeAttribute("src");
-  });
-  /* Example chips: tap to fill the prompt box with a well-structured
-     prompt (Subject -> Action -> Setting -> Camera -> Mood, one action). */
-  document.querySelectorAll(".lfai-chip").forEach(function (c) {
-    c.addEventListener("click", function () {
-      var ex = c.getAttribute("data-ex") || "";
-      if (ex) { promptEl.value = ex; promptEl.focus(); }
-    });
   });
   /* Content rules: no 18+/adult, no blood/gore, no minors. Simple word check. */
   var BLOCK_RE = /\b(sex|porn|nude|naked|erotic|xxx|hentai|blood|bleeding|gore|behead|dismember|torture|rape|suicide|child|kid|kids|minor|underage|schoolboy|schoolgirl|teen|teenager)\b/i;
@@ -3597,18 +3645,18 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       });
     }).then(function () {
       if (grantGot > 0) {
-        dailyBtn.textContent = "Claimed ✓ +" + grantGot;
+        setDailyState("Claimed ✓ +" + grantGot);
         setStatus(grantGot + " credits added ✓");
       } else {
-        dailyBtn.textContent = "Claimed ✓";
+        setDailyState("Claimed ✓");
         setStatus("You already have your 50 free credits ✓");
       }
     }).catch(function (err) {
       dailyBtn.disabled = false;
-      if (err && err.message === "already-claimed") { dailyBtn.textContent = "Claimed ✓"; dailyBtn.disabled = true; setStatus("Already claimed today ✓"); return; }
-      if (err && err.message === "trial-over") { dailyBtn.textContent = "Free trial over"; dailyBtn.disabled = true; setStatus("3-day free trial over — buy credits to keep making videos."); return; }
+      if (err && err.message === "already-claimed") { setDailyState("Claimed ✓"); dailyBtn.disabled = true; setStatus("Already claimed today ✓"); return; }
+      if (err && err.message === "trial-over") { setDailyState("Free trial over"); dailyBtn.disabled = true; setStatus("3-day free trial over — buy credits to keep making videos."); return; }
       if (err && err.code === "permission-denied") {
-        if (trialState === false) { dailyBtn.textContent = "Free trial over"; dailyBtn.disabled = true; setStatus("3-day free trial over — buy credits to keep making videos."); return; }
+        if (trialState === false) { setDailyState("Free trial over"); dailyBtn.disabled = true; setStatus("3-day free trial over — buy credits to keep making videos."); return; }
         setErr("Daily free credits are being switched on — please try again in a bit. Nothing was charged."); return;
       }
       setErr("Could not claim your free credits right now. Nothing changed — please try again.");
@@ -3953,10 +4001,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 <script>
 /* ---------- option popups (Higgsfield-style rows + popup cards) ---------- */
 (function () {
-  var RATIO_LABELS = { "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
+  var RATIO_LABELS = { "Auto": "Auto (model default)", "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
   function $(id) { return document.getElementById(id); }
   function eng() { try { return (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (e) { return e.id === selectedEngine; }) || null; } catch (e) { return null; } }
   function qualityOptions(e) {
+    if (e && e.opts && e.opts.quality && e.opts.quality.opts) return e.opts.quality.opts.slice();
     var res = (e && e.res) || "720p", out = [];
     res.split("/").forEach(function (p) {
       p = p.trim();
@@ -3978,6 +4027,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
   function refreshOptRows() {
     var e = eng();
+    /* Per-model clamp (Higgsfield): keep the picked values inside this
+       model's ranges; rows the model does not have are hidden below. */
+    (function () {
+      var o = (typeof engineOpts === "function") ? engineOpts(e) : { dur: null, ratio: null, quality: null, bitrate: null };
+      var dr = (typeof durRangeFor === "function") ? durRangeFor(e) : { min: 4, max: 30, def: null };
+      if (typeof selectedDur === "number" && (selectedDur < dr.min || selectedDur > dr.max)) { selectedDur = (dr.def != null) ? dr.def : dr.min; }
+      if (o.ratio && o.ratio.opts.indexOf(selectedRatio) === -1) { selectedRatio = o.ratio.def; }
+      if (o.quality && o.quality.opts.indexOf(currentQuality()) === -1) { var qd = o.quality.def; var sq = $("qualitySel"); if (sq) sq.value = qd; try { selectedQuality = qd; } catch (err) {} }
+      if (o.bitrate && o.bitrate.opts.indexOf(typeof selectedBitrate === "string" ? selectedBitrate : "High") === -1) { selectedBitrate = o.bitrate.def; }
+    })();
     var mv = $("modelRowVal"); if (mv) mv.textContent = e ? e.name : (typeof selectedEngine === "string" ? selectedEngine : "");
     var dv = $("durRowVal"); if (dv) dv.textContent = (typeof selectedDur === "number" ? selectedDur : 30) + " seconds";
     var rv = $("ratioRowVal"); if (rv) rv.textContent = (typeof selectedRatio === "string" ? selectedRatio : "16:9");
@@ -3996,8 +4055,15 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       var mlb = mwrap ? mwrap.previousElementSibling : null;
       if (mlb && mlb.tagName === "LABEL") mlb.style.display = isFlow ? "" : "none";
     }
+    (function () {
+      var o2 = (typeof engineOpts === "function") ? engineOpts(e) : { ratio: undefined, bitrate: undefined };
+      function hideRow(rowId, hide) { var row = $(rowId); if (!row) return; var wrap = row.closest ? row.closest(".opt-wrap") : null; if (wrap) wrap.style.display = hide ? "none" : ""; var lb = wrap ? wrap.previousElementSibling : null; if (lb && lb.tagName === "LABEL") lb.style.display = hide ? "none" : ""; }
+      hideRow("ratioRow", o2.ratio === null);
+      hideRow("bitrateRow", o2.bitrate === null);
+    })();
+    var showFrames = isFlow || ((typeof isH3Family === "function") && isH3Family(selectedEngine));
     var fr = document.querySelector(".frames-row");
-    if (fr) fr.style.display = isFlow ? "" : "none";
+    if (fr) fr.style.display = showFrames ? "" : "none";
   }
   window.refreshOptRows = refreshOptRows;
   /* Exposed for the detail modal's own rows + popups (same pattern, its own
@@ -4050,8 +4116,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function buildDurList() {
     var list = $("durPopList"); if (!list) return;
     var html = "";
-    [5, 10, 20, 30].forEach(function (d) {
-      html += itemHtml("⏱", d + " seconds", d === 30 ? "Full plan" : "Short clip", d === selectedDur, String(d));
+    var ticks = (typeof durTicksFor === "function") ? durTicksFor(eng()) : [5, 10, 20, 30];
+    ticks.forEach(function (d) {
+      html += itemHtml("⏱", d + " seconds", d === ticks[ticks.length - 1] ? "Full plan" : "Short clip", d === selectedDur, String(d));
     });
     list.innerHTML = html;
     list.querySelectorAll(".opt-item").forEach(function (it) {
@@ -4067,8 +4134,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function buildRatioList() {
     var list = $("ratioPopList"); if (!list) return;
     var html = "";
-    Object.keys(RATIO_LABELS).forEach(function (r) {
-      html += itemHtml("▣", r, RATIO_LABELS[r], r === selectedRatio, r);
+    var ropts = (typeof ratioOptsFor === "function") ? ratioOptsFor(eng()) : Object.keys(RATIO_LABELS);
+    if (!ropts) return;
+    ropts.forEach(function (r) {
+      html += itemHtml("▣", r, RATIO_LABELS[r] || r, r === selectedRatio, r);
     });
     list.innerHTML = html;
     list.querySelectorAll(".opt-item").forEach(function (it) {
@@ -4085,7 +4154,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var cur = currentQuality();
     var html = "";
     qualityOptions(eng()).forEach(function (q) {
-      html += itemHtml("◈", q, q === "720p" ? "Standard" : q === "1080p" ? "Full HD" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
+      html += itemHtml("◈", q, q === "480p" ? "Draft" : q === "720p" ? "Standard" : q === "768p" ? "HD" : q === "1080p" ? "Full HD" : q === "2K" ? "2K" : q === "4K" ? "Ultra HD" : "High", q === cur, q);
     });
     list.innerHTML = html;
     list.querySelectorAll(".opt-item").forEach(function (it) {
@@ -4102,7 +4171,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function buildBitrateList() {
     var list = $("bitratePopList"); if (!list) return;
     var html = "";
-    [["High", "Less compression · larger size"], ["Standard", "More compression · smaller size"]].forEach(function (pair) {
+    var bopts = (typeof bitrateOptsFor === "function") ? bitrateOptsFor(eng()) : ["High", "Standard"];
+    if (!bopts) return;
+    bopts.map(function (b) { return [b, b === "High" ? "Less compression · larger size" : "More compression · smaller size"]; }).forEach(function (pair) {
       html += itemHtml("◈", pair[0], pair[1], pair[0] === (typeof selectedBitrate === "string" ? selectedBitrate : "High"), pair[0]);
     });
     list.innerHTML = html;
@@ -4468,6 +4539,10 @@ var selectedSound = true;
     if (go) go.textContent = isOwner() ? "✦ free" : "✦ " + mCost();
     var ap = $("mApplyBtn");
     if (ap) ap.textContent = isOwner() ? "Apply — free for you" : "Apply ✦ " + mCost();
+    var ro1 = (typeof ratioOptsFor === "function") ? ratioOptsFor(e) : ["16:9"];
+    var rr1 = $("mRatioRow"); if (rr1) rr1.style.display = ro1 ? "" : "none";
+    var bo1 = (typeof bitrateOptsFor === "function") ? bitrateOptsFor(e) : ["High"];
+    var br1 = $("mBitrateRow"); if (br1) br1.style.display = bo1 ? "" : "none";
     refreshMRefs();
   }
   window.refreshMBar = refreshMBar;
@@ -4489,8 +4564,9 @@ var selectedSound = true;
     var badge = $("mRefCount");
     if (badge) { badge.hidden = count === 0; badge.textContent = String(count); }
     var isFlowM = (typeof selectedEngine === "string" && selectedEngine === "flow");
-    var sr = $("mStartRow"); if (sr) sr.style.display = isFlowM ? "" : "none";
-    var er = $("mEndRow"); if (er) er.style.display = isFlowM ? "" : "none";
+    var showFramesM = isFlowM || ((typeof isH3Family === "function") && isH3Family(selectedEngine));
+    var sr = $("mStartRow"); if (sr) sr.style.display = showFramesM ? "" : "none";
+    var er = $("mEndRow"); if (er) er.style.display = showFramesM ? "" : "none";
   }
   function mShowErr(msg) { var el = $("mErr"); if (el) { el.textContent = msg; el.classList.add("show"); } }
   function mHideErr() { var el = $("mErr"); if (el) { el.textContent = ""; el.classList.remove("show"); } }
@@ -4506,12 +4582,14 @@ var selectedSound = true;
   function mOptHtml(name, sub, sel, val) {
     return "<div class='m-opt" + (sel ? " sel" : "") + "' data-v='" + val + "'><span class='m-tx'><span class='m-nm'>" + name + "</span>" + (sub ? "<small>" + sub + "</small>" : "") + "</span><span class='m-dot'></span></div>";
   }
-  var RATIO_LABELS_M = (typeof window.lfOpt !== "undefined" && window.lfOpt.RATIO_LABELS) ? window.lfOpt.RATIO_LABELS : { "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
+  var RATIO_LABELS_M = (typeof window.lfOpt !== "undefined" && window.lfOpt.RATIO_LABELS) ? window.lfOpt.RATIO_LABELS : { "Auto": "Auto (model default)", "16:9": "16:9 widescreen", "9:16": "9:16 vertical", "1:1": "1:1 square", "4:3": "4:3 standard", "3:4": "3:4 portrait", "21:9": "21:9 ultrawide", "4:5": "4:5 portrait", "3:2": "3:2 landscape" };
   function buildMRatioPop() {
     var list = $("mRatioPop"); if (!list) return;
     var html = "";
-    Object.keys(RATIO_LABELS_M).forEach(function (r) {
-      html += mOptHtml(r, RATIO_LABELS_M[r], r === selectedRatio, r);
+    var ropts = (typeof ratioOptsFor === "function") ? ratioOptsFor(eng()) : Object.keys(RATIO_LABELS_M);
+    if (!ropts) return;
+    ropts.forEach(function (r) {
+      html += mOptHtml(r, RATIO_LABELS_M[r] || r, r === selectedRatio, r);
     });
     list.innerHTML = html;
     list.querySelectorAll(".m-opt").forEach(function (it) {
@@ -4530,7 +4608,9 @@ var selectedSound = true;
     var list = $("mQualityPop"); if (!list) return;
     var cur = (typeof selectedQuality === "string" && selectedQuality) ? selectedQuality : "720p";
     var html = "";
-    var opts = [["480p", "Draft"], ["720p", "Standard"], ["1080p", "Full HD"], ["4K", "Ultra HD"]];
+    var qopts = (typeof qualityOptionsFor === "function") ? qualityOptionsFor(eng()) : ["480p", "720p", "1080p", "4K"];
+    var qlabels = { "480p": "Draft", "720p": "Standard", "768p": "HD", "1080p": "Full HD", "2K": "2K", "4K": "Ultra HD" };
+    var opts = qopts.map(function (q) { return [q, qlabels[q] || "High"]; });
     opts.forEach(function (pair) {
       html += mOptHtml(pair[0], pair[1], pair[0] === cur, pair[0]);
     });
@@ -4558,7 +4638,9 @@ var selectedSound = true;
     var list = $("mBitratePop"); if (!list) return;
     var cur = (typeof selectedBitrate === "string") ? selectedBitrate : "High";
     var html = "";
-    var opts = [["High", "Less compression · larger size"], ["Standard", "More compression · smaller size"]];
+    var bopts = (typeof bitrateOptsFor === "function") ? bitrateOptsFor(eng()) : ["High", "Standard"];
+    if (!bopts) return;
+    var opts = bopts.map(function (b) { return [b, b === "High" ? "Less compression · larger size" : "More compression · smaller size"]; });
     opts.forEach(function (pair) {
       html += mOptHtml(pair[0], pair[1], pair[0] === cur, pair[0]);
     });
@@ -4575,11 +4657,16 @@ var selectedSound = true;
   }
   function syncMSettings() {
     var rv = $("mRatioVal"); if (rv) rv.textContent = (typeof selectedRatio === "string") ? selectedRatio : "16:9";
-    var ds = $("mDurSlider"); if (ds) ds.value = String((typeof selectedDur === "number") ? selectedDur : 30);
+    var dr0 = (typeof durRangeFor === "function") ? durRangeFor(eng()) : { min: 4, max: 30 };
+    var ds = $("mDurSlider"); if (ds) { ds.min = String(dr0.min); ds.max = String(dr0.max); ds.value = String((typeof selectedDur === "number") ? selectedDur : 30); }
     var dv = $("mDurVal"); if (dv) dv.textContent = String((typeof selectedDur === "number") ? selectedDur : 30);
     var qv = $("mQualityVal"); if (qv) qv.textContent = (typeof selectedQuality === "string" && selectedQuality) ? selectedQuality : "720p";
     var bv = $("mBitrateVal"); if (bv) bv.textContent = (typeof selectedBitrate === "string") ? selectedBitrate : "High";
     var st = $("mSoundToggle"); if (st) { st.classList.toggle("on", selectedSound !== false); st.setAttribute("aria-pressed", String(selectedSound !== false)); }
+    var ro0 = (typeof ratioOptsFor === "function") ? ratioOptsFor(eng()) : ["16:9"];
+    var rr0 = $("mRatioRow"); if (rr0) rr0.style.display = ro0 ? "" : "none";
+    var bo0 = (typeof bitrateOptsFor === "function") ? bitrateOptsFor(eng()) : ["High"];
+    var br0 = $("mBitrateRow"); if (br0) br0.style.display = bo0 ? "" : "none";
     refreshMBar();
     closeMPops();
   }
@@ -4682,8 +4769,9 @@ var selectedSound = true;
     });
     durSlider.addEventListener("change", function () {
       var v = parseInt(durSlider.value, 10) || 30;
-      if (v < 4) v = 4;
-      if (v > 30) v = 30;
+      var dr1 = (typeof durRangeFor === "function") ? durRangeFor(eng()) : { min: 4, max: 30 };
+      if (v < dr1.min) v = dr1.min;
+      if (v > dr1.max) v = dr1.max;
       durSlider.value = String(v);
       var dv = $("mDurVal"); if (dv) dv.textContent = String(v);
       try { selectedDur = v; } catch (e) {}
