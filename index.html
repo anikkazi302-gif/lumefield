@@ -644,6 +644,12 @@
 .lfai-sub { color: #a5a5b8; font-size: 14px; margin: 6px 0 14px; }
 #lfAIPrompt { width: 100%; box-sizing: border-box; background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; color: #fff; font-size: 16px; font-family: inherit; padding: 12px 14px; resize: vertical; min-height: 74px; }
 #lfAIPrompt:focus { outline: none; border-color: #c8f542; }
+.lfai-hint { color: #8a8a9e; font-size: 12px; margin: 8px 2px 0; }
+.lfai-chips { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.lfai-chip { background: #1c1c2c; border: 1px solid #33334a; color: #d7d7e6; border-radius: 999px; padding: 7px 12px; font-size: 13px; cursor: pointer; font-family: inherit; text-align: left; }
+.lfai-chip:hover { border-color: #c8f542; color: #fff; }
+.lfai-photowrap { position: relative; display: inline-block; }
+.lfai-photorm { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; border: 0; background: #ff7a7a; color: #111; font-size: 12px; font-weight: 800; cursor: pointer; line-height: 1; padding: 0; }
 .lfai-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 .lfai-photo { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 9px 14px; font-size: 14px; font-weight: 700; cursor: pointer; }
 .lfai-photo span { color: #8a8a9e; font-weight: 400; }
@@ -693,10 +699,16 @@
     <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span></div>
     <p class="lfai-sub">Make a video — right here.</p>
     <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="Describe the video you want..."></textarea>
+    <div class="lfai-hint">Subject &rarr; Action &rarr; Setting &rarr; Camera &rarr; Mood &mdash; one action per clip.</div>
+    <div class="lfai-chips">
+      <button type="button" class="lfai-chip" data-ex="A warrior in armor raises his sword, ancient village square at night, torchlight, camera pushes in, tense mood">Warrior raises sword</button>
+      <button type="button" class="lfai-chip" data-ex="A young woman dances in a sunny flower garden, bright daylight, camera arcs around her, joyful mood">Garden dance</button>
+      <button type="button" class="lfai-chip" data-ex="A fisherman rows his boat on a calm river at dawn, golden light, camera pulls back wide, peaceful mood">Dawn river</button>
+    </div>
     <div class="lfai-row">
       <label class="lfai-photo" for="lfAIPhoto">＋ Photo <span>(optional)</span></label>
       <input type="file" id="lfAIPhoto" accept="image/*" hidden>
-      <img id="lfAIPhotoPrev" alt="" hidden>
+      <span class="lfai-photowrap" id="lfAIPhotoWrap" hidden><img id="lfAIPhotoPrev" alt=""><button type="button" class="lfai-photorm" id="lfAIPhotoRm" aria-label="Remove photo">&times;</button></span>
       <div class="lfai-durs" role="group" aria-label="Duration">
         <button type="button" class="lfai-dur" data-dur="5">5s</button>
         <button type="button" class="lfai-dur on" data-dur="10">10s</button>
@@ -3408,6 +3420,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var OWN_AI_DAILY = 50;
   var $ = function (id) { return document.getElementById(id); };
   var promptEl = $("lfAIPrompt"), photoEl = $("lfAIPhoto"), prevEl = $("lfAIPhotoPrev"),
+      photoWrap = $("lfAIPhotoWrap"),
       genBtn = $("lfAIGenerate"), dailyBtn = $("lfAIDaily"),
       statusEl = $("lfAIStatus"), errEl = $("lfAIError"),
       videoEl = $("lfAIVideo"), dlEl = $("lfAIDownload");
@@ -3415,6 +3428,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var selectedDur = 10;
   var generating = false;
   var photoFile = null;
+  /* Higgsfield accuracy — IDENTITY + MOTION SPLIT: with a reference photo,
+     the identity stays FIXED (the person in the photo) and the user's
+     prompt carries only the action/camera. Never re-describe the face in
+     the motion part; the photo + identity block hold it. */
+  var IDENTITY_BLOCK = "Identity: the same person as in the reference photo, same face, same features, same appearance. Motion: ";
+  function buildEnginePrompt() {
+    var p = promptEl.value.trim();
+    if (photoFile) p = IDENTITY_BLOCK + p;
+    return p + REALISM_CUE;
+  }
   var clientPromise = null;
 
   function setErr(m) { if (errEl) errEl.textContent = m || ""; }
@@ -3445,12 +3468,29 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     photoFile = f || null;
     if (f) {
       var r = new FileReader();
-      r.onload = function (ev) { prevEl.src = ev.target.result; prevEl.hidden = false; };
+      r.onload = function (ev) { prevEl.src = ev.target.result; if (photoWrap) photoWrap.hidden = false; };
       r.readAsDataURL(f);
-    } else { prevEl.hidden = true; prevEl.removeAttribute("src"); }
+    } else { if (photoWrap) photoWrap.hidden = true; prevEl.removeAttribute("src"); }
   });
-  /* Content rules: no 18+/adult, no blood/gore. Simple word check. */
-  var BLOCK_RE = /\b(sex|porn|nude|naked|erotic|xxx|hentai|blood|bleeding|gore|behead|dismember|torture|rape|suicide)\b/i;
+  /* The same reference photo stays attached for every generation until the
+     user changes or removes it — it is never cleared after a generation. */
+  var photoRm = $("lfAIPhotoRm");
+  if (photoRm) photoRm.addEventListener("click", function () {
+    photoFile = null;
+    try { photoEl.value = ""; } catch (e) {}
+    if (photoWrap) photoWrap.hidden = true;
+    prevEl.removeAttribute("src");
+  });
+  /* Example chips: tap to fill the prompt box with a well-structured
+     prompt (Subject -> Action -> Setting -> Camera -> Mood, one action). */
+  document.querySelectorAll(".lfai-chip").forEach(function (c) {
+    c.addEventListener("click", function () {
+      var ex = c.getAttribute("data-ex") || "";
+      if (ex) { promptEl.value = ex; promptEl.focus(); }
+    });
+  });
+  /* Content rules: no 18+/adult, no blood/gore, no minors. Simple word check. */
+  var BLOCK_RE = /\b(sex|porn|nude|naked|erotic|xxx|hentai|blood|bleeding|gore|behead|dismember|torture|rape|suicide|child|kid|kids|minor|underage|schoolboy|schoolgirl|teen|teenager)\b/i;
   /* Gradio client, loaded lazily so a CDN failure shows a clear error
      instead of breaking the tool. A failed load clears the cache so the
      next click can retry. */
@@ -3508,7 +3548,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }).then(function (client) {
       setStatus("Generating… (free queue — can take a few minutes)");
       var seed = Math.floor(Math.random() * 2147483647);
-      var args = [photoFile || null, promptEl.value.trim() + REALISM_CUE, selectedDur, true, seed, true, 1024, 1536];
+      var args = [photoFile || null, buildEnginePrompt(), selectedDur, true, seed, true, 1024, 1536];
       return client.predict(ENDPOINT, args);
     }).then(function (result) {
       var url = extractVideoUrl(result);
