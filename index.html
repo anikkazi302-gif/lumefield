@@ -217,8 +217,8 @@
   .hero-carousel { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: none; padding: 6px 20px 10px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .hero-carousel::-webkit-scrollbar { display: none; }
   .hero-card { flex: 0 0 min(460px, 84vw); cursor: pointer; }
-  .hero-card-video { position: relative; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; background: #111; }
-  .hero-card-video iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .hero-card-video { position: relative; aspect-ratio: 16/9; border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, #232338, #14141f); }
+  .hero-card-video iframe { width: 100%; height: 100%; border: 0; display: block; background: #1c1c2c; }
   .hero-card-veil { position: absolute; inset: 0; cursor: pointer; }
   .hero-card h3 { margin: 10px 2px 0; font-size: 15px; letter-spacing: .05em; text-transform: uppercase; color: #fff; }
   .hero-card p { margin: 4px 2px 0; font-size: 13px; color: #a9a9bd; }
@@ -269,8 +269,8 @@
   .tool-motion { background: #10101a; border: 1px solid #232336; border-radius: 16px; padding: 18px 20px; margin: 16px 0; }
   .tool-motion h3 { font-size: 15px; color: #fff; margin-bottom: 12px; }
   .motion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .motion-tile { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; background: #000; }
-  .motion-tile iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .motion-tile { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 16 / 9; background: linear-gradient(135deg, #232338, #14141f); }
+  .motion-tile iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #1c1c2c; }
   .motion-veil { position: absolute; inset: 0; background: transparent; }
   .motion-tile span { position: absolute; left: 8px; bottom: 6px; font-size: 11px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.8); }
   .prompt-toggle { margin-left: 10px; vertical-align: middle; background: #c8f542; color: #111; border: none; border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
@@ -443,8 +443,8 @@
 .how-step { border:1px solid #33334a; border-radius:12px; padding:10px; background:#1c1c2c; }
 .how-step b { display:block; margin:8px 0 2px; }
 .how-step span { color:#9a9ab0; font-size:13px; }
-.how-thumb { position:relative; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:#000; }
-.how-thumb iframe { width:100%; height:100%; border:0; }
+.how-thumb { position:relative; aspect-ratio:16/9; border-radius:8px; overflow:hidden; background:linear-gradient(135deg, #232338, #14141f); }
+.how-thumb iframe { width:100%; height:100%; border:0; background:#1c1c2c; }
 
  /* ---------- footer ---------- */
   .footer { text-align: center; padding: 22px; font-size: 13px; color: #77778c; border-top: 1px solid #1c1c2c; line-height: 1.7; }
@@ -571,7 +571,12 @@
     #mGen { display: block; padding: 4px 0 0; }
     #toolOverlay .tool-head, #toolOverlay .honest, #toolOverlay .gen-tabs,
     #toolOverlay .tool-panel, #toolOverlay .tool-how { display: none !important; }
-    #toolOverlay .tool-wrap { padding: 0 12px 40px; }
+    #toolOverlay .tool-wrap { padding: 54px 12px 40px; }
+    /* Narrow screens: the planner is a bottom sheet, not a full-screen
+       empty page — the homepage hero stays visible above it, and the
+       sheet sizes to its content instead of leaving a vast dark band. */
+    #toolOverlay { top: auto; bottom: 0; left: 0; right: 0; max-height: 88vh; border-radius: 20px 20px 0 0; border-top: 1px solid #33334a; box-shadow: 0 -12px 40px rgba(0,0,0,.6); }
+    #toolOverlay .tool-close { position: absolute; top: 10px; right: 12px; }
     #mSettingsSheet, #mRefsSheet, #mModelSheet { display: block; }
     .m-bar { display: flex; flex-direction: column; align-items: stretch; gap: 10px; background: #14141f; border: 1px solid #33334a; border-radius: 20px; padding: 14px; }
     .m-bar-controls { display: flex; align-items: center; gap: 8px; }
@@ -3462,6 +3467,56 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function setErr(m) { if (errEl) errEl.textContent = m || ""; }
   function setStatus(m) { if (statusEl) statusEl.textContent = m || ""; }
   function ownCost(d) { return COSTS[d] || 20; }
+  /* Which model this tool box is showing: "__lfai" (this tool — in-site
+     LTX render) or a generator engine id. The tool itself only renders
+     via LumeField AI; picking another model points the box at that model
+     and Generate hands off to the main generator with it selected. */
+  var lfToolModel = "__lfai";
+  /* Select a generator engine WITHOUT dispatching a click on its (hidden)
+     .engine card: the card's own handler only sets state, so do the same
+     state updates directly. No click event, no side effects, nothing
+     written to storage, homepage untouched. */
+  function lfSelectEngine(id) {
+    var e = null;
+    try { e = (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (x) { return x.id === id; }); } catch (err) {}
+    if (!e) return false;
+    try { document.querySelectorAll(".engine").forEach(function (el) { el.classList.remove("selected"); }); } catch (err) {}
+    var card = null;
+    try { card = document.querySelector('.engine[data-id="' + id + '"]'); } catch (err) {}
+    if (card) card.classList.add("selected");
+    try { selectedEngine = id; } catch (err) {}
+    if (typeof refreshQualityOptions === "function") { try { refreshQualityOptions(); } catch (err) {} }
+    if (typeof applyEngineDefaults === "function") { try { applyEngineDefaults(); } catch (err) {} }
+    if (typeof refreshOptRows === "function") { try { refreshOptRows(); } catch (err) {} }
+    if (typeof hideBuildError === "function") { try { hideBuildError(); } catch (err) {} }
+    var w = document.getElementById("noI2vWarn");
+    if (w) {
+      if (!e.i2v) { var nm = document.getElementById("noI2vName"); if (nm) nm.textContent = e.name; w.classList.add("show"); }
+      else { w.classList.remove("show"); }
+    }
+    if (typeof window.refreshMBar === "function") { try { window.refreshMBar(); } catch (err) {} }
+    if (typeof updateBuildBtn === "function") { try { updateBuildBtn(); } catch (err) {} }
+    return true;
+  }
+  /* Cost shown on the tool's Generate button: LumeField AI uses its own
+     cost at the chosen duration; another model shows its generator cost
+     at its default duration (e.g. Kling 4.0, 10s default -> 7 credits). */
+  function lfToolCost() {
+    if (lfToolModel === "__lfai") return ownCost(selectedDur);
+    var e = null;
+    try { e = (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (x) { return x.id === lfToolModel; }); } catch (err) {}
+    return e ? lfModelCost(lfDefaultDur(e)) : ownCost(selectedDur);
+  }
+  /* Show the chosen model on the tool-box chip + refresh the Generate cost. */
+  function refreshLfToolModel() {
+    var name = "LumeField AI";
+    if (lfToolModel !== "__lfai") {
+      try { var e = (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (x) { return x.id === lfToolModel; }); if (e) name = e.name; } catch (err) {}
+    }
+    if (name.length > 24) name = name.slice(0, 22) + "\u2026";
+    if (modelBtn) modelBtn.innerHTML = "\u2726 " + lfEsc(name) + ' <span class="lfai-chev">\u203a</span>';
+    refreshGenLabel();
+  }
   function guestUsed() {
     try { return parseInt(window.localStorage.getItem("lumefield_guest_used") || "0", 10) || 0; }
     catch (e) { return 0; }
@@ -3472,7 +3527,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (window.lfIsOwner && window.lfIsOwner()) free = true;
       else if (window.lfSignedIn && !window.lfSignedIn() && guestUsed() < 1) free = true;
     } catch (e) {}
-    if (genBtn) genBtn.textContent = "✦ Generate — " + ownCost(selectedDur) + " credits";
+    if (genBtn) genBtn.textContent = "✦ Generate — " + lfToolCost() + " credits";
   }
   /* Settings popup: PLACEHOLDER contents (duration only) — the parent is
      checking Higgsfield's settings directly and will send the exact
@@ -3519,13 +3574,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var q = (modelSearch ? modelSearch.value : "").trim().toLowerCase();
     var html = "";
     if (!q || "lumefield ai".indexOf(q) !== -1) {
-      html += "<div class='opt-item' data-lfmodel='__lfai'><span class='opt-ic'>✦</span><span><span class='opt-nm'>LumeField AI</span><span class='opt-sub' style='display:block;'>In-site · up to 10s · ✦ 20</span></span><span class='opt-check'>✓</span></div>";
+      html += "<div class='opt-item' data-lfmodel='__lfai'><span class='opt-ic'>✦</span><span><span class='opt-nm'>LumeField AI</span><span class='opt-sub' style='display:block;'>In-site · up to 10s · ✦ 20</span></span>" + (lfToolModel === "__lfai" ? "<span class='opt-check'>✓</span>" : "") + "</div>";
     }
     try {
       (typeof ENGINES !== "undefined" ? ENGINES : []).forEach(function (e) {
         if (q && e.name.toLowerCase().indexOf(q) === -1) return;
         var badges = ((typeof TOP_ENGINE_IDS !== "undefined" && TOP_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='top-badge'>TOP</span>" : "") + ((typeof NEW_ENGINE_IDS !== "undefined" && NEW_ENGINE_IDS.indexOf(e.id) !== -1) ? " <span class='new-badge'>NEW</span>" : "");
-        html += "<div class='opt-item' data-lfmodel='" + lfEsc(e.id) + "'><span class='opt-ic'>✦</span><span><span class='opt-nm'>" + lfEsc(e.name) + badges + "</span><span class='opt-sub' style='display:block;'>" + lfEsc(e.res) + " · up to " + e.maxSec + "s · ✦ " + lfModelCost(lfDefaultDur(e)) + "</span></span></div>";
+        html += "<div class='opt-item' data-lfmodel='" + lfEsc(e.id) + "'><span class='opt-ic'>✦</span><span><span class='opt-nm'>" + lfEsc(e.name) + badges + "</span><span class='opt-sub' style='display:block;'>" + lfEsc(e.res) + " · up to " + e.maxSec + "s · ✦ " + lfModelCost(lfDefaultDur(e)) + "</span></span>" + (e.id === lfToolModel ? "<span class='opt-check'>✓</span>" : "") + "</div>";
       });
     } catch (err) {}
     modelListEl.innerHTML = html || "<div class='opt-sub' style='padding:10px 12px;color:#8a8a9e;'>No models found.</div>";
@@ -3533,11 +3588,15 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       it.addEventListener("click", function () {
         var id = it.getAttribute("data-lfmodel");
         hideLfModelPop();
-        if (!id || id === "__lfai") return; /* this tool stays LumeField AI */
-        var el = document.querySelector('.engine[data-id="' + id + '"]');
-        if (el) el.click(); /* selects the engine + applies its per-model options */
-        if (typeof window.refreshOptRows === "function") { try { window.refreshOptRows(); } catch (e) {} }
-        if (typeof updateBuildBtn === "function") { try { updateBuildBtn(); } catch (e) {} }
+        if (!id) return;
+        if (id === "__lfai") {
+          lfToolModel = "__lfai";
+          refreshLfToolModel();
+          return; /* this tool stays LumeField AI */
+        }
+        lfToolModel = id;
+        lfSelectEngine(id); /* direct state selection — no .engine card click */
+        refreshLfToolModel();
         if (typeof openTool === "function") openTool();
       });
     });
@@ -3667,6 +3726,16 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var p = promptEl.value.trim();
     if (!p) { setErr("Please describe the video you want."); promptEl.focus(); return; }
     if (BLOCK_RE.test(p)) { setErr("That kind of video is not allowed here — no adult or bloody content."); return; }
+    /* This tool only renders via LumeField AI (LTX). If another model is
+       shown on the chip, Generate hands off to the main generator with
+       that model selected instead of rendering the wrong engine here.
+       The prompt follows into the generator so nothing is lost. */
+    if (lfToolModel !== "__lfai") {
+      try { var act = document.getElementById("action"); if (act) act.value = p; } catch (e) {}
+      try { var mp = document.getElementById("mPrompt"); if (mp) mp.value = p; } catch (e) {}
+      if (typeof openTool === "function") openTool();
+      return;
+    }
     setErr(""); setStatus("");
     if (typeof window.lfCreditGate !== "function") { setErr("Credits are still loading — try again in a second."); return; }
     window.lfCreditGate(selectedDur, doGenerate, ownCost(selectedDur), true);
