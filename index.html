@@ -946,54 +946,10 @@
     <p class="sub">Describe what happens — be specific.</p>
     <div class="fields-grid">
       <div class="field-box">
-        <label for="subject">Subject (who / what is in the video)</label>
-        <input type="text" id="subject" placeholder="e.g. A white dragon standing behind a young woman in front of an old stone cottage">
-      </div>
-      <div class="field-box">
-        <label for="action">Action (what happens over the 30 seconds)</label>
-        <textarea id="action" placeholder="e.g. The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated"></textarea>
-      </div>
-      <div class="field-box">
-        <label for="camera">Camera move</label>
-        <select id="camera">
-          <option value="static, locked-off camera">Static — locked-off</option>
-          <option value="slow push-in toward the subject" selected>Slow push-in</option>
-          <option value="slow pull-back revealing the scene">Slow pull-back</option>
-          <option value="slow pan left to right">Pan left to right</option>
-          <option value="slow pan right to left">Pan right to left</option>
-          <option value="slow tracking shot following the subject">Tracking shot</option>
-          <option value="slow crane shot rising upward">Crane up</option>
-          <option value="slow orbit around the subject">Orbit around</option>
-          <option value="dolly in — camera moves forward toward the subject">Dolly in</option>
-          <option value="dolly out — camera pulls back from the subject">Dolly out</option>
-          <option value="crane down — camera descends from above">Crane down</option>
-          <option value="FPV drone fly-through — fast first-person drone flight through the scene">FPV drone flight</option>
-          <option value="slow tilt up — camera tilts upward">Tilt up</option>
-          <option value="slow tilt down — camera tilts downward">Tilt down</option>
-        </select>
-      </div>
-      <div class="field-box">
-        <label for="style">Style</label>
-        <select id="style">
-          <option value="cinematic dark fantasy, film grain, moody light" selected>Dark fantasy</option>
-          <option value="realistic, natural light, photographic">Realistic</option>
-          <option value="bright 3D cartoon, cheerful">Bright 3D cartoon</option>
-          <option value="anime style, clean lines">Anime style</option>
-          <option value="documentary style, handheld feel">Documentary style</option>
-          <option value="epic fantasy, dramatic light, rich colour">Epic fantasy</option>
-        </select>
-      </div>
-      <div class="field-box">
-        <label for="setting">Setting / place (optional)</label>
-        <input type="text" id="setting" placeholder="e.g. Rocky mountainside, old stone cottage, overcast grey sky, light snow falling">
-      </div>
-      <div class="field-box">
-        <label for="sound">Sound / dialogue note (optional — only engines marked "with audio" render it)</label>
-        <input type="text" id="sound" placeholder="e.g. No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end.">
+        <label for="action">Describe the video you want</label>
+        <textarea id="action" rows="4" placeholder="e.g. A white dragon standing behind a young woman in front of an old stone cottage. The dragon slowly lowers its head toward her, its throat glowing red, then raises its head and roars."></textarea>
       </div>
     </div>
-    <label class="preset-label">✨ Try an example — one click fills the scene</label>
-    <div class="seg-btns" id="presetBtns"></div>
   </div>
 
   <!-- STEP 3 : DURATION + ENGINE -->
@@ -1481,7 +1437,7 @@ const MAX_PHOTOS = 30; /* highest reference-photo limit across our engines (Seed
    the site was broken). Shown when a photo engine is picked with no photo. */
 var PHOTO_ERR = "Please upload a reference photo first — this engine needs one, or switch to a text-only engine.";
 var SUBJECT_ERR = "Please enter a subject for your video.";
-var ACTION_ERR = "Please enter an action for your video.";
+var ACTION_ERR = "Please describe your video first.";
 function showBuildError(msg) {
   var el = document.getElementById("buildErr");
   if (el) { el.textContent = msg; el.classList.add("show"); /* No forced scroll: the page never pushes the user down. */ }
@@ -1505,6 +1461,7 @@ ENGINES.forEach(function (e) {
     d.classList.add("selected");
     selectedEngine = e.id;
     refreshQualityOptions();
+    if (typeof refreshOptRows === "function") refreshOptRows();
     hideBuildError();
     const w = document.getElementById("noI2vWarn");
     if (!e.i2v) {
@@ -1678,16 +1635,10 @@ document.querySelectorAll("[data-copy]").forEach(function (btn) {
 
 /* ---------- build plan ---------- */
 function buildPlan() {
-  const subject = document.getElementById("subject").value.trim();
   const action = document.getElementById("action").value.trim();
-  const camera = document.getElementById("camera").value;
-  const style = document.getElementById("style").value;
-  const setting = document.getElementById("setting").value.trim();
-  const sound = document.getElementById("sound").value.trim();
   const engine = ENGINES.find(function (e) { return e.id === selectedEngine; });
   if (!engine) { showBuildError("Please pick an engine first."); return; }
 
-  if (!subject) { document.getElementById("subject").focus(); showBuildError(SUBJECT_ERR); return; }
   if (!action) { document.getElementById("action").focus(); showBuildError(ACTION_ERR); return; }
   if (photos.length === 0 && engine.i2v) {
     showBuildError(PHOTO_ERR);
@@ -1712,12 +1663,10 @@ function buildPlan() {
     const start = t, end = t + len;
     t = end;
     const beat = selectedMultiShot ? ("Shot " + (i + 1) + " of " + segCount + " — ") : ((i === segCount - 1) ? beats[beats.length - 1] : beats[Math.min(i, beats.length - 2)]);
-    let prompt = subject + ", " + beat + action + ". ";
+    let prompt = beat + action + ". ";
     if (selectedEnhance) {
-      prompt += "Camera: " + camera + ". Style: " + style + ". Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ". Bitrate: " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + ".";
+      prompt += "Ratio: " + ratioText(selectedRatio) + ". Quality: " + (selectedQuality || qualityOptionsFor(engine).slice(-1)[0]) + ". Bitrate: " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + ".";
     }
-    if (setting) prompt += " Setting: " + setting + ".";
-    if (sound && engine.audio && (typeof selectedSound === "undefined" || selectedSound)) prompt += " Sound: " + sound + ".";
     if (typeof refVideo !== "undefined" && refVideo) prompt += " Motion reference: " + refVideo.name + " (follow the reference video for motion).";
     if (i > 0) prompt += " Continue from the last frame of segment " + i + " — same character, same face, same clothes, same setting, no changes.";
     else if (photos.length > 1) prompt += " Match the reference photos exactly — Photo 1 is the start frame, Photo 2 is the end frame; use every photo for the character, clothes and setting.";
@@ -1734,7 +1683,7 @@ function buildPlan() {
     "(this engine makes max " + engine.maxSec + "s per clip, so the video is chained)<br>" +
     "<b>Reference photos:</b> " + photos.length + " uploaded" + (engine.refs ? " — " + engine.name + " takes up to " + engine.refs + (engine.refs === 1 ? " photo" : " photos") + " (Photo 1 = start frame" + (photos.length > 1 ? ", Photo 2 = end frame" : "") + ")" : " — this engine takes no reference photo") + "<br>" +
     ((typeof refVideo !== "undefined" && refVideo) ? "<b>Reference video:</b> " + escHtml(refVideo.name) + " (upload the same video on the engine's page as motion reference)<br>" : "") +
-    "<b>Style:</b> " + style + " · <b>Camera:</b> " + camera + " · <b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-") + " · <b>Bitrate:</b> " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + " · <b>Multi-shot:</b> " + (selectedMultiShot ? "On (" + segCount + " shots)" : "Off") + " · <b>Enhance:</b> " + (selectedEnhance ? "On" : "Off") + " · <b>Sound:</b> " + ((typeof selectedSound === "undefined" || selectedSound) ? "On" : "Off");
+    "<b>Ratio:</b> " + selectedRatio + " · <b>Quality:</b> " + (selectedQuality || "-") + " · <b>Bitrate:</b> " + (typeof selectedBitrate === "string" ? selectedBitrate : "High") + " · <b>Multi-shot:</b> " + (selectedMultiShot ? "On (" + segCount + " shots)" : "Off") + " · <b>Enhance:</b> " + (selectedEnhance ? "On" : "Off") + " · <b>Sound:</b> " + ((typeof selectedSound === "undefined" || selectedSound) ? "On" : "Off");
 
   const segWrap = document.getElementById("segments");
   segWrap.innerHTML = "";
@@ -1780,7 +1729,7 @@ document.querySelectorAll(".step-cell").forEach(function (cell, idx) {
       if (p) p.focus();
     } else if (step === 2) {
       if (typeof openTool === "function") openTool();
-      var s = document.getElementById("subject");
+      var s = document.getElementById("action");
       if (s) s.focus();
     } else if (step === 3) {
       if (typeof openTool === "function") openTool();
@@ -1792,42 +1741,6 @@ document.querySelectorAll(".step-cell").forEach(function (cell, idx) {
   });
 });
 
-/* ---------- preset scene templates + "Try an example" ---------- */
-var PRESETS = [
-  { name: "🐉 Dragon at sunset", subject: "A white dragon standing behind a young woman in front of an old stone cottage", action: "The dragon slowly lowers its head toward the woman, its throat glowing red, then raises its head and roars while the woman stays seated", camera: "slow push-in toward the subject", style: "cinematic dark fantasy, film grain, moody light", setting: "Rocky mountainside, old stone cottage, overcast grey sky, light snow falling", sound: "No dialogue. Wind, distant crowd murmurs, one deep dragon roar at the end." },
-  { name: "🎂 Birthday party", subject: "A happy child in a party hat blowing out candles on a birthday cake", action: "The child blows out the candles, friends cheer and clap, balloons float up and confetti falls over the table", camera: "slow pull-back revealing the scene", style: "bright 3D cartoon, cheerful", setting: "Colourful living room with balloons and streamers", sound: "Children laughing and cheering, happy birthday song in the background." },
-  { name: "🧴 Product shot", subject: "A sleek perfume bottle on a marble table", action: "The bottle slowly rotates as golden light sweeps across it and a soft mist swirls around its base", camera: "slow orbit around the subject", style: "realistic, natural light, photographic", setting: "Minimal studio, soft warm light, dark background", sound: "" },
-  { name: "⛰️ Mountain market", subject: "A busy mountain market at dawn with vendors and colourful stalls", action: "Vendors open their stalls, shoppers browse the goods, smoke rises from a tea stall and a dog runs through the lane", camera: "slow tracking shot following the subject", style: "realistic, natural light, photographic", setting: "Stone-paved mountain market, morning mist, warm sunrise light", sound: "Market chatter, distant bells, birdsong." },
-  { name: "🌧️ Rainy city street", subject: "A lone person with a glowing umbrella walking down a rainy city street at night", action: "The person walks slowly through the rain, neon signs reflect in the puddles and a tram passes behind them", camera: "slow tracking shot following the subject", style: "cinematic dark fantasy, film grain, moody light", setting: "Rainy city street at night, neon signs, wet pavement", sound: "Rain falling, distant traffic, soft footsteps." },
-  { name: "🐼 Baby animals", subject: "A baby panda and a baby elephant playing together in a sunny meadow", action: "The baby panda rolls in the grass, the baby elephant sprays water playfully and both tumble together", camera: "slow push-in toward the subject", style: "bright 3D cartoon, cheerful", setting: "Sunny green meadow with flowers and butterflies", sound: "Birds singing, soft playful music, happy animal sounds." }
-];
-function applyPreset(p) {
-  document.getElementById("subject").value = p.subject;
-  document.getElementById("action").value = p.action;
-  document.getElementById("camera").value = p.camera;
-  document.getElementById("style").value = p.style;
-  document.getElementById("setting").value = p.setting || "";
-  document.getElementById("sound").value = p.sound || "";
-  hideBuildError();
-  /* No scroll here: applying a preset must not move the page (the old
-     scrollIntoView jumped the page up to Step 1 every time). */
-}
-(function renderPresets() {
-  var wrap = document.getElementById("presetBtns");
-  if (!wrap) return;
-  PRESETS.forEach(function (p) {
-    var b = document.createElement("button");
-    b.type = "button";
-    b.textContent = p.name;
-    b.addEventListener("click", function () { applyPreset(p); });
-    wrap.appendChild(b);
-  });
-  var r = document.createElement("button");
-  r.type = "button";
-  r.textContent = "🎲 Try an example";
-  r.addEventListener("click", function () { applyPreset(PRESETS[Math.floor(Math.random() * PRESETS.length)]); });
-  wrap.appendChild(r);
-})();
 
 /* ---------- download / copy the whole plan ---------- */
 function fullPlanText() {
@@ -2141,11 +2054,10 @@ function modalGenerate(mid) {
   var engine = null;
   try { engine = ENGINES.find(function (e) { return e.id === mid; }); } catch (e) {}
   if (!engine) { showErr("Engine not found."); return; }
-  var ts0 = document.getElementById("subject"); if (ts0) ts0.value = s;
-  var ta0 = document.getElementById("action"); if (ta0) ta0.value = a;
+  var combined = [s, a].filter(function (x) { return x; }).join(", ");
+  var ta0 = document.getElementById("action"); if (ta0) ta0.value = combined;
   if (typeof photos !== "undefined" && photos.length === 0 && engine.i2v) { showErr("Please upload a reference photo first — this engine needs one, or switch to a text-only engine."); return; }
-  var ts = document.getElementById("subject"); if (ts) ts.value = s;
-  var ta = document.getElementById("action"); if (ta) ta.value = a;
+  var ta = document.getElementById("action"); if (ta) ta.value = combined;
   selectedQuality = qSel ? qSel.value : null;
   var el = document.querySelector('.engine[data-id="' + mid + '"]');
   if (el) el.click();
@@ -3298,9 +3210,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
   /* ----- gate: runs before buildPlan ----- */
   function validateInputs() {
-    var subject = document.getElementById("subject").value.trim();
     var action = document.getElementById("action").value.trim();
-    if (!subject) { document.getElementById("subject").focus(); showBuildError(SUBJECT_ERR); return false; }
     if (!action) { document.getElementById("action").focus(); showBuildError(ACTION_ERR); return false; }
     var engine = null;
     try { engine = ENGINES.find(function (e) { return e.id === selectedEngine; }); } catch (e) {}
@@ -3784,8 +3694,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     }
     photos.push({ name: c.name, dataUrl: c.photoDataUrl });
     renderThumbs();
-    var subj = document.getElementById("subject");
-    if (subj && !subj.value.trim()) subj.value = c.name + (c.description ? " — " + c.description : "");
+    var act = document.getElementById("action");
+    if (act && !act.value.trim()) act.value = c.name + (c.description ? " — " + c.description : "");
     closeCharModal();
     var tool = document.getElementById("tool");
     /* No forced scroll: the page never pushes the user down. */
@@ -3991,6 +3901,19 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var bv = $("bitrateRowVal"); if (bv) bv.textContent = (typeof selectedBitrate === "string" ? selectedBitrate : "High");
     var mv2 = $("multiRowVal"); if (mv2) mv2.textContent = selectedMultiShot ? "On" : "Off";
     var pe = $("presetEngine"); if (pe) pe.textContent = e ? e.name : "";
+    /* Higgsfield shows Multi-shot + Start/End frame only for Flow/Veo.
+       Hide them for every other engine (and reset Multi-shot). */
+    var isFlow = (typeof selectedEngine === "string" && selectedEngine === "flow");
+    if (!isFlow) { try { selectedMultiShot = false; } catch (err) {} }
+    var mw = $("multiRow");
+    if (mw) {
+      var mwrap = mw.closest ? mw.closest(".opt-wrap") : null;
+      if (mwrap) mwrap.style.display = isFlow ? "" : "none";
+      var mlb = mwrap ? mwrap.previousElementSibling : null;
+      if (mlb && mlb.tagName === "LABEL") mlb.style.display = isFlow ? "" : "none";
+    }
+    var fr = document.querySelector(".frames-row");
+    if (fr) fr.style.display = isFlow ? "" : "none";
   }
   window.refreshOptRows = refreshOptRows;
   /* Exposed for the detail modal's own rows + popups (same pattern, its own
@@ -4481,6 +4404,9 @@ var selectedSound = true;
     var pv = $("mPhotosVal"); if (pv) pv.textContent = total + " attached";
     var badge = $("mRefCount");
     if (badge) { badge.hidden = count === 0; badge.textContent = String(count); }
+    var isFlowM = (typeof selectedEngine === "string" && selectedEngine === "flow");
+    var sr = $("mStartRow"); if (sr) sr.style.display = isFlowM ? "" : "none";
+    var er = $("mEndRow"); if (er) er.style.display = isFlowM ? "" : "none";
   }
   function mShowErr(msg) { var el = $("mErr"); if (el) { el.textContent = msg; el.classList.add("show"); } }
   function mHideErr() { var el = $("mErr"); if (el) { el.textContent = ""; el.classList.remove("show"); } }
@@ -4620,9 +4546,8 @@ var selectedSound = true;
     var mp = $("mPrompt");
     var prompt = mp ? mp.value.trim() : "";
     if (!prompt) { mShowErr("Please describe your scene first."); if (mp) mp.focus(); return; }
-    var subj = $("subject"), act = $("action");
+    var act = $("action");
     if (act) act.value = prompt;
-    if (subj && !subj.value.trim()) subj.value = prompt;
     var e = eng();
     if (!e) { mShowErr("Please pick a model first."); return; }
     var nPhotos = 0;
@@ -4707,27 +4632,8 @@ var selectedSound = true;
     var inp = $(id); if (inp) inp.addEventListener("change", function () { setTimeout(refreshMRefs, 150); });
   });
   (function renderMExamples() {
-    var wrap = $("mExamples"); if (!wrap) return;
-    if (typeof PRESETS === "undefined") return;
-    PRESETS.forEach(function (p) {
-      var b = document.createElement("button");
-      b.type = "button"; b.textContent = p.name;
-      b.addEventListener("click", function () {
-        if (typeof applyPreset === "function") applyPreset(p);
-        var mp2 = $("mPrompt"); if (mp2) mp2.value = p.action || "";
-        mHideErr();
-      });
-      wrap.appendChild(b);
-    });
-    var r = document.createElement("button");
-    r.type = "button"; r.textContent = "🎲 Try an example";
-    r.addEventListener("click", function () {
-      var p = PRESETS[Math.floor(Math.random() * PRESETS.length)];
-      if (typeof applyPreset === "function") applyPreset(p);
-      var mp2 = $("mPrompt"); if (mp2) mp2.value = p.action || "";
-      mHideErr();
-    });
-    wrap.appendChild(r);
+    /* Mobile preset buttons removed — one prompt bar, like Higgsfield. */
+    return;
   })();
   document.addEventListener("keydown", function (ev) {
     if (ev.key !== "Escape") return;
