@@ -3866,10 +3866,24 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var charsCache = [];
   var videosCache = [];
 
+  /* The signed-in user, read live from Firebase Auth. NOTE (2026-11-13
+     fix): the credit-system IIFE owns a `var currentUser` that is NOT
+     global, so this section must never read bare `currentUser` — it was
+     always undefined here, which made libReady() always false and every
+     My characters / My videos click open the sign-in dialog. */
+  function libUser() {
+    try { return (typeof lfAuth !== "undefined" && lfAuth && lfAuth.currentUser) ? lfAuth.currentUser : null; } catch (e) { return null; }
+  }
   function libReady() {
-    return !!(typeof lfDb !== "undefined" && lfDb && typeof currentUser !== "undefined" && currentUser && currentUser.emailVerified);
+    var u = libUser();
+    return !!(typeof lfDb !== "undefined" && lfDb && u && u.emailVerified);
   }
   function libNeedLogin() {
+    var u = libUser();
+    if (u && !u.emailVerified) {
+      if (window.lfOpenLogin) window.lfOpenLogin("You're signed in — please verify your email to use this. Check your inbox for the verification email, or tap 'Resend verification email' below.");
+      return;
+    }
     if (window.lfOpenLogin) window.lfOpenLogin("Sign in (free) and verify your email to save characters and videos.");
   }
   function fmtDate(ts) {
@@ -3921,7 +3935,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   /* ---------- characters ---------- */
   function loadCharacters(silent) {
     if (!libReady()) return;
-    lfDb.collection("characters").where("uid", "==", currentUser.uid).get().then(function (qs) {
+    var lu = libUser(); if (!lu) return;
+    lfDb.collection("characters").where("uid", "==", lu.uid).get().then(function (qs) {
       charsCache = [];
       qs.forEach(function (doc) { var d = doc.data(); d.id = doc.id; charsCache.push(d); });
       charsCache.sort(function (a, b) {
@@ -3952,6 +3967,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function saveCharacter() {
     var msg = document.getElementById("charMsg");
     if (!libReady()) { libNeedLogin(); return; }
+    var lu = libUser(); if (!lu) { libNeedLogin(); return; }
     var name = (document.getElementById("charName").value || "").trim();
     var desc = (document.getElementById("charDesc").value || "").trim();
     var file = (document.getElementById("charPhoto").files || [])[0];
@@ -3963,7 +3979,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (!dataUrl) { if (msg) msg.textContent = "That photo could not be read — try a JPG or PNG."; return; }
       if (dataUrl.length > 400000) { if (msg) msg.textContent = "That photo is too large even after shrinking — try a smaller one."; return; }
       lfDb.collection("characters").add({
-        uid: currentUser.uid,
+        uid: lu.uid,
         name: name,
         description: desc,
         photoDataUrl: dataUrl,
@@ -4006,8 +4022,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   /* ---------- saved videos ---------- */
   function saveVideo(modelId, modelName, planText, videoUrl, btn) {
     if (!libReady()) { libNeedLogin(); return; }
+    var lu = libUser(); if (!lu) { libNeedLogin(); return; }
     lfDb.collection("savedVideos").add({
-      uid: currentUser.uid,
+      uid: lu.uid,
       modelId: modelId,
       modelName: modelName,
       planText: String(planText || "").slice(0, 20000),
@@ -4030,7 +4047,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
   function loadSavedVideos(silent) {
     if (!libReady()) return;
-    lfDb.collection("savedVideos").where("uid", "==", currentUser.uid).get().then(function (qs) {
+    var lu = libUser(); if (!lu) return;
+    lfDb.collection("savedVideos").where("uid", "==", lu.uid).get().then(function (qs) {
       videosCache = [];
       qs.forEach(function (doc) { var d = doc.data(); d.id = doc.id; videosCache.push(d); });
       videosCache.sort(function (a, b) {
