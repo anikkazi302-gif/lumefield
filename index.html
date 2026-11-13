@@ -2361,7 +2361,6 @@ function openDetail(kind, id) {
     var qSelIdx = (qDef && qOpts.indexOf(qDef) !== -1) ? qOpts.indexOf(qDef) : qOpts.length - 1;
     var qHtml = qOpts.map(function (q, qi) { return '<option value="' + q + '"' + (qi === qSelIdx ? ' selected' : '') + '>' + q + '</option>'; }).join('');
     var escAttr = function (s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); };
-    var subj = escAttr(((document.getElementById("subject") || {}).value || ""));
     var act = escAttr(((document.getElementById("action") || {}).value || ""));
     var durBtns = ((typeof durTicksFor === "function") ? durTicksFor(item) : [5, 10, 20, 30]).map(function (d) { return '<button type="button" data-dur="' + d + '"' + (d === selectedDur ? ' class="active"' : '') + '>' + d + 's</button>'; }).join('');
     var ratioOptsDb = (typeof ratioOptsFor === "function") ? ratioOptsFor(item) : ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9", "4:5", "3:2"];
@@ -2383,7 +2382,7 @@ function openDetail(kind, id) {
       '</div><select id="dQuality" hidden>' + qHtml + '</select></div>' +
       ratioRowDb +
       '<div class="db-section">✍️ Prompt — describe your video</div>' +
-      '<div><div class="db-label">Subject</div><input id="dSubject" type="text" value="' + subj + '" placeholder="Who / what is in the video"></div>' +
+      '<div><div class="db-label">Subject</div><input id="dSubject" type="text" value="" placeholder="Who / what is in the video"></div>' +
       '<div><div class="db-label">Action</div><textarea id="dAction" placeholder="What happens">' + act + '</textarea></div>' +
       '<div><div class="db-label">Duration</div><div class="opt-wrap">' +
         '<div class="opt-row" role="button" tabindex="0" data-db-row="dur"><span class="opt-label">Duration</span><span class="opt-value" id="dDurRowVal"></span><span class="opt-chev">›</span></div>' +
@@ -4148,13 +4147,22 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
 
   /* Two-tap delete (no confirm() dialogs on this site): first tap arms
-     the button ("Sure?"), second tap within 3s deletes. */
+     the button ("Sure?"), second tap within 3s deletes. Armed state
+     lives in `armedDel` (not on the button node) so a list re-render
+     between the two taps cannot lose it — the renderers paint "Sure?"
+     for the armed row. */
+  var armedDel = { kind: null, id: null, until: 0 };
   function armDelete(btn, fn) {
-    if (btn.getAttribute("data-armed") === "1") { fn(); return; }
+    var kind = btn.getAttribute("data-del-char") != null ? "char" : (btn.getAttribute("data-del-video") != null ? "video" : null);
+    var id = kind === "char" ? btn.getAttribute("data-del-char") : (kind === "video" ? btn.getAttribute("data-del-video") : null);
+    if (kind && armedDel.kind === kind && armedDel.id === id && Date.now() < armedDel.until) { armedDel = { kind: null, id: null, until: 0 }; fn(); return; }
+    armedDel = { kind: kind, id: id, until: Date.now() + 3000 };
     btn.setAttribute("data-armed", "1");
-    var old = btn.textContent;
     btn.textContent = "Sure?";
-    setTimeout(function () { btn.removeAttribute("data-armed"); btn.textContent = old; }, 3000);
+    setTimeout(function () {
+      if (armedDel.kind === kind && armedDel.id === id) armedDel = { kind: null, id: null, until: 0 };
+      renderCharacters(); renderVideos();
+    }, 3000);
   }
 
   function updateCounts() {
@@ -4190,6 +4198,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       var d = document.createElement("div");
       d.className = "lf-char-item";
       var vinfo = voiceOf(c);
+      var delArmed = (armedDel.kind === "char" && armedDel.id === c.id && Date.now() < armedDel.until);
       d.innerHTML = '<img src="' + esc(c.photoDataUrl || "") + '" alt="">' +
         '<div><div class="lf-char-name">' + esc(c.name) + '</div>' +
         (c.description ? '<div class="lf-char-desc">' + esc(c.description) + '</div>' : "") +
@@ -4197,7 +4206,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         '<div class="lf-char-actions"><button class="lf-mini-btn" type="button" data-voice-char="' + esc(c.id) + '">🎙️ Select a voice</button>' +
         (vinfo.voice === "own" ? '<button class="lf-mini-btn" type="button" data-play-char="' + esc(c.id) + '">▶ Play my voice</button>' : "") +
         '<button class="lf-mini-btn" type="button" data-use-char="' + esc(c.id) + '">🎬 Use in build</button>' +
-        '<button class="lf-mini-btn danger" type="button" data-del-char="' + esc(c.id) + '">Delete</button></div>';
+        '<button class="lf-mini-btn danger" type="button" data-del-char="' + esc(c.id) + '"' + (delArmed ? ' data-armed="1"' : '') + '>' + (delArmed ? "Sure?" : "Delete") + '</button></div>';
       list.appendChild(d);
       avatarVideoGet(c.id).then(function (b) {
         if (!b) return;
@@ -4289,11 +4298,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      "My own voice" records the user reading 5 random numbers (1-100);
      the audio is stored in IndexedDB on this device (never Firestore
      — too big). The choice is saved to the character doc as `voice`
-     (+ `voiceSample` for own voice). NOTE: live rules v5/v5.1 allow
-     only the 5 original character fields, so until rules v5.2 is
-     published the Firestore update fails — the choice is then kept in
-     localStorage on this device so the voice still works, with a
-     plain note. See lumefield-rules-v52-character-voice.md. */
+     (+ `voiceSample` for own voice). Rules v5.2 (published
+     2026-11-13) allow these fields; if the Firestore update itself
+     fails, the choice is kept in localStorage on this device so the
+     voice still works, with a plain note.
+     See lumefield-rules-v52-character-voice.md. */
   var LF_VOICES = [
     { id: "male-1", name: "Male 1 — deep", desc: "Low, calm", pitch: 0.7, rate: 0.9 },
     { id: "male-2", name: "Male 2 — warm", desc: "Friendly, steady", pitch: 0.9, rate: 1.0 },
@@ -4573,9 +4582,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       var m = document.getElementById("charMsg");
       if (m) m.textContent = "✓ Voice saved.";
     }).catch(function () {
-      /* Firestore update failed — live rules v5/v5.1 allow only the 5
-         original character fields, so `voice` is rejected until rules
-         v5.2 is published. Keep the choice on this device instead. */
+      /* Firestore update failed — keep the choice on this device
+         instead. (The device-only fallback applies only when the
+         write itself fails.) */
       voiceLocalSet(id, voiceSel, hasSample);
       charsCache.forEach(function (x) { if (x.id === id) { x.voice = voiceSel; x.voiceSample = hasSample; } });
       renderCharacters();
@@ -4692,8 +4701,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       avatarCamStarted = true;
       if (v) { v.muted = true; v.controls = false; v.loop = false; try { v.srcObject = stream; } catch (e) {} v.play().catch(function () {}); }
       if (m) m.textContent = "Look at the camera and tap ● Record — a few seconds is enough.";
-    }).catch(function () {
-      if (m) m.textContent = "Camera was blocked — allow camera and microphone access and try again.";
+    }).catch(function (e) {
+      if (m) m.textContent = (e && e.name === "NotFoundError") ? "Camera isn't available on this device." : "Camera was blocked — allow camera and microphone access and try again.";
     });
   }
   function openAvatarModal() {
@@ -4903,10 +4912,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       g.className = "lf-myv-group";
       var html = "<h4>" + esc(name) + " · " + byName[name].length + "</h4>";
       byName[name].forEach(function (v) {
+        var delArmed = (armedDel.kind === "video" && armedDel.id === v.id && Date.now() < armedDel.until);
         html += '<div class="lf-myv-item"><div class="lf-myv-date">' + esc(fmtDate(v.createdAt)) + '</div>' +
           '<details><summary>View saved plan</summary><pre>' + esc(v.planText || "") + '</pre></details>' +
           '<div class="lf-myv-links"><a class="btn-ghost" href="' + esc(v.videoUrl || "#") + '" target="_blank" rel="noopener" style="padding:8px 16px;font-size:14px;">▶ Open engine free ↗</a>' +
-          '<button class="lf-mini-btn danger" type="button" data-del-video="' + esc(v.id) + '">Delete</button></div></div>';
+          '<button class="lf-mini-btn danger" type="button" data-del-video="' + esc(v.id) + '"' + (delArmed ? ' data-armed="1"' : '') + '>' + (delArmed ? "Sure?" : "Delete") + '</button></div></div>';
       });
       g.innerHTML = html;
       wrap.appendChild(g);
