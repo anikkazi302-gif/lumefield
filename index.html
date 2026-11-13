@@ -978,7 +978,7 @@
     <div class="opt-wrap">
       <div class="opt-row" id="modelRow" role="button" tabindex="0"><span class="opt-label">Model</span><span class="opt-value" id="modelRowVal">Seedance 2.5</span><span class="opt-chev">›</span></div>
       <div class="opt-pop" id="modelPop" hidden>
-        <input class="opt-search" id="modelSearch" type="text" placeholder="Search..." autocomplete="off">
+        <input class="opt-search" id="modelSearchPop" type="text" placeholder="Search..." autocomplete="off">
         <div id="modelPopList"></div>
       </div>
     </div>
@@ -1396,7 +1396,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
       <button class="profile-view-btn" id="profileViewMyVideos" type="button">🎬 My videos</button>
       <button class="profile-view-btn" id="profileViewMyCharacters" type="button">👤 My characters</button>
       <button class="profile-view-btn" id="profileViewInvite" type="button">🔗 Copy invite link</button>
-      <button class="profile-view-btn" id="profileViewDaily" type="button">🎁 Daily free credits</button>
+      <button class="profile-view-btn" id="profileViewDailyBtn" type="button">🎁 Daily free credits</button>
       <a class="profile-view-btn profile-view-upgrade" id="profileViewUpgrade" href="#buy-credits">⬆️ Upgrade — Buy credits</a>
       <button class="profile-view-btn profile-view-signout" id="profileViewSignOut" type="button">Sign out</button>
     </div>
@@ -2899,7 +2899,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (mc) mc.addEventListener("click", function () { closeProfileView(); clickMenuItem("profileMyCharacters"); });
     var iv = document.getElementById("profileViewInvite");
     if (iv) iv.addEventListener("click", function () { clickMenuItem("profileInviteCopy"); });
-    var dy = document.getElementById("profileViewDaily");
+    var dy = document.getElementById("profileViewDailyBtn");
     if (dy) dy.addEventListener("click", function () { clickMenuItem("profileDailyClaim"); });
     var so = document.getElementById("profileViewSignOut");
     if (so) so.addEventListener("click", function () { closeProfileView(); clickMenuItem("profileSignOut"); });
@@ -2926,6 +2926,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       profileDailyClaim.hidden = !show;
       profileDailyClaim.disabled = claimedToday;
     }
+    /* Profile-view Daily button (2026-11-13 fix): it shares the menu
+       button's rule — hidden for the owner (Unlimited needs no refill),
+       so it never sits there as a dead click. */
+    var dyb = document.getElementById("profileViewDailyBtn");
+    if (dyb) dyb.hidden = !show;
     if (profileDailyClaimState) {
       profileDailyClaimState.textContent = claimedToday ? "Claimed ✓" : "4/day";
     }
@@ -3628,7 +3633,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       if (!modelPop.hidden && !modelPop.contains(e.target) && e.target !== modelBtn && !modelBtn.contains(e.target)) hideLfModelPop();
     });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideLfModelPop(); });
-    if (modelSearch) modelSearch.addEventListener("input", buildLfModelList);
+    var msp = $("modelSearchPop");
+    if (msp) msp.addEventListener("input", buildLfModelList);
     if (settingsBtn) settingsBtn.addEventListener("click", function () { hideLfModelPop(); });
   }
   var durBtns = document.querySelectorAll(".lfai-dur");
@@ -4302,7 +4308,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
   function buildModelList() {
     var list = $("modelPopList"); if (!list) return;
-    var q = ($("modelSearch") ? $("modelSearch").value : "").trim().toLowerCase();
+    var q = ($("modelSearchPop") ? $("modelSearchPop").value : "").trim().toLowerCase();
     var html = "";
     try {
       (typeof ENGINES !== "undefined" ? ENGINES : []).forEach(function (e) {
@@ -4424,7 +4430,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   bindRow("qualityRow", "qualityPop", buildQualityList);
   bindRow("bitrateRow", "bitratePop", buildBitrateList);
   bindRow("multiRow", "multiPop", buildMultiList);
-  var ms = $("modelSearch");
+  var ms = $("modelSearchPop");
   if (ms) ms.addEventListener("input", buildModelList);
   document.addEventListener("click", function (ev) {
     if (!ev.target.closest(".opt-wrap")) closeAllPops();
