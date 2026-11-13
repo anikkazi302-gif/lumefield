@@ -4037,7 +4037,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     setErr(""); setStatus("In queue\u2026");
     audioEl.hidden = true; audioEl.removeAttribute("src"); dlEl.hidden = true;
     getMusicClient().then(function (Client) {
-      setStatus("Making your song\u2026 (about a minute)");
+      setStatus("Making your song\u2026 (a few minutes)");
       return Client.connect(SPACE);
     }).then(function (client) {
       /* use_gpu=false: this free Space runs on CPU; true fails fast. */
@@ -4147,7 +4147,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
 
   /* Two-tap delete (no confirm() dialogs on this site): first tap arms
-     the button ("Sure?"), second tap within 3s deletes. Armed state
+     the button ("Sure?"), second tap within 30s deletes (30s is long
+     enough for a modal close/reopen including the Firestore fetch,
+     and for a human to hesitate). Armed state
      lives in `armedDel` (not on the button node) so a list re-render
      between the two taps cannot lose it — the renderers paint "Sure?"
      for the armed row. */
@@ -4156,13 +4158,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var kind = btn.getAttribute("data-del-char") != null ? "char" : (btn.getAttribute("data-del-video") != null ? "video" : null);
     var id = kind === "char" ? btn.getAttribute("data-del-char") : (kind === "video" ? btn.getAttribute("data-del-video") : null);
     if (kind && armedDel.kind === kind && armedDel.id === id && Date.now() < armedDel.until) { armedDel = { kind: null, id: null, until: 0 }; fn(); return; }
-    armedDel = { kind: kind, id: id, until: Date.now() + 3000 };
+    armedDel = { kind: kind, id: id, until: Date.now() + 30000 };
     btn.setAttribute("data-armed", "1");
     btn.textContent = "Sure?";
     setTimeout(function () {
       if (armedDel.kind === kind && armedDel.id === id) armedDel = { kind: null, id: null, until: 0 };
       renderCharacters(); renderVideos();
-    }, 3000);
+    }, 30000);
   }
 
   function updateCounts() {
