@@ -131,6 +131,11 @@
   .lf-char-name { font-weight: 800; }
   .lf-char-desc { font-size: 13px; color: #a9a9bd; margin-top: 2px; }
   .lf-char-actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .lf-char-voice { font-size: 13px; color: #a9a9bd; margin-top: 2px; }
+  .lf-voice-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; background: #10101a; border: 1px solid #232336; border-radius: 10px; padding: 10px 12px; cursor: pointer; font-family: inherit; color: #f2f2f7; font-size: 14px; }
+  .lf-voice-row.sel { border-color: #c8f542; }
+  .lf-voice-name { font-weight: 700; }
+  .lf-voice-desc { font-size: 12px; color: #a9a9bd; }
   .lf-mini-btn { background: #33334a; color: #f2f2f7; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; font-size: .82rem; font-family: inherit; }
   .lf-mini-btn:hover { background: #44445e; }
   .lf-mini-btn.danger { background: #450A0A; }
@@ -1382,6 +1387,26 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
       <div class="profile-history-row"><span>Videos saved</span><span id="statsVideos">—</span></div>
     </div>
     <p class="lf-msg" id="statsMsg" role="status"></p>
+  </div>
+</div>
+
+<!-- Select a voice (per character; item 2, 2026-11-13). -->
+<div class="detail-backdrop" id="voiceModal" hidden>
+  <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="voiceTitle">
+    <button class="modal-close" id="voiceClose" type="button" aria-label="Close">✕</button>
+    <h3 id="voiceTitle">🎙️ Select a voice</h3>
+    <p class="detail-vendor" id="voiceSub">Pick a voice for this character.</p>
+    <label class="lf-field-label" for="voiceSampleText">Sample dialogue</label>
+    <input class="lf-field" id="voiceSampleText" type="text" maxlength="120" placeholder="Type something for the voice to say…">
+    <div class="lf-panel-list" id="voiceList"></div>
+    <div id="voiceOwnBox" hidden>
+      <p class="lf-msg" id="voiceNumbers" role="status"></p>
+      <div class="detail-actions"><button class="btn-primary" id="voiceRecBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">● Record</button>
+      <button class="lf-mini-btn" id="voicePlayBtn" type="button" hidden>▶ Play my voice</button></div>
+      <p class="lf-msg" id="voiceRecMsg" role="status"></p>
+    </div>
+    <p class="lf-msg" id="voiceMsg" role="status"></p>
+    <div class="detail-actions"><button class="btn-primary" id="voiceDoneBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">Done</button></div>
   </div>
 </div>
 
@@ -4014,10 +4039,14 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     charsCache.forEach(function (c) {
       var d = document.createElement("div");
       d.className = "lf-char-item";
+      var vinfo = voiceOf(c);
       d.innerHTML = '<img src="' + esc(c.photoDataUrl || "") + '" alt="">' +
         '<div><div class="lf-char-name">' + esc(c.name) + '</div>' +
-        (c.description ? '<div class="lf-char-desc">' + esc(c.description) + '</div>' : "") + '</div>' +
-        '<div class="lf-char-actions"><button class="lf-mini-btn" type="button" data-use-char="' + esc(c.id) + '">🎬 Use in build</button>' +
+        (c.description ? '<div class="lf-char-desc">' + esc(c.description) + '</div>' : "") +
+        '<div class="lf-char-voice">🎙️ ' + esc(voiceLabel(vinfo.voice)) + '</div></div>' +
+        '<div class="lf-char-actions"><button class="lf-mini-btn" type="button" data-voice-char="' + esc(c.id) + '">🎙️ Select a voice</button>' +
+        (vinfo.voice === "own" ? '<button class="lf-mini-btn" type="button" data-play-char="' + esc(c.id) + '">▶ Play my voice</button>' : "") +
+        '<button class="lf-mini-btn" type="button" data-use-char="' + esc(c.id) + '">🎬 Use in build</button>' +
         '<button class="lf-mini-btn danger" type="button" data-del-char="' + esc(c.id) + '">Delete</button></div>';
       list.appendChild(d);
     });
@@ -4077,7 +4106,313 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
   function deleteCharacter(id, btn) {
     armDelete(btn, function () {
+      voiceSampleDelete(id);
+      voiceLocalClear(id);
       lfDb.collection("characters").doc(id).delete().then(function () { loadCharacters(false); });
+    });
+  }
+
+
+  /* ---------- voices (2026-11-13, item 2) ----------
+     "Select a voice" per character. Library voices use the browser's
+     built-in speech synthesis (free, in-browser, no service): 6 plain
+     voices, each the default speech voice with a different pitch/rate.
+     "My own voice" records the user reading 5 random numbers (1-100);
+     the audio is stored in IndexedDB on this device (never Firestore
+     — too big). The choice is saved to the character doc as `voice`
+     (+ `voiceSample` for own voice). NOTE: live rules v5/v5.1 allow
+     only the 5 original character fields, so until rules v5.2 is
+     published the Firestore update fails — the choice is then kept in
+     localStorage on this device so the voice still works, with a
+     plain note. See lumefield-rules-v52-character-voice.md. */
+  var LF_VOICES = [
+    { id: "male-1", name: "Male 1 — deep", desc: "Low, calm", pitch: 0.7, rate: 0.9 },
+    { id: "male-2", name: "Male 2 — warm", desc: "Friendly, steady", pitch: 0.9, rate: 1.0 },
+    { id: "male-3", name: "Male 3 — bright", desc: "Energetic, clear", pitch: 1.2, rate: 1.05 },
+    { id: "female-1", name: "Female 1 — soft", desc: "Gentle, soft", pitch: 1.3, rate: 0.95 },
+    { id: "female-2", name: "Female 2 — warm", desc: "Friendly, steady", pitch: 1.1, rate: 1.0 },
+    { id: "female-3", name: "Female 3 — bright", desc: "Cheerful, clear", pitch: 1.5, rate: 1.05 }
+  ];
+  var LF_VOICE_OWN = { id: "own", name: "My own voice", desc: "Record yourself reading numbers" };
+  function voiceLabel(id) {
+    if (!id) return "No voice yet";
+    if (id === "own") return "My own voice";
+    var v = null;
+    LF_VOICES.forEach(function (x) { if (x.id === id) v = x; });
+    return v ? v.name : "No voice yet";
+  }
+  function voiceDef(id) {
+    var v = null;
+    LF_VOICES.forEach(function (x) { if (x.id === id) v = x; });
+    return v;
+  }
+  function voiceLocalKey(id) { return "lfVoice:" + id; }
+  function voiceLocalGet(id) {
+    try {
+      var raw = localStorage.getItem(voiceLocalKey(id));
+      if (!raw) return null;
+      var o = JSON.parse(raw);
+      return o && o.voice ? o : null;
+    } catch (e) { return null; }
+  }
+  function voiceLocalSet(id, voice, sample) {
+    try { localStorage.setItem(voiceLocalKey(id), JSON.stringify({ voice: voice, voiceSample: !!sample })); } catch (e) {}
+  }
+  function voiceLocalClear(id) {
+    try { localStorage.removeItem(voiceLocalKey(id)); } catch (e) {}
+  }
+  function voiceOf(c) {
+    if (c.voice) return { voice: c.voice, sample: !!c.voiceSample };
+    var l = voiceLocalGet(c.id);
+    return l ? { voice: l.voice, sample: !!l.voiceSample } : { voice: "", sample: false };
+  }
+
+  /* Own-voice recordings live in IndexedDB ("lumefield-voices" /
+     "samples", key = character id). Audio never goes to Firestore. */
+  var voiceDbPromise = null;
+  function voiceDb() {
+    if (voiceDbPromise) return voiceDbPromise;
+    voiceDbPromise = new Promise(function (resolve, reject) {
+      if (!window.indexedDB) { reject(new Error("no idb")); return; }
+      var req = indexedDB.open("lumefield-voices", 1);
+      req.onupgradeneeded = function () {
+        try { req.result.createObjectStore("samples"); } catch (e) {}
+      };
+      req.onsuccess = function () { resolve(req.result); };
+      req.onerror = function () { reject(req.error || new Error("idb open failed")); };
+    });
+    return voiceDbPromise;
+  }
+  function voiceSampleSave(charId, blob) {
+    return voiceDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction("samples", "readwrite");
+        tx.objectStore("samples").put(blob, charId);
+        tx.oncomplete = function () { resolve(); };
+        tx.onerror = function () { reject(tx.error || new Error("idb put failed")); };
+      });
+    });
+  }
+  function voiceSampleGet(charId) {
+    return voiceDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var req = db.transaction("samples", "readonly").objectStore("samples").get(charId);
+        req.onsuccess = function () { resolve(req.result || null); };
+        req.onerror = function () { reject(req.error || new Error("idb get failed")); };
+      });
+    }).catch(function () { return null; });
+  }
+  function voiceSampleDelete(charId) {
+    voiceDb().then(function (db) {
+      try { db.transaction("samples", "readwrite").objectStore("samples").delete(charId); } catch (e) {}
+    }).catch(function () {});
+  }
+
+  function voiceSpeak(text, def) {
+    if (!("speechSynthesis" in window) || !window.SpeechSynthesisUtterance) return false;
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US";
+      if (def) { u.pitch = def.pitch; u.rate = def.rate; }
+      window.speechSynthesis.speak(u);
+      return true;
+    } catch (e) { return false; }
+  }
+  function voiceSampleLine() {
+    var t = document.getElementById("voiceSampleText");
+    var v = t ? (t.value || "").trim() : "";
+    return v || "Hello, I am your character. This is my voice.";
+  }
+  function voicePlayBlob(blob) {
+    try {
+      var url = URL.createObjectURL(blob);
+      var a = new Audio(url);
+      a.onended = function () { URL.revokeObjectURL(url); };
+      a.play().catch(function () {});
+    } catch (e) {}
+  }
+
+  var voiceCharId = null;
+  var voiceSel = "";
+  var voicePendingBlob = null;
+  var voiceRecorder = null;
+  var voiceRecChunks = [];
+  var voiceRecording = false;
+
+  function voiceNumbers() {
+    var nums = [];
+    while (nums.length < 5) {
+      var n = 1 + Math.floor(Math.random() * 100);
+      if (nums.indexOf(n) === -1) nums.push(n);
+    }
+    return nums;
+  }
+  function openVoiceModal(id) {
+    if (!libReady()) { libNeedLogin(); return; }
+    var c = null;
+    charsCache.forEach(function (x) { if (x.id === id) c = x; });
+    if (!c) return;
+    voiceCharId = id;
+    voiceSel = voiceOf(c).voice;
+    voicePendingBlob = null;
+    voiceStopRec(true);
+    var sub = document.getElementById("voiceSub");
+    if (sub) sub.textContent = "Pick a voice for " + c.name + ".";
+    var vm = document.getElementById("voiceMsg");
+    if (vm) vm.textContent = "";
+    var rm = document.getElementById("voiceRecMsg");
+    if (rm) rm.textContent = "";
+    var ne = document.getElementById("voiceNumbers");
+    if (ne) ne.textContent = "Read these numbers aloud:  " + voiceNumbers().join("  ·  ");
+    renderVoiceList();
+    var pb = document.getElementById("voicePlayBtn");
+    if (pb) {
+      pb.hidden = true;
+      if (voiceSel === "own") {
+        voiceSampleGet(id).then(function (b) {
+          var p2 = document.getElementById("voicePlayBtn");
+          if (b && p2 && voiceCharId === id) p2.hidden = false;
+        });
+      }
+    }
+    var modal = document.getElementById("voiceModal");
+    if (modal) { modal.hidden = false; document.body.style.overflow = "hidden"; }
+  }
+  function closeVoiceModal() {
+    voiceStopRec(true);
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+    var modal = document.getElementById("voiceModal");
+    if (modal) { modal.hidden = true; document.body.style.overflow = ""; }
+    voiceCharId = null;
+    voicePendingBlob = null;
+  }
+  function renderVoiceList() {
+    var list = document.getElementById("voiceList");
+    if (!list) return;
+    var all = LF_VOICES.concat([LF_VOICE_OWN]);
+    var html = "";
+    all.forEach(function (v) {
+      var sel = voiceSel === v.id ? " sel" : "";
+      html += '<button class="lf-voice-row' + sel + '" type="button" data-voice-pick="' + v.id + '">' +
+        '<span><span class="lf-voice-name">' + esc(v.name) + '</span><br>' +
+        '<span class="lf-voice-desc">' + esc(v.desc) + '</span></span>' +
+        '<span class="lf-voice-prev lf-mini-btn" data-voice-preview="' + v.id + '">▶ Preview</span></button>';
+    });
+    list.innerHTML = html;
+    var ob = document.getElementById("voiceOwnBox");
+    if (ob) ob.hidden = voiceSel !== "own";
+  }
+  function voicePreview(id) {
+    if (id === "own") { voicePlayOwn(); return; }
+    var def = voiceDef(id);
+    if (!def) return;
+    if (!voiceSpeak(voiceSampleLine(), def)) {
+      var vm = document.getElementById("voiceMsg");
+      if (vm) vm.textContent = "Voice preview isn't available in this browser.";
+    }
+  }
+  function voicePlayOwn() {
+    var vm = document.getElementById("voiceMsg");
+    if (voicePendingBlob) { voicePlayBlob(voicePendingBlob); return; }
+    if (!voiceCharId) return;
+    voiceSampleGet(voiceCharId).then(function (b) {
+      if (b) voicePlayBlob(b);
+      else if (vm) vm.textContent = "No recording on this device yet — record it again below.";
+    });
+  }
+  function voicePlayCard(id) {
+    var m = document.getElementById("charMsg");
+    voiceSampleGet(id).then(function (b) {
+      if (b) voicePlayBlob(b);
+      else if (m) m.textContent = "No recording on this device yet — open 'Select a voice' and record it again.";
+    });
+  }
+  function voiceStopRec(silent) {
+    if (voiceRecorder && voiceRecording) {
+      try { voiceRecorder.stop(); } catch (e) {}
+    }
+    voiceRecording = false;
+    if (!silent) {
+      var rb = document.getElementById("voiceRecBtn");
+      if (rb) rb.textContent = "● Record";
+    }
+  }
+  function voiceToggleRec() {
+    var rb = document.getElementById("voiceRecBtn");
+    var rm = document.getElementById("voiceRecMsg");
+    if (voiceRecording) { voiceStopRec(false); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
+      if (rm) rm.textContent = "Recording isn't available in this browser.";
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      voiceRecChunks = [];
+      var rec = new MediaRecorder(stream);
+      voiceRecorder = rec;
+      rec.ondataavailable = function (ev) { if (ev.data && ev.data.size) voiceRecChunks.push(ev.data); };
+      rec.onstop = function () {
+        voiceRecording = false;
+        if (rb) rb.textContent = "● Record";
+        try { stream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {}
+        var blob = new Blob(voiceRecChunks, { type: rec.mimeType || "audio/webm" });
+        if (blob.size < 500) {
+          if (rm) rm.textContent = "Nothing was recorded — try again and speak the numbers aloud.";
+          return;
+        }
+        voicePendingBlob = blob;
+        var pb = document.getElementById("voicePlayBtn");
+        if (pb) pb.hidden = false;
+        if (rm) rm.textContent = "✓ Recorded — tap Done to save it with this character.";
+      };
+      rec.start();
+      voiceRecording = true;
+      if (rb) rb.textContent = "■ Stop";
+      if (rm) rm.textContent = "Listening… read the numbers aloud.";
+    }).catch(function () {
+      if (rm) rm.textContent = "Microphone was blocked — allow microphone access and try again.";
+    });
+  }
+  function voiceSave() {
+    var vm = document.getElementById("voiceMsg");
+    if (!voiceCharId) return;
+    if (!libReady()) { libNeedLogin(); return; }
+    if (!voiceSel) { if (vm) vm.textContent = "Pick a voice first."; return; }
+    if (voiceSel === "own" && !voicePendingBlob) {
+      voiceSampleGet(voiceCharId).then(function (b) {
+        if (b) voiceDoSave(true);
+        else if (vm) vm.textContent = "Record your voice first — tap ● Record and read the numbers aloud.";
+      });
+      return;
+    }
+    voiceDoSave(voiceSel === "own");
+  }
+  function voiceDoSave(hasSample) {
+    var vm = document.getElementById("voiceMsg");
+    var id = voiceCharId;
+    if (!id) return;
+    var saveBlob = (voicePendingBlob && voiceSel === "own")
+      ? voiceSampleSave(id, voicePendingBlob)
+      : Promise.resolve();
+    saveBlob.then(function () {
+      return lfDb.collection("characters").doc(id).update({ voice: voiceSel, voiceSample: hasSample });
+    }).then(function () {
+      charsCache.forEach(function (x) { if (x.id === id) { x.voice = voiceSel; x.voiceSample = hasSample; } });
+      voiceLocalClear(id);
+      renderCharacters();
+      closeVoiceModal();
+      var m = document.getElementById("charMsg");
+      if (m) m.textContent = "✓ Voice saved.";
+    }).catch(function () {
+      /* Firestore update failed — live rules v5/v5.1 allow only the 5
+         original character fields, so `voice` is rejected until rules
+         v5.2 is published. Keep the choice on this device instead. */
+      voiceLocalSet(id, voiceSel, hasSample);
+      charsCache.forEach(function (x) { if (x.id === id) { x.voice = voiceSel; x.voiceSample = hasSample; } });
+      renderCharacters();
+      closeVoiceModal();
+      var m2 = document.getElementById("charMsg");
+      if (m2) m2.textContent = "Voice saved on this device. Cloud sync needs a small rules update — it will sync once that's on.";
     });
   }
 
@@ -4241,7 +4576,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (vc) vc.addEventListener("click", closeVideosModal);
   }
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { closeCharModal(); closeVideosModal(); closeStatsModal(); }
+    if (e.key === "Escape") { closeCharModal(); closeVideosModal(); closeStatsModal(); closeVoiceModal(); }
   });
 
   /* ---------- wiring ---------- */
@@ -4272,8 +4607,44 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (f) { try { pv.src = URL.createObjectURL(f); pv.hidden = false; } catch (e) { pv.hidden = true; } }
     else { pv.src = ""; pv.hidden = true; }
   });
+  var vmodal = document.getElementById("voiceModal");
+  if (vmodal) {
+    vmodal.addEventListener("click", function (e) { if (e.target === vmodal) closeVoiceModal(); });
+    var vclose = document.getElementById("voiceClose");
+    if (vclose) vclose.addEventListener("click", closeVoiceModal);
+  }
+  var vdone = document.getElementById("voiceDoneBtn");
+  if (vdone) vdone.addEventListener("click", voiceSave);
+  var vlist = document.getElementById("voiceList");
+  if (vlist) vlist.addEventListener("click", function (ev) {
+    var pv = ev.target.closest ? ev.target.closest("[data-voice-preview]") : null;
+    if (pv) { voicePreview(pv.getAttribute("data-voice-preview")); return; }
+    var pk = ev.target.closest ? ev.target.closest("[data-voice-pick]") : null;
+    if (pk) {
+      voiceSel = pk.getAttribute("data-voice-pick");
+      renderVoiceList();
+      var pb = document.getElementById("voicePlayBtn");
+      if (pb) {
+        if (voiceSel !== "own") { pb.hidden = true; }
+        else {
+          voiceSampleGet(voiceCharId).then(function (b) {
+            var pb2 = document.getElementById("voicePlayBtn");
+            if (pb2 && voiceCharId) pb2.hidden = !b;
+          });
+        }
+      }
+    }
+  });
+  var vrec = document.getElementById("voiceRecBtn");
+  if (vrec) vrec.addEventListener("click", voiceToggleRec);
+  var vplay = document.getElementById("voicePlayBtn");
+  if (vplay) vplay.addEventListener("click", voicePlayOwn);
   var cl = document.getElementById("charList");
   if (cl) cl.addEventListener("click", function (ev) {
+    var vc = ev.target.closest ? ev.target.closest("[data-voice-char]") : null;
+    if (vc) { openVoiceModal(vc.getAttribute("data-voice-char")); return; }
+    var vp = ev.target.closest ? ev.target.closest("[data-play-char]") : null;
+    if (vp) { voicePlayCard(vp.getAttribute("data-play-char")); return; }
     var u = ev.target.closest ? ev.target.closest("[data-use-char]") : null;
     if (u) { useCharacter(u.getAttribute("data-use-char")); return; }
     var d = ev.target.closest ? ev.target.closest("[data-del-char]") : null;
