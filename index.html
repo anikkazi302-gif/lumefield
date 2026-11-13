@@ -128,6 +128,7 @@
   .lf-panel-list { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
   .lf-char-item { display: flex; gap: 10px; align-items: center; background: #10101a; border: 1px solid #232336; border-radius: 12px; padding: 10px; }
   .lf-char-item img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
+  .lf-char-item video { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex-shrink: 0; }
   .lf-char-name { font-weight: 800; }
   .lf-char-desc { font-size: 13px; color: #a9a9bd; margin-top: 2px; }
   .lf-char-actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
@@ -142,6 +143,7 @@
   .lf-new-char { width: 100%; background: #10101a; border: 1px dashed #c8f542; color: #c8f542; border-radius: 12px; padding: 12px; cursor: pointer; font-size: 15px; font-weight: 800; font-family: inherit; margin-top: 12px; box-sizing: border-box; }
   .lf-new-char:hover { background: #171722; }
   .lf-char-photo-preview { width: 96px; height: 96px; object-fit: cover; border-radius: 12px; margin-top: 8px; display: block; border: 1px solid #33334a; }
+  .lf-avatar-cam { width: 100%; border-radius: 12px; background: #000; display: block; margin-top: 8px; max-height: 320px; }
   .lf-myv-group { margin-top: 16px; }
   .lf-myv-group h4 { font-size: 16px; margin-bottom: 8px; }
   .lf-myv-item { background: #10101a; border: 1px solid #232336; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
@@ -1349,6 +1351,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
     <h3 id="charTitle">👤 Characters</h3>
     <p class="detail-vendor">Save a character once, reuse it in any build. Photos are stored small (max 512px) so they sync to your account.</p>
     <button class="lf-new-char" id="charNewBtn" type="button">+ New character</button>
+    <button class="lf-new-char" id="charAvatarBtn" type="button">🎥 Create my avatar</button>
     <div id="charForm" hidden>
     <label class="lf-field-label" for="charPhoto">Upload</label>
     <input class="lf-field" id="charPhoto" type="file" accept="image/*">
@@ -1407,6 +1410,22 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
     </div>
     <p class="lf-msg" id="voiceMsg" role="status"></p>
     <div class="detail-actions"><button class="btn-primary" id="voiceDoneBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">Done</button></div>
+  </div>
+</div>
+
+<!-- Create my avatar (camera selfie video, face + voice together; item 3, 2026-11-13). -->
+<div class="detail-backdrop" id="avatarModal" hidden>
+  <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="avatarTitle">
+    <button class="modal-close" id="avatarClose" type="button" aria-label="Close">✕</button>
+    <h3 id="avatarTitle">🎥 Create my avatar</h3>
+    <p class="detail-vendor">Your face, your voice, your story.</p>
+    <video class="lf-avatar-cam" id="avatarCam" autoplay muted playsinline></video>
+    <label class="lf-field-label" for="avatarName">Avatar name</label>
+    <input class="lf-field" id="avatarName" type="text" maxlength="80" value="My avatar">
+    <p class="lf-msg" id="avatarMsg" role="status"></p>
+    <div class="detail-actions"><button class="btn-primary" id="avatarRecBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">● Record</button>
+    <button class="lf-mini-btn" id="avatarRetakeBtn" type="button" hidden>↺ Retake</button>
+    <button class="btn-primary" id="avatarDoneBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;" hidden>Done</button></div>
   </div>
 </div>
 
@@ -4022,9 +4041,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     lfDb.collection("characters").where("uid", "==", lu.uid).get().then(function (qs) {
       charsCache = [];
       qs.forEach(function (doc) { var d = doc.data(); d.id = doc.id; charsCache.push(d); });
+      avatarLocalAll().forEach(function (a) { a.uid = lu.uid; charsCache.push(a); });
       charsCache.sort(function (a, b) {
-        var ta = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
-        var tb = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+        var ta = a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : (a.createdAtMs || 0);
+        var tb = b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : (b.createdAtMs || 0);
         return tb - ta;
       });
       updateCounts();
@@ -4049,6 +4069,19 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         '<button class="lf-mini-btn" type="button" data-use-char="' + esc(c.id) + '">🎬 Use in build</button>' +
         '<button class="lf-mini-btn danger" type="button" data-del-char="' + esc(c.id) + '">Delete</button></div>';
       list.appendChild(d);
+      avatarVideoGet(c.id).then(function (b) {
+        if (!b) return;
+        var img = d.querySelector("img");
+        if (!img) return;
+        var v = document.createElement("video");
+        v.src = URL.createObjectURL(b);
+        v.controls = true;
+        v.loop = true;
+        v.playsInline = true;
+        v.preload = "metadata";
+        v.setAttribute("poster", c.photoDataUrl || "");
+        img.replaceWith(v);
+      });
     });
   }
   function saveCharacter() {
@@ -4108,6 +4141,12 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     armDelete(btn, function () {
       voiceSampleDelete(id);
       voiceLocalClear(id);
+      avatarVideoDelete(id);
+      if (String(id).indexOf("local-") === 0) {
+        avatarLocalClear(id);
+        loadCharacters(false);
+        return;
+      }
       lfDb.collection("characters").doc(id).delete().then(function () { loadCharacters(false); });
     });
   }
@@ -4416,6 +4455,266 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     });
   }
 
+  /* ---------- create my avatar (2026-11-13, item 3) ----------
+     "Create my avatar": a short selfie video — face + voice together
+     in one recording (getUserMedia + MediaRecorder, like Flow:
+     "Your face, your voice, your story."). The video file lives in
+     IndexedDB ("lumefield-avatars" / "videos", key = character id) —
+     never Firestore, too big. The avatar is a normal `characters`
+     document using only the 5 original fields (uid, name,
+     description, photoDataUrl = poster frame, createdAt), so NO
+     rules change is needed. If the Firestore save fails, the avatar
+     is kept on this device only (localStorage meta + IndexedDB video)
+     with a plain note. */
+  var avatarStream = null;
+  var avatarRecorder = null;
+  var avatarChunks = [];
+  var avatarRecording = false;
+  var avatarBlob = null;
+  var avatarCamStarted = false;
+  var AVATAR_MAX_SEC = 10;
+
+  var avatarDbPromise = null;
+  function avatarDb() {
+    if (avatarDbPromise) return avatarDbPromise;
+    avatarDbPromise = new Promise(function (resolve, reject) {
+      if (!window.indexedDB) { reject(new Error("no idb")); return; }
+      var req = indexedDB.open("lumefield-avatars", 1);
+      req.onupgradeneeded = function () {
+        try { req.result.createObjectStore("videos"); } catch (e) {}
+      };
+      req.onsuccess = function () { resolve(req.result); };
+      req.onerror = function () { reject(req.error || new Error("idb open failed")); };
+    });
+    return avatarDbPromise;
+  }
+  function avatarVideoSave(charId, blob) {
+    return avatarDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction("videos", "readwrite");
+        tx.objectStore("videos").put(blob, charId);
+        tx.oncomplete = function () { resolve(); };
+        tx.onerror = function () { reject(tx.error || new Error("idb put failed")); };
+      });
+    });
+  }
+  function avatarVideoGet(charId) {
+    return avatarDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var req = db.transaction("videos", "readonly").objectStore("videos").get(charId);
+        req.onsuccess = function () { resolve(req.result || null); };
+        req.onerror = function () { reject(req.error || new Error("idb get failed")); };
+      });
+    }).catch(function () { return null; });
+  }
+  function avatarVideoDelete(charId) {
+    avatarDb().then(function (db) {
+      try { db.transaction("videos", "readwrite").objectStore("videos").delete(charId); } catch (e) {}
+    }).catch(function () {});
+  }
+  function avatarLocalKey(id) { return "lfAvatar:" + id; }
+  function avatarLocalSet(id, meta) {
+    try { localStorage.setItem(avatarLocalKey(id), JSON.stringify(meta)); } catch (e) {}
+  }
+  function avatarLocalClear(id) {
+    try { localStorage.removeItem(avatarLocalKey(id)); } catch (e) {}
+  }
+  function avatarLocalAll() {
+    var out = [];
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf("lfAvatar:") === 0) {
+          var o = JSON.parse(localStorage.getItem(k) || "null");
+          if (o && o.name) out.push({ id: k.slice("lfAvatar:".length), uid: "", name: o.name, description: "", photoDataUrl: o.photoDataUrl || "", createdAtMs: o.createdAtMs || 0, local: true });
+        }
+      }
+    } catch (e) {}
+    return out;
+  }
+
+  function avatarStopCam() {
+    if (avatarStream) { try { avatarStream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} avatarStream = null; }
+    var v = document.getElementById("avatarCam");
+    if (v) { try { v.srcObject = null; } catch (e) {} }
+    avatarCamStarted = false;
+  }
+  function avatarStopRec(silent) {
+    if (avatarRecorder && avatarRecording) {
+      try { avatarRecorder.stop(); } catch (e) {}
+    }
+    avatarRecording = false;
+    if (!silent) {
+      var rb = document.getElementById("avatarRecBtn");
+      if (rb) rb.textContent = "● Record";
+    }
+  }
+  function avatarStartCam() {
+    var v = document.getElementById("avatarCam");
+    var m = document.getElementById("avatarMsg");
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
+      if (m) m.textContent = "Camera isn't available in this browser.";
+      return;
+    }
+    avatarStopCam();
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }, audio: true }).then(function (stream) {
+      avatarStream = stream;
+      avatarCamStarted = true;
+      if (v) { v.muted = true; v.controls = false; v.loop = false; try { v.srcObject = stream; } catch (e) {} v.play().catch(function () {}); }
+      if (m) m.textContent = "Look at the camera and tap ● Record — a few seconds is enough.";
+    }).catch(function () {
+      if (m) m.textContent = "Camera was blocked — allow camera and microphone access and try again.";
+    });
+  }
+  function openAvatarModal() {
+    if (!libReady()) { libNeedLogin(); return; }
+    avatarBlob = null;
+    avatarRecording = false;
+    avatarCamStarted = false;
+    var nm = document.getElementById("avatarName");
+    if (nm && !nm.value.trim()) nm.value = "My avatar";
+    var rb = document.getElementById("avatarRecBtn");
+    if (rb) { rb.textContent = "● Record"; rb.hidden = false; }
+    var rt = document.getElementById("avatarRetakeBtn");
+    if (rt) rt.hidden = true;
+    var db = document.getElementById("avatarDoneBtn");
+    if (db) db.hidden = true;
+    var m = document.getElementById("avatarMsg");
+    if (m) m.textContent = "";
+    var modal = document.getElementById("avatarModal");
+    if (modal) { modal.hidden = false; document.body.style.overflow = "hidden"; }
+    avatarStartCam();
+  }
+  function closeAvatarModal() {
+    avatarStopRec(true);
+    avatarStopCam();
+    var v = document.getElementById("avatarCam");
+    if (v) {
+      if (v.src) { try { URL.revokeObjectURL(v.src); } catch (e) {} }
+      v.removeAttribute("src");
+      try { v.load(); } catch (e) {}
+    }
+    var modal = document.getElementById("avatarModal");
+    if (modal) { modal.hidden = true; document.body.style.overflow = ""; }
+    avatarBlob = null;
+  }
+  function avatarToggleRec() {
+    var rb = document.getElementById("avatarRecBtn");
+    var m = document.getElementById("avatarMsg");
+    if (avatarRecording) { avatarStopRec(false); return; }
+    if (!avatarStream || !avatarCamStarted) {
+      if (m) m.textContent = "Camera is not ready yet — wait a moment and try again.";
+      return;
+    }
+    var mime = "";
+    if (typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported) {
+      ["video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm", "video/mp4"].forEach(function (t) {
+        if (!mime && MediaRecorder.isTypeSupported(t)) mime = t;
+      });
+    }
+    avatarChunks = [];
+    var rec;
+    try { rec = mime ? new MediaRecorder(avatarStream, { mimeType: mime }) : new MediaRecorder(avatarStream); }
+    catch (e) { if (m) m.textContent = "Recording isn't available in this browser."; return; }
+    avatarRecorder = rec;
+    rec.ondataavailable = function (ev) { if (ev.data && ev.data.size) avatarChunks.push(ev.data); };
+    rec.onstop = function () {
+      avatarRecording = false;
+      if (rb) rb.textContent = "● Record";
+      var blob = new Blob(avatarChunks, { type: rec.mimeType || "video/webm" });
+      if (blob.size < 1000) {
+        if (m) m.textContent = "Nothing was recorded — try again.";
+        return;
+      }
+      avatarBlob = blob;
+      var v = document.getElementById("avatarCam");
+      avatarStopCam();
+      if (v) { v.muted = false; v.controls = true; v.loop = true; v.src = URL.createObjectURL(blob); v.play().catch(function () {}); }
+      var rt = document.getElementById("avatarRetakeBtn");
+      if (rt) rt.hidden = false;
+      var db = document.getElementById("avatarDoneBtn");
+      if (db) db.hidden = false;
+      if (rb) rb.hidden = true;
+      if (m) m.textContent = "✓ Recorded — watch it back, then tap Done to save your avatar.";
+    };
+    rec.start();
+    avatarRecording = true;
+    if (rb) rb.textContent = "■ Stop";
+    if (m) m.textContent = "Recording… tap ■ Stop when you're done (max 10s).";
+    setTimeout(function () { if (avatarRecording) avatarStopRec(false); }, AVATAR_MAX_SEC * 1000);
+  }
+  function avatarRetake() {
+    avatarBlob = null;
+    var v = document.getElementById("avatarCam");
+    if (v) {
+      v.controls = false; v.loop = false; v.muted = true;
+      if (v.src) { try { URL.revokeObjectURL(v.src); } catch (e) {} }
+      v.removeAttribute("src");
+      try { v.load(); } catch (e) {}
+    }
+    var rt = document.getElementById("avatarRetakeBtn");
+    if (rt) rt.hidden = true;
+    var db = document.getElementById("avatarDoneBtn");
+    if (db) db.hidden = true;
+    var rb = document.getElementById("avatarRecBtn");
+    if (rb) { rb.hidden = false; rb.textContent = "● Record"; }
+    var m = document.getElementById("avatarMsg");
+    if (m) m.textContent = "Look at the camera and tap ● Record — a few seconds is enough.";
+    avatarStartCam();
+  }
+  function avatarPoster() {
+    try {
+      var v = document.getElementById("avatarCam");
+      if (!v || !v.videoWidth) return "";
+      var sc = Math.min(1, 320 / Math.max(v.videoWidth, v.videoHeight));
+      var cv = document.createElement("canvas");
+      cv.width = Math.max(1, Math.round(v.videoWidth * sc));
+      cv.height = Math.max(1, Math.round(v.videoHeight * sc));
+      cv.getContext("2d").drawImage(v, 0, 0, cv.width, cv.height);
+      return cv.toDataURL("image/jpeg", 0.7);
+    } catch (e) { return ""; }
+  }
+  function avatarSave() {
+    var m = document.getElementById("avatarMsg");
+    var cm = document.getElementById("charMsg");
+    if (!libReady()) { libNeedLogin(); return; }
+    var lu = libUser(); if (!lu) { libNeedLogin(); return; }
+    if (!avatarBlob) { if (m) m.textContent = "Record your avatar first — tap ● Record."; return; }
+    var nm = document.getElementById("avatarName");
+    var name = nm ? (nm.value || "").trim() : "";
+    if (!name) name = "My avatar";
+    if (charsCache.length >= MAX_CHARS) { if (m) m.textContent = "You have " + MAX_CHARS + " characters saved — delete one to add another."; return; }
+    if (m) m.textContent = "Saving…";
+    var poster = avatarPoster();
+    var blob = avatarBlob;
+    lfDb.collection("characters").add({
+      uid: lu.uid,
+      name: name,
+      description: "",
+      photoDataUrl: poster,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function (ref) {
+      return avatarVideoSave(ref.id, blob).then(function () { return ref.id; });
+    }).then(function () {
+      avatarBlob = null;
+      closeAvatarModal();
+      if (cm) cm.textContent = "✓ Avatar saved.";
+      loadCharacters(false);
+    }).catch(function () {
+      /* Firestore save failed — keep the avatar on this device only. */
+      var localId = "local-" + Date.now();
+      avatarVideoSave(localId, blob).then(function () {
+        avatarLocalSet(localId, { name: name, photoDataUrl: poster, createdAtMs: Date.now() });
+        avatarBlob = null;
+        closeAvatarModal();
+        if (cm) cm.textContent = "Avatar saved on this device only — it could not sync to your account right now.";
+        loadCharacters(false);
+      }).catch(function () {
+        if (m) m.textContent = "Could not save — try again.";
+      });
+    });
+  }
+
   /* ---------- saved videos ---------- */
   function saveVideo(modelId, modelName, planText, videoUrl, btn) {
     if (!libReady()) { libNeedLogin(); return; }
@@ -4576,7 +4875,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (vc) vc.addEventListener("click", closeVideosModal);
   }
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { closeCharModal(); closeVideosModal(); closeStatsModal(); closeVoiceModal(); }
+    if (e.key === "Escape") { closeCharModal(); closeVideosModal(); closeStatsModal(); closeVoiceModal(); closeAvatarModal(); }
   });
 
   /* ---------- wiring ---------- */
@@ -4599,6 +4898,20 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var cf = document.getElementById("charForm");
     if (cf) cf.hidden = !cf.hidden;
   });
+  var cab = document.getElementById("charAvatarBtn");
+  if (cab) cab.addEventListener("click", openAvatarModal);
+  var amodal = document.getElementById("avatarModal");
+  if (amodal) {
+    amodal.addEventListener("click", function (e) { if (e.target === amodal) closeAvatarModal(); });
+    var aclose = document.getElementById("avatarClose");
+    if (aclose) aclose.addEventListener("click", closeAvatarModal);
+  }
+  var arec = document.getElementById("avatarRecBtn");
+  if (arec) arec.addEventListener("click", avatarToggleRec);
+  var art = document.getElementById("avatarRetakeBtn");
+  if (art) art.addEventListener("click", avatarRetake);
+  var adone = document.getElementById("avatarDoneBtn");
+  if (adone) adone.addEventListener("click", avatarSave);
   var cp = document.getElementById("charPhoto");
   if (cp) cp.addEventListener("change", function () {
     var pv = document.getElementById("charPhotoPreview");
