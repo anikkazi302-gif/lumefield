@@ -2110,7 +2110,7 @@ function detailCreditsText() {
       return "💠 This video: " + c + " credits · " + (b || "0 credits");
     }
   } catch (e) {}
-  try { var left = Math.max(0, FREE_WITHOUT_LOGIN - guestUsed()); return "💠 This video: " + c + " credits · Free videos left: " + left + " of " + FREE_WITHOUT_LOGIN; } catch (e) { return "💠 This video: " + c + " credits"; }
+  try { var gu = (typeof window !== "undefined" && typeof window.lfGuestUsed === "function") ? window.lfGuestUsed() : 0; var tot = (typeof window !== "undefined" && typeof window.lfFreeWithoutLogin === "number") ? window.lfFreeWithoutLogin : 1; var left = Math.max(0, tot - gu); return "💠 This video: " + c + " credits · Free videos left: " + left + " of " + tot; } catch (e) { return "💠 This video: " + c + " credits"; }
 }
 function detailGenText() {
   try {
@@ -3347,6 +3347,12 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   window.updateBuildBtn = updateBuildBtn;
   window.lfBalanceText = profileBalanceText;
   window.lfSignedIn = function () { return !!currentUser; };
+  /* Same pattern for the detail modal's "Free videos left" line (2026-11-13
+     fix): detailCreditsText lives in another script and could not see
+     FREE_WITHOUT_LOGIN / guestUsed, so its try block always threw and the
+     free-videos-left text never showed for guests. */
+  window.lfGuestUsed = guestUsed;
+  window.lfFreeWithoutLogin = FREE_WITHOUT_LOGIN;
 
   /* Double-click guard: one charge at a time. Two rapid taps on Build /
      modal Generate must not start two Firestore charges. */
