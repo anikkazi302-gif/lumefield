@@ -452,8 +452,12 @@
 
   /* ---------- founder ---------- */
   .founder { text-align: center; padding: 28px 22px 34px; border-top: 1px solid #1c1c2c; }
-  .founder img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #2a2a40; }
+  .founder img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 2px solid #2a2a40; cursor: pointer; }
   .founder p { margin: 12px 0 0; font-size: 17px; color: #e8e8f0; font-weight: 600; }
+  /* Founder photo zoom (2026-11-13): click the photo to see it big; click outside it (or ✕ / Esc) to go back to small. */
+  .founder-lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.85); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+  .founder-lightbox img { width: min(86vw, 520px); height: min(86vw, 520px); border-radius: 50%; object-fit: cover; border: 3px solid #c8f542; }
+  .founder-lightbox .founder-x { position: absolute; top: 16px; right: 22px; color: #fff; font-size: 32px; background: none; border: none; cursor: pointer; }
 
 
   /* ---------- section background videos (muted, lazy, low opacity) ---------- */
@@ -1300,6 +1304,26 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
   <img src="founder.webp" alt="Founder Raju" width="120" height="120">
   <p>Founder Raju</p>
 </section>
+
+<!-- Founder photo zoom: click the photo to see it big; click outside it to go back to small. -->
+<div class="founder-lightbox" id="founderLightbox" hidden>
+  <button class="founder-x" id="founderLightboxClose" type="button" aria-label="Close">✕</button>
+  <img src="founder.webp" alt="Founder Raju">
+</div>
+<script>
+(function () {
+  var img = document.querySelector(".founder img");
+  var box = document.getElementById("founderLightbox");
+  if (!img || !box) return;
+  function open() { box.hidden = false; document.body.style.overflow = "hidden"; }
+  function close() { box.hidden = true; document.body.style.overflow = ""; }
+  img.addEventListener("click", open);
+  box.addEventListener("click", function (e) { if (e.target === box) close(); });
+  var x = document.getElementById("founderLightboxClose");
+  if (x) x.addEventListener("click", close);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !box.hidden) close(); });
+})();
+</script>
 
 
 <!-- Model detail modal: free-credits line + builder first (references, prompt, ratio, duration, quality, credits + Generate), then video, actions + BUY, then the model's working info at the very bottom. -->
