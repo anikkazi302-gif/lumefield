@@ -134,6 +134,9 @@
   .lf-mini-btn { background: #33334a; color: #f2f2f7; border: none; border-radius: 8px; padding: 7px 10px; cursor: pointer; font-size: .82rem; font-family: inherit; }
   .lf-mini-btn:hover { background: #44445e; }
   .lf-mini-btn.danger { background: #450A0A; }
+  .lf-new-char { width: 100%; background: #10101a; border: 1px dashed #c8f542; color: #c8f542; border-radius: 12px; padding: 12px; cursor: pointer; font-size: 15px; font-weight: 800; font-family: inherit; margin-top: 12px; box-sizing: border-box; }
+  .lf-new-char:hover { background: #171722; }
+  .lf-char-photo-preview { width: 96px; height: 96px; object-fit: cover; border-radius: 12px; margin-top: 8px; display: block; border: 1px solid #33334a; }
   .lf-myv-group { margin-top: 16px; }
   .lf-myv-group h4 { font-size: 16px; margin-bottom: 8px; }
   .lf-myv-item { background: #10101a; border: 1px solid #232336; border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; }
@@ -710,7 +713,7 @@
   <a class="logo" href="#" aria-label="LumeField — home"><div class="logo-mark">✦</div><div class="logo-name">Lume<span>Field</span></div></a>
   <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links"><a href="#models">Explore</a><div class="nav-drop" id="navImageDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Image ▾</button><div class="nav-menu" id="navImageMenu" hidden><div class="nav-menu-head">Image models</div><div id="navImageList"></div></div></div><div class="nav-drop" id="navVideoDrop"><button class="nav-drop-btn" type="button" aria-haspopup="true" aria-expanded="false">Video ▾</button><div class="nav-menu" id="navVideoMenu" hidden><button class="nav-menu-cta" id="navCreateVideo" type="button">✦ Create Video</button><div class="nav-menu-head">Video models</div><div id="navVideoList"></div></div></div><a href="#buy-credits">Pricing</a><a href="#guides">Guides</a></div>
-  <div class="nav-actions"><button class="nav-icon" id="navSearchBtn" type="button" aria-label="Search models">🔍</button><button class="nav-icon" id="navAssetsBtn" type="button" aria-label="My videos">🗂️</button><a class="nav-icon" href="#buy-credits" aria-label="Special offers">🎁</a><div class="nav-menu nav-search-menu" id="navSearchMenu" hidden><input class="opt-search" id="navSearchInput" type="text" placeholder="Search models..." autocomplete="off"><div id="navSearchList"></div></div><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 My characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="lfAIDaily" type="button">🎁 Daily free video credits <span class="profile-soon" id="lfAIDailyState">3-day trial</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
+  <div class="nav-actions"><button class="nav-icon" id="navSearchBtn" type="button" aria-label="Search models">🔍</button><button class="nav-icon" id="navAssetsBtn" type="button" aria-label="My videos">🗂️</button><a class="nav-icon" href="#buy-credits" aria-label="Special offers">🎁</a><div class="nav-menu nav-search-menu" id="navSearchMenu" hidden><input class="opt-search" id="navSearchInput" type="text" placeholder="Search models..." autocomplete="off"><div id="navSearchList"></div></div><button class="nav-signin" id="signInBtn" type="button">Sign in</button><div class="profile-wrap" id="profileWrap" hidden><button class="profile-chip" id="profileChip" type="button" aria-haspopup="true" aria-expanded="false"><span class="profile-avatar" id="profileAvatar">?</span><span class="profile-name" id="profileName"></span><span class="profile-credits" id="profileCredits"></span></button><a class="profile-upgrade" id="profileUpgrade" href="#buy-credits">⬆️ Upgrade</a><div class="profile-menu" id="profileMenu" hidden><div class="profile-menu-email" id="profileMenuEmail"></div><div class="profile-menu-credits" id="profileMenuCredits"></div><div class="profile-menu-costs">5s = 4 · 10s = 7 · 20s = 14 · 30s = 20</div><button class="profile-menu-item" id="profileViewProfileBtn" type="button">👤 View profile</button><div class="profile-history" id="profileHistory"></div><button class="profile-menu-item" id="profileMyVideos" type="button">🎬 My videos <span class="profile-soon" id="profileMyVideosCount"></span></button><button class="profile-menu-item" id="profileMyCharacters" type="button">👤 Characters <span class="profile-soon" id="profileMyCharactersCount"></span></button><a class="profile-menu-item" id="profileMenuUpgrade" href="#buy-credits">⬆️ Upgrade <span class="profile-soon">Buy credits</span></a><button class="profile-menu-item" id="profileResendBtn" type="button" hidden>✉️ Resend verification email</button><button class="profile-menu-item" id="profileDailyClaim" type="button">🎁 Daily free credits <span class="profile-soon" id="profileDailyClaimState">4/day</span></button><button class="profile-menu-item" id="lfAIDaily" type="button">🎁 Daily free video credits <span class="profile-soon" id="lfAIDailyState">3-day trial</span></button><button class="profile-menu-item" id="profileInviteCopy" type="button">🔗 Copy invite link <span class="profile-soon" id="profileInviteState">Copy</span></button><div class="profile-invite-link" id="profileInviteLink"></div><div class="profile-menu-item profile-soon-row">👥 Friends joined <span class="profile-soon" id="profileReferralStats">0 · Earned: 0 credits</span></div><button class="profile-menu-item profile-signout" id="profileSignOut" type="button">Sign out</button></div></div><a class="nav-cta" href="#tool">Start free</a></div>
 </nav>
 
 <section class="hero" aria-label="Featured video models">
@@ -757,7 +760,7 @@
   <a class="m-xbtn" href="#image-tools"><span class="m-xic">🖼</span><span class="m-xlb">Create<br>Image</span></a>
   <a class="m-xbtn" href="#tool"><span class="m-xic">🎬</span><span class="m-xlb">Create<br>Video</span></a>
   <button class="m-xbtn" type="button" id="mXAssets"><span class="m-xic">🗂</span><span class="m-xlb">My<br>Assets</span></button>
-  <button class="m-xbtn" type="button" id="mXChars"><span class="m-xic">👤</span><span class="m-xlb">My<br>Characters</span></button>
+  <button class="m-xbtn" type="button" id="mXChars"><span class="m-xic">👤</span><span class="m-xlb">Characters</span></button>
 </div>
 <div class="m-xsearch"><span aria-hidden="true">🔍</span><input type="text" id="mXSearch" placeholder="Search" autocomplete="off" aria-label="Search models"></div>
 <script>
@@ -1334,20 +1337,24 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
   </div>
 </div>
 
-<!-- My characters modal (Firestore collection "characters"). -->
+<!-- Characters modal (Firestore collection "characters"). -->
 <div class="detail-backdrop" id="charModal" hidden>
   <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="charTitle">
     <button class="modal-close" id="charClose" type="button" aria-label="Close">✕</button>
-    <h3 id="charTitle">👤 My characters</h3>
+    <h3 id="charTitle">👤 Characters</h3>
     <p class="detail-vendor">Save a character once, reuse it in any build. Photos are stored small (max 512px) so they sync to your account.</p>
+    <button class="lf-new-char" id="charNewBtn" type="button">+ New character</button>
+    <div id="charForm" hidden>
+    <label class="lf-field-label" for="charPhoto">Upload</label>
+    <input class="lf-field" id="charPhoto" type="file" accept="image/*">
+    <img class="lf-char-photo-preview" id="charPhotoPreview" alt="" hidden>
     <label class="lf-field-label" for="charName">Character name</label>
     <input class="lf-field" id="charName" type="text" maxlength="80" placeholder="e.g. Ember the white dragon">
-    <label class="lf-field-label" for="charDesc">Short description (optional)</label>
+    <label class="lf-field-label" for="charDesc">Character info (optional)</label>
     <input class="lf-field" id="charDesc" type="text" maxlength="500" placeholder="e.g. White dragon, dark red eyes, smooth scales">
-    <label class="lf-field-label" for="charPhoto">Reference photo</label>
-    <input class="lf-field" id="charPhoto" type="file" accept="image/*">
+    <div class="detail-actions"><button class="btn-primary" id="charSaveBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">Done</button></div>
+    </div>
     <p class="lf-msg" id="charMsg" role="status"></p>
-    <div class="detail-actions"><button class="btn-primary" id="charSaveBtn" type="button" style="border:none;cursor:pointer;font-family:inherit;">💾 Save character</button></div>
     <div class="lf-panel-list" id="charList"></div>
   </div>
 </div>
@@ -1418,7 +1425,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
     </div>
     <div class="profile-view-btns">
       <button class="profile-view-btn" id="profileViewMyVideos" type="button">🎬 My videos</button>
-      <button class="profile-view-btn" id="profileViewMyCharacters" type="button">👤 My characters</button>
+      <button class="profile-view-btn" id="profileViewMyCharacters" type="button">👤 Characters</button>
       <button class="profile-view-btn" id="profileViewInvite" type="button">🔗 Copy invite link</button>
       <button class="profile-view-btn" id="profileViewDailyBtn" type="button">🎁 Daily free credits</button>
       <a class="profile-view-btn profile-view-upgrade" id="profileViewUpgrade" href="#buy-credits">⬆️ Upgrade — Buy credits</a>
@@ -3888,7 +3895,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
 
 <script>
-/* ---------- My characters + My videos (Firestore) — 2026-11-11 ----------
+/* ---------- Characters + My videos (Firestore) — 2026-11-11 ----------
    characters:  { uid, name, description, photoDataUrl, createdAt }
    savedVideos: { uid, modelId, modelName, planText, videoUrl, createdAt }
    Both collections are owner-only + verified-email-only, enforced in
@@ -3906,7 +3913,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      fix): the credit-system IIFE owns a `var currentUser` that is NOT
      global, so this section must never read bare `currentUser` — it was
      always undefined here, which made libReady() always false and every
-     My characters / My videos click open the sign-in dialog. */
+     Characters / My videos click open the sign-in dialog. */
   function libUser() {
     try { return (typeof lfAuth !== "undefined" && lfAuth && lfAuth.currentUser) ? lfAuth.currentUser : null; } catch (e) { return null; }
   }
@@ -3987,7 +3994,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function renderCharacters() {
     var list = document.getElementById("charList");
     if (!list) return;
-    if (!charsCache.length) { list.innerHTML = "<p class=\"lf-msg\">No characters saved yet — add one above.</p>"; return; }
+    if (!charsCache.length) { list.innerHTML = "<p class=\"lf-msg\">No characters saved yet — tap '+ New character' above.</p>"; return; }
     list.innerHTML = "";
     charsCache.forEach(function (c) {
       var d = document.createElement("div");
@@ -4024,6 +4031,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         document.getElementById("charName").value = "";
         document.getElementById("charDesc").value = "";
         document.getElementById("charPhoto").value = "";
+        var pv = document.getElementById("charPhotoPreview");
+        if (pv) { pv.src = ""; pv.hidden = true; }
+        var cf = document.getElementById("charForm");
+        if (cf) cf.hidden = true;
         if (msg) msg.textContent = "✓ Character saved.";
         loadCharacters(false);
       }).catch(function (err) {
@@ -4134,6 +4145,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function openCharModal() {
     if (!libReady()) { libNeedLogin(); return; }
     loadCharacters(false);
+    var cf0 = document.getElementById("charForm");
+    if (cf0) cf0.hidden = true;
     if (charModal) { charModal.hidden = false; document.body.style.overflow = "hidden"; }
   }
   function closeCharModal() { if (charModal) { charModal.hidden = true; document.body.style.overflow = ""; } }
@@ -4165,6 +4178,19 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   if (pc) pc.addEventListener("click", function () { if (pm) pm.hidden = true; openCharModal(); });
   var csb = document.getElementById("charSaveBtn");
   if (csb) csb.addEventListener("click", saveCharacter);
+  var cnb = document.getElementById("charNewBtn");
+  if (cnb) cnb.addEventListener("click", function () {
+    var cf = document.getElementById("charForm");
+    if (cf) cf.hidden = !cf.hidden;
+  });
+  var cp = document.getElementById("charPhoto");
+  if (cp) cp.addEventListener("change", function () {
+    var pv = document.getElementById("charPhotoPreview");
+    if (!pv) return;
+    var f = (cp.files || [])[0];
+    if (f) { try { pv.src = URL.createObjectURL(f); pv.hidden = false; } catch (e) { pv.hidden = true; } }
+    else { pv.src = ""; pv.hidden = true; }
+  });
   var cl = document.getElementById("charList");
   if (cl) cl.addEventListener("click", function (ev) {
     var u = ev.target.closest ? ev.target.closest("[data-use-char]") : null;
