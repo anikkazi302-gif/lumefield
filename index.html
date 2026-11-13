@@ -694,6 +694,13 @@
 .lfai-error { color: #ff7a7a; font-size: 14px; min-height: 20px; }
 #lfAIVideo { width: 100%; border-radius: 14px; margin-top: 10px; background: #000; }
 #lfAIDownload { display: inline-block; margin-top: 10px; color: #c8f542; font-weight: 700; font-size: 14px; text-decoration: none; }
+/* ---------- Describe your song... (Flow Music, in-site) ---------- */
+.lfmusic { padding-top: 10px; }
+#lfMusicPrompt { width: 100%; box-sizing: border-box; background: transparent; border: 0; border-radius: 0; color: #fff; font-size: 16px; font-family: inherit; padding: 4px 2px; resize: vertical; min-height: 48px; }
+#lfMusicPrompt:focus { outline: none; border-color: transparent; }
+.lfmusic-chip { background: #c8f542; border: 1px solid #c8f542; color: #111; border-radius: 999px; padding: 10px 14px; font-size: 14px; font-weight: 700; white-space: nowrap; }
+#lfMusicAudio { width: 100%; margin-top: 10px; }
+#lfMusicDownload { display: inline-block; margin-top: 10px; color: #c8f542; font-weight: 700; font-size: 14px; text-decoration: none; }
 @media (max-width: 640px) { .lfai { padding: 18px 14px 6px; } .lfai-box { padding: 16px; } .lfai-head h2 { font-size: 22px; } .lfai-gen { width: 100%; } }
 </style>
 <script type="application/ld+json">
@@ -760,6 +767,24 @@
     <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
     <video id="lfAIVideo" controls autoplay loop playsinline hidden></video>
     <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
+  </div>
+</section>
+
+<section class="lfai lfmusic" id="lfMusic" aria-label="Describe your song">
+  <div class="lfai-box">
+    <div class="lfai-head"><span class="lfai-mark">🎵</span><h2>Describe your song&hellip;</h2><span class="lfai-tag">FREE</span></div>
+    <p class="lfai-sub">A short song for your video.</p>
+    <div class="lfai-composer">
+      <textarea id="lfMusicPrompt" rows="2" maxlength="200" placeholder="e.g. happy birthday song, soft piano"></textarea>
+      <div class="lfai-row">
+        <span class="lfmusic-chip" aria-pressed="true">Video creator</span>
+        <button type="button" class="lfai-gen" id="lfMusicGenerate">🎵 Generate</button>
+      </div>
+    </div>
+    <div class="lfai-status" id="lfMusicStatus" aria-live="polite"></div>
+    <div class="lfai-error" id="lfMusicError" aria-live="polite"></div>
+    <audio id="lfMusicAudio" controls preload="metadata" hidden></audio>
+    <a id="lfMusicDownload" href="#" download="lumefield-song.wav" hidden>⬇ Download song</a>
   </div>
 </section>
 
@@ -3930,6 +3955,111 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     });
   });
   refreshGenLabel();
+})();
+</script>
+
+<script>
+/* ---------- Describe your song... (Flow Music, in-site, free MusicGen) ---------- */
+(function () {
+  var SPACE = "aach456/music-gen-ai";
+  var ENDPOINT = "/generate_music";
+  var promptEl = document.getElementById("lfMusicPrompt"),
+      genBtn = document.getElementById("lfMusicGenerate"),
+      statusEl = document.getElementById("lfMusicStatus"),
+      errEl = document.getElementById("lfMusicError"),
+      audioEl = document.getElementById("lfMusicAudio"),
+      dlEl = document.getElementById("lfMusicDownload");
+  if (!promptEl || !genBtn) return;
+  var clientPromise = null, generating = false;
+  function setStatus(t) { if (statusEl) statusEl.textContent = t || ""; }
+  function setErr(t) { if (errEl) errEl.textContent = t || ""; }
+  /* Signed-in + verified check, same shape as libReady()/libNeedLogin()
+     (those live in another IIFE, so this block reads lfAuth directly). */
+  function musicUser() {
+    try { return (typeof lfAuth !== "undefined" && lfAuth && lfAuth.currentUser) ? lfAuth.currentUser : null; } catch (e) { return null; }
+  }
+  function musicReady() { var u = musicUser(); return !!(u && u.emailVerified); }
+  function musicNeedLogin() {
+    var u = musicUser();
+    if (u && !u.emailVerified) {
+      if (window.lfOpenLogin) window.lfOpenLogin("You're signed in \u2014 please verify your email to make a song. Check your inbox for the verification email, or tap 'Resend verification email' below.");
+      return;
+    }
+    if (window.lfOpenLogin) window.lfOpenLogin("Sign in (free) and verify your email to make a song.");
+  }
+  /* Gradio client, loaded lazily like the LumeField AI tool. A failed load
+     clears the cache so the next click can retry. */
+  function getMusicClient() {
+    if (!clientPromise) {
+      clientPromise = import("https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.js").then(function (m) {
+        if (!m || !m.Client) throw new Error("cdn");
+        return m.Client;
+      }).catch(function (e) { clientPromise = null; throw e; });
+    }
+    return clientPromise;
+  }
+  function extractAudioUrl(result) {
+    if (!result) return null;
+    var data = result.data || result;
+    if (!data) return null;
+    var out = Array.isArray(data) ? data[0] : data;
+    if (!out) return null;
+    if (typeof out === "string") return out;
+    if (out.url) return out.url;
+    if (out.path) return out.path;
+    return null;
+  }
+  function friendlyMusicErr(err) {
+    var m = (err && err.message) ? String(err.message) : "";
+    if (m === "no-audio") return "The song did not come back \u2014 please try again.";
+    if (m === "cdn") return "Could not load the music engine \u2014 check your connection and try again.";
+    if (/queue|quota|capacity|busy|rate|traffic/i.test(m)) return "The free music queue is busy right now \u2014 please try again in a bit.";
+    if (/network|fetch|Failed to fetch|Load failed/i.test(m)) return "Could not reach the music engine \u2014 check your connection and try again.";
+    return "Song generation failed \u2014 please try again.";
+  }
+  function setupMusicDownload(url) {
+    dlEl.hidden = true;
+    fetch(url).then(function (r) { if (!r.ok) throw new Error("fetch"); return r.blob(); }).then(function (b) {
+      dlEl.href = URL.createObjectURL(b);
+      dlEl.hidden = false;
+    }).catch(function () {
+      dlEl.href = url;
+      dlEl.hidden = false;
+    });
+  }
+  genBtn.addEventListener("click", function () {
+    if (generating) return;
+    var p = promptEl.value.trim();
+    if (!p) { setErr("Please describe the song you want."); promptEl.focus(); return; }
+    if (!musicReady()) { musicNeedLogin(); return; }
+    generating = true;
+    genBtn.disabled = true;
+    genBtn.textContent = "Making\u2026";
+    setErr(""); setStatus("In queue\u2026");
+    audioEl.hidden = true; audioEl.removeAttribute("src"); dlEl.hidden = true;
+    getMusicClient().then(function (Client) {
+      setStatus("Making your song\u2026 (about a minute)");
+      return Client.connect(SPACE);
+    }).then(function (client) {
+      /* use_gpu=false: this free Space runs on CPU; true fails fast. */
+      return client.predict(ENDPOINT, [p, false, false]);
+    }).then(function (result) {
+      var url = extractAudioUrl(result);
+      if (!url) throw new Error("no-audio");
+      setStatus("Done \u2713");
+      audioEl.src = url;
+      audioEl.hidden = false;
+      try { audioEl.play(); } catch (e) {}
+      setupMusicDownload(url);
+    }).catch(function (err) {
+      setStatus("");
+      setErr(friendlyMusicErr(err));
+    }).finally(function () {
+      generating = false;
+      genBtn.disabled = false;
+      genBtn.textContent = "\uD83C\uDFB5 Generate";
+    });
+  });
 })();
 </script>
 
