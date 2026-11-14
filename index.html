@@ -699,6 +699,11 @@
 #lfMusicPrompt { width: 100%; box-sizing: border-box; background: transparent; border: 0; border-radius: 0; color: #fff; font-size: 16px; font-family: inherit; padding: 4px 2px; resize: vertical; min-height: 48px; }
 #lfMusicPrompt:focus { outline: none; border-color: transparent; }
 .lfmusic-chip { background: #c8f542; border: 1px solid #c8f542; color: #111; border-radius: 999px; padding: 10px 14px; font-size: 14px; font-weight: 700; white-space: nowrap; }
+.lfgem-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.lfgem-chip { background: transparent; border: 1px solid #3a3f4a; color: #ddd; border-radius: 999px; padding: 9px 13px; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; }
+.lfgem-chip.on { background: #c8f542; border-color: #c8f542; color: #111; }
+.lf-gemini-result { white-space: pre-wrap; background: #15181d; border: 1px solid #2a2f38; border-radius: 12px; padding: 12px 14px; margin-top: 10px; font-size: 15px; line-height: 1.5; color: #eee; }
+.lf-gemini-use { margin-top: 10px; background: #c8f542; border: 0; color: #111; border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 700; cursor: pointer; }
 #lfMusicAudio { width: 100%; margin-top: 10px; }
 #lfMusicDownload { display: inline-block; margin-top: 10px; color: #c8f542; font-weight: 700; font-size: 14px; text-decoration: none; }
 @media (max-width: 640px) { .lfai { padding: 18px 14px 6px; } .lfai-box { padding: 16px; } .lfai-head h2 { font-size: 22px; } .lfai-gen { width: 100%; } }
@@ -767,6 +772,31 @@
     <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
     <video id="lfAIVideo" controls autoplay loop playsinline hidden></video>
     <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
+  </div>
+</section>
+
+<section class="lfai lfgemini" id="lfGemini" aria-label="Ask Gemini">
+  <div class="lfai-box">
+    <div class="lfai-head"><span class="lfai-mark">✦</span><h2>Ask Gemini</h2><span class="lfai-tag">FREE</span></div>
+    <p class="lfai-sub">Ideas, prompts, dialogue — right here.</p>
+    <div class="lfai-composer">
+      <textarea id="lfGeminiPrompt" rows="2" maxlength="300" placeholder="Ask for an idea, a prompt, dialogue..."></textarea>
+      <div class="lfgem-chips">
+        <button type="button" class="lfgem-chip on" data-mode="prompt" aria-pressed="true">Prompt</button>
+        <button type="button" class="lfgem-chip" data-mode="idea" aria-pressed="false">Idea</button>
+        <button type="button" class="lfgem-chip" data-mode="dialogue" aria-pressed="false">Dialogue</button>
+        <button type="button" class="lfgem-chip" data-mode="title" aria-pressed="false">Title</button>
+      </div>
+      <div class="lfai-row">
+        <button type="button" class="lfai-gen" id="lfGeminiAsk">✦ Ask</button>
+      </div>
+    </div>
+    <div class="lfai-status" id="lfGeminiStatus" aria-live="polite"></div>
+    <div class="lfai-error" id="lfGeminiError" aria-live="polite"></div>
+    <div id="lfGeminiResultWrap" hidden>
+      <div class="lf-gemini-result" id="lfGeminiResult"></div>
+      <button type="button" class="lf-gemini-use" id="lfGeminiUse">Use this prompt</button>
+    </div>
   </div>
 </section>
 
@@ -4058,6 +4088,79 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       genBtn.disabled = false;
       genBtn.textContent = "\uD83C\uDFB5 Generate";
     });
+  });
+})();
+</script>
+
+<script>
+/* ---------- Ask Gemini (in-site, free Gemini via Cloudflare Worker) ---------- */
+(function () {
+  var WORKER_URL = "https://lumefield-gemini.anikkazi302.workers.dev";
+  var promptEl = document.getElementById("lfGeminiPrompt"),
+      askBtn = document.getElementById("lfGeminiAsk"),
+      statusEl = document.getElementById("lfGeminiStatus"),
+      errEl = document.getElementById("lfGeminiError"),
+      resWrap = document.getElementById("lfGeminiResultWrap"),
+      resEl = document.getElementById("lfGeminiResult"),
+      useBtn = document.getElementById("lfGeminiUse");
+  if (!promptEl || !askBtn) return;
+  var mode = "prompt";
+  var busy = false;
+  var chips = document.querySelectorAll(".lfgem-chip");
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      chips.forEach(function (x) { x.classList.remove("on"); x.setAttribute("aria-pressed", "false"); });
+      c.classList.add("on"); c.setAttribute("aria-pressed", "true");
+      mode = c.getAttribute("data-mode");
+    });
+  });
+  function gemUser() { try { return (typeof lfAuth !== "undefined" && lfAuth && lfAuth.currentUser) ? lfAuth.currentUser : null; } catch (e) { return null; } }
+  function gemReady() { var u = gemUser(); return !!(u && u.emailVerified); }
+  function gemNeedLogin() {
+    var u = gemUser();
+    if (u && !u.emailVerified) { if (window.lfOpenLogin) window.lfOpenLogin("You're signed in \u2014 please verify your email to ask Gemini. Check your inbox for the verification email, or tap 'Resend verification email' below."); return; }
+    if (window.lfOpenLogin) window.lfOpenLogin("Sign in (free) and verify your email to ask Gemini.");
+  }
+  /* Mode-specific instructions live in the Worker (server-side). */
+  function friendlyErr(status) {
+    if (status === 429) return "Gemini's free limit for today is reached \u2014 please try again tomorrow.";
+    if (status === 400 || status === 403) return "Gemini could not answer that \u2014 please try different words.";
+    return "Could not reach Gemini \u2014 check your connection and try again.";
+  }
+  askBtn.addEventListener("click", function () {
+    if (busy) return;
+    var p = promptEl.value.trim();
+    if (!p) { if (errEl) errEl.textContent = "Please write what you want."; promptEl.focus(); return; }
+    if (!gemReady()) { gemNeedLogin(); return; }
+    busy = true; askBtn.disabled = true; askBtn.textContent = "Asking\u2026";
+    if (errEl) errEl.textContent = ""; if (statusEl) statusEl.textContent = "Asking Gemini\u2026";
+    if (resWrap) resWrap.hidden = true;
+    fetch(WORKER_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: mode, prompt: p }) })
+      .then(function (r) { if (!r.ok) throw { status: r.status }; return r.json(); })
+      .then(function (d) {
+        var t = "";
+        try { t = (d.text || "").trim(); } catch (e) {}
+        if (!t) throw { status: 0 };
+        if (statusEl) statusEl.textContent = "Done \u2713";
+        if (resEl) resEl.textContent = t;
+        if (resWrap) resWrap.hidden = false;
+        if (useBtn) useBtn.textContent = (mode === "prompt") ? "Use this prompt" : "Copy";
+      })
+      .catch(function (e) {
+        if (statusEl) statusEl.textContent = "";
+        if (errEl) errEl.textContent = friendlyErr(e && e.status);
+      })
+      .finally(function () { busy = false; askBtn.disabled = false; askBtn.textContent = "\u2726 Ask"; });
+  });
+  if (useBtn) useBtn.addEventListener("click", function () {
+    var t = resEl ? resEl.textContent : "";
+    if (!t) return;
+    if (mode === "prompt") {
+      var box = document.getElementById("lfAIPrompt");
+      if (box) { box.value = t; box.focus(); if (statusEl) statusEl.textContent = "Prompt is in the video box above \u2713"; }
+    } else {
+      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(function () { useBtn.textContent = "\u2713 Copied"; setTimeout(function () { useBtn.textContent = "Copy"; }, 2000); }); }
+    }
   });
 })();
 </script>
