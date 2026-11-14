@@ -660,7 +660,9 @@
 /* ---------- LumeField AI — own-AI video tool (top of page) ---------- */
 .lfai { padding: 26px 20px 10px; background: #0b0b14; }
 .lfai-box { max-width: 860px; margin: 0 auto; background: #14141f; border: 1px solid #2a2a3d; border-radius: 20px; padding: 22px; }
-.lfai-head { display: flex; align-items: center; gap: 10px; }
+.lfai-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lfai-head-div { width: 1px; align-self: stretch; background: #33334a; }
+.lfai-head-tag { color: #c8f542; font-weight: 700; font-size: 15px; }
 .lfai-mark { width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, #c8f542, #7ee0a3); color: #111; font-size: 22px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .lfai-head h2 { color: #fff; font-size: 26px; margin: 0; }
 .lfai-tag { background: #c8f542; color: #111; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 3px 10px; }
@@ -756,7 +758,7 @@
 #lfOneCreate::after{content:"→";margin-left:auto;background:#111;color:#c8f542;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:16px}
 .lfai-model-label{font:700 14px inherit;color:#d8d8e6;white-space:nowrap}
 .lfai-chip{padding:8px 12px;font-size:13px}
-.lfone-describe{position:absolute;top:12px;right:12px;z-index:3;padding:12px 16px;border-radius:999px;border:1px solid #c8f542;background:#14141c;color:#c8f542;font:600 15px inherit;cursor:pointer}
+.lfone-describe{position:absolute;top:12px;right:12px;z-index:3;padding:12px 16px;border-radius:999px;border:1px solid #c8f542;background:#c8f542;color:#111;font:600 15px inherit;cursor:pointer}
 .lfone-describe[hidden]{display:none}
 .lfone-create{flex:1}
 .lfone-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -776,6 +778,26 @@
 .lfone-done{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#c8f542;border:1px solid #c8f542;padding:6px 12px;border-radius:999px;font:600 13px inherit;z-index:2}
 .lfone-dur{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#fff;border:1px solid #444;padding:6px 10px;border-radius:999px;font:600 12px inherit;z-index:2}
 #lfOneImgResult{position:relative}
+.lfone-refpanel{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;border:1px solid #2a2a35;border-radius:16px;padding:14px;background:#12121a}
+.lfone-ref-left{flex:1;min-width:260px}
+.lfone-ref-title{font:700 15px inherit}
+.lfone-ref-sub{color:#9a9ab0;font-size:13px;margin:2px 0 10px}
+.lfone-ref-boxes{display:flex;gap:10px;flex-wrap:wrap}
+.lfone-ref-box{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:96px;padding:12px 10px;border:1px dashed #3a3a4a;border-radius:12px;cursor:pointer;color:#fff;font-size:14px}
+.lfone-ref-box b{font-size:14px}
+.lfone-ref-box span{font-size:12px;color:#9a9ab0}
+.lfone-ref-box:hover{border-color:#c8f542}
+.lfone-ref-box.has{border-style:solid;border-color:#c8f542}
+.lfone-ref-right{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.lfone-ref-col{display:flex;flex-direction:column;gap:8px}
+.lfone-ref-h{font:700 13px inherit;color:#d8d8e6;white-space:nowrap}
+.lfone-ratio{display:flex;gap:8px}
+.lfone-ratio-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:56px;padding:8px 4px;border-radius:12px;border:1px solid #2a2a35;background:#1c1c26;color:#fff;font:700 13px inherit;cursor:pointer}
+.lfone-ratio-btn.on{background:#c8f542;color:#111;border-color:#c8f542}
+.lfone-empty{border:1px solid #2a2a35;border-radius:14px;background:#12121a;padding:38px 16px;text-align:center;margin-top:10px}
+.lfone-empty-ic{font-size:52px;filter:drop-shadow(0 0 18px rgba(200,245,66,.45))}
+.lfone-empty-t{font:700 19px inherit;margin-top:10px}
+.lfone-empty-s{color:#9a9ab0;font-size:14px;margin-top:6px}
 .lfone-result-wrap{display:block}
 .lfone-side{margin-top:10px}
 .lfone-favcard{margin-top:12px;border:1px solid #2a2a35;border-radius:14px;padding:12px;background:#14141c}
@@ -812,15 +834,14 @@
   <button type="button" class="lfside-item" data-side="settings">⚙ Settings</button>
   <button type="button" class="lfside-item" data-side="help">❓ Help</button>
   <div class="lfside-pro">
-    <div class="lfside-pro-title">👑 Go Pro</div>
-    <div class="lfside-pro-sub">Unlock more power &amp; features</div>
-    <a class="lfside-pro-btn" href="#buy-credits">Upgrade →</a>
+    <div class="lfside-pro-title">👑 Upgrade to Pro</div>
+    <div class="lfside-pro-sub">Unlock more power and creativity!</div>
+    <a class="lfside-pro-btn" href="#buy-credits">Go Pro →</a>
   </div>
 </nav>
 <section class="lfai lfone" id="lfOne" aria-label="LumeField AI studio">
   <div class="lfai-box">
-    <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span></div>
-    <p class="lfai-sub">আপনার কল্পনা, আমাদের AI — অসীম সম্ভাবনা!</p>
+    <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span><span class="lfai-head-div"></span><span class="lfai-head-tag">✨ আপনার কল্পনা, আমাদের AI — অসীম সম্ভাবনা!</span></div>
     <div class="lfone-tabs" role="tablist" aria-label="What to make">
       <button type="button" class="lfone-tab on" data-tab="video" role="tab" aria-selected="true">▶ Video</button>
       <button type="button" class="lfone-tab" data-tab="image" role="tab" aria-selected="false">🖼 Image</button>
@@ -830,21 +851,48 @@
     <div class="lfai-composer">
       <div class="lfone-panel" id="lfOnePanelVideo">
         <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="আপনার যা চান, তা এখানে লিখুন..."></textarea>
-        <div class="lfai-row">
-          <label class="lfai-photo" for="lfAIPhoto" title="Add a reference photo" aria-label="Add a reference photo">＋</label>
-          <input type="file" id="lfAIPhoto" accept="image/*" hidden>
-          <span class="lfai-photowrap" id="lfAIPhotoWrap" hidden><img id="lfAIPhotoPrev" alt=""><button type="button" class="lfai-photorm" id="lfAIPhotoRm" aria-label="Remove photo">&times;</button></span>
-          <span class="lfai-model-label">⚙ Video Model:</span>
-          <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ All Models <span class="lfai-chev">›</span></button>
-          <button type="button" class="lfai-model lfai-chip" id="lfOneRatioBtn" aria-haspopup="true" aria-expanded="false">16:9 <span class="lfai-chev">›</span></button>
-          <button type="button" class="lfai-model lfai-chip" id="lfOneQualityBtn" aria-haspopup="true" aria-expanded="false">720p <span class="lfai-chev">›</span></button>
-          <button type="button" class="lfai-settings" id="lfAISettingsBtn" aria-label="Settings" aria-haspopup="true" aria-expanded="false">⚙</button>
-          <button type="button" class="lfai-gen" id="lfAIGenerate" hidden>✦ Generate — 20 credits</button>
+        <div class="lfone-refpanel">
+          <div class="lfone-ref-left">
+            <div class="lfone-ref-title">🖼 Reference Upload</div>
+            <div class="lfone-ref-sub">Add your reference (Optional)</div>
+            <div class="lfone-ref-boxes">
+              <label class="lfone-ref-box" for="lfAIPhoto">🖼<b>Photo</b><span>Add Image</span></label>
+              <label class="lfone-ref-box" for="lfOneVideoRef">🎬<b>Video</b><span>Add Video</span></label>
+              <label class="lfone-ref-box" for="lfOneAudioRef">🎵<b>Audio</b><span>Add Audio</span></label>
+            </div>
+            <input type="file" id="lfAIPhoto" accept="image/*" hidden>
+            <input type="file" id="lfOneVideoRef" accept="video/*" hidden>
+            <input type="file" id="lfOneAudioRef" accept="audio/*" hidden>
+            <span class="lfai-photowrap" id="lfAIPhotoWrap" hidden><img id="lfAIPhotoPrev" alt=""><button type="button" class="lfai-photorm" id="lfAIPhotoRm" aria-label="Remove photo">&times;</button></span>
+          </div>
+          <div class="lfone-ref-right">
+            <div class="lfone-ref-col">
+              <div class="lfone-ref-h">Video Model ⓘ</div>
+              <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ All Models <span class="lfai-chev">›</span></button>
+            </div>
+            <div class="lfone-ref-col">
+              <div class="lfone-ref-h">Aspect Ratio</div>
+              <div class="lfone-ratio">
+                <button type="button" class="lfone-ratio-btn on" data-ratio="16:9">▭<span>16:9</span></button>
+                <button type="button" class="lfone-ratio-btn" data-ratio="9:16">▯<span>9:16</span></button>
+                <button type="button" class="lfone-ratio-btn" data-ratio="1:1">▢<span>1:1</span></button>
+              </div>
+            </div>
+            <div class="lfone-ref-col">
+              <div class="lfone-ref-h">Quality</div>
+              <button type="button" class="lfai-model lfai-chip" id="lfOneQualityBtn" aria-haspopup="true" aria-expanded="false">1080P <span class="lfai-chev">›</span></button>
+            </div>
+            <div class="lfone-ref-col">
+              <div class="lfone-ref-h">Duration</div>
+              <button type="button" class="lfai-model lfai-chip" id="lfAISettingsBtn" aria-label="Duration" aria-haspopup="true" aria-expanded="false">5s <span class="lfai-chev">›</span></button>
+            </div>
+          </div>
         </div>
+        <button type="button" class="lfai-gen" id="lfAIGenerate" hidden>✦ Generate — 10 credits</button>
         <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
         <div class="lfone-result-wrap">
-          <div class="lfone-result"><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
+          <div class="lfone-result"><div class="lfone-empty" id="lfOneVideoEmpty"><div class="lfone-empty-ic">🎬</div><div class="lfone-empty-t">Your video will appear here</div><div class="lfone-empty-s">Add a prompt, choose options, and click the button below to generate your video.</div></div><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
           <div class="lfone-side" id="lfOneVideoSide" hidden>
             <div class="lfone-actions" id="lfOneVideoActions">
               <button type="button" id="lfOneVideoDownload">⬇ Download</button>
@@ -864,7 +912,7 @@
         <textarea id="lfOneImgPrompt" rows="3" maxlength="300" placeholder="আপনার যা চান, তা এখানে লিখুন..."></textarea>
         <div class="lfai-status" id="lfOneImgStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfOneImgError" aria-live="polite"></div>
-        <div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt="Generated image"><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
+        <div class="lfone-empty" id="lfOneImgEmpty"><div class="lfone-empty-ic">🖼️</div><div class="lfone-empty-t">Your image will appear here</div><div class="lfone-empty-s">Add a prompt and click the button below to generate your image.</div></div><div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt="Generated image"><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
       </div>
       <div class="lfone-panel" id="lfOnePanelSong" hidden>
         <textarea id="lfMusicPrompt" rows="2" maxlength="200" placeholder="e.g. happy birthday song, soft piano"></textarea>
@@ -896,30 +944,25 @@
         </div>
       </div>
       <div class="lfone-create-row">
-        <button type="button" class="lfone-describe" id="lfOneDescribe">✨ Describe</button>
+        <button type="button" class="lfone-describe" id="lfOneDescribe">Describe ✨</button>
         <button type="button" class="lfai-gen lfone-create" id="lfOneCreate">✦ তৈরি করুন</button>
       </div>
     </div>
     <div class="lfai-settings-pop" id="lfAISettingsPop" hidden>
       <div class="lfai-settings-title">Duration</div>
       <div class="lfai-durs" role="group" aria-label="Duration">
-        <button type="button" class="lfai-dur" data-dur="5">5s</button>
-        <button type="button" class="lfai-dur on" data-dur="10">10s</button>
+        <button type="button" class="lfai-dur on" data-dur="5">5s</button>
+        <button type="button" class="lfai-dur" data-dur="10">10s</button>
       </div>
     </div>
     <div class="lfai-model-pop" id="lfAIModelPop" hidden>
       <input class="opt-search" id="lfAIModelSearch" type="text" placeholder="Search models..." autocomplete="off">
       <div id="lfAIModelList"></div>
     </div>
-    <div class="lfai-model-pop" id="lfOneRatioPop" hidden>
-      <div class="opt-item" data-ratio="16:9"><span><span class="opt-nm">16:9</span><span class="opt-sub" style="display:block;">Widescreen</span></span></div>
-      <div class="opt-item" data-ratio="9:16"><span><span class="opt-nm">9:16</span><span class="opt-sub" style="display:block;">Vertical — Shorts / Reels</span></span></div>
-      <div class="opt-item" data-ratio="1:1"><span><span class="opt-nm">1:1</span><span class="opt-sub" style="display:block;">Square</span></span></div>
-    </div>
     <div class="lfai-model-pop" id="lfOneQualityPop" hidden>
-      <div class="opt-item" data-quality="480p"><span><span class="opt-nm">480p</span><span class="opt-sub" style="display:block;">Standard</span></span></div>
-      <div class="opt-item" data-quality="720p"><span><span class="opt-nm">720p</span><span class="opt-sub" style="display:block;">HD</span></span></div>
-      <div class="opt-item" data-quality="1080p"><span><span class="opt-nm">1080p</span><span class="opt-sub" style="display:block;">Full HD</span></span></div>
+      <div class="opt-item" data-quality="480P"><span><span class="opt-nm">480p</span><span class="opt-sub" style="display:block;">Standard</span></span></div>
+      <div class="opt-item" data-quality="720P"><span><span class="opt-nm">720p</span><span class="opt-sub" style="display:block;">HD</span></span></div>
+      <div class="opt-item" data-quality="1080P"><span><span class="opt-nm">1080p</span><span class="opt-sub" style="display:block;">Full HD</span></span></div>
       <div class="opt-item" data-quality="4K"><span><span class="opt-nm">4K</span><span class="opt-sub" style="display:block;">Ultra HD</span></span></div>
     </div>
   </div>
@@ -948,7 +991,7 @@
   var createBtn = $("lfOneCreate"), describeBtn = $("lfOneDescribe");
   var panels = { video: "lfOnePanelVideo", image: "lfOnePanelImage", song: "lfOnePanelSong", gemini: "lfOnePanelGemini" };
   function labelFor(tab) {
-    if (tab === "video") { var g = $("lfAIGenerate"); var t = g ? g.textContent.replace("Generate", "তৈরি করুন") : ""; return t || "✦ তৈরি করুন"; }
+    if (tab === "video") { var g = $("lfAIGenerate"); var t = g ? g.textContent.replace("Generate", "Generate Video") : ""; return t || "✦ Generate Video"; }
     if (tab === "image") return "🖼️ তৈরি করুন — ফ্রি";
     if (tab === "song") return "🎵 তৈরি করুন — ফ্রি";
     return "✦ জিজ্ঞেস করুন — ফ্রি";
@@ -1001,7 +1044,7 @@
       var img = new Image();
       img.onload = function () {
         if (createBtn) { createBtn.disabled = false; createBtn.textContent = labelFor("image"); }
-        if (imgEl) { imgEl.src = url; imgEl.alt = p; } if (dl) dl.href = url; if (res) res.hidden = false; var idn = $("lfOneImgDone"); if (idn) idn.hidden = false;
+        if (imgEl) { imgEl.src = url; imgEl.alt = p; } if (dl) dl.href = url; if (res) res.hidden = false; var idn = $("lfOneImgDone"); if (idn) idn.hidden = false; var ie = $("lfOneImgEmpty"); if (ie) ie.hidden = true;
         try { var arr = JSON.parse(localStorage.getItem("lumefield_images") || "[]"); arr.unshift({ url: url, prompt: p, at: new Date().toISOString().slice(0, 16).replace("T", " ") }); localStorage.setItem("lumefield_images", JSON.stringify(arr.slice(0, 12))); } catch (e) {}
         renderOneGallery();
       };
@@ -1021,7 +1064,7 @@
     } catch (e) { finish(p); }
   }
   var vEl = $("lfAIVideo"), vAct = $("lfOneVideoSide");
-  function syncVideoActions() { if (vEl && vAct) vAct.hidden = !!vEl.hidden; var d = $("lfOneVideoDone"), du = $("lfOneVideoDur"); if (d) d.hidden = !vEl || !!vEl.hidden; if (du) du.hidden = !vEl || !!vEl.hidden; }
+  function syncVideoActions() { if (vEl && vAct) vAct.hidden = !!vEl.hidden; var d = $("lfOneVideoDone"), du = $("lfOneVideoDur"); if (d) d.hidden = !vEl || !!vEl.hidden; if (du) du.hidden = !vEl || !!vEl.hidden; var em = $("lfOneVideoEmpty"); if (em) em.hidden = !vEl || !vEl.hidden; }
   function updDur() { var du = $("lfOneVideoDur"); if (!du || !vEl) return; function f(t) { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ":" + ("0" + (t % 60)).slice(-2); } du.textContent = f(vEl.currentTime) + " / " + f(vEl.duration); }
   if (vEl) { vEl.addEventListener("loadedmetadata", updDur); vEl.addEventListener("timeupdate", updDur); }
   if (vEl && vAct && "MutationObserver" in window) { new MutationObserver(syncVideoActions).observe(vEl, { attributes: true, attributeFilter: ["hidden"] }); syncVideoActions(); }
@@ -3956,8 +3999,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var dailyState = $("lfAIDailyState");
   function setDailyState(t) { if (dailyState) dailyState.textContent = t; }
   if (!promptEl || !genBtn) return;
-  var selectedDur = 10;
-  var lfOneRatio = "16:9", lfOneQuality = "720p";
+  var selectedDur = 5;
+  var lfOneRatio = "16:9", lfOneQuality = "1080P";
   var generating = false;
   var photoFile = null;
   /* Higgsfield accuracy — IDENTITY + MOTION SPLIT: with a reference photo,
@@ -4133,6 +4176,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   durBtns.forEach(function (b) {
     b.addEventListener("click", function () {
       selectedDur = parseInt(b.getAttribute("data-dur"), 10) || 10;
+      if (settingsBtn) settingsBtn.innerHTML = selectedDur + "s <span class=\"lfai-chev\">›</span>";
       durBtns.forEach(function (x) { x.classList.toggle("on", x === b); });
       refreshGenLabel();
       hideSettingsPop();
@@ -4140,7 +4184,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   });
   /* One-box ratio + quality chips (his design): the choice is baked into
      the engine prompt as a cue — the free renderer itself is fixed. */
-  function hideOnePops() { var r = $("lfOneRatioPop"), q = $("lfOneQualityPop"); if (r) r.hidden = true; if (q) q.hidden = true; }
+  function hideOnePops() { var q = $("lfOneQualityPop"); if (q) q.hidden = true; }
   function bindOneChip(btnId, popId, attr, set) {
     var b = $(btnId), p = $(popId); if (!b || !p) return;
     b.addEventListener("click", function (e) { e.stopPropagation(); var open = p.hidden; hideOnePops(); hideLfModelPop(); hideSettingsPop(); if (open) { p.hidden = false; b.setAttribute("aria-expanded", "true"); } });
@@ -4148,16 +4192,69 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       it.addEventListener("click", function () { var v = it.getAttribute(attr); if (!v) return; set(v); b.innerHTML = lfEsc(v) + ' <span class="lfai-chev">›</span>'; hideOnePops(); });
     });
   }
-  bindOneChip("lfOneRatioBtn", "lfOneRatioPop", "data-ratio", function (v) { lfOneRatio = v; });
   bindOneChip("lfOneQualityBtn", "lfOneQualityPop", "data-quality", function (v) { lfOneQuality = v; });
+  document.querySelectorAll(".lfone-ratio-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      lfOneRatio = b.getAttribute("data-ratio") || "16:9";
+      document.querySelectorAll(".lfone-ratio-btn").forEach(function (x) { x.classList.toggle("on", x === b); });
+    });
+  });
   document.addEventListener("click", function (e) {
-    var r = $("lfOneRatioPop"), q = $("lfOneQualityPop");
-    if (r && !r.hidden && !r.contains(e.target) && e.target.id !== "lfOneRatioBtn") r.hidden = true;
+    var q = $("lfOneQualityPop");
     if (q && !q.hidden && !q.contains(e.target) && e.target.id !== "lfOneQualityBtn") q.hidden = true;
+  });
+  /* Reference Video: its first frame becomes the reference photo. */
+  var audioRefUrl = null, refAudio = null;
+  var videoRefEl = $("lfOneVideoRef");
+  if (videoRefEl) videoRefEl.addEventListener("change", function () {
+    var f = videoRefEl.files && videoRefEl.files[0]; if (!f) return;
+    var url = URL.createObjectURL(f);
+    var v = document.createElement("video");
+    v.muted = true; v.preload = "auto"; v.src = url;
+    v.addEventListener("loadeddata", function () {
+      try {
+        var c = document.createElement("canvas");
+        c.width = v.videoWidth || 640; c.height = v.videoHeight || 360;
+        c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+        c.toBlob(function (blob) {
+          if (!blob) return;
+          photoFile = blob;
+          if (prevEl) prevEl.src = URL.createObjectURL(blob);
+          if (photoWrap) photoWrap.hidden = false;
+          var vb = document.querySelector('[for="lfOneVideoRef"]'); if (vb) vb.classList.add("has");
+        }, "image/jpeg", 0.9);
+      } catch (e) {}
+      URL.revokeObjectURL(url);
+    });
+    v.load();
+  });
+  /* Reference Audio: plays in sync over the generated video (video muted). */
+  function syncRefAudio() {
+    if (!videoEl) return;
+    if (!audioRefUrl) { videoEl.muted = false; if (refAudio) refAudio.pause(); return; }
+    if (!refAudio) {
+      refAudio = new Audio();
+      videoEl.addEventListener("play", function () { if (!audioRefUrl) return; refAudio.src = audioRefUrl; refAudio.currentTime = videoEl.currentTime; refAudio.play().catch(function () {}); });
+      videoEl.addEventListener("pause", function () { if (refAudio) refAudio.pause(); });
+      videoEl.addEventListener("seeked", function () { if (refAudio && !videoEl.paused) refAudio.currentTime = videoEl.currentTime; });
+      videoEl.addEventListener("ended", function () { if (refAudio) refAudio.pause(); });
+    }
+    videoEl.muted = true;
+    refAudio.src = audioRefUrl;
+    if (!videoEl.paused && videoEl.src) { refAudio.currentTime = videoEl.currentTime; refAudio.play().catch(function () {}); }
+  }
+  var audioRefEl = $("lfOneAudioRef");
+  if (audioRefEl) audioRefEl.addEventListener("change", function () {
+    var f = audioRefEl.files && audioRefEl.files[0]; if (!f) return;
+    if (audioRefUrl) URL.revokeObjectURL(audioRefUrl);
+    audioRefUrl = URL.createObjectURL(f);
+    var ab = document.querySelector('[for="lfOneAudioRef"]'); if (ab) ab.classList.add("has");
+    syncRefAudio();
   });
   if (photoEl) photoEl.addEventListener("change", function () {
     var f = photoEl.files && photoEl.files[0];
     photoFile = f || null;
+    var pb = document.querySelector('[for="lfAIPhoto"]'); if (pb) pb.classList.toggle("has", !!f);
     if (f) {
       var r = new FileReader();
       r.onload = function (ev) { prevEl.src = ev.target.result; if (photoWrap) photoWrap.hidden = false; };
@@ -4169,6 +4266,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var photoRm = $("lfAIPhotoRm");
   if (photoRm) photoRm.addEventListener("click", function () {
     photoFile = null;
+    var pb2 = document.querySelector('[for="lfAIPhoto"]'); if (pb2) pb2.classList.remove("has");
     try { photoEl.value = ""; } catch (e) {}
     if (photoWrap) photoWrap.hidden = true;
     prevEl.removeAttribute("src");
@@ -4241,6 +4339,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       videoEl.src = url;
       videoEl.hidden = false;
       try { videoEl.play(); } catch (e) {}
+      syncRefAudio();
       setupDownload(url);
     }).catch(function (err) {
       setStatus("");
