@@ -750,7 +750,13 @@
 #lfOneImgPrompt{width:100%;box-sizing:border-box;background:transparent;border:0;border-radius:0;color:#fff;font-size:16px;font-family:inherit;padding:4px 2px;resize:vertical;min-height:64px}
 #lfOneImgPrompt:focus{outline:none}
 .lfone-create-row{display:flex;gap:10px;margin-top:12px}
-.lfone-describe{flex:0 0 auto;padding:12px 16px;border-radius:999px;border:1px solid #c8f542;background:transparent;color:#c8f542;font:600 15px inherit;cursor:pointer}
+.lfai-composer{position:relative}
+#lfAIPrompt,#lfOneImgPrompt{padding-right:132px;box-sizing:border-box}
+#lfOneCreate{display:flex;align-items:center;justify-content:center;gap:10px}
+#lfOneCreate::after{content:"→";margin-left:auto;background:#111;color:#c8f542;border-radius:50%;width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:16px}
+.lfai-model-label{font:700 14px inherit;color:#d8d8e6;white-space:nowrap}
+.lfai-chip{padding:8px 12px;font-size:13px}
+.lfone-describe{position:absolute;top:12px;right:12px;z-index:3;padding:12px 16px;border-radius:999px;border:1px solid #c8f542;background:#14141c;color:#c8f542;font:600 15px inherit;cursor:pointer}
 .lfone-describe[hidden]{display:none}
 .lfone-create{flex:1}
 .lfone-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -823,12 +829,15 @@
     </div>
     <div class="lfai-composer">
       <div class="lfone-panel" id="lfOnePanelVideo">
-        <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="Describe the video you want..."></textarea>
+        <textarea id="lfAIPrompt" rows="3" maxlength="500" placeholder="আপনার যা চান, তা এখানে লিখুন..."></textarea>
         <div class="lfai-row">
           <label class="lfai-photo" for="lfAIPhoto" title="Add a reference photo" aria-label="Add a reference photo">＋</label>
           <input type="file" id="lfAIPhoto" accept="image/*" hidden>
           <span class="lfai-photowrap" id="lfAIPhotoWrap" hidden><img id="lfAIPhotoPrev" alt=""><button type="button" class="lfai-photorm" id="lfAIPhotoRm" aria-label="Remove photo">&times;</button></span>
-          <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ LumeField AI <span class="lfai-chev">›</span></button>
+          <span class="lfai-model-label">⚙ Video Model:</span>
+          <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ All Models <span class="lfai-chev">›</span></button>
+          <button type="button" class="lfai-model lfai-chip" id="lfOneRatioBtn" aria-haspopup="true" aria-expanded="false">16:9 <span class="lfai-chev">›</span></button>
+          <button type="button" class="lfai-model lfai-chip" id="lfOneQualityBtn" aria-haspopup="true" aria-expanded="false">720p <span class="lfai-chev">›</span></button>
           <button type="button" class="lfai-settings" id="lfAISettingsBtn" aria-label="Settings" aria-haspopup="true" aria-expanded="false">⚙</button>
           <button type="button" class="lfai-gen" id="lfAIGenerate" hidden>✦ Generate — 20 credits</button>
         </div>
@@ -852,7 +861,7 @@
         <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
       </div>
       <div class="lfone-panel" id="lfOnePanelImage" hidden>
-        <textarea id="lfOneImgPrompt" rows="3" maxlength="300" placeholder="Describe the image you want..."></textarea>
+        <textarea id="lfOneImgPrompt" rows="3" maxlength="300" placeholder="আপনার যা চান, তা এখানে লিখুন..."></textarea>
         <div class="lfai-status" id="lfOneImgStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfOneImgError" aria-live="polite"></div>
         <div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt="Generated image"><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
@@ -901,6 +910,17 @@
     <div class="lfai-model-pop" id="lfAIModelPop" hidden>
       <input class="opt-search" id="lfAIModelSearch" type="text" placeholder="Search models..." autocomplete="off">
       <div id="lfAIModelList"></div>
+    </div>
+    <div class="lfai-model-pop" id="lfOneRatioPop" hidden>
+      <div class="opt-item" data-ratio="16:9"><span><span class="opt-nm">16:9</span><span class="opt-sub" style="display:block;">Widescreen</span></span></div>
+      <div class="opt-item" data-ratio="9:16"><span><span class="opt-nm">9:16</span><span class="opt-sub" style="display:block;">Vertical — Shorts / Reels</span></span></div>
+      <div class="opt-item" data-ratio="1:1"><span><span class="opt-nm">1:1</span><span class="opt-sub" style="display:block;">Square</span></span></div>
+    </div>
+    <div class="lfai-model-pop" id="lfOneQualityPop" hidden>
+      <div class="opt-item" data-quality="480p"><span><span class="opt-nm">480p</span><span class="opt-sub" style="display:block;">Standard</span></span></div>
+      <div class="opt-item" data-quality="720p"><span><span class="opt-nm">720p</span><span class="opt-sub" style="display:block;">HD</span></span></div>
+      <div class="opt-item" data-quality="1080p"><span><span class="opt-nm">1080p</span><span class="opt-sub" style="display:block;">Full HD</span></span></div>
+      <div class="opt-item" data-quality="4K"><span><span class="opt-nm">4K</span><span class="opt-sub" style="display:block;">Ultra HD</span></span></div>
     </div>
   </div>
 </section>
@@ -3937,6 +3957,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function setDailyState(t) { if (dailyState) dailyState.textContent = t; }
   if (!promptEl || !genBtn) return;
   var selectedDur = 10;
+  var lfOneRatio = "16:9", lfOneQuality = "720p";
   var generating = false;
   var photoFile = null;
   /* Higgsfield accuracy — IDENTITY + MOTION SPLIT: with a reference photo,
@@ -3947,7 +3968,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function buildEnginePrompt() {
     var p = promptEl.value.trim();
     if (photoFile) p = IDENTITY_BLOCK + p;
-    return p + REALISM_CUE;
+    return p + REALISM_CUE + ", " + lfOneRatio + ", " + lfOneQuality;
   }
   var clientPromise = null;
 
@@ -3958,7 +3979,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      LTX render) or a generator engine id. The tool itself only renders
      via LumeField AI; picking another model points the box at that model
      and Generate hands off to the main generator with it selected. */
-  var lfToolModel = "__lfai";
+  var lfToolModel = "__all";
   /* Select a generator engine WITHOUT dispatching a click on its (hidden)
      .engine card: the card's own handler only sets state, so do the same
      state updates directly. No click event, no side effects, nothing
@@ -3989,7 +4010,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
      cost at the chosen duration; another model shows its generator cost
      at its default duration (e.g. Kling 4.0, 10s default -> 7 credits). */
   function lfToolCost() {
-    if (lfToolModel === "__lfai") return ownCost(selectedDur);
+    if (lfToolModel === "__lfai" || lfToolModel === "__all") return ownCost(selectedDur);
     var e = null;
     try { e = (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (x) { return x.id === lfToolModel; }); } catch (err) {}
     return e ? lfModelCost(lfDefaultDur(e)) : ownCost(selectedDur);
@@ -3997,7 +4018,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   /* Show the chosen model on the tool-box chip + refresh the Generate cost. */
   function refreshLfToolModel() {
     var name = "LumeField AI";
-    if (lfToolModel !== "__lfai") {
+    if (lfToolModel === "__all") name = "All Models";
+    else if (lfToolModel !== "__lfai") {
       try { var e = (typeof ENGINES !== "undefined" ? ENGINES : []).find(function (x) { return x.id === lfToolModel; }); if (e) name = e.name; } catch (err) {}
     }
     if (name.length > 24) name = name.slice(0, 22) + "\u2026";
@@ -4060,6 +4082,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!modelListEl) return;
     var q = (modelSearch ? modelSearch.value : "").trim().toLowerCase();
     var html = "";
+    if (!q || "all models".indexOf(q) !== -1) {
+      html += "<div class='opt-item' data-lfmodel='__all'><span class='opt-ic'>✦</span><span><span class='opt-nm'>All Models</span><span class='opt-sub' style='display:block;'>সকল ভিডিও মডেল একসাথে</span></span>" + (lfToolModel === "__all" ? "<span class='opt-check'>✓</span>" : "") + "</div>";
+    }
     if (!q || "lumefield ai".indexOf(q) !== -1) {
       html += "<div class='opt-item' data-lfmodel='__lfai'><span class='opt-ic'>✦</span><span><span class='opt-nm'>LumeField AI</span><span class='opt-sub' style='display:block;'>In-site · up to 10s · ✦ 20</span></span>" + (lfToolModel === "__lfai" ? "<span class='opt-check'>✓</span>" : "") + "</div>";
     }
@@ -4076,8 +4101,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
         var id = it.getAttribute("data-lfmodel");
         hideLfModelPop();
         if (!id) return;
-        if (id === "__lfai") {
-          lfToolModel = "__lfai";
+        if (id === "__lfai" || id === "__all") {
+          lfToolModel = id;
           refreshLfToolModel();
           return; /* this tool stays LumeField AI */
         }
@@ -4112,6 +4137,23 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       refreshGenLabel();
       hideSettingsPop();
     });
+  });
+  /* One-box ratio + quality chips (his design): the choice is baked into
+     the engine prompt as a cue — the free renderer itself is fixed. */
+  function hideOnePops() { var r = $("lfOneRatioPop"), q = $("lfOneQualityPop"); if (r) r.hidden = true; if (q) q.hidden = true; }
+  function bindOneChip(btnId, popId, attr, set) {
+    var b = $(btnId), p = $(popId); if (!b || !p) return;
+    b.addEventListener("click", function (e) { e.stopPropagation(); var open = p.hidden; hideOnePops(); hideLfModelPop(); hideSettingsPop(); if (open) { p.hidden = false; b.setAttribute("aria-expanded", "true"); } });
+    p.querySelectorAll(".opt-item").forEach(function (it) {
+      it.addEventListener("click", function () { var v = it.getAttribute(attr); if (!v) return; set(v); b.innerHTML = lfEsc(v) + ' <span class="lfai-chev">›</span>'; hideOnePops(); });
+    });
+  }
+  bindOneChip("lfOneRatioBtn", "lfOneRatioPop", "data-ratio", function (v) { lfOneRatio = v; });
+  bindOneChip("lfOneQualityBtn", "lfOneQualityPop", "data-quality", function (v) { lfOneQuality = v; });
+  document.addEventListener("click", function (e) {
+    var r = $("lfOneRatioPop"), q = $("lfOneQualityPop");
+    if (r && !r.hidden && !r.contains(e.target) && e.target.id !== "lfOneRatioBtn") r.hidden = true;
+    if (q && !q.hidden && !q.contains(e.target) && e.target.id !== "lfOneQualityBtn") q.hidden = true;
   });
   if (photoEl) photoEl.addEventListener("change", function () {
     var f = photoEl.files && photoEl.files[0];
@@ -4218,7 +4260,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
        shown on the chip, Generate hands off to the main generator with
        that model selected instead of rendering the wrong engine here.
        The prompt follows into the generator so nothing is lost. */
-    if (lfToolModel !== "__lfai") {
+    if (lfToolModel !== "__lfai" && lfToolModel !== "__all") {
       try { var act = document.getElementById("action"); if (act) act.value = p; } catch (e) {}
       try { var mp = document.getElementById("mPrompt"); if (mp) mp.value = p; } catch (e) {}
       if (typeof openTool === "function") openTool();
