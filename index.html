@@ -679,11 +679,12 @@
 .lfai-model { background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 999px; padding: 10px 14px; font-size: 14px; font-weight: 700; white-space: nowrap; cursor: pointer; font-family: inherit; }
 .lfai-model:hover { border-color: #c8f542; }
 .lfai-model .lfai-chev { color: #8a8a9e; margin-left: 2px; }
-.lfai-model-pop { background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 10px; margin-top: 10px; max-height: 340px; overflow-y: auto; }
+.lfai-model-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 30; min-width: 300px; max-width: calc(100vw - 32px); background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 10px; max-height: 340px; overflow-y: auto; box-shadow: 0 18px 40px rgba(0,0,0,.6); }
+.lfai-model-pop.lfai-mini-pop { min-width: 200px; }
 .lfai-model-pop[hidden] { display: none; }
 .lfai-settings { width: 44px; height: 44px; flex-shrink: 0; background: #1c1c2c; border: 1px solid #33334a; color: #fff; border-radius: 50%; font-size: 18px; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; padding: 0; }
 .lfai-settings:hover { border-color: #c8f542; }
-.lfai-settings-pop { background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 14px; margin-top: 10px; }
+.lfai-settings-pop { position: absolute; top: calc(100% + 8px); left: 0; z-index: 30; min-width: 200px; background: #1c1c2c; border: 1px solid #33334a; border-radius: 14px; padding: 14px; box-shadow: 0 18px 40px rgba(0,0,0,.6); }
 .lfai-settings-pop[hidden] { display: none; }
 .lfai-settings-title { color: #a5a5b8; font-size: 12px; font-weight: 700; margin-bottom: 8px; }
 #lfAIPhotoPrev { width: 44px; height: 44px; object-fit: cover; border-radius: 10px; border: 1px solid #33334a; }
@@ -789,7 +790,7 @@
 .lfone-ref-box:hover{border-color:#c8f542}
 .lfone-ref-box.has{border-style:solid;border-color:#c8f542}
 .lfone-ref-right{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
-.lfone-ref-col{display:flex;flex-direction:column;gap:8px}
+.lfone-ref-col{display:flex;flex-direction:column;gap:8px;position:relative}
 .lfone-ref-h{font:700 13px inherit;color:#d8d8e6;white-space:nowrap}
 .lfone-ratio{display:flex;gap:8px}
 .lfone-ratio-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:56px;padding:8px 4px;border-radius:12px;border:1px solid #2a2a35;background:#1c1c26;color:#fff;font:700 13px inherit;cursor:pointer}
@@ -869,6 +870,10 @@
             <div class="lfone-ref-col">
               <div class="lfone-ref-h">Video Model ⓘ</div>
               <button type="button" class="lfai-model" id="lfAIModelBtn" aria-haspopup="true" aria-expanded="false">✦ All Models <span class="lfai-chev">›</span></button>
+              <div class="lfai-model-pop" id="lfAIModelPop" hidden>
+                <input class="opt-search" id="lfAIModelSearch" type="text" placeholder="Search models..." autocomplete="off">
+                <div id="lfAIModelList"></div>
+              </div>
             </div>
             <div class="lfone-ref-col">
               <div class="lfone-ref-h">Aspect Ratio</div>
@@ -881,10 +886,25 @@
             <div class="lfone-ref-col">
               <div class="lfone-ref-h">Quality</div>
               <button type="button" class="lfai-model lfai-chip" id="lfOneQualityBtn" aria-haspopup="true" aria-expanded="false">1080P <span class="lfai-chev">›</span></button>
+              <div class="lfai-model-pop lfai-mini-pop" id="lfOneQualityPop" hidden>
+                <div class="opt-item" data-quality="480P"><span><span class="opt-nm">480p</span><span class="opt-sub" style="display:block;">Standard</span></span></div>
+                <div class="opt-item" data-quality="720P"><span><span class="opt-nm">720p</span><span class="opt-sub" style="display:block;">HD</span></span></div>
+                <div class="opt-item" data-quality="1080P"><span><span class="opt-nm">1080p</span><span class="opt-sub" style="display:block;">Full HD</span></span></div>
+                <div class="opt-item" data-quality="2K"><span><span class="opt-nm">2K</span><span class="opt-sub" style="display:block;">Quad HD</span></span></div>
+              </div>
             </div>
             <div class="lfone-ref-col">
               <div class="lfone-ref-h">Duration</div>
               <button type="button" class="lfai-model lfai-chip" id="lfAISettingsBtn" aria-label="Duration" aria-haspopup="true" aria-expanded="false">5s <span class="lfai-chev">›</span></button>
+              <div class="lfai-settings-pop" id="lfAISettingsPop" hidden>
+                <div class="lfai-settings-title">Duration</div>
+                <div class="lfai-durs" role="group" aria-label="Duration">
+                  <button type="button" class="lfai-dur on" data-dur="5">5s</button>
+                  <button type="button" class="lfai-dur" data-dur="10">10s</button>
+                  <button type="button" class="lfai-dur" data-dur="15">15s</button>
+                  <button type="button" class="lfai-dur" data-dur="30">30s</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -947,25 +967,6 @@
         <button type="button" class="lfone-describe" id="lfOneDescribe">Describe ✨</button>
         <button type="button" class="lfai-gen lfone-create" id="lfOneCreate">✦ তৈরি করুন</button>
       </div>
-    </div>
-    <div class="lfai-settings-pop" id="lfAISettingsPop" hidden>
-      <div class="lfai-settings-title">Duration</div>
-      <div class="lfai-durs" role="group" aria-label="Duration">
-        <button type="button" class="lfai-dur on" data-dur="5">5s</button>
-        <button type="button" class="lfai-dur" data-dur="10">10s</button>
-        <button type="button" class="lfai-dur" data-dur="15">15s</button>
-        <button type="button" class="lfai-dur" data-dur="30">30s</button>
-      </div>
-    </div>
-    <div class="lfai-model-pop" id="lfAIModelPop" hidden>
-      <input class="opt-search" id="lfAIModelSearch" type="text" placeholder="Search models..." autocomplete="off">
-      <div id="lfAIModelList"></div>
-    </div>
-    <div class="lfai-model-pop" id="lfOneQualityPop" hidden>
-      <div class="opt-item" data-quality="480P"><span><span class="opt-nm">480p</span><span class="opt-sub" style="display:block;">Standard</span></span></div>
-      <div class="opt-item" data-quality="720P"><span><span class="opt-nm">720p</span><span class="opt-sub" style="display:block;">HD</span></span></div>
-      <div class="opt-item" data-quality="1080P"><span><span class="opt-nm">1080p</span><span class="opt-sub" style="display:block;">Full HD</span></span></div>
-      <div class="opt-item" data-quality="2K"><span><span class="opt-nm">2K</span><span class="opt-sub" style="display:block;">Quad HD</span></span></div>
     </div>
   </div>
 </section>
