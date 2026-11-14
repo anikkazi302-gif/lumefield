@@ -789,6 +789,11 @@
 .lfone-ref-box span{font-size:12px;color:#9a9ab0}
 .lfone-ref-box:hover{border-color:#c8f542}
 .lfone-ref-box.has{border-style:solid;border-color:#c8f542}
+.lfone-ref-left{position:relative}
+.lfone-ref-plus{width:44px;height:44px;border-radius:50%;border:1.5px dashed #3a3a4a;background:#10101a;color:#c8f542;font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.lfone-ref-plus:hover{border-color:#c8f542}
+.lfone-ref-plus.has{border-style:solid;border-color:#c8f542}
+#lfOneRefPop .opt-item{cursor:pointer}
 .lfone-ref-right{flex:0 1 480px;min-width:0;display:flex;gap:14px;flex-wrap:nowrap;align-items:flex-start;overflow-x:auto;scrollbar-width:none}
 .lfone-ref-right::-webkit-scrollbar{display:none}
 .lfone-ref-col{display:flex;flex-direction:column;gap:8px;position:relative;flex:1 1 0;min-width:0}
@@ -872,10 +877,11 @@
           <div class="lfone-ref-left">
             <div class="lfone-ref-title">🖼 Reference Upload</div>
             <div class="lfone-ref-sub">Add your reference (Optional)</div>
-            <div class="lfone-ref-boxes">
-              <label class="lfone-ref-box" for="lfAIPhoto">🖼<b>Photo</b><span>Add Image</span></label>
-              <label class="lfone-ref-box" for="lfOneVideoRef">🎬<b>Video</b><span>Add Video</span></label>
-              <label class="lfone-ref-box" for="lfOneAudioRef">🎵<b>Audio</b><span>Add Audio</span></label>
+            <button type="button" class="lfone-ref-plus" id="lfOneRefPlus" aria-haspopup="true" aria-expanded="false" aria-label="Add reference">+</button>
+            <div class="lfai-model-pop lfai-mini-pop" id="lfOneRefPop" hidden>
+              <label class="opt-item" for="lfAIPhoto"><span><span class="opt-nm">🖼 Photo</span><span class="opt-sub" style="display:block;">Add Image</span></span></label>
+              <label class="opt-item" for="lfOneVideoRef"><span><span class="opt-nm">🎬 Video</span><span class="opt-sub" style="display:block;">Add Video</span></span></label>
+              <label class="opt-item" for="lfOneAudioRef"><span><span class="opt-nm">🎵 Audio</span><span class="opt-sub" style="display:block;">Add Audio</span></span></label>
             </div>
             <input type="file" id="lfAIPhoto" accept="image/*" hidden>
             <input type="file" id="lfOneVideoRef" accept="video/*" hidden>
@@ -928,7 +934,7 @@
         <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
         <div class="lfone-result-wrap">
-          <div class="lfone-result"><div class="lfone-empty" id="lfOneVideoEmpty"><div class="lfone-empty-ic">🎬</div><div class="lfone-empty-t">Your video will appear here</div><div class="lfone-empty-s">Add a prompt, choose options, and click the button below to generate your video.</div></div><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
+          <div class="lfone-result"><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
           <div class="lfone-side" id="lfOneVideoSide" hidden>
             <div class="lfone-actions" id="lfOneVideoActions">
               <button type="button" id="lfOneVideoDownload">⬇ Download</button>
@@ -948,7 +954,7 @@
         <textarea id="lfOneImgPrompt" rows="3" maxlength="300" placeholder="আপনার যা চান, তা এখানে লিখুন..."></textarea>
         <div class="lfai-status" id="lfOneImgStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfOneImgError" aria-live="polite"></div>
-        <div class="lfone-empty" id="lfOneImgEmpty"><div class="lfone-empty-ic">🖼️</div><div class="lfone-empty-t">Your image will appear here</div><div class="lfone-empty-s">Add a prompt and click the button below to generate your image.</div></div><div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt="Generated image"><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
+        <div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt="Generated image"><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
       </div>
       <div class="lfone-panel" id="lfOnePanelSong" hidden>
         <textarea id="lfMusicPrompt" rows="2" maxlength="200" placeholder="e.g. happy birthday song, soft piano"></textarea>
@@ -4109,6 +4115,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     settingsBtn.addEventListener("click", function (e) {
       e.stopPropagation();
       var open = settingsPop.hidden;
+      hideRefPop();
       settingsPop.hidden = !open;
       settingsBtn.setAttribute("aria-expanded", String(open));
     });
@@ -4179,7 +4186,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     modelBtn.addEventListener("click", function (e) {
       e.stopPropagation();
       var open = modelPop.hidden;
-      hideSettingsPop();
+      hideSettingsPop(); hideRefPop();
       if (open) { buildLfModelList(); modelPop.hidden = false; modelBtn.setAttribute("aria-expanded", "true"); }
       else hideLfModelPop();
     });
@@ -4206,7 +4213,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   function hideOnePops() { var q = $("lfOneQualityPop"); if (q) q.hidden = true; }
   function bindOneChip(btnId, popId, attr, set) {
     var b = $(btnId), p = $(popId); if (!b || !p) return;
-    b.addEventListener("click", function (e) { e.stopPropagation(); var open = p.hidden; hideOnePops(); hideLfModelPop(); hideSettingsPop(); if (open) { p.hidden = false; b.setAttribute("aria-expanded", "true"); } });
+    b.addEventListener("click", function (e) { e.stopPropagation(); var open = p.hidden; hideOnePops(); hideLfModelPop(); hideSettingsPop(); hideRefPop(); if (open) { p.hidden = false; b.setAttribute("aria-expanded", "true"); } });
     p.querySelectorAll(".opt-item").forEach(function (it) {
       it.addEventListener("click", function () { var v = it.getAttribute(attr); if (!v) return; set(v); b.innerHTML = lfEsc(v) + ' <span class="lfai-chev">›</span>'; hideOnePops(); });
     });
@@ -4222,6 +4229,23 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var q = $("lfOneQualityPop");
     if (q && !q.hidden && !q.contains(e.target) && e.target.id !== "lfOneQualityBtn") q.hidden = true;
   });
+  /* Reference "+" menu: Photo / Video / Audio live inside one plus button. */
+  var refPlusBtn = $("lfOneRefPlus"), refPop = $("lfOneRefPop");
+  function hideRefPop() { if (refPop) refPop.hidden = true; if (refPlusBtn) refPlusBtn.setAttribute("aria-expanded", "false"); }
+  function syncRefPlus() { if (refPlusBtn) refPlusBtn.classList.toggle("has", !!photoFile || !!audioRefUrl); }
+  if (refPlusBtn && refPop) {
+    refPlusBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      var open = refPop.hidden;
+      hideOnePops(); hideLfModelPop(); hideSettingsPop();
+      refPop.hidden = !open;
+      refPlusBtn.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) {
+      if (!refPop.hidden && !refPop.contains(e.target) && e.target !== refPlusBtn) hideRefPop();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideRefPop(); });
+  }
   /* Reference Video: its first frame becomes the reference photo. */
   var audioRefUrl = null, refAudio = null;
   var videoRefEl = $("lfOneVideoRef");
@@ -4240,7 +4264,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
           photoFile = blob;
           if (prevEl) prevEl.src = URL.createObjectURL(blob);
           if (photoWrap) photoWrap.hidden = false;
-          var vb = document.querySelector('[for="lfOneVideoRef"]'); if (vb) vb.classList.add("has");
+          var vb = document.querySelector('[for="lfOneVideoRef"]'); if (vb) vb.classList.add("has"); hideRefPop(); syncRefPlus();
         }, "image/jpeg", 0.9);
       } catch (e) {}
       URL.revokeObjectURL(url);
@@ -4267,13 +4291,13 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var f = audioRefEl.files && audioRefEl.files[0]; if (!f) return;
     if (audioRefUrl) URL.revokeObjectURL(audioRefUrl);
     audioRefUrl = URL.createObjectURL(f);
-    var ab = document.querySelector('[for="lfOneAudioRef"]'); if (ab) ab.classList.add("has");
+    var ab = document.querySelector('[for="lfOneAudioRef"]'); if (ab) ab.classList.add("has"); hideRefPop(); syncRefPlus();
     syncRefAudio();
   });
   if (photoEl) photoEl.addEventListener("change", function () {
     var f = photoEl.files && photoEl.files[0];
     photoFile = f || null;
-    var pb = document.querySelector('[for="lfAIPhoto"]'); if (pb) pb.classList.toggle("has", !!f);
+    var pb = document.querySelector('[for="lfAIPhoto"]'); if (pb) pb.classList.toggle("has", !!f); hideRefPop(); syncRefPlus();
     if (f) {
       var r = new FileReader();
       r.onload = function (ev) { prevEl.src = ev.target.result; if (photoWrap) photoWrap.hidden = false; };
@@ -4285,7 +4309,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var photoRm = $("lfAIPhotoRm");
   if (photoRm) photoRm.addEventListener("click", function () {
     photoFile = null;
-    var pb2 = document.querySelector('[for="lfAIPhoto"]'); if (pb2) pb2.classList.remove("has");
+    var pb2 = document.querySelector('[for="lfAIPhoto"]'); if (pb2) pb2.classList.remove("has"); syncRefPlus();
     try { photoEl.value = ""; } catch (e) {}
     if (photoWrap) photoWrap.hidden = true;
     prevEl.removeAttribute("src");
