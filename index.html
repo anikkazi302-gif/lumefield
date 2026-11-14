@@ -789,12 +789,27 @@
 .lfone-ref-box span{font-size:12px;color:#9a9ab0}
 .lfone-ref-box:hover{border-color:#c8f542}
 .lfone-ref-box.has{border-style:solid;border-color:#c8f542}
-.lfone-ref-right{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
-.lfone-ref-col{display:flex;flex-direction:column;gap:8px;position:relative}
+.lfone-ref-right{flex:0 1 480px;min-width:0;display:flex;gap:14px;flex-wrap:nowrap;align-items:flex-start;overflow-x:auto;scrollbar-width:none}
+.lfone-ref-right::-webkit-scrollbar{display:none}
+.lfone-ref-col{display:flex;flex-direction:column;gap:8px;position:relative;flex:1 1 0;min-width:0}
+.lfone-ref-right .lfone-ref-col:nth-child(1){flex:1.6 1 0}
+.lfone-ref-right .lfone-ref-col:nth-child(2){flex:1.5 1 0}
+.lfone-ref-right .lfone-ref-col:nth-child(3){flex:1.1 1 0}
+.lfone-ref-right .lfone-ref-col:nth-child(4){flex:.8 1 0}
 .lfone-ref-h{font:700 13px inherit;color:#d8d8e6;white-space:nowrap}
 .lfone-ratio{display:flex;gap:8px}
-.lfone-ratio-btn{display:flex;flex-direction:column;align-items:center;gap:2px;width:56px;padding:8px 4px;border-radius:12px;border:1px solid #2a2a35;background:#1c1c26;color:#fff;font:700 13px inherit;cursor:pointer}
+.lfone-ratio-btn{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:0;width:auto;padding:8px 4px;border-radius:12px;border:1px solid #2a2a35;background:#1c1c26;color:#fff;font:700 13px inherit;cursor:pointer}
 .lfone-ratio-btn.on{background:#c8f542;color:#111;border-color:#c8f542}
+@media (max-width:640px){
+  .lfone-refpanel{gap:12px;padding:12px}
+  .lfone-ref-right{gap:10px}
+  .lfone-ref-h{font-size:12px}
+  .lfone-ratio{gap:6px}
+  .lfone-ratio-btn{padding:6px 2px;font-size:11px}
+  .lfai-model{font-size:12px;padding:8px 8px}
+  .lfai-chip{font-size:12px;padding:8px 8px}
+  .lfone-ref-box{flex:1;min-width:0;padding:10px 4px}
+}
 .lfone-empty{border:1px solid #2a2a35;border-radius:14px;background:#12121a;padding:38px 16px;text-align:center;margin-top:10px}
 .lfone-empty-ic{font-size:52px;filter:drop-shadow(0 0 18px rgba(200,245,66,.45))}
 .lfone-empty-t{font:700 19px inherit;margin-top:10px}
