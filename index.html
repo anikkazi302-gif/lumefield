@@ -2436,7 +2436,10 @@ function openDetail(kind, id) {
         '<div class="db-section">✍️ Prompt — describe your image</div>' +
         '<div><textarea id="iPrompt" placeholder="Describe the image you want"></textarea></div>' +
         '<button class="big-btn" id="iCopyBtn" type="button" data-copy-img-prompt data-img-refs="' + imgRefs + '">📋 Copy prompt</button>' +
+        '<button class="big-btn" id="iGenerate" type="button">🖼️ Generate image — free</button>' +
+        '<p class="db-credits" style="margin-top:6px;">Free image engine — text only, made right here on LumeField.</p>' +
         '<p class="db-err" id="dErr" hidden></p>' +
+        '<div class="db-result" id="iResult" hidden><img id="iImg" alt="Generated image" style="width:100%;border-radius:12px;display:block;"><div style="margin-top:10px;"><button class="btn-primary" id="iDownload" type="button">⬇️ Download image</button></div></div>' +
       '</div>';
     }
   detailBody.innerHTML =
@@ -2480,6 +2483,39 @@ if (detailModal) {
       if (r) { ev.preventDefault(); toggleDbPop(r.getAttribute("data-db-row")); }
     }
   });
+}
+/* ---------- In-site image generation (free engine, via Pollinations/FLUX) ----------
+   Gemini image models have a free-tier limit of 0 for this account, so the
+   detail modal generates with the free image engine instead. The picture is
+   fetched straight from the visitor's browser and shown inside our modal —
+   nobody leaves the site. No login needed, no credits charged. */
+var __lfImgUrl = "";
+function generateDetailImage(btn) {
+  var pEl = document.getElementById("iPrompt");
+  var errEl = document.getElementById("dErr");
+  var resWrap = document.getElementById("iResult");
+  var imgEl = document.getElementById("iImg");
+  var p = pEl ? pEl.value.trim() : "";
+  if (!p) { if (errEl) { errEl.textContent = "Please write what you want."; errEl.hidden = false; } if (pEl) pEl.focus(); return; }
+  if (errEl) errEl.hidden = true;
+  if (resWrap) resWrap.hidden = true;
+  btn.disabled = true; btn.textContent = "🖼️ Making your image…";
+  var seed = Math.floor(Math.random() * 1000000);
+  __lfImgUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(p) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed;
+  var img = new Image();
+  img.onload = function () { btn.disabled = false; btn.textContent = "🖼️ Generate image — free"; if (imgEl) imgEl.src = __lfImgUrl; if (resWrap) resWrap.hidden = false; };
+  img.onerror = function () { btn.disabled = false; btn.textContent = "🖼️ Generate image — free"; if (errEl) { errEl.textContent = "The free image queue is busy — try again in a bit."; errEl.hidden = false; } };
+  img.src = __lfImgUrl;
+}
+function downloadDetailImage() {
+  if (!__lfImgUrl) return;
+  fetch(__lfImgUrl).then(function (r) { return r.blob(); }).then(function (b) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(b);
+    a.download = "lumefield-image.jpg";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 5000);
+  }).catch(function () { window.open(__lfImgUrl, "_blank"); });
 }
 if (detailBody) {
   detailBody.addEventListener("click", function (ev) {
@@ -2538,6 +2574,10 @@ if (detailBody) {
     if (cBtn) { try { copyText(fullPlanText(), cBtn); } catch (e) {} return; }
     var ciBtn = t.closest("[data-copy-img-prompt]");
     if (ciBtn) { try { var ip = document.getElementById("iPrompt"); var txt = ip ? ip.value : ""; var n = (typeof photos !== "undefined") ? photos.length : 0; var lim = parseInt(ciBtn.getAttribute("data-img-refs") || "0", 10); if (n > 0 && lim > 0) txt += (txt ? "\n" : "") + "Reference photos: " + n + " uploaded — upload Photos 1–" + Math.min(n, lim) + " on the tool's page."; else if (n > 0) txt += (txt ? "\n" : "") + "Reference photos: " + n + " uploaded — upload them on the tool's page."; copyText(txt, ciBtn); } catch (e) {} return; }
+    var igBtn = t.closest("#iGenerate");
+    if (igBtn) { generateDetailImage(igBtn); return; }
+    var idlBtn = t.closest("#iDownload");
+    if (idlBtn) { downloadDetailImage(); return; }
     var clrP = t.closest("[data-db-clear-photo]");
     if (clrP) { try { photos.length = 0; renderThumbs(); } catch (e) {} refreshDbRefs(); return; }
     var clrV = t.closest("[data-db-clear-video]");
