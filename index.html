@@ -765,12 +765,52 @@
 .lfone-gal-card p{margin:0;padding:8px 10px;font-size:12px;color:#cfcfe0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lfone-gal-card p a{color:#c8f542;text-decoration:none}
 .lfone-gal-empty{color:#9a9ab0;font-size:14px}
-#lfOneImg{max-width:100%;border-radius:14px}
+#lfOneImg{max-width:100%;height:auto;display:block;border-radius:14px}
 .lfone-result{position:relative}
 .lfone-done{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#c8f542;border:1px solid #c8f542;padding:6px 12px;border-radius:999px;font:600 13px inherit;z-index:2}
 .lfone-dur{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#fff;border:1px solid #444;padding:6px 10px;border-radius:999px;font:600 12px inherit;z-index:2}
 #lfOneImgResult{position:relative}
+.lfone-result-wrap{display:block}
+.lfone-side{margin-top:10px}
+.lfone-favcard{margin-top:12px;border:1px solid #2a2a35;border-radius:14px;padding:12px;background:#14141c}
+.lfone-favcard-head{font:700 15px inherit;margin-bottom:8px}
+.lfone-favcard-item{font-size:13px;color:#cfcfe0;padding:6px 0;border-top:1px solid #23232e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lfone-favcard-empty{color:#9a9ab0;font-size:13px}
+.lfone-gal-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.lfone-gal-filter{padding:7px 14px;border-radius:999px;border:1px solid #2a2a35;background:#1c1c26;color:#fff;font:600 13px inherit;cursor:pointer}
+.lfone-gal-filter.on{background:#c8f542;color:#111;border-color:#c8f542}
+.lfside{display:none}
+@media (min-width:1024px){
+  body{padding-left:212px}
+  .lfside{display:flex;flex-direction:column;gap:4px;position:fixed;left:0;top:0;bottom:0;width:212px;z-index:60;background:#0d0d14;border-right:1px solid #23232e;padding:18px 12px;box-sizing:border-box}
+  .lfside-item{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;border:0;border-radius:12px;background:transparent;color:#d8d8e6;font:600 15px inherit;cursor:pointer;text-align:left}
+  .lfside-item:hover{background:#1a1a24}
+  .lfside-item.on{background:#c8f542;color:#111}
+  .lfside-count{margin-left:auto;background:#ff5c8a;color:#fff;font-size:11px;min-width:20px;height:20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;padding:0 5px}
+  .lfside-pro{margin-top:auto;border:1px solid #2a2a35;border-radius:16px;padding:14px;background:#14141c;text-align:center}
+  .lfside-pro-title{color:#c8f542;font:700 17px inherit}
+  .lfside-pro-sub{color:#9a9ab0;font-size:12px;margin:6px 0 10px}
+  .lfside-pro-btn{display:inline-block;background:#c8f542;color:#111;font:700 14px inherit;padding:9px 16px;border-radius:999px;text-decoration:none}
+  .lfone-result-wrap{display:flex;gap:14px;align-items:flex-start}
+  .lfone-result{flex:1;min-width:0}
+  .lfone-side{width:200px;flex:none;margin-top:0}
+  .lfone-actions{flex-direction:column;flex-wrap:nowrap;margin-top:0}
+  .lfone-actions button{width:100%;text-align:left}
+}
 </style>
+<nav class="lfside" id="lfSide" aria-label="LumeField menu">
+  <button type="button" class="lfside-item on" data-side="home">🏠 Home</button>
+  <button type="button" class="lfside-item" data-side="creations">🖼 My Creations</button>
+  <button type="button" class="lfside-item" data-side="favs">❤ Favorites <span class="lfside-count" id="lfSideFavCount" hidden>0</span></button>
+  <button type="button" class="lfside-item" data-side="history">🕐 History</button>
+  <button type="button" class="lfside-item" data-side="settings">⚙ Settings</button>
+  <button type="button" class="lfside-item" data-side="help">❓ Help</button>
+  <div class="lfside-pro">
+    <div class="lfside-pro-title">👑 Go Pro</div>
+    <div class="lfside-pro-sub">Unlock more power &amp; features</div>
+    <a class="lfside-pro-btn" href="#buy-credits">Upgrade →</a>
+  </div>
+</nav>
 <section class="lfai lfone" id="lfOne" aria-label="LumeField AI studio">
   <div class="lfai-box">
     <div class="lfai-head"><span class="lfai-mark">✦</span><h2>LumeField AI</h2><span class="lfai-tag">FREE</span></div>
@@ -794,20 +834,28 @@
         </div>
         <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
-        <div class="lfone-result"><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
-        <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
-        <div class="lfone-actions" id="lfOneVideoActions" hidden>
-          <button type="button" id="lfOneVideoDownload">⬇ Download</button>
-          <button type="button" id="lfOneVideoShare">🔗 Share</button>
-          <button type="button" id="lfOneVideoRegen">↻ Regenerate</button>
-          <button type="button" class="fav" id="lfOneVideoFav">❤ Add to Favorite</button>
+        <div class="lfone-result-wrap">
+          <div class="lfone-result"><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
+          <div class="lfone-side" id="lfOneVideoSide" hidden>
+            <div class="lfone-actions" id="lfOneVideoActions">
+              <button type="button" id="lfOneVideoDownload">⬇ Download</button>
+              <button type="button" id="lfOneVideoShare">🔗 Share</button>
+              <button type="button" id="lfOneVideoRegen">↻ Regenerate</button>
+              <button type="button" class="fav" id="lfOneVideoFav">❤ Add to Favorite</button>
+            </div>
+            <div class="lfone-favcard" id="lfOneFavCard">
+              <div class="lfone-favcard-head">❤ Favorite Items</div>
+              <div id="lfOneFavList"><p class="lfone-favcard-empty">No favorites yet.</p></div>
+            </div>
+          </div>
         </div>
+        <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
       </div>
       <div class="lfone-panel" id="lfOnePanelImage" hidden>
         <textarea id="lfOneImgPrompt" rows="3" maxlength="300" placeholder="Describe the image you want..."></textarea>
         <div class="lfai-status" id="lfOneImgStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfOneImgError" aria-live="polite"></div>
-        <div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt=""><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
+        <div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt="Generated image"><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
       </div>
       <div class="lfone-panel" id="lfOnePanelSong" hidden>
         <textarea id="lfMusicPrompt" rows="2" maxlength="200" placeholder="e.g. happy birthday song, soft piano"></textarea>
@@ -860,7 +908,14 @@
 <section class="lfai lfone-gallery" id="lfOneGallery" aria-label="Your creations">
   <div class="lfai-box">
     <div class="lfone-gal-head"><h2>🖼 আপনার তৈরি কাজ</h2><button type="button" id="lfOneGalAll">সব দেখুন →</button></div>
+    <div class="lfone-gal-filters" id="lfOneGalFilters">
+      <button type="button" class="lfone-gal-filter on" data-f="all">All (<span id="lfGalNAll">0</span>)</button>
+      <button type="button" class="lfone-gal-filter" data-f="image">Images (<span id="lfGalNImg">0</span>)</button>
+      <button type="button" class="lfone-gal-filter" data-f="video">Videos (<span id="lfGalNVid">0</span>)</button>
+      <button type="button" class="lfone-gal-filter" data-f="song">Songs (<span id="lfGalNSong">0</span>)</button>
+    </div>
     <div id="lfOneGalList"><p class="lfone-gal-empty">No creations yet — make your first video, image or song above.</p></div>
+    <p class="lfone-gal-empty" id="lfOneGalEmptyF" hidden>Nothing here yet.</p>
   </div>
 </section>
 
@@ -926,7 +981,7 @@
       var img = new Image();
       img.onload = function () {
         if (createBtn) { createBtn.disabled = false; createBtn.textContent = labelFor("image"); }
-        if (imgEl) imgEl.src = url; if (dl) dl.href = url; if (res) res.hidden = false; var idn = $("lfOneImgDone"); if (idn) idn.hidden = false;
+        if (imgEl) { imgEl.src = url; imgEl.alt = p; } if (dl) dl.href = url; if (res) res.hidden = false; var idn = $("lfOneImgDone"); if (idn) idn.hidden = false;
         try { var arr = JSON.parse(localStorage.getItem("lumefield_images") || "[]"); arr.unshift({ url: url, prompt: p, at: new Date().toISOString().slice(0, 16).replace("T", " ") }); localStorage.setItem("lumefield_images", JSON.stringify(arr.slice(0, 12))); } catch (e) {}
         renderOneGallery();
       };
@@ -945,7 +1000,7 @@
         .catch(function () { clearTimeout(timer); finish(p); });
     } catch (e) { finish(p); }
   }
-  var vEl = $("lfAIVideo"), vAct = $("lfOneVideoActions");
+  var vEl = $("lfAIVideo"), vAct = $("lfOneVideoSide");
   function syncVideoActions() { if (vEl && vAct) vAct.hidden = !!vEl.hidden; var d = $("lfOneVideoDone"), du = $("lfOneVideoDur"); if (d) d.hidden = !vEl || !!vEl.hidden; if (du) du.hidden = !vEl || !!vEl.hidden; }
   function updDur() { var du = $("lfOneVideoDur"); if (!du || !vEl) return; function f(t) { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ":" + ("0" + (t % 60)).slice(-2); } du.textContent = f(vEl.currentTime) + " / " + f(vEl.duration); }
   if (vEl) { vEl.addEventListener("loadedmetadata", updDur); vEl.addEventListener("timeupdate", updDur); }
@@ -971,17 +1026,56 @@
   function renderOneGallery() {
     var list = $("lfOneGalList"); if (!list) return;
     var html = "";
-    try { var imgs = JSON.parse(localStorage.getItem("lumefield_images") || "[]"); imgs.slice(0, 6).forEach(function (im) { html += '<div class="lfone-gal-card"><img src="' + esc(im.url) + '" alt="" loading="lazy"><p>🖼 ' + esc(im.prompt || "Image") + '</p></div>'; }); } catch (e) {}
-    try { var favs = JSON.parse(localStorage.getItem("lumefield_favs") || "[]"); favs.slice(0, 6).forEach(function (f) { html += '<div class="lfone-gal-card"><p>❤ ' + esc(f.prompt || "Favorite video") + '</p></div>'; }); } catch (e) {}
+    try { var imgs = JSON.parse(localStorage.getItem("lumefield_images") || "[]"); imgs.slice(0, 6).forEach(function (im) { html += '<div class="lfone-gal-card" data-kind="image"><img src="' + esc(im.url) + '" alt="' + esc(im.prompt || "Image") + '" loading="lazy"><p>🖼 ' + esc(im.prompt || "Image") + '</p></div>'; }); } catch (e) {}
+    try { var favs = JSON.parse(localStorage.getItem("lumefield_favs") || "[]"); favs.slice(0, 6).forEach(function (f) { html += '<div class="lfone-gal-card" data-kind="video"><p>❤ ' + esc(f.prompt || "Favorite video") + '</p></div>'; }); } catch (e) {}
     list.innerHTML = html || '<p class="lfone-gal-empty">No creations yet — make your first video, image or song above.</p>';
+    renderOneFavs(); updateGalCounts(); applyGalFilter();
     if (typeof lfDb !== "undefined" && lfDb && typeof lfAuth !== "undefined" && lfAuth && lfAuth.currentUser) {
       lfDb.collection("savedVideos").where("uid", "==", lfAuth.currentUser.uid).get().then(function (qs) {
         var extra = "";
-        qs.forEach(function (doc) { var d = doc.data(); var u = d.videoUrl || ""; var label = d.planText ? d.planText.slice(0, 60) : (d.modelName || "Saved video"); extra += '<div class="lfone-gal-card"><p>' + (u ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">🎬 ' + esc(label) + ' ↗</a>' : '🎬 ' + esc(label)) + '</p></div>'; });
-        if (extra) { var cur = list.innerHTML; if (cur.indexOf("lfone-gal-empty") >= 0) cur = ""; list.innerHTML = cur + extra; }
+        qs.forEach(function (doc) { var d = doc.data(); var u = d.videoUrl || ""; var label = d.planText ? d.planText.slice(0, 60) : (d.modelName || "Saved video"); extra += '<div class="lfone-gal-card" data-kind="video"><p>' + (u ? '<a href="' + esc(u) + '" target="_blank" rel="noopener">🎬 ' + esc(label) + ' ↗</a>' : '🎬 ' + esc(label)) + '</p></div>'; });
+        if (extra) { var cur = list.innerHTML; if (cur.indexOf("lfone-gal-empty") >= 0) cur = ""; list.innerHTML = cur + extra; updateGalCounts(); applyGalFilter(); }
       }).catch(function () {});
     }
   }
+  var galFilter = "all";
+  function updateGalCounts() {
+    var list = $("lfOneGalList"); if (!list) return;
+    function n(k) { return list.querySelectorAll('.lfone-gal-card[data-kind="' + k + '"]').length; }
+    function set(id, v) { var el = $(id); if (el) el.textContent = v; }
+    set("lfGalNAll", list.querySelectorAll(".lfone-gal-card").length);
+    set("lfGalNImg", n("image")); set("lfGalNVid", n("video")); set("lfGalNSong", 0);
+  }
+  function applyGalFilter() {
+    var list = $("lfOneGalList"); if (!list) return;
+    var shown = 0;
+    list.querySelectorAll(".lfone-gal-card").forEach(function (c) { var ok = galFilter === "all" || c.getAttribute("data-kind") === galFilter; c.style.display = ok ? "" : "none"; if (ok) shown++; });
+    var ef = $("lfOneGalEmptyF"); if (ef) ef.hidden = !(shown === 0 && list.querySelectorAll(".lfone-gal-card").length > 0);
+  }
+  function renderOneFavs() {
+    var box = $("lfOneFavList"); if (!box) return;
+    var html = "";
+    try { var favs = JSON.parse(localStorage.getItem("lumefield_favs") || "[]"); favs.slice(0, 5).forEach(function (f) { html += '<div class="lfone-favcard-item">❤ ' + esc(f.prompt || "Favorite video") + '</div>'; }); } catch (e) {}
+    box.innerHTML = html || '<p class="lfone-favcard-empty">No favorites yet.</p>';
+    var fc = $("lfSideFavCount"); if (fc) { var n = 0; try { n = JSON.parse(localStorage.getItem("lumefield_favs") || "[]").length; } catch (e) {} fc.hidden = n === 0; fc.textContent = n; }
+  }
+  var gf = $("lfOneGalFilters");
+  if (gf) gf.addEventListener("click", function (e) { var b = e.target.closest(".lfone-gal-filter"); if (!b) return; galFilter = b.getAttribute("data-f") || "all"; gf.querySelectorAll(".lfone-gal-filter").forEach(function (x) { x.classList.toggle("on", x === b); }); applyGalFilter(); });
+  (function () {
+    var side = $("lfSide"); if (!side) return;
+    function go(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    side.addEventListener("click", function (e) {
+      var b = e.target.closest(".lfside-item"); if (!b) return;
+      side.querySelectorAll(".lfside-item").forEach(function (x) { x.classList.toggle("on", x === b); });
+      var k = b.getAttribute("data-side");
+      if (k === "home") window.scrollTo({ top: 0, behavior: "smooth" });
+      else if (k === "creations") { var ab = $("navAssetsBtn"); if (ab) ab.click(); else { var pv = $("profileMyVideos"); if (pv) pv.click(); } }
+      else if (k === "favs") go("lfOneGallery");
+      else if (k === "history") { if (window.openProfileView) window.openProfileView(); else { var pb = $("profileViewProfileBtn"); if (pb) pb.click(); } }
+      else if (k === "settings") { var pc = $("profileChip"); if (pc) pc.click(); else { var si = $("signInBtn"); if (si) si.click(); } }
+      else if (k === "help") go("guides");
+    });
+  })();
   window.lfOneGalleryRender = renderOneGallery;
   renderOneGallery();
   if ("IntersectionObserver" in window) { var gal = $("lfOneGallery"); if (gal) { var io = new IntersectionObserver(function (en) { if (en[0].isIntersecting) { renderOneGallery(); io.disconnect(); } }); io.observe(gal); } }
