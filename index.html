@@ -2490,6 +2490,7 @@ if (detailModal) {
    fetched straight from the visitor's browser and shown inside our modal —
    nobody leaves the site. No login needed, no credits charged. */
 var __lfImgUrl = "";
+var __lfWorkerUrl = "https://lumefield-gemini.anikkazi302.workers.dev";
 function generateDetailImage(btn) {
   var pEl = document.getElementById("iPrompt");
   var errEl = document.getElementById("dErr");
@@ -2500,12 +2501,27 @@ function generateDetailImage(btn) {
   if (errEl) errEl.hidden = true;
   if (resWrap) resWrap.hidden = true;
   btn.disabled = true; btn.textContent = "🖼️ Making your image…";
-  var seed = Math.floor(Math.random() * 1000000);
-  __lfImgUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(p) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed;
-  var img = new Image();
-  img.onload = function () { btn.disabled = false; btn.textContent = "🖼️ Generate image — free"; if (imgEl) imgEl.src = __lfImgUrl; if (resWrap) resWrap.hidden = false; };
-  img.onerror = function () { btn.disabled = false; btn.textContent = "🖼️ Generate image — free"; if (errEl) { errEl.textContent = "The free image queue is busy — try again in a bit."; errEl.hidden = false; } };
-  img.src = __lfImgUrl;
+  /* Free Gemini writes a detailed, realistic prompt first (it is free and
+     fast); if that fails, the raw prompt is used as-is. */
+  var enhanced = null;
+  var done = false;
+  function finish(finalPrompt) {
+    if (done) return; done = true;
+    var seed = Math.floor(Math.random() * 1000000);
+    __lfImgUrl = "https://image.pollinations.ai/prompt/" + encodeURIComponent(finalPrompt) + "?width=1024&height=1024&model=flux&nologo=true&seed=" + seed;
+    var img = new Image();
+    img.onload = function () { btn.disabled = false; btn.textContent = "🖼️ Generate image — free"; if (imgEl) imgEl.src = __lfImgUrl; if (resWrap) resWrap.hidden = false; };
+    img.onerror = function () { btn.disabled = false; btn.textContent = "🖼️ Generate image — free"; if (errEl) { errEl.textContent = "The free image queue is busy — try again in a bit."; errEl.hidden = false; } };
+    img.src = __lfImgUrl;
+  }
+  try {
+    var ctrl = new AbortController();
+    var timer = setTimeout(function () { try { ctrl.abort(); } catch (e) {} finish(p); }, 10000);
+    fetch(__lfWorkerUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "imageprompt", prompt: p }), signal: ctrl.signal })
+      .then(function (r) { if (!r.ok) throw new Error("worker " + r.status); return r.json(); })
+      .then(function (d) { clearTimeout(timer); var t = (d && d.text) ? d.text.trim() : ""; finish(t || p); })
+      .catch(function () { clearTimeout(timer); finish(p); });
+  } catch (e) { finish(p); }
 }
 function downloadDetailImage() {
   if (!__lfImgUrl) return;
