@@ -766,6 +766,10 @@
 .lfone-gal-card p a{color:#c8f542;text-decoration:none}
 .lfone-gal-empty{color:#9a9ab0;font-size:14px}
 #lfOneImg{max-width:100%;border-radius:14px}
+.lfone-result{position:relative}
+.lfone-done{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.65);color:#c8f542;border:1px solid #c8f542;padding:6px 12px;border-radius:999px;font:600 13px inherit;z-index:2}
+.lfone-dur{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.65);color:#fff;border:1px solid #444;padding:6px 10px;border-radius:999px;font:600 12px inherit;z-index:2}
+#lfOneImgResult{position:relative}
 </style>
 <section class="lfai lfone" id="lfOne" aria-label="LumeField AI studio">
   <div class="lfai-box">
@@ -790,7 +794,7 @@
         </div>
         <div class="lfai-status" id="lfAIStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfAIError" aria-live="polite"></div>
-        <video id="lfAIVideo" controls autoplay loop playsinline hidden></video>
+        <div class="lfone-result"><video id="lfAIVideo" controls autoplay loop playsinline hidden></video><span class="lfone-done" id="lfOneVideoDone" hidden>✓ Generation Complete!</span><span class="lfone-dur" id="lfOneVideoDur" hidden>0:00 / 0:05</span></div>
         <a id="lfAIDownload" href="#" download="lumefield-ai-video.mp4" hidden>⬇ Download video</a>
         <div class="lfone-actions" id="lfOneVideoActions" hidden>
           <button type="button" id="lfOneVideoDownload">⬇ Download</button>
@@ -803,7 +807,7 @@
         <textarea id="lfOneImgPrompt" rows="3" maxlength="300" placeholder="Describe the image you want..."></textarea>
         <div class="lfai-status" id="lfOneImgStatus" aria-live="polite"></div>
         <div class="lfai-error" id="lfOneImgError" aria-live="polite"></div>
-        <div id="lfOneImgResult" hidden><img id="lfOneImg" alt=""><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
+        <div id="lfOneImgResult" hidden><span class="lfone-done" id="lfOneImgDone" hidden>✓ Generation Complete!</span><img id="lfOneImg" alt=""><br><a id="lfOneImgDownload" href="#" download="lumefield-image.jpg">⬇ Download image</a></div>
       </div>
       <div class="lfone-panel" id="lfOnePanelSong" hidden>
         <textarea id="lfMusicPrompt" rows="2" maxlength="200" placeholder="e.g. happy birthday song, soft piano"></textarea>
@@ -922,7 +926,7 @@
       var img = new Image();
       img.onload = function () {
         if (createBtn) { createBtn.disabled = false; createBtn.textContent = labelFor("image"); }
-        if (imgEl) imgEl.src = url; if (dl) dl.href = url; if (res) res.hidden = false;
+        if (imgEl) imgEl.src = url; if (dl) dl.href = url; if (res) res.hidden = false; var idn = $("lfOneImgDone"); if (idn) idn.hidden = false;
         try { var arr = JSON.parse(localStorage.getItem("lumefield_images") || "[]"); arr.unshift({ url: url, prompt: p, at: new Date().toISOString().slice(0, 16).replace("T", " ") }); localStorage.setItem("lumefield_images", JSON.stringify(arr.slice(0, 12))); } catch (e) {}
         renderOneGallery();
       };
@@ -942,7 +946,9 @@
     } catch (e) { finish(p); }
   }
   var vEl = $("lfAIVideo"), vAct = $("lfOneVideoActions");
-  function syncVideoActions() { if (vEl && vAct) vAct.hidden = !!vEl.hidden; }
+  function syncVideoActions() { if (vEl && vAct) vAct.hidden = !!vEl.hidden; var d = $("lfOneVideoDone"), du = $("lfOneVideoDur"); if (d) d.hidden = !vEl || !!vEl.hidden; if (du) du.hidden = !vEl || !!vEl.hidden; }
+  function updDur() { var du = $("lfOneVideoDur"); if (!du || !vEl) return; function f(t) { t = Math.max(0, Math.floor(t || 0)); return Math.floor(t / 60) + ":" + ("0" + (t % 60)).slice(-2); } du.textContent = f(vEl.currentTime) + " / " + f(vEl.duration); }
+  if (vEl) { vEl.addEventListener("loadedmetadata", updDur); vEl.addEventListener("timeupdate", updDur); }
   if (vEl && vAct && "MutationObserver" in window) { new MutationObserver(syncVideoActions).observe(vEl, { attributes: true, attributeFilter: ["hidden"] }); syncVideoActions(); }
   var dlBtn = $("lfOneVideoDownload"), shBtn = $("lfOneVideoShare"), rgBtn = $("lfOneVideoRegen"), fvBtn = $("lfOneVideoFav");
   if (dlBtn) dlBtn.addEventListener("click", function () { var a = $("lfAIDownload"); if (a) a.click(); });
