@@ -953,6 +953,8 @@
       <div class="lfai-durs" role="group" aria-label="Duration">
         <button type="button" class="lfai-dur on" data-dur="5">5s</button>
         <button type="button" class="lfai-dur" data-dur="10">10s</button>
+        <button type="button" class="lfai-dur" data-dur="15">15s</button>
+        <button type="button" class="lfai-dur" data-dur="30">30s</button>
       </div>
     </div>
     <div class="lfai-model-pop" id="lfAIModelPop" hidden>
@@ -963,7 +965,7 @@
       <div class="opt-item" data-quality="480P"><span><span class="opt-nm">480p</span><span class="opt-sub" style="display:block;">Standard</span></span></div>
       <div class="opt-item" data-quality="720P"><span><span class="opt-nm">720p</span><span class="opt-sub" style="display:block;">HD</span></span></div>
       <div class="opt-item" data-quality="1080P"><span><span class="opt-nm">1080p</span><span class="opt-sub" style="display:block;">Full HD</span></span></div>
-      <div class="opt-item" data-quality="4K"><span><span class="opt-nm">4K</span><span class="opt-sub" style="display:block;">Ultra HD</span></span></div>
+      <div class="opt-item" data-quality="2K"><span><span class="opt-nm">2K</span><span class="opt-sub" style="display:block;">Quad HD</span></span></div>
     </div>
   </div>
 </section>
@@ -3981,7 +3983,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 (function () {
   var SPACE = "Lightricks/LTX-2-3";
   var ENDPOINT = "/generate_video";
-  var COSTS = { 5: 10, 10: 20 };
+  var COSTS = { 5: 10, 10: 20, 15: 30, 30: 60 };
   /* User rule — REALISM MOTTO: videos must be beautiful AND realistic,
      exactly like real people; nothing unrealistic. Appended to every
      prompt sent to the engine (not shown as a separate option). */
@@ -4315,6 +4317,47 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       dlEl.hidden = false;
     });
   }
+  /* Last frame of a video URL as a JPEG blob (continuity between segments). */
+  function lastFrameBlob(url) {
+    return new Promise(function (resolve) {
+      try {
+        var v = document.createElement("video");
+        v.muted = true; v.preload = "auto"; v.crossOrigin = "anonymous"; v.src = url;
+        var done = false;
+        function finish(blob) { if (!done) { done = true; resolve(blob || null); } }
+        v.addEventListener("loadedmetadata", function () {
+          try { v.currentTime = Math.max(0, (v.duration || 0) - 0.1); } catch (e) { finish(null); }
+        });
+        v.addEventListener("seeked", function () {
+          try {
+            var c = document.createElement("canvas");
+            c.width = v.videoWidth || 640; c.height = v.videoHeight || 360;
+            c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+            c.toBlob(function (b) { finish(b); }, "image/jpeg", 0.9);
+          } catch (e) { finish(null); }
+        });
+        v.addEventListener("error", function () { finish(null); });
+        setTimeout(function () { finish(null); }, 15000);
+      } catch (e) { resolve(null); }
+    });
+  }
+  /* Play segment URLs back-to-back in the same player (loop only for one). */
+  var segUrls = [], segIdx = 0;
+  function playSegments(urls) {
+    segUrls = urls || []; segIdx = 0;
+    if (!segUrls.length) return;
+    videoEl.loop = segUrls.length === 1;
+    videoEl.src = segUrls[0];
+    videoEl.hidden = false;
+    try { videoEl.play(); } catch (e) {}
+  }
+  videoEl.addEventListener("ended", function () {
+    if (segUrls.length > 1 && segIdx < segUrls.length - 1) {
+      segIdx++;
+      videoEl.src = segUrls[segIdx];
+      try { videoEl.play(); } catch (e) {}
+    }
+  });
   /* Runs AFTER the credit gate approves (or immediately for owner / the
      one free guest video, per the gate's existing logic). */
   function doGenerate() {
@@ -4328,19 +4371,32 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       setStatus("In queue…");
       return Client.connect(SPACE);
     }).then(function (client) {
-      setStatus("Generating… (free queue — can take a few minutes)");
+      /* The free engine renders at most 10s per call: longer videos are
+         built as 10s segments, each continuing from the previous one's
+         last frame, then played back-to-back in the same player. */
       var seed = Math.floor(Math.random() * 2147483647);
-      var args = [photoFile || null, buildEnginePrompt(), selectedDur, true, seed, true, 1024, 1536];
-      return client.predict(ENDPOINT, args);
-    }).then(function (result) {
-      var url = extractVideoUrl(result);
-      if (!url) throw new Error("no-video");
+      var segs = [], remaining = selectedDur;
+      while (remaining > 0) { segs.push(Math.min(10, remaining)); remaining -= 10; }
+      var chain = Promise.resolve(), urls = [], img = photoFile || null;
+      segs.forEach(function (d, i) {
+        chain = chain.then(function () {
+          setStatus("Generating… part " + (i + 1) + " of " + segs.length + " (free queue — can take a few minutes)");
+          var args = [img, buildEnginePrompt(), d, true, seed + i, true, 1024, 1536];
+          return client.predict(ENDPOINT, args).then(function (result) {
+            var url = extractVideoUrl(result);
+            if (!url) throw new Error("no-video");
+            urls.push(url);
+            return lastFrameBlob(url);
+          }).then(function (blob) { if (blob) img = blob; });
+        });
+      });
+      return chain.then(function () { return urls; });
+    }).then(function (urls) {
+      if (!urls || !urls.length) throw new Error("no-video");
       setStatus("Done ✓");
-      videoEl.src = url;
-      videoEl.hidden = false;
-      try { videoEl.play(); } catch (e) {}
+      playSegments(urls);
       syncRefAudio();
-      setupDownload(url);
+      setupDownload(urls[0]);
     }).catch(function (err) {
       setStatus("");
       setErr(friendlyErr(err));
