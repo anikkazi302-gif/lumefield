@@ -197,9 +197,9 @@
   .auth-submit { width: 100%; margin-top: 6px; cursor: pointer; font-family: inherit; }
   .auth-google { width: 100%; margin-top: 10px; background: #fff; color: #0a0a12; border: none; border-radius: 999px; padding: 12px 0; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
   .auth-google:hover { background: #ffd166; }
-  /* ---------- Higgsfield-style split login ---------- */
+  /* ---------- Login modal ---------- */
   #authModal .modal { max-width: 460px; padding: 0; overflow: hidden; display: block; text-align: left; }
-  .auth-google, .auth-social { display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .auth-google { display: flex; align-items: center; justify-content: center; gap: 8px; }
   .auth-logo svg { display: block; }
   .auth-bonus { color: #c8f542; font-size: 13px; font-weight: 700; margin: 10px 0 0; text-align: center; }
   .auth-legal { margin-top: 14px; font-size: 12px; line-height: 1.55; color: #8a8a9e; text-align: center; }
@@ -208,10 +208,7 @@
   .auth-form { padding: 30px 30px 24px; }
   .auth-or { display: flex; align-items: center; gap: 10px; color: #8a8a9e; font-size: 12px; margin: 16px 0 2px; }
   .auth-or::before, .auth-or::after { content: ""; flex: 1; height: 1px; background: #26263a; }
-  .auth-social { width: 100%; margin-top: 10px; background: #1c1c2c; color: #f2f2f7; border: 1px solid #26263a; border-radius: 999px; padding: 12px 0; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; }
-  .auth-social:hover { border-color: #ffd166; }
-  .auth-social[disabled] { opacity: .45; cursor: not-allowed; }
-  @media (max-width: 640px) { #authModal .modal { grid-template-columns: 1fr; max-width: 420px; } }
+  @media (max-width: 640px) { #authModal .modal { max-width: 420px; } }
   .modal-note { margin-top: 16px; font-size: 12.5px; line-height: 1.55; color: #a9a9bd; background: #1c1c2c; border: 1px solid #26263a; border-radius: 12px; padding: 10px 12px; }
   /* ---------- hero background video (Team 4) ---------- */
   .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
@@ -1673,7 +1670,6 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
       <a href="#image-tools">Create Image</a>
       <a href="#photo-editing">Edit Photo</a>
       <a href="#guides">Guides</a>
-      <a href="#buy-credits">Pricing</a>
     </div>
     <div class="foot-col"><h3>Video Models</h3><div id="footVideoList"></div></div>
     <div class="foot-col"><h3>Image Models</h3><div id="footImageList"></div></div>
@@ -1704,7 +1700,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
     <!-- YouTube / TikTok / Discord / X / LinkedIn return here when the real links arrive -->
   </div>
   <div class="foot-links">
-    <a href="#guides">Help center</a>
+    <a href="#guides">Help Center</a>
     <a href="privacy.html">Cookie Notice</a>
     <a href="terms.html">Terms</a>
     <a href="privacy.html">Privacy</a>
@@ -3060,6 +3056,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (!FIREBASE_CONFIGURED || !lfAuth) return notConnected();
     var email = emailEl.value.trim(), pass = passEl.value;
     if (!email || !pass) { showMsg("Enter your email and password."); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showMsg("Enter a valid email address."); return; }
+    if (pass.length < 6) { showMsg("Password must be at least 6 characters."); return; }
     if (mode === "signup" && isDisposableEmail(email)) { showMsg("Temporary email addresses are not allowed. Please use a real email address."); return; }
     var p = mode === "signin"
       ? lfAuth.signInWithEmailAndPassword(email, pass)
@@ -3079,6 +3077,9 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       closeModal();
     }).catch(function (err) { showMsg(err && err.message ? err.message : "Sign-in failed. Try again."); });
   });
+  function submitOnEnter(e) { if (e.key === "Enter") { e.preventDefault(); submitBtn.click(); } }
+  emailEl.addEventListener("keydown", submitOnEnter);
+  passEl.addEventListener("keydown", submitOnEnter);
   document.getElementById("authGoogle").addEventListener("click", function () {
     if (!FIREBASE_CONFIGURED || !lfAuth) return notConnected();
     lfAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
