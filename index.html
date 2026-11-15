@@ -2788,6 +2788,8 @@ function openDetail(kind, id) {
     buyHTML +
     '<p class="detail-spec">' + escHtml(spec) + '</p>';
   refreshDetailGen();
+  var ds = document.getElementById("dSubject");
+  if (ds) ds.onkeydown = function (e) { if (e.key === "Enter") { e.preventDefault(); var g = document.getElementById("dGenerate"); if (g) g.click(); } };
   refreshDbRefs();
   refreshDbRows();
   closeDbPops();
@@ -5686,6 +5688,11 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   }
   var csb = document.getElementById("charSaveBtn");
   if (csb) csb.addEventListener("click", saveCharacter);
+  function charEnter(e) { if (e.key === "Enter") { e.preventDefault(); if (csb) csb.click(); } }
+  var cnEl = document.getElementById("charName");
+  var cdEl = document.getElementById("charDesc");
+  if (cnEl) cnEl.addEventListener("keydown", charEnter);
+  if (cdEl) cdEl.addEventListener("keydown", charEnter);
   var cnb = document.getElementById("charNewBtn");
   if (cnb) cnb.addEventListener("click", function () {
     var cf = document.getElementById("charForm");
@@ -5745,6 +5752,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   if (vrec) vrec.addEventListener("click", voiceToggleRec);
   var vplay = document.getElementById("voicePlayBtn");
   if (vplay) vplay.addEventListener("click", voicePlayOwn);
+  var vst = document.getElementById("voiceSampleText");
+  if (vst) vst.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); if (vplay && !vplay.hidden) vplay.click(); } });
   var cl = document.getElementById("charList");
   if (cl) cl.addEventListener("click", function (ev) {
     var vc = ev.target.closest ? ev.target.closest("[data-voice-char]") : null;
