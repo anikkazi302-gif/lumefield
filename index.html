@@ -1512,18 +1512,18 @@
       <button class="copy-btn" id="savePlanBtn" type="button">💾 Save this video to My videos</button>
     </div>
     <div id="segments"></div>
-    <p class="note">✏️ <b>Customize your plan:</b> every segment prompt above is editable — change any part of it, then copy it. Change the style, camera or duration above and press “Build my video plan” again to rebuild the whole plan your way. You control every part.</p>
+    <p class="note">✏️ <b>Customize your plan:</b> every segment prompt above is editable — change any part of it, then copy it. Change the style, camera or duration above and press “✦ Generate” again to rebuild the whole plan your way. You control every part.</p>
     <h2 style="margin-top:18px;">Locked rules — paste with every prompt</h2>
     <div class="rules" id="rulesText"></div>
     <button class="copy-btn" data-copy="rulesText">📋 Copy locked rules</button>
     <h2 style="margin-top:18px;">Recommended settings for <span id="engineName"></span></h2>
     <div class="summary" id="settings"></div>
     <a class="go-btn" id="goBtn" href="#" target="_blank" rel="noopener">▶ Open the free engine →</a>
-    <h2 style="margin-top:18px;">How to make the full 30 seconds</h2>
+    <h2 style="margin-top:18px;">How to make the full video</h2>
     <ol class="howto">
       <li>Open the engine above (free, no payment). Upload your reference photo as the start frame / image input.</li>
       <li>Paste the <b>Segment 1</b> prompt and generate. Download the clip.</li>
-      <li>For Segment 2, use the <b>last frame of Segment 1</b> as the start image (save it from the clip) and paste the Segment 2 prompt. Repeat for Segment 3.</li>
+      <li>For each following segment, use the <b>last frame of the previous segment</b> as the start image (save it from the clip) and paste that segment's prompt.</li>
       <li>Join the clips in any free editor (CapCut, DaVinci Resolve, or ffmpeg) — no re-render needed.</li>
       <li>If a segment comes out wrong, regenerate only that segment — never the whole video.</li>
     </ol>
@@ -1904,7 +1904,7 @@ const ENGINES = [
   { id: "h3max", opts: { dur: { min: 5, max: 15, ticks: [5, 10, 15], def: 5 }, ratio: { opts: ["Auto", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "Auto" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Max", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Max \u2014 the highest-quality H3 variant. Same welcome credits, watermarked." },
   { id: "h3highspeed", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 5 }, ratio: { opts: ["Auto", "21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "Auto" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Highspeed", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Highspeed \u2014 the fast H3 variant. Same welcome credits, watermarked." },
   { id: "h3lite", opts: { dur: { min: 4, max: 15, ticks: [4, 10, 15], def: 5 }, ratio: { opts: ["21:9", "16:9", "4:3", "1:1", "3:4", "9:16"], def: "16:9" }, quality: { opts: ["480p", "768p"], def: "768p" }, bitrate: null }, refs: 12, name: "MiniMax H3 Lite", vendor: "MiniMax", url: "https://hailuoai.video", maxSec: 15, i2v: true, res: "up to 2K", audio: true, free: "Free welcome credits (~80, 3 days)", note: "H3 Lite \u2014 the light, cheap H3 variant. Same welcome credits, watermarked." },
-  { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 30 seconds with sound, free daily check-in credits. Free plan: clips up to 10s." },
+  { id: "wan3", refs: 1, name: "Wan 3.0", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Alibaba's newest model, up to 10 seconds free with sound (30s paid), free daily check-in credits. Free plan: clips up to 10s." },
   { id: "wan3prime", opts: { dur: { min: 2, max: 30, ticks: [2, 5, 10, 20, 30], def: 5 }, ratio: { opts: ["16:9", "4:3", "1:1", "3:4", "9:16", "adaptive", "21:9"], def: "adaptive" }, quality: { opts: ["480p", "720p", "1080p"], def: "1080p" } }, refs: 1, name: "Wan 3.0 Prime", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 30, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 3.0 Prime \u2014 the top Wan 3.0 tier. Free quota: 30s, 90 days, Singapore region only; sign-up asks for payment details." },
   { id: "wan25", refs: 1, name: "Wan 2.5", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.5 \u2014 free quota 50s (shared with 2.6/2.7), 90 days, Singapore only." },
   { id: "wan26", refs: 1, name: "Wan 2.6", vendor: "Alibaba", url: "https://create.wan.video", maxSec: 10, i2v: true, res: "up to 1080p", audio: true, free: "Free daily check-in credits", note: "Wan 2.6 \u2014 same free quota as Wan 2.5 (50s, 90 days, Singapore only)." },
