@@ -41,13 +41,14 @@
 
 <main class="legal">
   <h1>Terms &amp; <span>Conditions</span></h1>
-  <p class="updated">Last updated: 12 November 2026</p>
+  <p class="updated">Last updated: 15 November 2026</p>
 
   <h2>1. A free tool, in plain words</h2>
   <p>LumeField is a <b>free-to-start</b> tool. It helps you plan a 30-second video from your reference photos and writes the prompts for it. The free plan needs no payment, no subscription, and no card. Extra credits can be bought in packs — see section 8.</p>
 
   <h2>2. We don't render your video</h2>
   <p>This site <b>does not render video itself</b>. Your video is rendered on <b>third-party free engines</b> — for example free Hugging Face Spaces, Kling, Google Flow, or Runway — which you open yourself. Those engines have their own rules, their own free limits, and their own terms. When you use them, their terms apply too.</p>
+  <p>The site also has built-in AI helpers. Describe and Ask Gemini send your prompt to our Cloudflare Worker, which calls Google Gemini; Image Generate sends your prompt to Pollinations; Song sends your prompt to the Gradio space aach456/music-gen-ai; and LumeField AI video sends your prompt to the Gradio LTX-2.3 service. What you send a helper is governed by that helper's own terms and privacy policy.</p>
 
   <h2>3. Your prompts and photos are your responsibility</h2>
   <p>You are responsible for what you write and what photos you use. Do not use LumeField to make anything <b>illegal, hateful, or infringing</b> — no content that breaks the law, harasses or targets people, or uses someone else's photos, faces, or work without permission. Do not use it to make <b>violent, bloody, or gory</b> videos. Only use photos you have the right to use — your own photos, or photos you have permission for.</p>
@@ -62,7 +63,7 @@
   <p>Sign-in is available (email or Google, through Firebase). Your first video needs no account. Accounts may be closed if they are used to abuse the service or break these terms.</p>
 
   <h2>7. Credits</h2>
-  <p>Your first video plan is free with no account. After that, sign in (free) and you get <b>20 credits</b>. Each video plan costs credits: 5 seconds = 4, 10 seconds = 7, 20 seconds = 14, 30 seconds = 20. When your credits run out, the tool shows "Credits finished" and you cannot build more video plans until you have credits again. Your credit balance is stored in our database (Firestore) under your account, and the rules only ever let it go down by the cost of a video you build — nobody can add credits to their own account. Extra credits can be bought in packs (see section 8); bought credits are added to your balance by us after your payment is confirmed, and they stay in your balance until you use them.</p>
+  <p>Your first video plan is free with no account. After that, sign in (free) and you get <b>20 credits</b>. Each video plan costs credits: 5 seconds = 4, 10 seconds = 7, 20 seconds = 14, 30 seconds = 20. When your credits run out, the tool shows "Credits finished" and you cannot build more video plans until you have credits again. Your credit balance is stored in our database (Firestore) under your account, and it only changes in ways the rules allow: a video you build takes its cost away, and credits are added only by a validated grant — the daily refill (+4), a referral (+20), or the own-AI trial top-up (to 50) — or by a pack you bought (see section 8). Nobody can add credits to their own account. Extra credits can be bought in packs (see section 8); bought credits are added to your balance by us after your payment is confirmed, and they stay in your balance until you use them.</p>
 
   <h2 id="refunds">8. Buying credits &amp; refunds</h2>
   <p>Credit packs are sold in US dollars. The packs are: <b>Starter — 60 credits — $4.99</b>; <b>Plus — 150 credits — $9.99</b>; <b>Ultra — 300 credits — $19.99</b>. Prices shown on the site are the final prices once checkout is open; before that, prices shown are proposed only. Payment is handled by our <b>Merchant of Record</b> (Lemon Squeezy — the name is shown on the checkout page), who takes your payment on their own secure checkout page, handles sales tax, and pays us what is left. <b>Your card details go only to the payment provider and never touch LumeField</b> — this site never sees, stores, or handles card numbers.</p>
