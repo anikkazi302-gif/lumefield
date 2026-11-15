@@ -3262,7 +3262,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var LOGIN_MSG = "১টা ফ্রি প্ল্যান শেষ, লগইন করো";
   /* Owner bypass: the site owner always builds free — no credit deduction,
      no wallet needed. Marked clearly so it is easy to find and audit. */
-  var OWNER_EMAIL = "anikkazi302@gmail.com";
+  var OWNER_EMAIL = "lumefieldofficial@gmail.com";
   function isOwner() { return !!(currentUser && currentUser.email === OWNER_EMAIL); }
   /* Claimed-bonus key: for Gmail, dots and +tags do not make a new mailbox
      (user.name+tag@gmail.com IS username@gmail.com), so strip them before
@@ -5663,12 +5663,12 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
 
   /* ---------- Owner-only Stats (2026-11-13) ----------
      "📊 Stats" in the profile menu, visible ONLY to the owner
-     (anikkazi302@gmail.com). Counts come from Firestore. Under the
+     (lumefieldofficial@gmail.com). Counts come from Firestore. Under the
      live rules v5 the owner cannot read other users' docs, so counts
      fail with permission-denied until rules v5.1 (owner read
      allowance) is published — the panel then shows a plain message,
      never a blank panel and never a crash. */
-  var OWNER_STATS_EMAIL = "anikkazi302@gmail.com";
+  var OWNER_STATS_EMAIL = "lumefieldofficial@gmail.com";
   function statsIsOwner(u) {
     try { if (typeof window.lfIsOwner === "function" && window.lfIsOwner()) return true; } catch (e) {}
     return !!(u && u.email === OWNER_STATS_EMAIL);
