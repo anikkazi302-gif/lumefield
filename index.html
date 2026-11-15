@@ -2939,6 +2939,10 @@ if (detailBody) {
       closeDetail();
       var el = document.querySelector('.engine[data-id="' + eid + '"]');
       if (el) el.click();
+      /* Keep the one-box in sync too, so its model chip shows the engine
+         the user just chose (otherwise it would still say "All Models"
+         while the generator uses this engine). */
+      if (typeof window.lfSetToolModel === "function") window.lfSetToolModel(eid);
       /* User tapped "Use this engine in the tool" — take them to the tool. */
       if (typeof openTool === "function") openTool();
       return;
@@ -4133,6 +4137,10 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     if (modelBtn) modelBtn.innerHTML = "\u2726 " + lfEsc(name) + ' <span class="lfai-chev">\u203a</span>';
     refreshGenLabel();
   }
+  /* Bridge for the detail modal's "Use this engine in the tool" button:
+     that handler lives in another script block, so it selects the one-box
+     model through this setter instead of touching lfToolModel directly. */
+  window.lfSetToolModel = function (id) { lfToolModel = id; refreshLfToolModel(); };
   function guestUsed() {
     try { return parseInt(window.localStorage.getItem("lumefield_guest_used") || "0", 10) || 0; }
     catch (e) { return 0; }
@@ -4221,7 +4229,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       e.stopPropagation();
       var open = modelPop.hidden;
       hideOnePops(); hideSettingsPop(); hideRefPop();
-      if (open) { buildLfModelList(); modelPop.hidden = false; modelBtn.setAttribute("aria-expanded", "true"); }
+      if (open) { if (modelSearch) modelSearch.value = ""; buildLfModelList(); modelPop.hidden = false; modelBtn.setAttribute("aria-expanded", "true"); }
       else hideLfModelPop();
     });
     document.addEventListener("click", function (e) {
@@ -5944,7 +5952,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     var pop = $(popId); if (!pop) return;
     var wasHidden = pop.hidden;
     closeAllPops();
-    if (wasHidden) { if (typeof build === "function") build(); pop.hidden = false; }
+    if (wasHidden) { if (popId === "modelPop") { var ms = $("modelSearchPop"); if (ms) ms.value = ""; } if (typeof build === "function") build(); pop.hidden = false; }
   }
   function bindRow(rowId, popId, build) {
     var row = $(rowId); if (!row) return;
