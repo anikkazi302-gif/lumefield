@@ -41,10 +41,10 @@
 
 <main class="legal">
   <h1>Privacy <span>Policy</span></h1>
-  <p class="updated">Last updated: 12 November 2026</p>
+  <p class="updated">Last updated: 15 November 2026</p>
 
   <h2>The short version</h2>
-  <p>LumeField collects <b>almost nothing</b>. You can start without an account — your first video need no sign-in — and nothing you type or upload on this site is sent to us.</p>
+  <p>LumeField collects <b>almost nothing</b>. You can start without an account — your first video need no sign-in — and, except for what you send to the site's own AI helpers to produce the result you asked for (see "AI helpers on this site"), nothing you type or upload on this site is sent to us.</p>
 
   <h2>What we collect</h2>
   <p>If you use the tool without signing in, this site collects <b>no personal data at all</b>.</p>
@@ -54,13 +54,16 @@
   <p>To stop one email taking the free signup bonus again and again, we keep a record that an email has already claimed it. That record holds only the email address and the date it was claimed. It cannot be read, changed or deleted through the site — not even by you — and it stays even if you delete your account. If you want it removed, ask us (see "Deleting your account") and we will remove it by hand.</p>
 
   <h2>We never train AI on your data. We collect no biometrics.</h2>
-  <p>We never train any AI model on your photos, prompts, characters or video plans. We do not run any AI model at all — your video is rendered on a third-party engine you open yourself. We do not extract faceprints, voiceprints or any other biometric data from your photos. A photo you save as a character is stored as a plain image and is never analyzed.</p>
+  <p>We never train any AI model on your photos, prompts, characters or video plans. We do not run any AI model on our own servers — the site's built-in helpers call third-party AI services (see "AI helpers on this site"), and your video is rendered on a third-party engine you open yourself. We do not extract faceprints, voiceprints or any other biometric data from your photos. A photo you save as a character is stored as a plain image and is never analyzed.</p>
+
+  <h2>AI helpers on this site</h2>
+  <p>The site has a few built-in AI helpers, and using one sends your prompt — and, where the helper needs it, your uploaded photo or audio — to that helper's service so it can produce the result: Describe and Ask Gemini send your prompt to our Cloudflare Worker, which calls Google Gemini; Image Generate sends your prompt to Pollinations; Song sends your prompt to the Gradio space aach456/music-gen-ai; and LumeField AI video sends your prompt to the Gradio LTX-2.3 service. Those services have their own privacy policies, and what you send them is governed by them.</p>
 
   <h2>Your photos stay in your browser</h2>
   <p>When you upload reference photos in the video tool, they are <b>previewed only in your own browser</b> — never uploaded by this site and never stored by us. The exception is a photo you choose to save as a character in My characters: that photo (downscaled) is stored in our database under your account, together with the name and description you give it, and so are video plans you choose to save in My videos. When you generate a video, you upload the photo yourself on the engine's own page — that is the only place it goes.</p>
 
   <h2>Cookies &amp; local storage</h2>
-  <p>This site sets <b>no cookies of its own</b> and runs no analytics or advertising trackers. Your browser stores three things locally, only in your own browser: (1) how many free guest videos you have used; (2) a referral code if you arrived through an invite link; (3) the list of video plans you built in this browser. Clearing your browser data removes all three. Signing in with Google happens on Google's own page and is governed by Google's privacy policy. Demo videos load from YouTube in privacy-enhanced mode and from Pexels; when a demo loads, YouTube or Pexels sees your IP address, as on any site that embeds a video.</p>
+  <p>This site sets <b>no cookies of its own</b> and runs no analytics or advertising trackers. Your browser stores a few things locally, only in your own browser: how many free guest videos you have used; a referral code if you arrived through an invite link; the list of video plans you built in this browser; your favourite items (localStorage <i>lumefield_favs</i>); your generated images (localStorage <i>lumefield_images</i>); your enrolled voices (IndexedDB <i>lumefield-voices</i>); and your created avatars (IndexedDB <i>lumefield-avatars</i>). Clearing your browser data removes them. Signing in with Google happens on Google's own page and is governed by Google's privacy policy. Demo videos load from YouTube in privacy-enhanced mode and from Pexels; when a demo loads, YouTube or Pexels sees your IP address, as on any site that embeds a video.</p>
 
   <h2>Payments</h2>
   <p>If you buy extra credits, payment is handled <b>only by our payment provider</b> (Lemon Squeezy — the Merchant of Record shown on the checkout page). Your <b>card details go only to the payment provider</b> and are never sent to, seen by, or stored by LumeField. The only payment information we keep is the record we need to add your credits: your email, which credit pack you bought, and your credit balance — stored in our database (Firestore) under your account. We never sell or share that record. The payment provider has its own privacy policy, which applies to the payment itself.</p>
