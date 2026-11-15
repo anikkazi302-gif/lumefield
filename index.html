@@ -1091,8 +1091,10 @@
   if (dlBtn) dlBtn.addEventListener("click", function () { var a = $("lfAIDownload"); if (a) a.click(); });
   if (shBtn) shBtn.addEventListener("click", function () {
     var url = "https://anikkazi302-gif.github.io/lumefield/";
-    function done(ok) { shBtn.textContent = ok ? "✅ Link copied" : "🔗 Share"; setTimeout(function () { shBtn.textContent = "🔗 Share"; }, 2000); }
-    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(url).then(function () { done(true); }, function () { done(false); }); } else { done(false); }
+    /* Route through the site's copyText() helper: it falls back to the
+       textarea+execCommand path when clipboard.writeText rejects, so a
+       denied clipboard no longer fails silently (Family F, Pass 25). */
+    if (typeof copyText === "function") copyText(url, shBtn);
   });
   if (rgBtn) rgBtn.addEventListener("click", function () { var g = $("lfAIGenerate"); if (g) g.click(); });
   if (fvBtn) fvBtn.addEventListener("click", function () {
