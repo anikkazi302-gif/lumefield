@@ -2696,13 +2696,14 @@ function showModalResult(mid) {
 /* ---------- Modal focus: first field on open + Tab trap (Pass 8 P3) ----------
    Keyboard users used to land on BODY when a dialog opened. Every modal open
    now calls window.lfFocusModal(modal) and every close calls
-   window.lfUnfocusModal() to restore focus. One document Tab handler traps
+   window.lfUnfocusModal() to restore focus — a stack, so a modal opened
+   over another restores to the right trigger. One document Tab handler traps
    Tab inside the topmost visible dialog (last .detail-backdrop /
    .modal-backdrop in DOM order wins, so a modal opened over another wins).
    Visibility uses getClientRects so fixed-position backdrops are seen. */
 window.lfFocusModal = function (modalEl) {
   if (!modalEl) return;
-  try { window._lfLastFocus = document.activeElement; } catch (e) {}
+  try { if (!Array.isArray(window._lfFocusStack)) window._lfFocusStack = []; window._lfFocusStack.push(document.activeElement); } catch (e) {}
   try {
     var els = modalEl.querySelectorAll("input, select, textarea, button, [tabindex]");
     var firstBtn = null;
@@ -2716,7 +2717,11 @@ window.lfFocusModal = function (modalEl) {
   } catch (e) {}
 };
 window.lfUnfocusModal = function () {
-  try { var el = window._lfLastFocus; if (el && el.focus && document.contains(el)) el.focus(); } catch (e) {}
+  try {
+    var stack = window._lfFocusStack;
+    var el = (Array.isArray(stack) && stack.length) ? stack.pop() : window._lfLastFocus;
+    if (el && el.focus && document.contains(el)) el.focus();
+  } catch (e) {}
 };
 document.addEventListener("keydown", function (e) {
   if (e.key !== "Tab") return;
@@ -4244,7 +4249,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   });
   /* One-box ratio + quality chips (his design): the choice is baked into
      the engine prompt as a cue — the free renderer itself is fixed. */
-  function hideOnePops() { var q = $("lfOneQualityPop"); if (q) q.hidden = true; }
+  function hideOnePops() { var q = $("lfOneQualityPop"); if (q) q.hidden = true; var qb = $("lfOneQualityBtn"); if (qb) qb.setAttribute("aria-expanded", "false"); }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") hideOnePops(); });
   function bindOneChip(btnId, popId, attr, set) {
     var b = $(btnId), p = $(popId); if (!b || !p) return;
     b.addEventListener("click", function (e) { e.stopPropagation(); var open = p.hidden; hideOnePops(); hideLfModelPop(); hideSettingsPop(); hideRefPop(); if (open) { p.hidden = false; b.setAttribute("aria-expanded", "true"); } });
@@ -4261,7 +4267,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   });
   document.addEventListener("click", function (e) {
     var q = $("lfOneQualityPop");
-    if (q && !q.hidden && !q.contains(e.target) && e.target.id !== "lfOneQualityBtn") q.hidden = true;
+    if (q && !q.hidden && !q.contains(e.target) && e.target.id !== "lfOneQualityBtn") hideOnePops();
   });
   /* Reference "+" menu: Photo / Video / Audio live inside one plus button. */
   var refPlusBtn = $("lfOneRefPlus"), refPop = $("lfOneRefPop");
@@ -6163,6 +6169,7 @@ function closeTool() {
   function closeAllNavMenus() {
     document.querySelectorAll(".nav-menu").forEach(function (m) { m.hidden = true; });
     document.querySelectorAll(".nav-drop").forEach(function (d) { d.classList.remove("open"); });
+    document.querySelectorAll(".nav-drop-btn").forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
   }
   function menuItem(kind, id, name, sub) {
     return '<button class="nav-menu-item" type="button" data-kind="' + kind + '" data-id="' + id + '"><span class="nav-menu-name">' + esc(name) + '</span><span class="opt-sub">' + esc(sub) + '</span></button>';
