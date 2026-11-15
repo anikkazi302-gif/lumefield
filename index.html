@@ -1364,7 +1364,7 @@
       <label class="drop frame-box" for="startFrameInput"><span class="frame-label">Start frame</span><span class="frame-prev" id="startFramePrev">+ Add photo</span><input type="file" id="startFrameInput" accept="image/*" hidden></label>
       <label class="drop frame-box" for="endFrameInput"><span class="frame-label">End frame (optional)</span><span class="frame-prev" id="endFramePrev">+ Add photo</span><input type="file" id="endFrameInput" accept="image/*" hidden></label>
     </div>
-    <label class="drop" for="videoInput">🎬 Add a reference video to extract motion <span class="step">Video duration: 4 to 30 seconds (MP4 / WebM)</span>
+    <label class="drop" for="videoInput">🎬 Add a reference video to extract motion <span class="step">Short video works best (MP4 / WebM)</span>
       <input type="file" id="videoInput" accept="video/*">
     </label>
     <div class="thumbs" id="videoThumb"></div>
@@ -1488,10 +1488,10 @@
     </div>
     <div id="howPanel">
       <h3>MAKE VIDEOS IN ONE CLICK</h3>
-      <p class="sub">250+ presets for camera control, framing, and high-quality VFX — or use the general preset for manual control.</p>
+      <p class="sub">Choose a video model for camera control, framing, and high-quality VFX — the general preset follows the model you pick, and you can change it anytime.</p>
       <div class="how-steps">
         <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/mZja2Ve0Mns?autoplay=1&mute=1&loop=1&playlist=mZja2Ve0Mns&controls=0&rel=0" title="Seedance 2.5" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>01 — ADD IMAGE</b><span>Upload or generate an image to start your animation</span></div>
-        <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/nlM7kL3kv_Y?autoplay=1&mute=1&loop=1&playlist=nlM7kL3kv_Y&controls=0&rel=0" title="Kling 4.0" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>02 — CHOOSE PRESET</b><span>Pick a preset to control your image movement</span></div>
+        <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/nlM7kL3kv_Y?autoplay=1&mute=1&loop=1&playlist=nlM7kL3kv_Y&controls=0&rel=0" title="Kling 4.0" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>02 — CHOOSE MODEL</b><span>Pick a video model to control your image movement</span></div>
         <div class="how-step"><div class="how-thumb"><iframe src="https://www.youtube-nocookie.com/embed/I06Ef8alr2Y?autoplay=1&mute=1&loop=1&playlist=I06Ef8alr2Y&controls=0&rel=0" title="Google Flow (Veo 3.1)" frameborder="0" allow="autoplay; muted" loading="lazy"></iframe></div><b>03 — GET VIDEO</b><span>Click generate to create your final animated video!</span></div>
       </div>
       <p class="sub">Don&rsquo;t know where to start? <a href="#guides">Go to the Academy and start your journey</a></p>
@@ -4140,11 +4140,6 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     catch (e) { return 0; }
   }
   function refreshGenLabel() {
-    var free = false;
-    try {
-      if (window.lfIsOwner && window.lfIsOwner()) free = true;
-      else if (window.lfSignedIn && !window.lfSignedIn() && guestUsed() < 1) free = true;
-    } catch (e) {}
     if (genBtn) genBtn.textContent = "✦ Generate — " + lfToolCost() + " credits";
   }
   /* Settings popup: PLACEHOLDER contents (duration only) — the parent is
