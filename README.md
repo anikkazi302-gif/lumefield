@@ -1,6 +1,6 @@
 # LumeField
 
-> **Try it live: https://anikkazi302-gif.github.io/lumefield/**
+> **Try it live: https://lumefield.github.io/lumefield/**
 
 Turn reference photos into a 30-second, high-quality video — free.
 
@@ -28,7 +28,7 @@ segment 2, and so on. This tool builds that chain for you.
 ## Credits
 
 - Your first **3 video plans are free with no account**.
-- After that, sign in (free, email or Google) and you get **60 credits**.
+- After that, sign in (free, email or Google) and you get **20 credits**.
 - Cost per video plan: **5s = 4, 10s = 7, 20s = 14, 30s = 20** credits.
 - When your credits run out, the tool shows **"Credits finished"**.
 - Credits are enforced server-side: each signed-in user's balance lives in
@@ -43,9 +43,9 @@ segment 2, and so on. This tool builds that chain for you.
 - When your free credits run out, you will be able to buy a credit pack:
   **Starter — 60 credits — $4.99** (3 × 30s videos), **Plus — 150 credits —
   $9.99** (7 × 30s videos), **Ultra — 300 credits — $19.99** (15 × 30s videos).
-  Prices are proposed until the owner approves them and checkout opens.
+  Prices are final. Checkout opens after our payment provider (Lemon Squeezy) approves the store.
 - Checkout is **not live yet** — the "Buy credits" section on the site is a
-  placeholder until a payment provider (Paddle or Polar) approves the store.
+  placeholder until our payment provider (Lemon Squeezy) approves the store.
   Payment will be handled on the provider's secure checkout page; no card
   data ever touches this site.
 - **Manual unlock first:** when a payment arrives, the owner adds the bought
@@ -54,7 +54,7 @@ segment 2, and so on. This tool builds that chain for you.
   video cost, so credits can only be added by the owner in the console — a
   user can never add credits to their own account.) Automation via webhook
   comes later, after the first sales.
-- See `PAYMENT-APPLICATION-CHECKLIST.md` for the Paddle + Polar application
+- See `PAYMENT-APPLICATION-CHECKLIST.md` for the Lemon Squeezy application
   steps, and `lumefield-payment-plan.md` for the full payment research.
 
 ## How to make the full 30 seconds
