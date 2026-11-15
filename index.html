@@ -953,7 +953,7 @@
       <div class="lfone-panel" id="lfOnePanelSong" hidden>
         <textarea id="lfMusicPrompt" rows="2" maxlength="200" placeholder="e.g. happy birthday song, soft piano"></textarea>
         <div class="lfai-row">
-          <span class="lfmusic-chip" aria-pressed="true">Video creator</span>
+          <span class="lfmusic-chip">Video creator</span>
           <button type="button" class="lfai-gen" id="lfMusicGenerate" hidden>🎵 Generate</button>
         </div>
         <div class="lfai-status" id="lfMusicStatus" aria-live="polite"></div>
@@ -1154,7 +1154,7 @@
       else if (k === "creations") { var ab = $("navAssetsBtn"); if (ab) ab.click(); else { var pv = $("profileMyVideos"); if (pv) pv.click(); } }
       else if (k === "favs") go("lfOneGallery");
       else if (k === "history") { if (window.openProfileView) window.openProfileView(); else { var pb = $("profileViewProfileBtn"); if (pb) pb.click(); } }
-      else if (k === "settings") { var pc = $("profileChip"); if (pc) pc.click(); else { var si = $("signInBtn"); if (si) si.click(); } }
+      else if (k === "settings") { var pb2 = $("profileViewProfileBtn"); if (pb2) pb2.click(); else { var si = $("signInBtn"); if (si) si.click(); } }
       else if (k === "help") go("guides");
     });
   })();
@@ -3412,7 +3412,8 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
   var profileViewWrap = null;
   function openProfileView() {
     if (!profileViewWrap) profileViewWrap = document.getElementById("profileViewWrap");
-    if (!profileViewWrap || !currentUser) return;
+    if (!profileViewWrap) return;
+    if (!currentUser) { if (window.lfOpenLogin) window.lfOpenLogin("Sign in (free) and verify your email to see your profile and history."); return; }
     var email = currentUser.email || "";
     var name = email.split("@")[0] || "Signed in";
     var av = document.getElementById("profileViewAvatar");
@@ -4155,7 +4156,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     settingsBtn.addEventListener("click", function (e) {
       e.stopPropagation();
       var open = settingsPop.hidden;
-      hideRefPop();
+      hideOnePops(); hideLfModelPop(); hideRefPop();
       settingsPop.hidden = !open;
       settingsBtn.setAttribute("aria-expanded", String(open));
     });
@@ -4226,7 +4227,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
     modelBtn.addEventListener("click", function (e) {
       e.stopPropagation();
       var open = modelPop.hidden;
-      hideSettingsPop(); hideRefPop();
+      hideOnePops(); hideSettingsPop(); hideRefPop();
       if (open) { buildLfModelList(); modelPop.hidden = false; modelBtn.setAttribute("aria-expanded", "true"); }
       else hideLfModelPop();
     });
