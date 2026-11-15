@@ -1101,8 +1101,13 @@
     try {
       var favs = JSON.parse(localStorage.getItem("lumefield_favs") || "[]");
       var p = $("lfAIPrompt") ? $("lfAIPrompt").value.trim() : "";
-      favs.unshift({ prompt: p, at: new Date().toISOString().slice(0, 16).replace("T", " ") });
-      localStorage.setItem("lumefield_favs", JSON.stringify(favs.slice(0, 12)));
+      /* Dedupe by prompt (Pass 33): clicking Add to Favorite twice for the
+         same video used to store two identical entries. */
+      var alreadyFav = favs.some(function (f) { return (f.prompt || "") === p; });
+      if (!alreadyFav) {
+        favs.unshift({ prompt: p, at: new Date().toISOString().slice(0, 16).replace("T", " ") });
+        localStorage.setItem("lumefield_favs", JSON.stringify(favs.slice(0, 12)));
+      }
       fvBtn.textContent = "❤ Saved to Favorites"; setTimeout(function () { fvBtn.textContent = "❤ Add to Favorite"; }, 2000);
       renderOneGallery();
     } catch (e) {}
