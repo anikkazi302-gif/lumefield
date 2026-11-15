@@ -4762,7 +4762,7 @@ if (FIREBASE_CONFIGURED && typeof firebase !== "undefined") {
       var box = document.getElementById("lfAIPrompt");
       if (box) { box.value = t; box.focus(); if (statusEl) statusEl.textContent = "Prompt is in the video box above \u2713"; }
     } else {
-      if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(t).then(function () { useBtn.textContent = "\u2713 Copied"; setTimeout(function () { useBtn.textContent = "Copy"; }, 2000); }); }
+      if (typeof copyText === "function") copyText(t, useBtn);
     }
   });
 })();
@@ -6281,9 +6281,8 @@ function closeTool() {
     if (act === "tool") { if (typeof openTool === "function") openTool(); }
     else if (act === "share") {
       var url = "https://anikkazi302-gif.github.io/lumefield/";
-      var done = function () { a.textContent = "Copied ✓"; setTimeout(function () { a.textContent = "Share LumeField"; }, 2000); };
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () {});
-      else done();
+      if (typeof copyText === "function") copyText(url, a);
+      else { var done = function () { a.textContent = "Copied \u2713"; setTimeout(function () { a.textContent = "Share LumeField"; }, 2000); }; done(); }
     }
     else if (act === "daily" || act === "invite") {
       var w = document.getElementById("profileWrap");
