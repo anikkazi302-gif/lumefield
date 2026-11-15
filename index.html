@@ -54,6 +54,13 @@
   .explore-tags { max-width: 1100px; margin: 0 auto; padding: 56px 18px 40px; text-align: center; }
   .explore-tags h2 { font-size: 34px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; margin: 0 0 22px; }
   .explore-tags h2 span { color: #c8f542; }
+  .guides { max-width: 980px; margin: 0 auto; padding: 10px 20px 44px; }
+  .guides h2 { font-size: 28px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; margin: 0 0 6px; }
+  .guide-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 16px; }
+  @media (max-width: 560px) { .guide-grid { grid-template-columns: 1fr; } }
+  .guide-card { background: #1a1a28; border: 1px solid #33334a; border-radius: 14px; padding: 16px; }
+  .guide-card h3 { font-size: 16px; margin: 0 0 8px; color: #fff; }
+  .guide-card p { font-size: 14px; color: #b9b9c9; line-height: 1.55; margin: 0; }
   .tags-cloud { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
   .tag-pill { background: #1c1c2c; color: #e8e8f0; border: 1px solid #33334a; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
   .tag-pill:hover { border-color: #c8f542; color: #fff; }
@@ -66,7 +73,7 @@
   .foot-bottom { background: #07070d; color: #b9b9c9; padding: 18px 28px; display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; font-size: 13px; }
   .foot-bottom a { color: #b9b9c9; text-decoration: none; }
   .foot-bottom a:hover { color: #fff; }
-  .foot-social { display: flex; gap: 16px; align-items: center; }
+  .foot-social { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
   .foot-social a, .foot-social span { color: #fff; font-weight: 700; }
   .foot-links { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
   @media (max-width: 900px) { .foot-cols { grid-template-columns: repeat(3, 1fr); } }
@@ -153,8 +160,8 @@
   .lf-myv-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
   .credit-signin:disabled { opacity: .55; cursor: default; }
   /* ---------- "JUST ADD" items: NEW badges, filters, hamburger, history, resend ---------- */
-  .new-badge { font-size: 10px; background: #c8f542; color: #111; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
-  .top-badge { font-size: 10px; background: #c8f542; color: #111; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; }
+  .new-badge { font-size: 10px; background: #c8f542; color: #111; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; white-space: nowrap; }
+  .top-badge { font-size: 10px; background: #c8f542; color: #111; border-radius: 999px; padding: 2px 7px; margin-left: 6px; vertical-align: middle; font-weight: 800; white-space: nowrap; }
   .promo-banner { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 8px 16px; background: #111; color: #e8e8f0; font-size: 13px; border-bottom: 1px solid #1c1c2c; flex-wrap: wrap; }
   .promo-banner b { color: #c8f542; }
   .promo-banner-link { color: #c8f542; font-weight: 700; text-decoration: none; }
@@ -359,7 +366,7 @@
   .engine:hover { border-color: #c8f542; }
   .engine.selected { border-color: #c8f542; background: #141a0c; box-shadow: 0 0 0 1px #c8f542; }
   .engine h3 { font-size: 1rem; color: #fff; }
-  .engine h3 .badge { font-size: .68rem; background: #065F46; color: #A7F3D0; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+  .engine h3 .badge { font-size: .68rem; background: #065F46; color: #A7F3D0; border-radius: 999px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; white-space: nowrap; }
   .engine h3 .badge.no { background: #7F1D1D; color: #FECACA; }
   .engine p { font-size: .83rem; color: #a9a9bd; line-height: 1.55; margin-top: 5px; }
   .engine .limit { font-size: .8rem; color: #ffd166; margin-top: 6px; font-weight: 600; }
@@ -406,7 +413,7 @@
   .sale-panel h2 { font-size: 30px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px; }
   .sale-panel p { font-size: 15px; margin: 0 0 18px; }
   .sale-panel .sale-btn { display: block; width: 100%; background: #c8f542; color: #111; border: none; border-radius: 999px; padding: 13px 0; font-size: 16px; font-weight: 800; cursor: pointer; font-family: inherit; text-decoration: none; text-align: center; }
-  .sale-panel .sale-sticker { position: absolute; top: 14px; right: -8px; background: #c8f542; color: #111; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 999px; transform: rotate(-6deg); }
+  .sale-panel .sale-sticker { position: absolute; top: -13px; right: 14px; background: #c8f542; color: #111; font-size: 12px; font-weight: 800; padding: 6px 10px; border-radius: 999px; transform: rotate(-6deg); }
   .sale-panel .sale-fine { font-size: 12px; opacity: .8; margin: 12px 0 0; text-align: center; }
   .sale-tiles { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .sale-tile { background: #1c1c2c; border: 1px solid transparent; border-radius: 14px; padding: 18px; text-align: left; cursor: pointer; font-family: inherit; }
@@ -1613,7 +1620,7 @@
     </div>
   </div>
   <p class="packs-note">One-time payment. No subscription, no monthly bill.</p>
-  <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Paddle or Polar) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (first purchase only, within 7 days, if no credits used) (see <a href="terms.html" style="color:#ffd166;">Terms</a>). Bought credits stay in your balance until you use them.</p>
+  <p class="lead" style="margin-top:22px;">Prices above are <b>proposed</b> — final prices are confirmed when checkout opens. Checkout opens after our payment provider (Lemon Squeezy) approves the store. Payment is handled on the provider's secure checkout page — your card details never touch this site. <b>7-day money-back guarantee</b> on your first purchase (first purchase only, within 7 days, if no credits used) (see <a href="terms.html" style="color:#ffd166;">Terms</a>). Bought credits stay in your balance until you use them.</p>
 </section>
 
 <section class="howto-sec" id="image-tools">
@@ -1634,7 +1641,7 @@
 <div class="footer has-bg">
   <div class="bg-overlay" aria-hidden="true"></div>
 <div class="footer-inner">LumeField — Free AI Video Generator · Made for creators, free for everyone.<br>
-Plans and prompts only; video is rendered free on the engine you choose. Engine limits verified 10 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.<br>
+Plans and prompts only; video is rendered in-site by LumeField AI or free on the engine you choose. Engine limits verified 15 November 2026. Free tiers change — always re-check the engine's own page before planning a production around a limit. MIT License — free to use, share and remix.<br>
 <a href="terms.html">Terms &amp; Conditions</a> · <a href="privacy.html">Privacy Policy</a> · <a href="terms.html#refunds">Refund Policy</a><br>
 Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div></div>
 
@@ -1704,11 +1711,7 @@ Contact: <a href="mailto:anikkazi302@gmail.com">anikkazi302@gmail.com</a></div><
 <div class="foot-bottom">
   <div class="foot-social">
     <a href="https://github.com/anikkazi302-gif/lumefield">GitHub</a>
-    <span data-social="youtube">YouTube</span>
-    <span data-social="tiktok">TikTok</span>
-    <span data-social="discord">Discord</span>
-    <span data-social="x">X / Twitter</span>
-    <span data-social="linkedin">LinkedIn</span>
+    <!-- YouTube / TikTok / Discord / X / LinkedIn return here when the real links arrive -->
   </div>
   <div class="foot-links">
     <a href="#guides">Help center</a>
