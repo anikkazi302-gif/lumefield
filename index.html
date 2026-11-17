@@ -228,6 +228,7 @@
   .hero-card p { margin: 4px 2px 0; font-size: 13px; color: #a9a9bd; }
   .hero h1 { font-size: 52px; line-height: 1.05; letter-spacing: -1.5px; font-weight: 800; }
   .hero h1 span { color: #c8f542; }
+  .sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
   .hero p { margin-top: 18px; font-size: 18px; color: #c9c9d8; line-height: 1.6; }
   .hero p b { color: #fff; }
   .cta-row { margin-top: 30px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
@@ -733,10 +734,11 @@
 </nav>
 
 <section class="hero" aria-label="Featured video models">
+  <h1 class="sr-only">LumeField — Free AI Video Generator</h1>
   <div class="hero-carousel" id="heroCarousel">
     <div class="hero-card" data-engine="seedance" tabindex="0" role="button" aria-label="Seedance 2.5 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/mZja2Ve0Mns?autoplay=1&mute=1&loop=1&playlist=mZja2Ve0Mns&controls=0&rel=0" title="Seedance 2.5 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Seedance 2.5</h3><p>The most advanced video model</p></div><div class="hero-card" data-engine="kling" tabindex="0" role="button" aria-label="Kling 4.0 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/nlM7kL3kv_Y?autoplay=1&mute=1&loop=1&playlist=nlM7kL3kv_Y&controls=0&rel=0" title="Kling 4.0 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Kling 4.0</h3><p>Perfect motion with advanced video control</p></div><div class="hero-card" data-engine="flow" tabindex="0" role="button" aria-label="Google Flow (Veo 3.1) — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/I06Ef8alr2Y?autoplay=1&mute=1&loop=1&playlist=I06Ef8alr2Y&controls=0&rel=0" title="Google Flow (Veo 3.1) demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Google Flow (Veo 3.1)</h3><p>Precision video with sound control</p></div><div class="hero-card" data-engine="vidu" tabindex="0" role="button" aria-label="Vidu Q4 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/jJcbxCDRRaw?autoplay=1&mute=1&loop=1&playlist=jJcbxCDRRaw&controls=0&rel=0" loading="lazy" title="Vidu Q4 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Vidu Q4</h3><p>The most consistent characters</p></div><div class="hero-card" data-engine="hailuo" tabindex="0" role="button" aria-label="MiniMax Hailuo — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/J18idUz87LA?autoplay=1&mute=1&loop=1&playlist=J18idUz87LA&controls=0&rel=0" loading="lazy" title="MiniMax Hailuo demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>MiniMax Hailuo</h3><p>High-dynamic, VFX-ready</p></div><div class="hero-card" data-engine="wan3" tabindex="0" role="button" aria-label="Wan 3.0 — tap for details"><div class="hero-card-video"><iframe src="https://www.youtube-nocookie.com/embed/g3ihFwqiPcw?autoplay=1&mute=1&loop=1&playlist=g3ihFwqiPcw&controls=0&rel=0" loading="lazy" title="Wan 3.0 demo" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="hero-card-veil" aria-hidden="true"></div></div><h3>Wan 3.0</h3><p>Camera-controlled video with sound</p></div>
   </div>
-  <div class="hero-dots" id="heroDots" aria-hidden="true"></div>
+  <div class="hero-dots" id="heroDots"></div>
 </section>
 
 <style>
